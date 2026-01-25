@@ -1,0 +1,44 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ArmorName'}}"/></h1>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+      
+      <div class="form-group">
+        <label>{{localize "RYF.Protection"}}</label>
+        <input type="number" name="system.protection" value="{{system.protection}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Hindrance"}}</label>
+        <input type="number" name="system.hindrance" value="{{system.hindrance}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Equipped"}}</label>
+        <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+      </div>
+
+    </div>
+
+  </section>
+</form>
+

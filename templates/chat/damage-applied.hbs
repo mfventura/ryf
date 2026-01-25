@@ -1,0 +1,56 @@
+<div class="ryf-roll damage-applied">
+  <div class="roll-header">
+    <div class="roll-title">
+      <i class="fas fa-heart-broken"></i>
+      <h3>{{actor.name}} {{localize "RYF.Combat.ReceivesDamage"}}</h3>
+    </div>
+  </div>
+
+  <div class="roll-content">
+    <div class="damage-calculation">
+      <div class="damage-row">
+        <span class="damage-label">{{localize "RYF.Combat.GrossDamage"}}:</span>
+        <span class="damage-value gross">{{damageGross}}</span>
+      </div>
+
+      {{#if (gt absorption 0)}}
+      <div class="damage-row absorption">
+        <span class="damage-label">{{localize "RYF.Combat.Absorption"}}:</span>
+        <span class="damage-value">-{{absorption}}</span>
+      </div>
+      {{/if}}
+
+      <div class="damage-row final">
+        <span class="damage-label">{{localize "RYF.Combat.FinalDamage"}}:</span>
+        <span class="damage-value">{{damageFinal}}</span>
+      </div>
+    </div>
+
+    <div class="health-status">
+      <div class="health-bar">
+        <div class="health-label">
+          <i class="fas fa-heart"></i>
+          <span>{{localize "RYF.Health"}}: {{health.value}} / {{health.max}}</span>
+        </div>
+      </div>
+
+      {{#if states.dead}}
+      <div class="state-indicator dead">
+        <i class="fas fa-skull"></i>
+        <strong>{{localize "RYF.States.Dead"}}</strong>
+      </div>
+      {{else if states.unconscious}}
+      <div class="state-indicator unconscious">
+        <i class="fas fa-dizzy"></i>
+        <strong>{{localize "RYF.States.Unconscious"}}</strong>
+      </div>
+      {{else if states.wounded}}
+      <div class="state-indicator wounded">
+        <i class="fas fa-heart-broken"></i>
+        <strong>{{localize "RYF.States.Wounded"}}</strong>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+

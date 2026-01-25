@@ -1,0 +1,62 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.SpellName'}}"/></h1>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+      
+      <div class="form-group">
+        <label>{{localize "RYF.Level"}}</label>
+        <input type="number" name="system.level" value="{{system.level}}" data-dtype="Number" min="1" max="10"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.ManaCost"}}</label>
+        <input type="number" name="system.manaCost" value="{{system.manaCost}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.CastingTime"}}</label>
+        <input type="text" name="system.castingTime" value="{{system.castingTime}}" placeholder="{{localize 'RYF.Action'}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Range"}}</label>
+        <input type="text" name="system.range" value="{{system.range}}" placeholder="{{localize 'RYF.Touch'}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Duration"}}</label>
+        <input type="text" name="system.duration" value="{{system.duration}}" placeholder="{{localize 'RYF.Instantaneous'}}"/>
+      </div>
+
+      {{#if actor}}
+      <div class="form-group">
+        <button type="button" class="spell-cast">
+          <i class="fas fa-magic"></i> {{localize "RYF.CastSpell"}}
+        </button>
+      </div>
+      {{/if}}
+
+    </div>
+
+  </section>
+</form>
+

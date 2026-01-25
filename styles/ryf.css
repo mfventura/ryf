@@ -1,0 +1,1350 @@
+/* ===================================
+   RYF System - Estilos Base
+   =================================== */
+
+:root {
+  --ryf-primary: #2c3e50;
+  --ryf-secondary: #3498db;
+  --ryf-accent: #e74c3c;
+  --ryf-success: #27ae60;
+  --ryf-warning: #f39c12;
+  --ryf-danger: #c0392b;
+  --ryf-light: #ecf0f1;
+  --ryf-dark: #2c3e50;
+}
+
+/* Custom Pyramid Config Form */
+.custom-pyramid-config {
+  padding: 1rem;
+}
+
+.custom-pyramid-config .form-header {
+  margin-bottom: 1.5rem;
+}
+
+.custom-pyramid-config .notes {
+  background: var(--ryf-light);
+  padding: 0.75rem;
+  border-left: 4px solid var(--ryf-secondary);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.custom-pyramid-config .presets-section {
+  margin-bottom: 2rem;
+}
+
+.custom-pyramid-config .presets-section h3 {
+  margin-bottom: 0.75rem;
+  color: var(--ryf-primary);
+  border-bottom: 2px solid var(--ryf-secondary);
+  padding-bottom: 0.5rem;
+}
+
+.custom-pyramid-config .preset-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.custom-pyramid-config .preset-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.75rem;
+  background: white;
+  border: 2px solid var(--ryf-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-pyramid-config .preset-button:hover {
+  background: var(--ryf-light);
+  border-color: var(--ryf-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-pyramid-config .preset-button strong {
+  font-size: 1rem;
+  color: var(--ryf-primary);
+  margin-bottom: 0.25rem;
+}
+
+.custom-pyramid-config .preset-button .preset-description {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.custom-pyramid-config .pyramid-inputs {
+  margin-bottom: 1.5rem;
+}
+
+.custom-pyramid-config .pyramid-inputs h3 {
+  margin-bottom: 0.75rem;
+  color: var(--ryf-primary);
+  border-bottom: 2px solid var(--ryf-secondary);
+  padding-bottom: 0.5rem;
+}
+
+.custom-pyramid-config .form-group {
+  display: grid;
+  grid-template-columns: 150px 100px 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.custom-pyramid-config .form-group label {
+  font-weight: bold;
+  color: var(--ryf-primary);
+}
+
+.custom-pyramid-config .form-group input[type="number"] {
+  padding: 0.5rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.custom-pyramid-config .form-group .hint {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.custom-pyramid-config .pyramid-summary {
+  background: var(--ryf-success);
+  color: white;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.custom-pyramid-config .pyramid-summary h4 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.custom-pyramid-config .pyramid-summary .total-skills {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.custom-pyramid-config .form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-pyramid-config .save-button {
+  background: var(--ryf-success);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.custom-pyramid-config .save-button:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-pyramid-config .save-button i {
+  font-size: 1.1rem;
+}
+
+/* ===================================
+   Actor Sheets
+   =================================== */
+
+.ryf.sheet {
+  font-family: "Signika", sans-serif;
+}
+
+.ryf.sheet .window-content {
+  background: #f5f5f5;
+  padding: 0;
+}
+
+.ryf.sheet form {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sheet Header */
+.ryf.sheet .sheet-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 10px;
+  background: linear-gradient(to right, var(--ryf-primary), var(--ryf-secondary));
+  color: white;
+  border-bottom: 2px solid var(--ryf-accent);
+}
+
+.ryf.sheet .sheet-header .profile-img {
+  flex: 0 0 100px;
+  height: 100px;
+  margin-right: 10px;
+  border: 2px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ryf.sheet .sheet-header .header-fields {
+  flex: 1;
+}
+
+.ryf.sheet .sheet-header h1.charname {
+  height: 40px;
+  margin: 0 0 10px;
+  border-bottom: 0;
+}
+
+.ryf.sheet .sheet-header h1.charname input {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.ryf.sheet .sheet-header h1.charname input:focus {
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Resources */
+.ryf.sheet .resources {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ryf.sheet .resource {
+  display: flex;
+  flex-direction: column;
+}
+
+.ryf.sheet .resource-label {
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.ryf.sheet .resource-content {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.ryf.sheet .resource-content input {
+  width: 60px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: bold;
+}
+
+.ryf.sheet .resource-content .sep {
+  margin: 0 5px;
+}
+
+.ryf.sheet .resource-content .resource-max,
+.ryf.sheet .resource-content .resource-value {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Experience Bar */
+.ryf.sheet .experience-bar {
+  margin-top: 10px;
+}
+
+.ryf.sheet .experience-bar label {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  display: block;
+}
+
+.ryf.sheet .progress-bar {
+  height: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.ryf.sheet .progress-fill {
+  height: 100%;
+  background: var(--ryf-success);
+  transition: width 0.3s;
+}
+
+/* Sheet Tabs */
+.ryf.sheet .sheet-tabs {
+  flex: 0 0 40px;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  background: white;
+}
+
+.ryf.sheet .sheet-tabs .item {
+  line-height: 40px;
+  font-weight: bold;
+  border-right: 1px solid #ccc;
+}
+
+.ryf.sheet .sheet-tabs .item.active {
+  text-decoration: underline;
+  text-shadow: none;
+  color: var(--ryf-accent);
+}
+
+/* Sheet Body */
+.ryf.sheet .sheet-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+.ryf.sheet .sheet-body .tab {
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* Attributes */
+.ryf.sheet .attributes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--ryf-secondary);
+}
+
+.ryf.sheet .attributes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ryf.sheet .attribute {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.ryf.sheet .attribute-label {
+  flex: 1;
+  font-weight: bold;
+  color: var(--ryf-primary);
+}
+
+.ryf.sheet .attribute-input {
+  width: 60px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+/* Derived Stats */
+.ryf.sheet .derived-stats {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.ryf.sheet .stat-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ryf.sheet .stat-row label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.ryf.sheet .state-value {
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.ryf.sheet .state-value.healthy {
+  background: var(--ryf-success);
+  color: white;
+}
+
+.ryf.sheet .state-value.wounded {
+  background: var(--ryf-warning);
+  color: white;
+}
+
+.ryf.sheet .state-value.unconscious {
+  background: var(--ryf-danger);
+  color: white;
+}
+
+.ryf.sheet .state-value.dead {
+  background: black;
+  color: white;
+}
+
+/* Rest Buttons */
+.ryf.sheet .rest-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ryf.sheet .rest-buttons button {
+  flex: 1;
+  padding: 10px;
+  background: var(--ryf-secondary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ryf.sheet .rest-buttons button:hover {
+  background: var(--ryf-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Items List */
+.ryf.sheet .items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid var(--ryf-secondary);
+}
+
+.ryf.sheet .items-header h3 {
+  margin: 0;
+  color: var(--ryf-primary);
+}
+
+.ryf.sheet .item-create {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--ryf-success);
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ryf.sheet .item-create:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ryf.sheet .items-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ryf.sheet .items-list .item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  transition: all 0.2s;
+}
+
+.ryf.sheet .items-list .item:hover {
+  background: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ryf.sheet .items-list .item-header {
+  font-weight: bold;
+  background: var(--ryf-light);
+  border: none;
+  margin-bottom: 10px;
+}
+
+.ryf.sheet .items-list .item-name {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ryf.sheet .items-list .item-image {
+  flex: 0 0 24px;
+  height: 24px;
+}
+
+.ryf.sheet .items-list .item-image img {
+  border: none;
+  border-radius: 3px;
+}
+
+.ryf.sheet .items-list h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.ryf.sheet .items-list .item-attribute,
+.ryf.sheet .items-list .item-level,
+.ryf.sheet .items-list .item-damage,
+.ryf.sheet .items-list .item-protection,
+.ryf.sheet .items-list .item-defense,
+.ryf.sheet .items-list .item-hindrance,
+.ryf.sheet .items-list .item-quantity,
+.ryf.sheet .items-list .item-mana {
+  flex: 0 0 100px;
+  text-align: center;
+}
+
+.ryf.sheet .items-list .item-equipped {
+  flex: 0 0 60px;
+  text-align: center;
+}
+
+.ryf.sheet .items-list .item-controls {
+  flex: 0 0 100px;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.ryf.sheet .items-list .item-control {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ryf.sheet .items-list .item-control:hover {
+  background: var(--ryf-secondary);
+  color: white;
+}
+
+.ryf.sheet .items-list .item-delete:hover {
+  background: var(--ryf-danger);
+}
+
+/* Level Control */
+.ryf.sheet .level-value {
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ryf.sheet .skill-increase,
+.ryf.sheet .skill-decrease {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--ryf-secondary);
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ryf.sheet .skill-increase:hover,
+.ryf.sheet .skill-decrease:hover {
+  background: var(--ryf-primary);
+  transform: scale(1.1);
+}
+
+/* Pyramid Validation */
+.ryf.sheet .pyramid-valid {
+  background: var(--ryf-success);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ryf.sheet .pyramid-invalid {
+  background: var(--ryf-danger);
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.ryf.sheet .pyramid-invalid ul {
+  margin: 10px 0 0 20px;
+  padding: 0;
+}
+
+/* ===================================
+   Item Sheets
+   =================================== */
+
+.ryf.sheet.item .sheet-header {
+  background: linear-gradient(to right, var(--ryf-secondary), var(--ryf-primary));
+}
+
+.ryf.sheet.item .sheet-header .profile-img {
+  flex: 0 0 64px;
+  height: 64px;
+}
+
+.ryf.sheet.item .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.ryf.sheet.item .form-group label {
+  font-weight: bold;
+  color: var(--ryf-primary);
+  margin-bottom: 5px;
+}
+
+.ryf.sheet.item .form-group input[type="text"],
+.ryf.sheet.item .form-group input[type="number"],
+.ryf.sheet.item .form-group select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.ryf.sheet.item .form-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+
+.ryf.sheet.item .level-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ryf.sheet.item .level-control input {
+  flex: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ryf.sheet.item .upgrade-info {
+  background: var(--ryf-light);
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 4px solid var(--ryf-secondary);
+}
+
+.ryf.sheet.item .upgrade-info p {
+  margin: 5px 0;
+}
+
+.ryf.sheet.item button.spell-cast {
+  width: 100%;
+  padding: 12px;
+  background: var(--ryf-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ryf.sheet.item button.spell-cast:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Editor Content */
+.ryf.sheet .editor-content {
+  height: 100%;
+}
+
+.ryf.sheet .editor-content .editor {
+  height: 100%;
+}
+
+/* Flexbox Utilities */
+.ryf.sheet .flexrow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.ryf.sheet .flexcol {
+  display: flex;
+  flex-direction: column;
+}
+
+.ryf.sheet .grid {
+  display: grid;
+}
+
+.ryf.sheet .grid-2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ryf.sheet .grid-3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ===================================
+   Chat Cards - Sistema de Tiradas
+   =================================== */
+
+.ryf-roll {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  color: #ecf0f1;
+  font-family: "Signika", sans-serif;
+}
+
+.ryf-roll.success {
+  border-color: #27ae60;
+}
+
+.ryf-roll.failure {
+  border-color: #e74c3c;
+}
+
+.ryf-roll.fumble {
+  border-color: #c0392b;
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+
+.ryf-roll .roll-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ryf-roll .actor-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #3498db;
+  object-fit: cover;
+}
+
+.ryf-roll .roll-title h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #3498db;
+}
+
+.ryf-roll .roll-subtitle {
+  font-size: 0.85rem;
+  color: #bdc3c7;
+  margin-top: 0.25rem;
+}
+
+.ryf-roll .roll-formula {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.ryf-roll .formula-part {
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.ryf-roll .formula-separator {
+  color: #95a5a6;
+}
+
+.ryf-roll .dice-part {
+  color: #3498db;
+}
+
+.ryf-roll .dice-results {
+  margin: 1rem 0;
+}
+
+.ryf-roll .dice-pool {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.ryf-roll .die {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #7f8c8d;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.ryf-roll .die.chosen {
+  background: rgba(52, 152, 219, 0.3);
+  border-color: #3498db;
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+}
+
+.ryf-roll .die.critical {
+  border-color: #f39c12;
+  background: rgba(243, 156, 18, 0.2);
+}
+
+.ryf-roll .die i {
+  font-size: 1.5rem;
+  color: #ecf0f1;
+  margin-bottom: 0.25rem;
+}
+
+.ryf-roll .die-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.ryf-roll .explosions {
+  text-align: center;
+  padding: 0.5rem;
+  background: rgba(243, 156, 18, 0.2);
+  border-radius: 4px;
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.ryf-roll .explosion-value {
+  margin: 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.ryf-roll .roll-result {
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.ryf-roll .result-total,
+.ryf-roll .result-difficulty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ryf-roll .result-label,
+.ryf-roll .difficulty-label {
+  font-size: 0.85rem;
+  color: #95a5a6;
+  text-transform: uppercase;
+}
+
+.ryf-roll .result-value,
+.ryf-roll .difficulty-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.ryf-roll .result-total.success .result-value {
+  color: #27ae60;
+}
+
+.ryf-roll .result-total.failure .result-value {
+  color: #e74c3c;
+}
+
+.ryf-roll .roll-outcome {
+  margin-top: 1rem;
+}
+
+.ryf-roll .outcome {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.ryf-roll .outcome.success {
+  background: rgba(39, 174, 96, 0.2);
+  border: 1px solid #27ae60;
+}
+
+.ryf-roll .outcome.failure {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+}
+
+.ryf-roll .outcome.fumble {
+  background: rgba(192, 57, 43, 0.3);
+  border: 1px solid #c0392b;
+}
+
+.ryf-roll .outcome i {
+  font-size: 1.5rem;
+}
+
+.ryf-roll .outcome strong {
+  font-size: 1.1rem;
+}
+
+.ryf-roll .outcome .margin {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #bdc3c7;
+}
+
+.ryf-roll .critical-success {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(243, 156, 18, 0.2);
+  border: 1px solid #f39c12;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.ryf-roll .critical-success i {
+  font-size: 1.5rem;
+  color: #f39c12;
+}
+
+.ryf-roll .critical-dice {
+  margin-left: auto;
+  font-weight: bold;
+  color: #f39c12;
+}
+
+.ryf-roll .damage-button {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.ryf-roll .roll-damage {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ryf-roll .roll-damage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ryf-roll .damage-breakdown {
+  margin: 1rem 0;
+}
+
+.ryf-roll .damage-section {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.ryf-roll .damage-section.critical-damage {
+  background: rgba(243, 156, 18, 0.2);
+  border: 1px solid #f39c12;
+}
+
+.ryf-roll .section-label {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.ryf-roll .damage-formula {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.ryf-roll .damage-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.ryf-roll .damage-subtotal {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #bdc3c7;
+}
+
+.ryf-roll .damage-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(231, 76, 60, 0.3);
+  border: 2px solid #e74c3c;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.ryf-roll .total-label {
+  font-size: 1.1rem;
+  color: #ecf0f1;
+  text-transform: uppercase;
+}
+
+.ryf-roll .total-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.ryf-roll .damage-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #95a5a6;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.ryf-roll .spell-info {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(155, 89, 182, 0.2);
+  border-radius: 4px;
+}
+
+.ryf-roll .spell-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ecf0f1;
+}
+
+.ryf-roll .spell-detail i {
+  color: #9b59b6;
+}
+
+.ryf-roll .spell-description {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #9b59b6;
+  border-radius: 4px;
+}
+
+.ryf-roll .description-label {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.ryf-roll .description-content {
+  color: #ecf0f1;
+  line-height: 1.5;
+}
+
+/* ===================================
+   Combat Status Indicators
+   =================================== */
+
+.combat-status-indicators {
+  margin-bottom: 1rem;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.status-indicator i {
+  font-size: 1.2rem;
+}
+
+.status-indicator.wounded {
+  background: rgba(243, 156, 18, 0.2);
+  border-left: 4px solid var(--ryf-warning);
+  color: var(--ryf-warning);
+}
+
+.status-indicator.unconscious {
+  background: rgba(192, 57, 43, 0.2);
+  border-left: 4px solid var(--ryf-danger);
+  color: var(--ryf-danger);
+}
+
+.status-indicator.dead {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 4px solid #000;
+  color: #95a5a6;
+}
+
+.status-effect {
+  font-size: 0.85rem;
+  font-weight: normal;
+  opacity: 0.9;
+}
+
+/* Combat Modifiers */
+.combat-modifiers {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modifier {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(52, 152, 219, 0.1);
+  border: 1px solid var(--ryf-secondary);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.modifier.hindrance {
+  background: rgba(243, 156, 18, 0.1);
+  border-color: var(--ryf-warning);
+  color: var(--ryf-warning);
+}
+
+.modifier.absorption {
+  background: rgba(39, 174, 96, 0.1);
+  border-color: var(--ryf-success);
+  color: var(--ryf-success);
+}
+
+.modifier i {
+  font-size: 1rem;
+}
+
+/* Wounded Indicator in Chat */
+.ryf-roll .wounded-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(243, 156, 18, 0.2);
+  border-left: 3px solid var(--ryf-warning);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  color: var(--ryf-warning);
+}
+
+.ryf-roll .wounded-indicator i {
+  font-size: 1.2rem;
+}
+
+/* Damage Applied Chat Card */
+.ryf-roll.damage-applied {
+  background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
+}
+
+.damage-calculation {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.damage-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.damage-row:last-child {
+  border-bottom: none;
+}
+
+.damage-row.final {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.damage-label {
+  color: #bdc3c7;
+  font-size: 0.9rem;
+}
+
+.damage-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.damage-value.gross {
+  color: #e74c3c;
+}
+
+.damage-row.absorption .damage-value {
+  color: #27ae60;
+}
+
+.health-status {
+  margin-top: 1rem;
+}
+
+.health-bar {
+  margin-bottom: 1rem;
+}
+
+.health-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #ecf0f1;
+}
+
+.health-bar-container {
+  width: 100%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.health-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e74c3c 0%, #27ae60 100%);
+  transition: width 0.3s ease;
+}
+
+/* Apply Damage Button */
+.damage-actions {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.apply-damage-button {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: #ecf0f1;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.apply-damage-button:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.apply-damage-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.apply-damage-button i {
+  margin-right: 0.5rem;
+}
+

@@ -1,0 +1,75 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.WeaponName'}}"/></h1>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+
+      <div class="form-group">
+        <label>{{localize "RYF.Damage"}}</label>
+        <input type="text" name="system.damage.base" value="{{system.damage.base}}" placeholder="1d6"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DamageBonus"}}</label>
+        <input type="number" name="system.damage.bonus" value="{{system.damage.bonus}}" data-dtype="Number" placeholder="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Category"}}</label>
+        <select name="system.category">
+          <option value="melee" {{#if (eq system.category "melee")}}selected{{/if}}>{{localize "RYF.SkillCategories.melee"}}</option>
+          <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>{{localize "RYF.SkillCategories.ranged"}}</option>
+          <option value="firearms" {{#if (eq system.category "firearms")}}selected{{/if}}>{{localize "RYF.SkillCategories.firearms"}}</option>
+        </select>
+      </div>
+
+      {{#if (or (eq system.category "ranged") (eq system.category "firearms"))}}
+      <div class="form-group">
+        <label>{{localize "RYF.RangeShort"}}</label>
+        <input type="number" name="system.range.short" value="{{system.range.short}}" data-dtype="Number" placeholder="10"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.RangeMedium"}}</label>
+        <input type="number" name="system.range.medium" value="{{system.range.medium}}" data-dtype="Number" placeholder="20"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.RangeLong"}}</label>
+        <input type="number" name="system.range.long" value="{{system.range.long}}" data-dtype="Number" placeholder="40"/>
+      </div>
+      {{/if}}
+
+      <div class="form-group">
+        <label>{{localize "RYF.TwoHanded"}}</label>
+        <input type="checkbox" name="system.twoHanded" {{checked system.twoHanded}}/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Equipped"}}</label>
+        <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+      </div>
+
+    </div>
+
+  </section>
+</form>
+

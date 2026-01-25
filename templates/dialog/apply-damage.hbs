@@ -1,0 +1,47 @@
+<form class="ryf-dialog apply-damage">
+  <div class="dialog-content">
+    <h3>{{localize "RYF.Combat.ApplyDamage"}}</h3>
+    
+    <div class="target-info">
+      <img src="{{target.img}}" alt="{{target.name}}" class="target-image"/>
+      <div class="target-stats">
+        <h4>{{target.name}}</h4>
+        <div class="health-display">
+          <i class="fas fa-heart"></i>
+          <span>{{target.system.health.value}} / {{target.system.health.max}}</span>
+        </div>
+        {{#if (gt target.system.combat.absorption 0)}}
+        <div class="absorption-display">
+          <i class="fas fa-shield-alt"></i>
+          <span>{{localize "RYF.Combat.Absorption"}}: {{target.system.combat.absorption}}</span>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="damage-amount">{{localize "RYF.Combat.DamageAmount"}}</label>
+      <input type="number" id="damage-amount" name="damage" value="0" min="0" autofocus/>
+    </div>
+
+    <div class="form-group">
+      <label for="damage-type">{{localize "RYF.Combat.DamageType"}}</label>
+      <select id="damage-type" name="damageType">
+        <option value="physical">{{localize "RYF.Combat.DamagePhysical"}}</option>
+        <option value="magical">{{localize "RYF.Combat.DamageMagical"}}</option>
+        <option value="fire">{{localize "RYF.Combat.DamageFire"}}</option>
+        <option value="cold">{{localize "RYF.Combat.DamageCold"}}</option>
+        <option value="electric">{{localize "RYF.Combat.DamageElectric"}}</option>
+        <option value="poison">{{localize "RYF.Combat.DamagePoison"}}</option>
+        <option value="psychic">{{localize "RYF.Combat.DamagePsychic"}}</option>
+      </select>
+    </div>
+
+    {{#if (eq damageType "physical")}}
+    <div class="damage-preview">
+      <p>{{localize "RYF.Combat.DamagePreview"}}: <strong>{{subtract damage target.system.combat.absorption}}</strong></p>
+    </div>
+    {{/if}}
+  </div>
+</form>
+

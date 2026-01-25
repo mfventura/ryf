@@ -1,0 +1,149 @@
+{
+  "Actor": {
+    "types": ["character", "npc"],
+    "templates": {
+      "base": {
+        "biography": "",
+        "health": {
+          "value": 20,
+          "max": 20,
+          "temp": 0
+        },
+        "attributes": {
+          "fisico": {
+            "value": 4,
+            "mod": 0
+          },
+          "destreza": {
+            "value": 4,
+            "mod": 0
+          },
+          "inteligencia": {
+            "value": 4,
+            "mod": 0
+          },
+          "percepcion": {
+            "value": 4,
+            "mod": 0
+          },
+          "carisma": {
+            "value": 4,
+            "mod": 0
+          }
+        },
+        "defense": {
+          "value": 10,
+          "base": 5,
+          "armor": 0,
+          "shield": 0,
+          "hindrance": 0
+        },
+        "willpower": {
+          "value": 10,
+          "base": 5
+        },
+        "initiative": {
+          "value": 0,
+          "base": 0
+        }
+      }
+    },
+    "character": {
+      "templates": ["base"],
+      "mana": {
+        "value": 12,
+        "max": 12,
+        "temp": 0
+      },
+      "experience": {
+        "current": 0,
+        "total": 0
+      },
+      "attributePoints": {
+        "used": 20,
+        "max": 30
+      },
+      "characterType": "specialistHeroic",
+      "states": {
+        "wounded": false,
+        "unconscious": false,
+        "dead": false
+      }
+    },
+    "npc": {
+      "templates": ["base"],
+      "mana": {
+        "value": 0,
+        "max": 0
+      },
+      "cr": 1,
+      "isMinion": false
+    }
+  },
+  "Item": {
+    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell"],
+    "templates": {
+      "base": {
+        "description": "",
+        "quantity": 1,
+        "weight": 0,
+        "price": 0
+      },
+      "physical": {
+        "equipped": false,
+        "identified": true
+      }
+    },
+    "skill": {
+      "level": 0,
+      "attribute": "fisico",
+      "category": "",
+      "isProfessional": false,
+      "specialization": ""
+    },
+    "weapon": {
+      "templates": ["base", "physical"],
+      "category": "melee",
+      "damage": {
+        "base": "1d6",
+        "bonus": 0,
+        "type": "physical"
+      },
+      "range": {
+        "short": 0,
+        "medium": 0,
+        "long": 0
+      },
+      "twoHanded": false,
+      "properties": []
+    },
+    "armor": {
+      "templates": ["base", "physical"],
+      "protection": 0,
+      "hindrance": 0,
+      "armorType": "light"
+    },
+    "shield": {
+      "templates": ["base", "physical"],
+      "defense": {
+        "melee": 0,
+        "ranged": 0
+      },
+      "hindrance": 0
+    },
+    "equipment": {
+      "templates": ["base", "physical"]
+    },
+    "spell": {
+      "templates": ["base"],
+      "level": 1,
+      "manaCost": 1,
+      "castingTime": "action",
+      "range": "touch",
+      "duration": "instant",
+      "effect": "",
+      "school": "general"
+    }
+  }
+}
+

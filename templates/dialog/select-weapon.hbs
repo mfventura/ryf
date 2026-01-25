@@ -1,0 +1,41 @@
+<form class="ryf-dialog select-weapon">
+  <div class="dialog-content">
+    <h3>{{localize "RYF.Combat.SelectWeapon"}}</h3>
+    
+    {{#if weapons.length}}
+    <div class="weapons-list">
+      {{#each weapons as |weapon|}}
+      <div class="weapon-option" data-weapon-id="{{weapon._id}}">
+        <img src="{{weapon.img}}" alt="{{weapon.name}}" class="weapon-image"/>
+        <div class="weapon-info">
+          <h4>{{weapon.name}}</h4>
+          <div class="weapon-stats">
+            <span class="weapon-damage">
+              <i class="fas fa-dice-d6"></i> {{weapon.system.damage.base}}
+            </span>
+            {{#if (eq weapon.system.category "melee")}}
+            <span class="weapon-type melee">
+              <i class="fas fa-sword"></i> {{localize "RYF.SkillCategories.melee"}}
+            </span>
+            {{/if}}
+            {{#if (eq weapon.system.category "ranged")}}
+            <span class="weapon-type ranged">
+              <i class="fas fa-bow-arrow"></i> {{localize "RYF.SkillCategories.ranged"}}
+            </span>
+            {{/if}}
+            {{#if (eq weapon.system.category "firearms")}}
+            <span class="weapon-type firearms">
+              <i class="fas fa-gun"></i> {{localize "RYF.SkillCategories.firearms"}}
+            </span>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="no-weapons">{{localize "RYF.Combat.NoWeaponsEquipped"}}</p>
+    {{/if}}
+  </div>
+</form>
+

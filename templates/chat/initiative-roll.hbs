@@ -1,0 +1,34 @@
+<div class="ryf-roll initiative-roll">
+  <div class="roll-header">
+    <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
+    <div class="roll-title">
+      <h3>{{localize "RYF.Initiative"}}</h3>
+      <div class="roll-subtitle">{{actor.name}}</div>
+    </div>
+  </div>
+
+  {{#if wounded}}
+  <div class="wounded-indicator">
+    <i class="fas fa-heart-broken"></i>
+    <strong>{{localize "RYF.States.Wounded"}}</strong>
+  </div>
+  {{/if}}
+
+  <div class="roll-formula">
+    <span class="formula-part">{{localize "RYF.InitiativeBase"}}: {{initiativeBase}}</span>
+    {{#if (gt hindrance 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part hindrance">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    {{/if}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part dice-part">
+      <i class="fas fa-dice-d10"></i> {{diceResult}}
+    </span>
+  </div>
+
+  <div class="roll-total">
+    <div class="total-label">{{localize "RYF.Total"}}</div>
+    <div class="total-value">{{total}}</div>
+  </div>
+</div>
+

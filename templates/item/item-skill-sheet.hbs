@@ -1,0 +1,79 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.SkillName'}}"/></h1>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+      
+      <div class="form-group">
+        <label>{{localize "RYF.Attribute"}}</label>
+        <select name="system.attribute" data-dtype="String">
+          {{#each attributes as |attr|}}
+          <option value="{{attr.key}}" {{#if (eq attr.key ../system.attribute)}}selected{{/if}}>
+            {{attr.label}}
+          </option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Category"}}</label>
+        <select name="system.category" data-dtype="String">
+          <option value="" {{#if (eq system.category "")}}selected{{/if}}>{{localize "RYF.SkillCategories.none"}}</option>
+          <option value="defense" {{#if (eq system.category "defense")}}selected{{/if}}>{{localize "RYF.SkillCategories.defense"}}</option>
+          <option value="initiative" {{#if (eq system.category "initiative")}}selected{{/if}}>{{localize "RYF.SkillCategories.initiative"}}</option>
+          <option value="melee" {{#if (eq system.category "melee")}}selected{{/if}}>{{localize "RYF.SkillCategories.melee"}}</option>
+          <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>{{localize "RYF.SkillCategories.ranged"}}</option>
+          <option value="firearms" {{#if (eq system.category "firearms")}}selected{{/if}}>{{localize "RYF.SkillCategories.firearms"}}</option>
+          <option value="magic" {{#if (eq system.category "magic")}}selected{{/if}}>{{localize "RYF.SkillCategories.magic"}}</option>
+          <option value="social" {{#if (eq system.category "social")}}selected{{/if}}>{{localize "RYF.SkillCategories.social"}}</option>
+          <option value="knowledge" {{#if (eq system.category "knowledge")}}selected{{/if}}>{{localize "RYF.SkillCategories.knowledge"}}</option>
+          <option value="physical" {{#if (eq system.category "physical")}}selected{{/if}}>{{localize "RYF.SkillCategories.physical"}}</option>
+          <option value="perception" {{#if (eq system.category "perception")}}selected{{/if}}>{{localize "RYF.SkillCategories.perception"}}</option>
+          <option value="stealth" {{#if (eq system.category "stealth")}}selected{{/if}}>{{localize "RYF.SkillCategories.stealth"}}</option>
+          <option value="survival" {{#if (eq system.category "survival")}}selected{{/if}}>{{localize "RYF.SkillCategories.survival"}}</option>
+          <option value="technical" {{#if (eq system.category "technical")}}selected{{/if}}>{{localize "RYF.SkillCategories.technical"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Level"}}</label>
+        <div class="level-control flexrow">
+          <a class="skill-decrease" title="{{localize 'RYF.DecreaseLevel'}}"><i class="fas fa-minus"></i></a>
+          <input type="number" name="system.level" value="{{system.level}}" data-dtype="Number" min="0" max="10"/>
+          <a class="skill-increase" title="{{localize 'RYF.IncreaseLevel'}}"><i class="fas fa-plus"></i></a>
+        </div>
+      </div>
+
+      {{#if actor}}
+      <div class="form-group">
+        <label>{{localize "RYF.UpgradeCost"}}</label>
+        <div class="upgrade-info">
+          <p>{{localize "RYF.CurrentLevel"}}: {{system.level}}</p>
+          <p>{{localize "RYF.NextLevelCost"}}: {{multiply 10 (add system.level 1)}} {{localize "RYF.XP"}}</p>
+        </div>
+      </div>
+      {{/if}}
+
+    </div>
+
+  </section>
+</form>
+

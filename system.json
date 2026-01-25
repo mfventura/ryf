@@ -1,0 +1,67 @@
+{
+  "id": "ryf",
+  "title": "Rápido y Fácil (RyF) 3.0",
+  "description": "Sistema de rol Rápido y Fácil 3.0 con sistema de tiradas 1o3d10 para Foundry VTT v13",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "RyF Development Team",
+      "flags": {}
+    }
+  ],
+  "esmodules": [
+    "module/ryf.mjs"
+  ],
+  "styles": [
+    "styles/ryf.css"
+  ],
+  "languages": [
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json",
+      "flags": {}
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": ["system.biography"]
+      },
+      "npc": {
+        "htmlFields": ["system.biography"]
+      }
+    },
+    "Item": {
+      "skill": {},
+      "weapon": {},
+      "armor": {},
+      "shield": {},
+      "equipment": {},
+      "spell": {}
+    }
+  },
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": "mana",
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE",
+  "readme": "README.md",
+  "media": [
+    {
+      "type": "icon",
+      "url": "assets/icons/ryf-logo.png"
+    }
+  ]
+}
+
