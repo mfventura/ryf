@@ -838,6 +838,7 @@
 
 .ryf-roll .dice-pool {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: center;
   margin-bottom: 0.75rem;
@@ -1055,6 +1056,14 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #ecf0f1;
+}
+
+.ryf-roll .damage-section .dice-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 0.75rem 0;
 }
 
 .ryf-roll .damage-subtotal {

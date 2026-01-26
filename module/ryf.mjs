@@ -33,7 +33,7 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });

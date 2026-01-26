@@ -71,17 +71,22 @@
       }
     },
     "npc": {
-      "templates": ["base"],
-      "mana": {
-        "value": 0,
-        "max": 0
+      "biography": "",
+      "health": {
+        "value": 20,
+        "max": 20
       },
+      "initiative": 10,
+      "defense": 10,
+      "absorption": 0,
+      "willpower": 10,
+      "attacks": [],
       "cr": 1,
       "isMinion": false
     }
   },
   "Item": {
-    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect"],
+    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
     "templates": {
       "base": {
         "description": "",
@@ -194,6 +199,15 @@
       },
       "appliedAt": 0,
       "appliedBy": ""
+    },
+    "npc-attack": {
+      "description": "",
+      "attackType": "melee",
+      "attackBonus": 0,
+      "damage": {
+        "base": "1d6",
+        "bonus": 0
+      }
     }
   }
 }

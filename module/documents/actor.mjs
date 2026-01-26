@@ -197,63 +197,6 @@ export class RyfActor extends Actor {
     if (actorData.type !== 'npc') return;
 
     const system = actorData.system;
-
-    if (!CONFIG.RYF.isCarismaEnabled() && system.attributes.carisma) {
-      delete system.attributes.carisma;
-    }
-
-    const healthMult = CONFIG.RYF.getHealthMultiplier();
-    system.health.max = system.attributes.fisico.value * healthMult;
-
-    if (CONFIG.RYF.isMagicEnabled()) {
-      const manaMult = CONFIG.RYF.getManaMultiplier();
-      system.mana.max = system.attributes.inteligencia.value * manaMult;
-    } else {
-      system.mana.max = 0;
-      system.mana.value = 0;
-    }
-
-    const defenseSkills = this.items.filter(i => i.type === 'skill' && i.system.category === 'defense');
-    const defenseBonus = defenseSkills.reduce((sum, skill) => sum + skill.system.level, 0);
-
-    const shieldBonus = this.items
-      .filter(i => i.type === 'shield' && i.system.equipped)
-      .reduce((sum, shield) => {
-        if (typeof shield.system.defense === 'object') {
-          return sum + (shield.system.defense.melee || 0);
-        }
-        return sum + (shield.system.defense || 0);
-      }, 0);
-
-    system.defense.base = 5;
-    system.defense.value = system.attributes.destreza.value + defenseBonus + system.defense.base + shieldBonus;
-
-    const initiativeSkills = this.items.filter(i => i.type === 'skill' && i.system.category === 'initiative');
-    const initiativeBonus = initiativeSkills.reduce((sum, skill) => sum + skill.system.level, 0);
-
-    system.initiative.base = system.attributes.percepcion.value + initiativeBonus;
-    system.initiative.value = system.initiative.base;
-
-    const equippedArmor = this.items.find(i => i.type === 'armor' && i.system.equipped);
-    const equippedShields = this.items.filter(i => i.type === 'shield' && i.system.equipped);
-
-    let totalHindrance = 0;
-    let armorAbsorption = 0;
-
-    if (equippedArmor) {
-      totalHindrance += equippedArmor.system.hindrance || 0;
-      armorAbsorption = equippedArmor.system.protection || 0;
-    }
-
-    equippedShields.forEach(shield => {
-      totalHindrance += shield.system.hindrance || 0;
-    });
-
-    system.combat = system.combat || {};
-    system.combat.baseHindrance = totalHindrance;
-    system.combat.hindrance = totalHindrance;
-    system.combat.baseAbsorption = armorAbsorption;
-    system.combat.absorption = armorAbsorption;
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -375,7 +318,13 @@ export class RyfActor extends Actor {
 
   async takeDamage(amount, type = 'physical') {
     const currentHP = this.system.health.value;
-    const newHP = Math.max(currentHP - amount, -(this.system.attributes.fisico.value * 6));
+
+    let minHP = 0;
+    if (this.type === 'character' && this.system.attributes?.fisico) {
+      minHP = -(this.system.attributes.fisico.value * 6);
+    }
+
+    const newHP = Math.max(currentHP - amount, minHP);
 
     await this.update({
       'system.health.value': newHP
@@ -385,7 +334,11 @@ export class RyfActor extends Actor {
       ui.notifications.warn(game.i18n.format('RYF.Notifications.ActorUnconscious', { name: this.name }));
     }
 
-    if (newHP <= -(this.system.attributes.fisico.value * 6)) {
+    if (this.type === 'character' && this.system.attributes?.fisico) {
+      if (newHP <= -(this.system.attributes.fisico.value * 6)) {
+        ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
+      }
+    } else if (this.type === 'npc' && newHP <= 0) {
       ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
     }
 
@@ -485,6 +438,20 @@ export class RyfActor extends Actor {
     const mode = modeOverride || autoMode;
 
     if (!targetDefense) {
+      const targets = Array.from(game.user.targets);
+
+      if (targets.length > 0 && targets[0].actor) {
+        const targetActor = targets[0].actor;
+        if (targetActor.type === 'character') {
+          targetDefense = targetActor.system.combat?.defense?.total || 10;
+        } else if (targetActor.type === 'npc') {
+          targetDefense = targetActor.system.defense || 10;
+        }
+        console.log(`RyF | Auto-detected target defense: ${targetDefense} from ${targetActor.name}`);
+      }
+    }
+
+    if (!targetDefense) {
       const defenseInput = await Dialog.prompt({
         title: game.i18n.localize('RYF.Combat.EnterTargetDefense'),
         content: `
@@ -568,14 +535,220 @@ export class RyfActor extends Actor {
     return attackRoll;
   }
 
+  async rollNpcAttack(attack) {
+    if (this.type !== 'npc') {
+      ui.notifications.warn('This method is only for NPCs');
+      return null;
+    }
+
+    const attackType = attack.system.attackType;
+    const attackBonus = attack.system.attackBonus || 0;
+    const damageBase = attack.system.damage?.base || '1d6';
+    const damageBonus = attack.system.damage?.bonus || 0;
+
+    const attackParams = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Attack')}: ${attack.name}`,
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode">
+                <option value="normal">${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d20"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => {
+              const form = html[0].querySelector('form');
+              resolve({
+                mode: form.mode.value,
+                modifier: parseInt(form.modifier.value) || 0
+              });
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!attackParams) return null;
+
+    const mode = attackParams.mode;
+    const modifier = attackParams.modifier;
+
+    let difficulty = 10;
+
+    if (attackType === 'melee') {
+      const targets = Array.from(game.user.targets);
+
+      if (targets.length > 0 && targets[0].actor) {
+        const targetActor = targets[0].actor;
+        if (targetActor.type === 'character') {
+          difficulty = targetActor.system.combat?.defense?.total || 10;
+        } else if (targetActor.type === 'npc') {
+          difficulty = targetActor.system.defense || 10;
+        }
+        console.log(`RyF | Auto-detected target defense: ${difficulty} from ${targetActor.name}`);
+      } else {
+        const defenseInput = await Dialog.prompt({
+          title: game.i18n.localize('RYF.Combat.EnterTargetDefense'),
+          content: `
+            <form>
+              <div class="form-group">
+                <label>${game.i18n.localize('RYF.Defense')}</label>
+                <input type="number" name="defense" value="10" min="1" autofocus/>
+              </div>
+            </form>
+          `,
+          callback: (html) => {
+            return html.find('[name="defense"]').val();
+          },
+          rejectClose: false
+        });
+
+        if (!defenseInput) return null;
+        difficulty = parseInt(defenseInput);
+      }
+    } else {
+      const rangeInput = await Dialog.prompt({
+        title: game.i18n.localize('RYF.Combat.SelectRange'),
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Range')}</label>
+              <select name="range">
+                <option value="pointblank">${game.i18n.localize('RYF.Ranges.Pointblank')}</option>
+                <option value="short">${game.i18n.localize('RYF.Ranges.Short')}</option>
+                <option value="medium">${game.i18n.localize('RYF.Ranges.Medium')}</option>
+                <option value="long">${game.i18n.localize('RYF.Ranges.Long')}</option>
+              </select>
+            </div>
+          </form>
+        `,
+        callback: (html) => {
+          return html.find('[name="range"]').val();
+        },
+        rejectClose: false
+      });
+
+      if (!rangeInput) return null;
+
+      const difficulties = {
+        'pointblank': 10,
+        'short': 15,
+        'medium': 20,
+        'long': 25
+      };
+
+      difficulty = difficulties[rangeInput] || 15;
+    }
+
+    const { roll1o3d10, isSuccess, checkFumble, calculateCriticalDice } = await import('../helpers/dice.mjs');
+    const diceRoll = await roll1o3d10(mode);
+    const total = attackBonus + diceRoll.result + modifier;
+
+    const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble);
+    const margin = total - difficulty;
+    const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
+
+    const chatData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: await renderTemplate('systems/ryf/templates/chat/npc-attack-roll.hbs', {
+        actorName: this.name,
+        actorImg: this.img,
+        attackName: attack.name,
+        attackType: attackType,
+        attackBonus: attackBonus,
+        mode: mode,
+        modifier: modifier,
+        diceRoll: diceRoll,
+        total: total,
+        difficulty: difficulty,
+        success: success,
+        fumble: fumble,
+        margin: margin,
+        criticalDice: criticalDice
+      })
+    };
+
+    await ChatMessage.create(chatData);
+
+    if (success) {
+      const rollDamage = await Dialog.confirm({
+        title: game.i18n.localize('RYF.Combat.AttackSuccess'),
+        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`,
+        defaultYes: true
+      });
+
+      if (rollDamage) {
+        const { rollEffect } = await import('../helpers/dice.mjs');
+
+        const baseRoll = await rollEffect(damageBase);
+        let total = baseRoll.total + damageBonus;
+
+        let criticalRoll = null;
+        if (criticalDice > 0) {
+          criticalRoll = await rollEffect(`${criticalDice}d6`);
+          total += criticalRoll.total;
+        }
+
+        const damageChatData = {
+          user: game.user.id,
+          speaker: ChatMessage.getSpeaker({ actor: this }),
+          content: await renderTemplate('systems/ryf/templates/chat/npc-damage-roll.hbs', {
+            actorName: this.name,
+            attackName: attack.name,
+            damageBase: damageBase,
+            baseRoll: baseRoll,
+            damageBonus: damageBonus,
+            criticalDice: criticalDice,
+            criticalRoll: criticalRoll,
+            total: total
+          })
+        };
+
+        await ChatMessage.create(damageChatData);
+      }
+    }
+
+    return { success, total, difficulty, fumble, criticalDice };
+  }
+
   async applyDamage(damageAmount, damageType = 'physical', source = null) {
     let finalDamage = damageAmount;
 
-    const absorption = this.system.combat?.absorption || 0;
+    let absorption = 0;
+    if (this.type === 'character') {
+      absorption = this.system.combat?.absorption || 0;
+    } else if (this.type === 'npc') {
+      absorption = this.system.absorption || 0;
+    }
 
     if (damageType === 'physical' && absorption > 0) {
       finalDamage = Math.max(0, damageAmount - absorption);
     }
+
+    console.log(`RyF | applyDamage called for ${this.name}`);
+    console.log(`RyF | ${this.name} - Daño: ${damageAmount}, Absorción: ${absorption}, Final: ${finalDamage}`);
 
     await this.takeDamage(finalDamage, damageType);
 

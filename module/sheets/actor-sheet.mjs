@@ -85,6 +85,7 @@ export class RyfActorSheet extends ActorSheet {
     const equipment = [];
     const spells = [];
     const activeEffects = [];
+    const npcAttacks = [];
 
     for (let i of context.items) {
       i.img = i.img || Item.DEFAULT_ICON;
@@ -103,6 +104,8 @@ export class RyfActorSheet extends ActorSheet {
         spells.push(i);
       } else if (i.type === 'active-effect') {
         activeEffects.push(i);
+      } else if (i.type === 'npc-attack') {
+        npcAttacks.push(i);
       }
     }
 
@@ -116,6 +119,7 @@ export class RyfActorSheet extends ActorSheet {
     context.equipment = equipment;
     context.spells = spells;
     context.activeEffects = activeEffects;
+    context.npcAttacks = npcAttacks;
   }
 
   activateListeners(html) {
@@ -136,6 +140,8 @@ export class RyfActorSheet extends ActorSheet {
 
     html.find('.spell-cast').click(this._onSpellCast.bind(this));
     html.find('.effect-remove').click(this._onRemoveEffect.bind(this));
+
+    html.find('.npc-attack-roll').click(this._onNpcAttackRoll.bind(this));
 
     html.find('.short-rest').click(this._onShortRest.bind(this));
     html.find('.long-rest').click(this._onLongRest.bind(this));
@@ -523,6 +529,16 @@ export class RyfActorSheet extends ActorSheet {
         ui.notifications.info(game.i18n.format('RYF.Notifications.EffectRemoved', { name: effect.name }));
       }
     }
+  }
+
+  async _onNpcAttackRoll(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const attack = this.actor.items.get(li.data("itemId"));
+
+    if (!attack) return;
+
+    await this.actor.rollNpcAttack(attack);
   }
 
   async _onShortRest(event) {

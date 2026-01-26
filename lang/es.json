@@ -510,6 +510,22 @@
       "Failure": "Fallo",
       "CriticalDice": "Dados Críticos",
       "Fumble": "Pifia"
+    },
+
+    "NPC": {
+      "PV": "PV",
+      "INI": "INI",
+      "DEF": "DEF",
+      "ABS": "ABS",
+      "ATK": "ATK",
+      "Willpower": "Voluntad",
+      "Attacks": "Ataques",
+      "AddAttack": "Añadir Ataque",
+      "AttackName": "Nombre del Ataque",
+      "AttackType": "Tipo de Ataque",
+      "AttackBonus": "Bono de Ataque",
+      "RollAttack": "Tirar Ataque",
+      "NoAttacks": "Este NPC no tiene ataques configurados"
     }
   }
 }
