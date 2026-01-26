@@ -1,0 +1,105 @@
+<div class="ryf-roll spell-casting-roll {{#if success}}success{{else}}failure{{/if}} {{#if fumble}}fumble{{/if}}">
+  <div class="roll-header">
+    <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
+    <div class="roll-title">
+      <h3>{{localize "RYF.SpellCasting"}}: {{spell.name}}</h3>
+      <div class="roll-subtitle">{{actor.name}}</div>
+    </div>
+  </div>
+
+  {{#if actor.system.states.wounded}}
+  <div class="wounded-indicator">
+    <i class="fas fa-heart-broken"></i>
+    <strong>{{localize "RYF.States.Wounded"}}</strong> - {{localize "RYF.Combat.AutoDisadvantage"}}
+  </div>
+  {{/if}}
+
+  <div class="roll-formula">
+    <span class="formula-part">{{localize "RYF.Attributes.inteligencia"}}: {{intelligence}}</span>
+    <span class="formula-separator">+</span>
+    <span class="formula-part">{{localize "RYF.Level"}}: {{spellLevel}}</span>
+    <span class="formula-separator">+</span>
+    <span class="formula-part dice-part">
+      {{#if (eq mode "advantage")}}
+        <i class="fas fa-arrow-up"></i> {{diceRoll.chosen}}
+      {{else if (eq mode "disadvantage")}}
+        <i class="fas fa-arrow-down"></i> {{diceRoll.chosen}}
+      {{else}}
+        {{diceRoll.chosen}}
+      {{/if}}
+    </span>
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: +{{modifier}}</span>
+    {{else if (lt modifier 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{modifier}}</span>
+    {{/if}}
+  </div>
+
+  <div class="dice-results">
+    <div class="dice-pool">
+      {{#each diceRoll.sorted as |die index|}}
+        <div class="die d10 {{#if (eq index diceRoll.chosenIndex)}}chosen{{/if}}">
+          <i class="fas fa-dice-d10"></i>
+          <span class="die-value">{{die}}</span>
+        </div>
+      {{/each}}
+    </div>
+
+    {{#if diceRoll.exploded}}
+    <div class="explosions">
+      <i class="fas fa-burst"></i> {{localize "RYF.Exploded"}}:
+      {{#each diceRoll.explosions as |explosion|}}
+        <span class="explosion-value">+{{explosion}}</span>
+      {{/each}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="roll-result">
+    <div class="result-total {{#if success}}success{{else}}failure{{/if}}">
+      <span class="result-label">{{localize "RYF.Total"}}</span>
+      <span class="result-value">{{total}}</span>
+    </div>
+
+    <div class="result-difficulty">
+      <span class="difficulty-label">{{localize "RYF.Magic.CastingDifficulty"}}</span>
+      <span class="difficulty-value">{{difficulty}}</span>
+    </div>
+  </div>
+
+  <div class="roll-outcome">
+    {{#if fumble}}
+      <div class="outcome fumble">
+        <i class="fas fa-skull-crossbones"></i>
+        <strong>{{localize "RYF.Fumble"}}</strong>
+      </div>
+    {{else if success}}
+      <div class="outcome success">
+        <i class="fas fa-check-circle"></i>
+        <strong>{{localize "RYF.Success"}}</strong>
+        {{#if (gt margin 0)}}
+          <span class="margin">{{localize "RYF.Margin"}}: +{{margin}}</span>
+        {{/if}}
+      </div>
+
+      {{#if (gt criticalDice 0)}}
+      <div class="critical-success">
+        <i class="fas fa-star"></i>
+        <strong>{{localize "RYF.CriticalSuccess"}}</strong>
+        <span class="critical-dice">+{{criticalDice}}d6 {{localize "RYF.ExtraDice"}}</span>
+      </div>
+      {{/if}}
+    {{else}}
+      <div class="outcome failure">
+        <i class="fas fa-times-circle"></i>
+        <strong>{{localize "RYF.Failure"}}</strong>
+        {{#if (lt margin 0)}}
+          <span class="margin">{{localize "RYF.Margin"}}: {{margin}}</span>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+</div>
+

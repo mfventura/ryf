@@ -15,6 +15,7 @@ export class RyfActor extends Actor {
 
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
+    this._applyActiveEffects(actorData);
   }
 
   async _preCreate(data, options, user) {
@@ -184,6 +185,73 @@ export class RyfActor extends Actor {
     system.combat = system.combat || {};
     system.combat.hindrance = totalHindrance;
     system.combat.absorption = armorAbsorption;
+  }
+
+  _applyActiveEffects(actorData) {
+    const system = actorData.system;
+    const activeEffects = this.items.filter(i => i.type === 'active-effect');
+
+    if (activeEffects.length === 0) return;
+
+    system.activeEffectBonuses = {
+      defense: 0,
+      initiative: 0,
+      hindranceReduction: 0,
+      skills: {},
+      weapons: {},
+      armor: 0
+    };
+
+    activeEffects.forEach(effect => {
+      const effectType = effect.system.effectType;
+      const modifier = effect.system.modifier || 0;
+      const targetName = effect.system.targetName;
+
+      switch (effectType) {
+        case 'skill-bonus':
+          if (targetName) {
+            if (!system.activeEffectBonuses.skills[targetName]) {
+              system.activeEffectBonuses.skills[targetName] = 0;
+            }
+            system.activeEffectBonuses.skills[targetName] += modifier;
+          }
+          break;
+
+        case 'defense-bonus':
+          system.activeEffectBonuses.defense += modifier;
+          break;
+
+        case 'weapon-bonus':
+          if (targetName) {
+            if (!system.activeEffectBonuses.weapons[targetName]) {
+              system.activeEffectBonuses.weapons[targetName] = 0;
+            }
+            system.activeEffectBonuses.weapons[targetName] += modifier;
+          }
+          break;
+
+        case 'armor-bonus':
+          system.activeEffectBonuses.armor += modifier;
+          break;
+
+        case 'hindrance-reduction':
+          system.activeEffectBonuses.hindranceReduction += modifier;
+          break;
+      }
+    });
+
+    if (system.defense) {
+      system.defense.value += system.activeEffectBonuses.defense;
+    }
+
+    if (system.initiative) {
+      system.initiative.value += system.activeEffectBonuses.initiative;
+    }
+
+    if (system.combat) {
+      system.combat.hindrance = Math.max(0, system.combat.hindrance - system.activeEffectBonuses.hindranceReduction);
+      system.combat.absorption += system.activeEffectBonuses.armor;
+    }
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -537,6 +605,402 @@ export class RyfActor extends Actor {
     });
 
     return finalDamage;
+  }
+
+  async castSpell(spell, targets = null, mode = 'normal', modifier = 0) {
+    if (!spell || spell.type !== 'spell') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.InvalidSpell'));
+      return null;
+    }
+
+    const manaCost = spell.system.manaCost || 0;
+    const currentMana = this.system.mana?.value || 0;
+
+    if (currentMana < manaCost) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.NotEnoughMana', {
+        required: manaCost,
+        current: currentMana
+      }));
+      return null;
+    }
+
+    await this.update({
+      'system.mana.value': currentMana - manaCost
+    });
+
+    ui.notifications.info(game.i18n.format('RYF.Notifications.ManaSpent', {
+      name: spell.name,
+      cost: manaCost
+    }));
+
+    const castingDifficulty = spell.system.castingDifficulty || 15;
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+    const castingRoll = await RyfRoll.rollSpellCasting(
+      this,
+      spell,
+      castingDifficulty,
+      mode,
+      modifier
+    );
+
+    if (!castingRoll.success) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.SpellCastingFailed', { name: spell.name }));
+      return null;
+    }
+
+    if (!targets || targets.length === 0) {
+      targets = Array.from(game.user.targets);
+    }
+
+    if (targets.length === 0 && spell.system.targets.type === 'self') {
+      targets = [this];
+    }
+
+    let result = null;
+
+    switch (spell.system.spellType) {
+      case 'damage':
+        result = await this._castDamageSpell(spell, targets);
+        break;
+      case 'healing':
+        result = await this._castHealingSpell(spell, targets);
+        break;
+      case 'buff-skill':
+      case 'buff-weapon':
+      case 'buff-armor':
+        result = await this._castBuffSpell(spell, targets);
+        break;
+      case 'effect':
+        result = await this._castEffectSpell(spell, targets);
+        break;
+      case 'generic':
+        result = await this._castGenericSpell(spell, targets);
+        break;
+      default:
+        ui.notifications.warn(game.i18n.localize('RYF.Warnings.UnknownSpellType'));
+        return null;
+    }
+
+    return result;
+  }
+
+  async _castDamageSpell(spell, targets) {
+    const results = [];
+
+    let range = null;
+    if (spell.system.attackType === 'ranged') {
+      range = await this._promptRangeDialog();
+      if (!range) return null;
+    }
+
+    if (targets.length === 0) {
+      if (spell.system.attackType !== 'none') {
+        await this._rollSpellAttack(spell, null, range);
+      }
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForDamage'));
+      return results;
+    }
+
+    for (const target of targets) {
+      let hitSuccess = true;
+      let attackRoll = null;
+
+      if (spell.system.attackType !== 'none') {
+        attackRoll = await this._rollSpellAttack(spell, target, range);
+        hitSuccess = attackRoll.success;
+
+        if (!hitSuccess) {
+          results.push({
+            target: target,
+            hit: false,
+            damage: 0
+          });
+          continue;
+        }
+      }
+
+      let applyDamage = true;
+
+      if (spell.system.savingThrow.enabled) {
+        const savingThrow = await this._rollSavingThrow(target, spell);
+        applyDamage = !savingThrow.success;
+      }
+
+      if (applyDamage) {
+        const criticalDice = attackRoll?.criticalDice || 0;
+
+        const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+        const damageRollData = await RyfRoll.rollSpellDamage(spell, criticalDice);
+        const damageAmount = damageRollData.total;
+
+        const targetActor = target.actor || target;
+        await targetActor.applyDamage(damageAmount, spell.system.damage.type, this);
+
+        results.push({
+          target: target,
+          hit: true,
+          damage: damageAmount,
+          damageRoll: damageRollData
+        });
+      } else {
+        results.push({
+          target: target,
+          hit: true,
+          damage: 0,
+          saved: true
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async _castHealingSpell(spell, targets) {
+    const results = [];
+
+    for (const target of targets) {
+      const healingRoll = await new Roll(spell.system.healing.formula).evaluate();
+      const healingAmount = healingRoll.total;
+
+      const currentHP = target.actor.system.health.value;
+      const maxHP = target.actor.system.health.max;
+      const newHP = Math.min(maxHP, currentHP + healingAmount);
+
+      await target.actor.update({
+        'system.health.value': newHP
+      });
+
+      results.push({
+        target: target,
+        healing: healingAmount,
+        healingRoll: healingRoll
+      });
+    }
+
+    return results;
+  }
+
+  async _castBuffSpell(spell, targets) {
+    const results = [];
+    const { RyfActiveEffect } = await import('./active-effect.mjs');
+
+    for (const target of targets) {
+      let duration = spell.system.effect.duration.value;
+
+      if (spell.system.effect.duration.perLevel) {
+        duration = duration * spell.system.level;
+      }
+
+      const effectData = {
+        name: `${spell.name} (${game.i18n.localize('RYF.Buff')})`,
+        img: spell.img,
+        sourceType: 'spell',
+        sourceName: spell.name,
+        sourceId: spell.id,
+        effectType: this._getEffectTypeFromSpellType(spell.system.spellType),
+        targetType: spell.system.effect.targetType,
+        targetName: spell.system.effect.targetName,
+        modifier: spell.system.effect.modifier,
+        duration: {
+          remaining: duration,
+          total: duration
+        },
+        appliedBy: this.name
+      };
+
+      const effect = await RyfActiveEffect.create(target.actor, effectData);
+
+      results.push({
+        target: target,
+        effect: effect
+      });
+    }
+
+    return results;
+  }
+
+  async _castEffectSpell(spell, targets) {
+    const results = [];
+    const { RyfActiveEffect } = await import('./active-effect.mjs');
+
+    for (const target of targets) {
+      let applyEffect = true;
+
+      if (spell.system.savingThrow.enabled) {
+        const savingThrow = await this._rollSavingThrow(target, spell);
+        applyEffect = !savingThrow.success;
+      }
+
+      if (applyEffect) {
+        let duration = spell.system.effect.duration.value;
+
+        if (spell.system.effect.duration.perLevel) {
+          duration = duration * spell.system.level;
+        }
+
+        const effectData = {
+          name: `${spell.name} (${game.i18n.localize('RYF.Effect')})`,
+          img: spell.img,
+          sourceType: 'spell',
+          sourceName: spell.name,
+          sourceId: spell.id,
+          effectType: spell.system.effect.type,
+          targetType: spell.system.effect.targetType,
+          targetName: spell.system.effect.targetName,
+          modifier: spell.system.effect.modifier,
+          duration: {
+            remaining: duration,
+            total: duration
+          },
+          appliedBy: this.name
+        };
+
+        const effect = await RyfActiveEffect.create(target.actor, effectData);
+
+        results.push({
+          target: target,
+          effect: effect,
+          saved: false
+        });
+      } else {
+        results.push({
+          target: target,
+          effect: null,
+          saved: true
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async _castGenericSpell(spell, targets) {
+    if (spell.system.requiresRoll) {
+      const attribute = spell.system.rollAttribute;
+      const difficulty = spell.system.genericDifficulty;
+
+      const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+      await RyfRoll.rollAttribute(this, attribute, difficulty);
+    }
+
+    const templateData = {
+      actor: this,
+      spell: spell,
+      targets: targets,
+      description: spell.system.description
+    };
+
+    const template = 'systems/ryf/templates/chat/spell-generic.hbs';
+    const html = await renderTemplate(template, templateData);
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: html,
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+    });
+
+    return { targets: targets };
+  }
+
+  async _promptRangeDialog() {
+    return new Promise((resolve) => {
+      new Dialog({
+        title: game.i18n.localize('RYF.Combat.SelectRange'),
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Combat.Range')}</label>
+              <select name="range" autofocus>
+                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (10)</option>
+                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (15)</option>
+                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (20)</option>
+                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (25)</option>
+              </select>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => {
+              const range = html.find('[name="range"]').val();
+              resolve(range);
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+  }
+
+  async _rollSpellAttack(spell, target, range = null) {
+    const spellAsWeapon = {
+      name: spell.name,
+      type: 'weapon',
+      system: {
+        category: spell.system.attackType
+      }
+    };
+
+    if (spell.system.attackType === 'melee') {
+      let targetDefense = null;
+
+      if (target) {
+        const targetActor = target.actor || target;
+        targetDefense = targetActor.system.defense.value;
+      }
+
+      return await this.rollMeleeAttack(spellAsWeapon, targetDefense, null, 0);
+    } else if (spell.system.attackType === 'ranged') {
+      let targetDefenseRanged = null;
+
+      if (target) {
+        const targetActor = target.actor || target;
+        targetDefenseRanged = targetActor.system.defense.ranged || 0;
+      }
+
+      return await this.rollRangedAttack(spellAsWeapon, range, null, targetDefenseRanged, 0);
+    }
+
+    return null;
+  }
+
+  async _rollSavingThrow(target, spell) {
+    const targetActor = target.actor || target;
+    const attribute = spell.system.savingThrow.attribute;
+    const difficulty = spell.system.savingThrow.difficulty;
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+
+    const savingRoll = await RyfRoll.rollAttribute(
+      targetActor,
+      attribute,
+      difficulty,
+      'normal'
+    );
+
+    return savingRoll;
+  }
+
+  _getEffectTypeFromSpellType(spellType) {
+    switch (spellType) {
+      case 'buff-skill':
+        return 'skill-bonus';
+      case 'buff-weapon':
+        return 'weapon-bonus';
+      case 'buff-armor':
+        return 'armor-bonus';
+      default:
+        return 'skill-bonus';
+    }
   }
 }
 

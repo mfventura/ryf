@@ -1,0 +1,34 @@
+<div class="ryf chat-card spell-healing">
+  <header class="card-header flexrow">
+    <img src="{{spell.img}}" title="{{spell.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{spell.name}}</h3>
+  </header>
+
+  <div class="card-content">
+    <div class="spell-info">
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Caster"}}:</span>
+        <span class="info-value">{{actor.name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.HealingAmount"}}:</span>
+        <span class="info-value healing-value">{{healingAmount}}</span>
+      </div>
+    </div>
+
+    {{#if targets}}
+    <div class="spell-targets">
+      <h4>{{localize "RYF.TargetsHealed"}}</h4>
+      <ul>
+        {{#each targets as |target|}}
+        <li>
+          <strong>{{target.name}}</strong>
+          <span class="healing-applied">+{{healingAmount}} {{localize "RYF.HP"}}</span>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div>
+</div>
+

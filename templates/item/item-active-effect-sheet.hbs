@@ -1,0 +1,101 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ActiveEffect'}}"/></h1>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+      
+      <h3>{{localize "RYF.SourceInfo"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.SourceType"}}</label>
+        <input type="text" name="system.sourceType" value="{{system.sourceType}}" readonly/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.SourceName"}}</label>
+        <input type="text" name="system.sourceName" value="{{system.sourceName}}" readonly/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.AppliedBy"}}</label>
+        <input type="text" name="system.appliedBy" value="{{system.appliedBy}}" readonly/>
+      </div>
+
+      <h3>{{localize "RYF.EffectInfo"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.EffectType"}}</label>
+        <select name="system.effectType" data-dtype="String">
+          <option value="skill-bonus" {{#if (eq system.effectType "skill-bonus")}}selected{{/if}}>{{localize "RYF.EffectTypes.skill-bonus"}}</option>
+          <option value="defense-bonus" {{#if (eq system.effectType "defense-bonus")}}selected{{/if}}>{{localize "RYF.EffectTypes.defense-bonus"}}</option>
+          <option value="weapon-bonus" {{#if (eq system.effectType "weapon-bonus")}}selected{{/if}}>{{localize "RYF.EffectTypes.weapon-bonus"}}</option>
+          <option value="armor-bonus" {{#if (eq system.effectType "armor-bonus")}}selected{{/if}}>{{localize "RYF.EffectTypes.armor-bonus"}}</option>
+          <option value="hindrance-reduction" {{#if (eq system.effectType "hindrance-reduction")}}selected{{/if}}>{{localize "RYF.EffectTypes.hindrance-reduction"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.TargetType"}}</label>
+        <input type="text" name="system.targetType" value="{{system.targetType}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.TargetName"}}</label>
+        <input type="text" name="system.targetName" value="{{system.targetName}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Modifier"}}</label>
+        <input type="number" name="system.modifier" value="{{system.modifier}}" data-dtype="Number"/>
+      </div>
+
+      <h3>{{localize "RYF.Duration"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.RemainingTurns"}}</label>
+        <input type="number" name="system.duration.remaining" value="{{system.duration.remaining}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.TotalTurns"}}</label>
+        <input type="number" name="system.duration.total" value="{{system.duration.total}}" data-dtype="Number" min="1" readonly/>
+      </div>
+
+      <div class="form-group">
+        <div class="duration-bar">
+          <div class="duration-fill" style="width: {{multiply (divide system.duration.remaining system.duration.total) 100}}%"></div>
+        </div>
+        <p class="duration-text">{{system.duration.remaining}} / {{system.duration.total}} {{localize "RYF.Turns"}}</p>
+      </div>
+
+      {{#if actor}}
+      <div class="form-group">
+        <button type="button" class="remove-effect" data-effect-id="{{item._id}}">
+          <i class="fas fa-times"></i> {{localize "RYF.RemoveEffect"}}
+        </button>
+      </div>
+      {{/if}}
+
+    </div>
+
+  </section>
+</form>
+

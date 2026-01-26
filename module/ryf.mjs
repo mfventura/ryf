@@ -34,7 +34,7 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
@@ -221,5 +221,43 @@ Hooks.on('renderChatMessage', (message, html) => {
       }
     }
   });
+});
+
+Hooks.on('combatTurn', async (combat, updateData, updateOptions) => {
+  console.log('RyF | Combat turn changed, decrementing active effects');
+
+  const combatant = combat.combatant;
+
+  if (!combatant || !combatant.actor) {
+    return;
+  }
+
+  const actor = combatant.actor;
+
+  const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
+
+  await RyfActiveEffect.decrementAllEffects(actor);
+
+  const activeEffects = actor.items.filter(i => i.type === 'active-effect');
+
+  if (activeEffects.length > 0) {
+    const effectsList = activeEffects.map(e => {
+      const remaining = e.system.duration.remaining;
+      return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
+    }).join(', ');
+
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      content: `<div class="ryf chat-card">
+        <h3>${game.i18n.localize('RYF.ActiveEffects')}</h3>
+        <p>${effectsList}</p>
+      </div>`,
+      whisper: [game.user.id]
+    });
+  }
+});
+
+Hooks.on('combatRound', async (combat, updateData, updateOptions) => {
+  console.log('RyF | Combat round changed');
 });
 

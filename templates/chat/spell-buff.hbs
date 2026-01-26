@@ -1,0 +1,51 @@
+<div class="ryf chat-card spell-buff">
+  <header class="card-header flexrow">
+    <img src="{{spell.img}}" title="{{spell.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{spell.name}}</h3>
+  </header>
+
+  <div class="card-content">
+    <div class="spell-info">
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Caster"}}:</span>
+        <span class="info-value">{{actor.name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.EffectType"}}:</span>
+        <span class="info-value">{{localize (concat "RYF.EffectTypes." effectType)}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Modifier"}}:</span>
+        <span class="info-value modifier-value">
+          {{#if (gt modifier 0)}}+{{/if}}{{modifier}}
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Duration"}}:</span>
+        <span class="info-value">{{duration}} {{localize "RYF.Turns"}}</span>
+      </div>
+    </div>
+
+    {{#if targetName}}
+    <div class="buff-target">
+      <span class="target-label">{{localize "RYF.Target"}}:</span>
+      <span class="target-value">{{targetName}}</span>
+    </div>
+    {{/if}}
+
+    {{#if targets}}
+    <div class="spell-targets">
+      <h4>{{localize "RYF.AffectedTargets"}}</h4>
+      <ul>
+        {{#each targets as |target|}}
+        <li>
+          <strong>{{target.name}}</strong>
+          <span class="buff-applied">{{localize "RYF.BuffApplied"}}</span>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div>
+</div>
+

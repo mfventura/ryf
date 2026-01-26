@@ -84,10 +84,11 @@ export class RyfActorSheet extends ActorSheet {
     const shields = [];
     const equipment = [];
     const spells = [];
+    const activeEffects = [];
 
     for (let i of context.items) {
       i.img = i.img || Item.DEFAULT_ICON;
-      
+
       if (i.type === 'skill') {
         skills.push(i);
       } else if (i.type === 'weapon') {
@@ -100,10 +101,13 @@ export class RyfActorSheet extends ActorSheet {
         equipment.push(i);
       } else if (i.type === 'spell') {
         spells.push(i);
+      } else if (i.type === 'active-effect') {
+        activeEffects.push(i);
       }
     }
 
     skills.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
+    activeEffects.sort((a, b) => (b.system.duration.remaining || 0) - (a.system.duration.remaining || 0));
 
     context.skills = skills;
     context.weapons = weapons;
@@ -111,6 +115,7 @@ export class RyfActorSheet extends ActorSheet {
     context.shields = shields;
     context.equipment = equipment;
     context.spells = spells;
+    context.activeEffects = activeEffects;
   }
 
   activateListeners(html) {
@@ -130,6 +135,7 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.skill-decrease').click(this._onSkillDecrease.bind(this));
 
     html.find('.spell-cast').click(this._onSpellCast.bind(this));
+    html.find('.effect-remove').click(this._onRemoveEffect.bind(this));
 
     html.find('.short-rest').click(this._onShortRest.bind(this));
     html.find('.long-rest').click(this._onLongRest.bind(this));
@@ -405,10 +411,117 @@ export class RyfActorSheet extends ActorSheet {
   async _onSpellCast(event) {
     event.preventDefault();
     const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
+    const spell = this.actor.items.get(li.data("itemId"));
 
-    if (item) {
-      await item.castSpell();
+    if (!spell) return;
+
+    const castParams = await this._promptSpellCastDialog(spell);
+    if (!castParams) return;
+
+    const targets = await this._promptSpellDialog(spell);
+    if (targets === null) return;
+
+    await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier);
+  }
+
+  async _promptSpellCastDialog(spell) {
+    const isWounded = this.actor.system.states?.wounded || false;
+    const defaultMode = isWounded ? 'disadvantage' : 'normal';
+    const castingDifficulty = spell.system.castingDifficulty || 15;
+    const manaCost = spell.system.manaCost || 0;
+    const currentMana = this.actor.system.mana?.value || 0;
+
+    return new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.CastSpell')}: ${spell.name}`,
+        content: `
+          <form>
+            ${isWounded ? `
+            <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
+              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+            </div>
+            ` : ''}
+            <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
+                <span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Magic.CastingDifficulty')}: ${castingDifficulty}</span>
+                <span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode" autofocus>
+                <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          cast: {
+            icon: '<i class="fas fa-magic"></i>',
+            label: game.i18n.localize('RYF.Cast'),
+            callback: (html) => {
+              const mode = html.find('[name="mode"]').val();
+              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
+              resolve({ mode, modifier });
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'cast',
+        close: () => resolve(null)
+      }).render(true);
+    });
+  }
+
+  async _promptSpellDialog(spell) {
+    const targetType = spell.system.targets?.type || 'single';
+    const targetCount = spell.system.targets?.count || 1;
+
+    let selectedTargets = Array.from(game.user.targets);
+
+    if (selectedTargets.length === 0) {
+      if (targetType === 'single') {
+        ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsSelected'));
+      } else if (targetType === 'multiple') {
+        ui.notifications.info(game.i18n.format('RYF.Info.NoTargetsForMultiple', { count: targetCount }));
+      } else if (targetType === 'area') {
+        const areaRadius = spell.system.targets?.areaRadius || 0;
+        ui.notifications.info(game.i18n.format('RYF.Info.AreaSpell', { radius: areaRadius }));
+      }
+    }
+
+    return selectedTargets.map(t => t.actor).filter(a => a);
+  }
+
+  async _onRemoveEffect(event) {
+    event.preventDefault();
+    const effectId = event.currentTarget.dataset.effectId;
+    const effect = this.actor.items.get(effectId);
+
+    if (effect) {
+      const confirmed = await Dialog.confirm({
+        title: game.i18n.localize('RYF.Dialogs.RemoveEffect'),
+        content: game.i18n.format('RYF.Dialogs.RemoveEffectConfirm', { name: effect.name })
+      });
+
+      if (confirmed) {
+        await effect.delete();
+        ui.notifications.info(game.i18n.format('RYF.Notifications.EffectRemoved', { name: effect.name }));
+      }
     }
   }
 

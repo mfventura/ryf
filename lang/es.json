@@ -135,7 +135,16 @@
       "SkillNotFoundCategory": "No se encontró ninguna habilidad con la categoría {category}",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
       "NoTargetSelected": "No hay objetivos seleccionados",
-      "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia"
+      "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
+      "SelectTargets": "Selecciona {count} objetivos",
+      "SpellCastingFailed": "Fallo al lanzar {name}"
+    },
+
+    "Info": {
+      "AreaSpell": "Hechizo de área con radio {radius}. Selecciona objetivos manualmente o se aplicará automáticamente.",
+      "NoTargetsForDamage": "No hay objetivos seleccionados. Se muestra solo la tirada de ataque.",
+      "NoTargetsSelected": "No hay objetivos seleccionados. Se lanzará el hechizo sin aplicar efectos.",
+      "NoTargetsForMultiple": "No hay objetivos seleccionados. El hechizo requiere {count} objetivos."
     },
 
     "Notifications": {
@@ -149,7 +158,9 @@
       "ItemUnequipped": "{name} desequipado",
       "SkillIncreased": "{name} aumentado a nivel {level}",
       "SkillDecreased": "{name} reducido a nivel {level}",
-      "SpellCast": "Has lanzado {name} (Coste: {cost} maná)"
+      "ManaSpent": "Gastado {cost} maná para lanzar {name}",
+      "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
+      "EffectRemoved": "Efecto {name} eliminado"
     },
 
     "SheetLabels": {
@@ -202,6 +213,8 @@
     "Edit": "Editar",
     "Delete": "Eliminar",
     "Cast": "Lanzar",
+    "SpellCasting": "Lanzamiento de Hechizo",
+    "Intelligence": "Inteligencia",
 
     "AddSkill": "Añadir Habilidad",
     "AddWeapon": "Añadir Arma",
@@ -243,6 +256,7 @@
     "Quantity": "Cantidad",
     "Weight": "Peso",
     "ManaCost": "Coste de Maná",
+    "CurrentMana": "Maná Actual",
     "CastingTime": "Tiempo de Lanzamiento",
     "Duration": "Duración",
     "CastSpell": "Lanzar Hechizo",
@@ -265,7 +279,9 @@
 
     "Dialogs": {
       "DeleteItem": "Eliminar Item",
-      "DeleteItemConfirm": "¿Estás seguro de que quieres eliminar {name}?"
+      "DeleteItemConfirm": "¿Estás seguro de que quieres eliminar {name}?",
+      "RemoveEffect": "Eliminar Efecto",
+      "RemoveEffectConfirm": "¿Estás seguro de que quieres eliminar el efecto {name}?"
     },
 
     "States": {
@@ -275,7 +291,6 @@
       "dead": "Muerto"
     },
 
-    "Roll": "Tirar",
     "RollMode": "Modo de Tirada",
     "Normal": "Normal",
     "Advantage": "Ventaja",
@@ -304,6 +319,8 @@
     "BaseDamage": "Daño Base",
     "TotalDamage": "Daño Total",
     "DamageNote": "La armadura absorbe daño según su protección",
+    "SpellDamage": "Daño de Hechizo",
+    "SpellDamageNote": "El daño mágico puede ser absorbido por armadura según el tipo",
     "Subtotal": "Subtotal",
 
     "SpellSuccess": "Hechizo Exitoso",
@@ -344,12 +361,6 @@
     "Category": "Categoría",
     "SelectCategory": "Seleccionar Categoría",
 
-    "States": {
-      "Wounded": "Malherido",
-      "Unconscious": "Inconsciente",
-      "Dead": "Muerto"
-    },
-
     "Combat": {
       "AutoDisadvantage": "Desventaja Automática",
       "ReceivesDamage": "recibe daño",
@@ -380,6 +391,116 @@
       "NoWeaponsEquipped": "No hay armas equipadas",
       "Untrained": "Sin Entrenamiento",
       "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática"
+    },
+
+    "Magic": {
+      "SpellType": "Tipo de Hechizo",
+      "CastingDifficulty": "Dificultad de Casteo",
+      "SpellTypes": {
+        "generic": "Genérico",
+        "damage": "Daño",
+        "healing": "Curación",
+        "buff-skill": "Mejora de Habilidad",
+        "buff-weapon": "Mejora de Arma",
+        "buff-armor": "Mejora de Armadura",
+        "effect": "Efecto"
+      },
+      "AttackType": "Tipo de Ataque",
+      "AttackTypes": {
+        "none": "Ninguno",
+        "melee": "Cuerpo a Cuerpo",
+        "ranged": "A Distancia"
+      },
+      "DamageTypes": {
+        "physical": "Físico",
+        "fire": "Fuego",
+        "cold": "Frío",
+        "lightning": "Relámpago",
+        "force": "Fuerza"
+      },
+      "RangeType": "Tipo de Alcance",
+      "RangeTypes": {
+        "self": "Personal",
+        "touch": "Toque",
+        "ranged": "A Distancia"
+      },
+      "RangeValue": "Valor de Alcance",
+      "TargetType": "Tipo de Objetivo",
+      "TargetTypes": {
+        "single": "Individual",
+        "multiple": "Múltiple",
+        "area": "Área"
+      },
+      "TargetCount": "Cantidad de Objetivos",
+      "AreaRadius": "Radio de Área",
+      "DurationTypes": {
+        "fixed": "Fijo",
+        "perLevel": "Por Nivel"
+      },
+      "DurationType": "Tipo de Duración",
+      "DurationValue": "Valor de Duración",
+      "EffectType": "Tipo de Efecto",
+      "EffectTypes": {
+        "skill-bonus": "Bonus a Habilidad",
+        "defense-bonus": "Bonus a Defensa",
+        "weapon-bonus": "Bonus a Arma",
+        "armor-bonus": "Bonus a Armadura",
+        "hindrance-reduction": "Reducción de Estorbo"
+      },
+      "BasicInfo": "Información Básica",
+      "RangeAndTargets": "Alcance y Objetivos",
+      "DamageSettings": "Configuración de Daño",
+      "HealingSettings": "Configuración de Curación",
+      "BuffSettings": "Configuración de Mejora",
+      "EffectSettings": "Configuración de Efecto",
+      "GenericSettings": "Configuración Genérica",
+      "DamageFormula": "Fórmula de Daño",
+      "HealingFormula": "Fórmula de Curación",
+      "RequiresSavingThrow": "Requiere Tirada de Salvación",
+      "SavingThrowDifficulty": "Dificultad de Salvación",
+      "SavingThrowAttribute": "Atributo de Salvación",
+      "RequiresRoll": "Requiere Tirada",
+      "RollAttribute": "Atributo para Tirar",
+      "Modifier": "Modificador",
+      "TargetName": "Nombre del Objetivo",
+      "ActiveEffects": "Efectos Activos",
+      "ActiveEffect": "Efecto Activo",
+      "NoActiveEffects": "No hay efectos activos",
+      "Source": "Fuente",
+      "SourceInfo": "Información de Fuente",
+      "SourceType": "Tipo de Fuente",
+      "SourceName": "Nombre de Fuente",
+      "AppliedBy": "Aplicado Por",
+      "EffectInfo": "Información del Efecto",
+      "Duration": "Duración",
+      "RemainingTurns": "Turnos Restantes",
+      "TotalTurns": "Turnos Totales",
+      "Turns": "turnos",
+      "RemoveEffect": "Eliminar Efecto",
+      "CastSpell": "Lanzar Hechizo",
+      "Caster": "Lanzador",
+      "SpellLevel": "Nivel del Hechizo",
+      "ManaCost": "Coste de Maná",
+      "School": "Escuela",
+      "Evocation": "Evocación",
+      "CastingTime": "Tiempo de Lanzamiento",
+      "Action": "Acción",
+      "Targets": "Objetivos",
+      "TargetsHealed": "Objetivos Curados",
+      "AffectedTargets": "Objetivos Afectados",
+      "HealingAmount": "Cantidad de Curación",
+      "HP": "PV",
+      "Hit": "Impacto",
+      "Miss": "Fallo",
+      "Saved": "Salvado",
+      "BuffApplied": "Mejora Aplicada",
+      "EffectApplied": "Efecto Aplicado",
+      "EffectExpired": "Efecto Expirado",
+      "DiceRolled": "Dados Tirados",
+      "Success": "Éxito",
+      "Failure": "Fallo",
+      "CriticalDice": "Dados Críticos",
+      "Fumble": "Pifia"
     }
   }
 }
