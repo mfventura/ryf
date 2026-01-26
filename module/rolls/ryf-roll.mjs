@@ -4,25 +4,27 @@ export class RyfRoll {
   
   static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal') {
     const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
-    
+
     if (!skill) {
       ui.notifications.warn(game.i18n.format('RYF.Warnings.SkillNotFound', { skill: skillName }));
       return null;
     }
-    
+
     const attribute = actor.system.attributes[skill.system.attribute];
     const attributeValue = attribute ? attribute.value : 0;
     const skillLevel = skill.system.level || 0;
-    
+
+    const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
+
     const diceRoll = await roll1o3d10(mode);
-    
-    const total = attributeValue + skillLevel + diceRoll.result;
-    
+
+    const total = attributeValue + skillLevel + diceRoll.result - hindrance;
+
     const success = isSuccess(total, difficulty);
     const margin = total - difficulty;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
-    
+
     const rollData = {
       type: 'skill',
       actor: actor,
@@ -33,6 +35,7 @@ export class RyfRoll {
       skillLevel: skillLevel,
       difficulty: difficulty,
       mode: mode,
+      hindrance: hindrance,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -40,9 +43,9 @@ export class RyfRoll {
       fumble: fumble,
       criticalDice: criticalDice
     };
-    
+
     await this.toMessage(rollData);
-    
+
     return rollData;
   }
   

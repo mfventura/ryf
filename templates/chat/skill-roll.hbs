@@ -28,6 +28,10 @@
         {{diceRoll.chosen}}
       {{/if}}
     </span>
+    {{#if (gt hindrance 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    {{/if}}
   </div>
 
   <div class="dice-results">
