@@ -13,6 +13,7 @@ export async function preloadHandlebarsTemplates() {
     'systems/ryf/templates/item/item-shield-sheet.hbs',
     'systems/ryf/templates/item/item-equipment-sheet.hbs',
     'systems/ryf/templates/item/item-spell-sheet.hbs',
+    'systems/ryf/templates/item/item-active-effect-sheet.hbs',
     'systems/ryf/templates/chat/skill-roll.hbs',
     'systems/ryf/templates/chat/attack-roll.hbs',
     'systems/ryf/templates/chat/damage-roll.hbs',

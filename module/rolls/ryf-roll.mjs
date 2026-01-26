@@ -14,11 +14,13 @@ export class RyfRoll {
     const attributeValue = attribute ? attribute.value : 0;
     const skillLevel = skill.system.level || 0;
 
+    const effectBonus = actor.system.activeEffectBonuses?.skills?.[skillName] || 0;
+
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + diceRoll.result - hindrance;
+    const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance;
 
     const success = isSuccess(total, difficulty);
     const margin = total - difficulty;
@@ -33,6 +35,7 @@ export class RyfRoll {
       attribute: skill.system.attribute,
       attributeValue: attributeValue,
       skillLevel: skillLevel,
+      effectBonus: effectBonus,
       difficulty: difficulty,
       mode: mode,
       hindrance: hindrance,
@@ -252,6 +255,34 @@ export class RyfRoll {
     return rollData;
   }
 
+  static async rollHealing(spell, targetActor, criticalDice = 0) {
+    const healingFormula = spell.system.healing?.formula || '1d6';
+
+    const baseRoll = await rollEffect(healingFormula);
+    let total = baseRoll.total;
+
+    let criticalRoll = null;
+    if (criticalDice > 0) {
+      criticalRoll = await rollEffect(`${criticalDice}d6`);
+      total += criticalRoll.total;
+    }
+
+    const rollData = {
+      type: 'healing',
+      spell: spell,
+      target: targetActor,
+      healingFormula: healingFormula,
+      baseRoll: baseRoll,
+      criticalDice: criticalDice,
+      criticalRoll: criticalRoll,
+      total: total
+    };
+
+    await this.toMessage(rollData);
+
+    return rollData;
+  }
+
   static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal') {
     const attribute = actor.system.attributes[attributeName];
 
@@ -299,7 +330,8 @@ export class RyfRoll {
       'spell': 'systems/ryf/templates/chat/spell-roll.hbs',
       'attribute': 'systems/ryf/templates/chat/attribute-roll.hbs',
       'spell-casting': 'systems/ryf/templates/chat/spell-casting-roll.hbs',
-      'spell-damage': 'systems/ryf/templates/chat/spell-damage.hbs'
+      'spell-damage': 'systems/ryf/templates/chat/spell-damage.hbs',
+      'healing': 'systems/ryf/templates/chat/healing-roll.hbs'
     };
 
     const template = templateMap[rollData.type];

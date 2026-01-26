@@ -41,8 +41,6 @@ Hooks.once('init', async function() {
 
   registerSystemSettings();
 
-  await preloadHandlebarsTemplates();
-
   Handlebars.registerHelper('times', function(n, block) {
     let accum = '';
     for (let i = 0; i < n; ++i) {
@@ -103,10 +101,6 @@ Hooks.once('init', async function() {
     return a + b;
   });
 
-  Handlebars.registerHelper('multiply', function(a, b) {
-    return a * b;
-  });
-
   Handlebars.registerHelper('checked', function(value) {
     return value ? 'checked' : '';
   });
@@ -119,6 +113,8 @@ Hooks.once('init', async function() {
     args.pop();
     return args.join('');
   });
+
+  await preloadHandlebarsTemplates();
 
   console.log('RyF | Sistema inicializado correctamente');
 });
@@ -223,22 +219,41 @@ Hooks.on('renderChatMessage', (message, html) => {
   });
 });
 
-Hooks.on('combatTurn', async (combat, updateData, updateOptions) => {
-  console.log('RyF | Combat turn changed, decrementing active effects');
+Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
+  console.log('RyF | Combat updated:', updateData);
+
+  if (!updateData.turn && !updateData.round) {
+    console.log('RyF | Not a turn/round change, skipping');
+    return;
+  }
+
+  console.log('RyF | Combat turn/round changed, decrementing active effects');
 
   const combatant = combat.combatant;
 
   if (!combatant || !combatant.actor) {
+    console.log('RyF | No combatant or actor found');
     return;
   }
 
   const actor = combatant.actor;
+  console.log(`RyF | Decrementing effects for ${actor.name}`);
 
   const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
+
+  const effectsBefore = actor.items.filter(i => i.type === 'active-effect');
+  console.log(`RyF | Effects before decrement: ${effectsBefore.length}`);
+  effectsBefore.forEach(e => {
+    console.log(`  - ${e.name}: ${e.system.duration.remaining}/${e.system.duration.total}`);
+  });
 
   await RyfActiveEffect.decrementAllEffects(actor);
 
   const activeEffects = actor.items.filter(i => i.type === 'active-effect');
+  console.log(`RyF | Effects after decrement: ${activeEffects.length}`);
+  activeEffects.forEach(e => {
+    console.log(`  - ${e.name}: ${e.system.duration.remaining}/${e.system.duration.total}`);
+  });
 
   if (activeEffects.length > 0) {
     const effectsList = activeEffects.map(e => {

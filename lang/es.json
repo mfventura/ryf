@@ -144,7 +144,9 @@
       "AreaSpell": "Hechizo de área con radio {radius}. Selecciona objetivos manualmente o se aplicará automáticamente.",
       "NoTargetsForDamage": "No hay objetivos seleccionados. Se muestra solo la tirada de ataque.",
       "NoTargetsSelected": "No hay objetivos seleccionados. Se lanzará el hechizo sin aplicar efectos.",
-      "NoTargetsForMultiple": "No hay objetivos seleccionados. El hechizo requiere {count} objetivos."
+      "NoTargetsForMultiple": "No hay objetivos seleccionados. El hechizo requiere {count} objetivos.",
+      "NoTargetsForHealing": "No hay objetivos seleccionados para curar.",
+      "NoTargetsForBuff": "No hay objetivos seleccionados para aplicar el buff."
     },
 
     "Notifications": {
@@ -207,6 +209,7 @@
     "State": "Estado",
 
     "Level": "Nivel",
+    "EffectBonus": "Bono de Efecto",
     "Attribute": "Atributo",
     "Controls": "Controles",
     "Roll": "Tirar",
@@ -215,6 +218,12 @@
     "Cast": "Lanzar",
     "SpellCasting": "Lanzamiento de Hechizo",
     "Intelligence": "Inteligencia",
+    "Healing": "Curación",
+    "Target": "Objetivo",
+    "Formula": "Fórmula",
+    "BaseHealing": "Curación Base",
+    "CriticalHealing": "Curación Crítica",
+    "TotalHealing": "Curación Total",
 
     "AddSkill": "Añadir Habilidad",
     "AddWeapon": "Añadir Arma",

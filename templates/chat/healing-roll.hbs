@@ -1,0 +1,76 @@
+<div class="ryf-roll healing-roll">
+  <div class="roll-header">
+    <img src="{{spell.img}}" alt="{{spell.name}}" class="actor-image"/>
+    <div class="roll-title">
+      <h3>{{localize "RYF.Healing"}}: {{spell.name}}</h3>
+      <div class="roll-subtitle">{{localize "RYF.Target"}}: {{target.name}}</div>
+    </div>
+  </div>
+
+  <div class="healing-breakdown">
+    <div class="healing-section base-healing">
+      <div class="section-label">{{localize "RYF.BaseHealing"}}</div>
+      <div class="healing-formula">{{healingFormula}}</div>
+
+      <div class="dice-results">
+        {{#each baseRoll.rolls as |roll|}}
+          <div class="die d6">
+            <i class="fas fa-dice-d6"></i>
+            <span class="die-value">{{roll}}</span>
+          </div>
+        {{/each}}
+
+        {{#if baseRoll.explosions.length}}
+        <div class="explosions">
+          <i class="fas fa-burst"></i>
+          {{#each baseRoll.explosions as |explosion|}}
+            <span class="explosion-value">+{{explosion}}</span>
+          {{/each}}
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="healing-subtotal">
+        {{localize "RYF.Subtotal"}}: {{baseRoll.total}}
+      </div>
+    </div>
+
+    {{#if criticalRoll}}
+    <div class="healing-section critical-healing">
+      <div class="section-label">
+        <i class="fas fa-star"></i> {{localize "RYF.CriticalHealing"}} ({{criticalDice}}d6)
+      </div>
+
+      <div class="dice-results">
+        {{#each criticalRoll.rolls as |roll|}}
+          <div class="die d6 critical">
+            <i class="fas fa-dice-d6"></i>
+            <span class="die-value">{{roll}}</span>
+          </div>
+        {{/each}}
+
+        {{#if criticalRoll.explosions.length}}
+        <div class="explosions">
+          <i class="fas fa-burst"></i>
+          {{#each criticalRoll.explosions as |explosion|}}
+            <span class="explosion-value">+{{explosion}}</span>
+          {{/each}}
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="healing-subtotal">
+        {{localize "RYF.Subtotal"}}: {{criticalRoll.total}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="healing-total">
+    <div class="total-label">
+      <i class="fas fa-heart"></i> {{localize "RYF.TotalHealing"}}
+    </div>
+    <div class="total-value">{{total}}</div>
+  </div>
+</div>
+

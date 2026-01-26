@@ -15,7 +15,7 @@ export class RyfActor extends Actor {
 
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
-    this._applyActiveEffects(actorData);
+    this._applyActiveEffects(system);
   }
 
   async _preCreate(data, options, user) {
@@ -113,6 +113,8 @@ export class RyfActor extends Actor {
     system.combat.hindrance = totalHindrance;
     system.combat.absorption = armorAbsorption;
 
+    this._applyActiveEffects(system);
+
     system.states.wounded = system.health.value <= system.attributes.fisico.value;
     system.states.unconscious = system.health.value <= 0;
     system.states.dead = system.health.value <= -(system.attributes.fisico.value * 6);
@@ -124,6 +126,75 @@ export class RyfActor extends Actor {
     }
     system.attributePoints.max = maxPoints;
     system.attributePoints.used = usedPoints;
+  }
+
+  _applyActiveEffects(system) {
+    const activeEffects = this.items.filter(i => i.type === 'active-effect');
+
+    system.activeEffectBonuses = {
+      defense: 0,
+      initiative: 0,
+      hindranceReduction: 0,
+      absorption: 0,
+      skills: {},
+      weapons: {},
+      armor: 0
+    };
+
+    if (activeEffects.length === 0) return;
+
+    console.log(`RyF | Applying ${activeEffects.length} active effects to ${this.name}`);
+
+    for (const effect of activeEffects) {
+      const effectType = effect.system.effectType;
+      const targetType = effect.system.targetType;
+      const targetName = effect.system.targetName;
+      const modifier = effect.system.modifier || 0;
+
+      console.log(`RyF | Effect: ${effect.name}, Type: ${effectType}, Target: ${targetType}/${targetName}, Modifier: ${modifier}`);
+
+      if (effectType === 'defense-bonus') {
+        system.activeEffectBonuses.defense += modifier;
+        console.log(`RyF | Stored defense bonus: ${modifier}`);
+      } else if (effectType === 'initiative-bonus') {
+        system.activeEffectBonuses.initiative += modifier;
+        console.log(`RyF | Stored initiative bonus: ${modifier}`);
+      } else if (effectType === 'hindrance-reduction') {
+        system.activeEffectBonuses.hindranceReduction += modifier;
+        console.log(`RyF | Stored hindrance reduction: ${modifier}`);
+      } else if (effectType === 'absorption-bonus') {
+        system.activeEffectBonuses.absorption += modifier;
+        console.log(`RyF | Stored absorption bonus: ${modifier}`);
+      } else if (effectType === 'skill-bonus' && targetType === 'skill') {
+        if (!system.activeEffectBonuses.skills[targetName]) {
+          system.activeEffectBonuses.skills[targetName] = 0;
+        }
+        system.activeEffectBonuses.skills[targetName] += modifier;
+        console.log(`RyF | Stored skill bonus for ${targetName}: ${modifier}`);
+      } else if (effectType === 'weapon-bonus' && targetType === 'weapon') {
+        if (!system.activeEffectBonuses.weapons[targetName]) {
+          system.activeEffectBonuses.weapons[targetName] = 0;
+        }
+        system.activeEffectBonuses.weapons[targetName] += modifier;
+        console.log(`RyF | Stored weapon bonus for ${targetName}: ${modifier}`);
+      } else if (effectType === 'armor-bonus' && targetType === 'armor') {
+        system.activeEffectBonuses.armor += modifier;
+        console.log(`RyF | Stored armor bonus: ${modifier}`);
+      }
+    }
+
+    if (system.defense) {
+      system.defense.value += system.activeEffectBonuses.defense;
+    }
+
+    if (system.initiative) {
+      system.initiative.value += system.activeEffectBonuses.initiative;
+    }
+
+    if (system.combat) {
+      system.combat.hindrance = Math.max(0, system.combat.hindrance - system.activeEffectBonuses.hindranceReduction);
+      system.combat.absorption += system.activeEffectBonuses.absorption;
+    }
   }
 
   _prepareNpcData(actorData) {
@@ -185,73 +256,6 @@ export class RyfActor extends Actor {
     system.combat = system.combat || {};
     system.combat.hindrance = totalHindrance;
     system.combat.absorption = armorAbsorption;
-  }
-
-  _applyActiveEffects(actorData) {
-    const system = actorData.system;
-    const activeEffects = this.items.filter(i => i.type === 'active-effect');
-
-    if (activeEffects.length === 0) return;
-
-    system.activeEffectBonuses = {
-      defense: 0,
-      initiative: 0,
-      hindranceReduction: 0,
-      skills: {},
-      weapons: {},
-      armor: 0
-    };
-
-    activeEffects.forEach(effect => {
-      const effectType = effect.system.effectType;
-      const modifier = effect.system.modifier || 0;
-      const targetName = effect.system.targetName;
-
-      switch (effectType) {
-        case 'skill-bonus':
-          if (targetName) {
-            if (!system.activeEffectBonuses.skills[targetName]) {
-              system.activeEffectBonuses.skills[targetName] = 0;
-            }
-            system.activeEffectBonuses.skills[targetName] += modifier;
-          }
-          break;
-
-        case 'defense-bonus':
-          system.activeEffectBonuses.defense += modifier;
-          break;
-
-        case 'weapon-bonus':
-          if (targetName) {
-            if (!system.activeEffectBonuses.weapons[targetName]) {
-              system.activeEffectBonuses.weapons[targetName] = 0;
-            }
-            system.activeEffectBonuses.weapons[targetName] += modifier;
-          }
-          break;
-
-        case 'armor-bonus':
-          system.activeEffectBonuses.armor += modifier;
-          break;
-
-        case 'hindrance-reduction':
-          system.activeEffectBonuses.hindranceReduction += modifier;
-          break;
-      }
-    });
-
-    if (system.defense) {
-      system.defense.value += system.activeEffectBonuses.defense;
-    }
-
-    if (system.initiative) {
-      system.initiative.value += system.activeEffectBonuses.initiative;
-    }
-
-    if (system.combat) {
-      system.combat.hindrance = Math.max(0, system.combat.hindrance - system.activeEffectBonuses.hindranceReduction);
-      system.combat.absorption += system.activeEffectBonuses.armor;
-    }
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -650,7 +654,8 @@ export class RyfActor extends Actor {
     }
 
     if (!targets || targets.length === 0) {
-      targets = Array.from(game.user.targets);
+      const selectedTargets = Array.from(game.user.targets);
+      targets = selectedTargets.map(t => t.actor).filter(a => a);
     }
 
     if (targets.length === 0 && spell.system.targets.type === 'self') {
@@ -664,7 +669,7 @@ export class RyfActor extends Actor {
         result = await this._castDamageSpell(spell, targets);
         break;
       case 'healing':
-        result = await this._castHealingSpell(spell, targets);
+        result = await this._castHealingSpell(spell, targets, castingRoll);
         break;
       case 'buff-skill':
       case 'buff-weapon':
@@ -756,23 +761,39 @@ export class RyfActor extends Actor {
     return results;
   }
 
-  async _castHealingSpell(spell, targets) {
+  async _castHealingSpell(spell, targets, castingRoll) {
     const results = [];
 
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForHealing'));
+      return results;
+    }
+
+    const criticalDice = castingRoll?.criticalDice || 0;
+
     for (const target of targets) {
-      const healingRoll = await new Roll(spell.system.healing.formula).evaluate();
+      const targetActor = target.actor || target;
+
+      console.log('RyF | Healing target:', targetActor.name, 'Type:', typeof targetActor, 'Is Actor:', targetActor instanceof Actor);
+
+      const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+      const healingRoll = await RyfRoll.rollHealing(spell, targetActor, criticalDice);
       const healingAmount = healingRoll.total;
 
-      const currentHP = target.actor.system.health.value;
-      const maxHP = target.actor.system.health.max;
+      const currentHP = targetActor.system.health.value;
+      const maxHP = targetActor.system.health.max;
       const newHP = Math.min(maxHP, currentHP + healingAmount);
 
-      await target.actor.update({
+      console.log(`RyF | Healing ${targetActor.name}: ${currentHP} + ${healingAmount} = ${newHP} (max: ${maxHP})`);
+
+      await targetActor.update({
         'system.health.value': newHP
       });
 
+      console.log(`RyF | Updated ${targetActor.name} HP to ${newHP}`);
+
       results.push({
-        target: target,
+        target: targetActor,
         healing: healingAmount,
         healingRoll: healingRoll
       });
@@ -785,7 +806,14 @@ export class RyfActor extends Actor {
     const results = [];
     const { RyfActiveEffect } = await import('./active-effect.mjs');
 
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
+      return results;
+    }
+
     for (const target of targets) {
+      const targetActor = target.actor || target;
+
       let duration = spell.system.effect.duration.value;
 
       if (spell.system.effect.duration.perLevel) {
@@ -809,10 +837,14 @@ export class RyfActor extends Actor {
         appliedBy: this.name
       };
 
-      const effect = await RyfActiveEffect.create(target.actor, effectData);
+      console.log('RyF | Creating buff effect:', effectData);
+
+      const effect = await RyfActiveEffect.create(targetActor, effectData);
+
+      console.log('RyF | Buff effect created:', effect);
 
       results.push({
-        target: target,
+        target: targetActor,
         effect: effect
       });
     }
