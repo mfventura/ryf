@@ -19,7 +19,7 @@
         <div class="resource">
           <label class="resource-label">{{localize "RYF.NPC.INI"}}</label>
           <div class="resource-content">
-            <input type="text" name="system.initiative" value="{{system.initiative}}" data-dtype="Number"/>
+            <input type="text" name="system.initiative.base" value="{{#if system.initiative.base}}{{system.initiative.base}}{{else}}{{system.initiative}}{{/if}}" data-dtype="Number"/>
           </div>
         </div>
 

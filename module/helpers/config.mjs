@@ -93,23 +93,23 @@ RYF.skillPyramids = {
 };
 
 RYF.isCarismaEnabled = function() {
-  return game.settings.get('ryf', 'enableCarisma');
+  return game.settings.get('ryf3', 'enableCarisma');
 };
 
 RYF.isMagicEnabled = function() {
-  return game.settings.get('ryf', 'enableMagia');
+  return game.settings.get('ryf3', 'enableMagia');
 };
 
 RYF.getHealthMultiplier = function() {
-  return game.settings.get('ryf', 'healthMultiplier');
+  return game.settings.get('ryf3', 'healthMultiplier');
 };
 
 RYF.getManaMultiplier = function() {
-  return game.settings.get('ryf', 'manaMultiplier');
+  return game.settings.get('ryf3', 'manaMultiplier');
 };
 
 RYF.getAttributePoints = function() {
-  return game.settings.get('ryf', 'attributePoints');
+  return game.settings.get('ryf3', 'attributePoints');
 };
 
 RYF.getActiveAttributes = function() {
@@ -138,10 +138,10 @@ RYF.getAvailableSkills = function() {
 };
 
 RYF.getActivePyramid = function() {
-  const type = game.settings.get('ryf', 'defaultCharacterType');
+  const type = game.settings.get('ryf3', 'defaultCharacterType');
   
   if (type === 'custom') {
-    const custom = game.settings.get('ryf', 'customPyramid');
+    const custom = game.settings.get('ryf3', 'customPyramid');
     const pyramid = [];
     
     if (custom.level6 > 0) pyramid.push({ level: 6, count: custom.level6 });

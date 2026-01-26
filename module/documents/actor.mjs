@@ -25,7 +25,7 @@ export class RyfActor extends Actor {
       const updates = {};
 
       if (!data.system?.characterType) {
-        updates['system.characterType'] = game.settings.get('ryf', 'defaultCharacterType');
+        updates['system.characterType'] = game.settings.get('ryf3', 'defaultCharacterType');
       }
 
       if (!data.system?.attributePoints) {
@@ -197,6 +197,24 @@ export class RyfActor extends Actor {
     if (actorData.type !== 'npc') return;
 
     const system = actorData.system;
+
+    if (typeof system.initiative === 'number') {
+      const initiativeValue = system.initiative;
+      system.initiative = {
+        value: initiativeValue,
+        base: initiativeValue
+      };
+    } else if (typeof system.initiative === 'object' && system.initiative !== null) {
+      if (system.initiative.base !== undefined) {
+        system.initiative.value = system.initiative.base;
+      }
+    }
+
+    if (!system.combat) {
+      system.combat = {
+        hindrance: 0
+      };
+    }
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -443,7 +461,7 @@ export class RyfActor extends Actor {
       if (targets.length > 0 && targets[0].actor) {
         const targetActor = targets[0].actor;
         if (targetActor.type === 'character') {
-          targetDefense = targetActor.system.combat?.defense?.total || 10;
+          targetDefense = targetActor.system.defense?.value || 10;
         } else if (targetActor.type === 'npc') {
           targetDefense = targetActor.system.defense || 10;
         }
@@ -601,7 +619,7 @@ export class RyfActor extends Actor {
       if (targets.length > 0 && targets[0].actor) {
         const targetActor = targets[0].actor;
         if (targetActor.type === 'character') {
-          difficulty = targetActor.system.combat?.defense?.total || 10;
+          difficulty = targetActor.system.defense?.value || 10;
         } else if (targetActor.type === 'npc') {
           difficulty = targetActor.system.defense || 10;
         }
@@ -672,7 +690,7 @@ export class RyfActor extends Actor {
     const chatData = {
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      content: await renderTemplate('systems/ryf/templates/chat/npc-attack-roll.hbs', {
+      content: await renderTemplate('systems/ryf3/templates/chat/npc-attack-roll.hbs', {
         actorName: this.name,
         actorImg: this.img,
         attackName: attack.name,
@@ -714,7 +732,7 @@ export class RyfActor extends Actor {
         const damageChatData = {
           user: game.user.id,
           speaker: ChatMessage.getSpeaker({ actor: this }),
-          content: await renderTemplate('systems/ryf/templates/chat/npc-damage-roll.hbs', {
+          content: await renderTemplate('systems/ryf3/templates/chat/npc-damage-roll.hbs', {
             actorName: this.name,
             attackName: attack.name,
             damageBase: damageBase,
@@ -762,7 +780,7 @@ export class RyfActor extends Actor {
       states: this.system.states
     };
 
-    const template = 'systems/ryf/templates/chat/damage-applied.hbs';
+    const template = 'systems/ryf3/templates/chat/damage-applied.hbs';
     const html = await renderTemplate(template, templateData);
 
     await ChatMessage.create({
@@ -1081,7 +1099,7 @@ export class RyfActor extends Actor {
       description: spell.system.description
     };
 
-    const template = 'systems/ryf/templates/chat/spell-generic.hbs';
+    const template = 'systems/ryf3/templates/chat/spell-generic.hbs';
     const html = await renderTemplate(template, templateData);
 
     await ChatMessage.create({
@@ -1145,7 +1163,11 @@ export class RyfActor extends Actor {
 
       if (target) {
         const targetActor = target.actor || target;
-        targetDefense = targetActor.system.defense.value;
+        if (targetActor.type === 'character') {
+          targetDefense = targetActor.system.defense?.value || 10;
+        } else if (targetActor.type === 'npc') {
+          targetDefense = targetActor.system.defense || 10;
+        }
       }
 
       return await this.rollMeleeAttack(spellAsWeapon, targetDefense, null, 0);
@@ -1154,7 +1176,7 @@ export class RyfActor extends Actor {
 
       if (target) {
         const targetActor = target.actor || target;
-        targetDefenseRanged = targetActor.system.defense.ranged || 0;
+        targetDefenseRanged = targetActor.system.defense?.ranged || 0;
       }
 
       return await this.rollRangedAttack(spellAsWeapon, range, null, targetDefenseRanged, 0);

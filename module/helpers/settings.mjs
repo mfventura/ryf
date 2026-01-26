@@ -2,7 +2,7 @@ import { CustomPyramidConfig } from './custom-pyramid-config.mjs';
 
 export function registerSystemSettings() {
   
-  game.settings.register('ryf', 'enableCarisma', {
+  game.settings.register('ryf3', 'enableCarisma', {
     name: 'RYF.Settings.EnableCarisma.Name',
     hint: 'RYF.Settings.EnableCarisma.Hint',
     scope: 'world',
@@ -12,7 +12,7 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
-  game.settings.register('ryf', 'enableMagia', {
+  game.settings.register('ryf3', 'enableMagia', {
     name: 'RYF.Settings.EnableMagia.Name',
     hint: 'RYF.Settings.EnableMagia.Hint',
     scope: 'world',
@@ -22,7 +22,7 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
-  game.settings.register('ryf', 'healthMultiplier', {
+  game.settings.register('ryf3', 'healthMultiplier', {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',
     scope: 'world',
@@ -43,7 +43,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register('ryf', 'manaMultiplier', {
+  game.settings.register('ryf3', 'manaMultiplier', {
     name: 'RYF.Settings.ManaMultiplier.Name',
     hint: 'RYF.Settings.ManaMultiplier.Hint',
     scope: 'world',
@@ -64,7 +64,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register('ryf', 'defaultCharacterType', {
+  game.settings.register('ryf3', 'defaultCharacterType', {
     name: 'RYF.Settings.DefaultCharacterType.Name',
     hint: 'RYF.Settings.DefaultCharacterType.Hint',
     scope: 'world',
@@ -81,7 +81,7 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
-  game.settings.registerMenu('ryf', 'customPyramidMenu', {
+  game.settings.registerMenu('ryf3', 'customPyramidMenu', {
     name: 'RYF.Settings.CustomPyramidMenu.Name',
     label: 'RYF.Settings.CustomPyramidMenu.Label',
     hint: 'RYF.Settings.CustomPyramidMenu.Hint',
@@ -90,7 +90,7 @@ export function registerSystemSettings() {
     restricted: true
   });
 
-  game.settings.register('ryf', 'customPyramid', {
+  game.settings.register('ryf3', 'customPyramid', {
     scope: 'world',
     config: false,
     type: Object,
@@ -104,7 +104,7 @@ export function registerSystemSettings() {
     }
   });
 
-  game.settings.register('ryf', 'attributePoints', {
+  game.settings.register('ryf3', 'attributePoints', {
     name: 'RYF.Settings.AttributePoints.Name',
     hint: 'RYF.Settings.AttributePoints.Hint',
     scope: 'world',
@@ -118,7 +118,7 @@ export function registerSystemSettings() {
     default: 30
   });
 
-  game.settings.register('ryf', 'autoCalculateDefense', {
+  game.settings.register('ryf3', 'autoCalculateDefense', {
     name: 'RYF.Settings.AutoCalculateDefense.Name',
     hint: 'RYF.Settings.AutoCalculateDefense.Hint',
     scope: 'world',

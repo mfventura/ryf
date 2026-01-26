@@ -10,7 +10,7 @@ export class RyfItemSheet extends ItemSheet {
   }
 
   get template() {
-    return `systems/ryf/templates/item/item-${this.item.type}-sheet.hbs`;
+    return `systems/ryf3/templates/item/item-${this.item.type}-sheet.hbs`;
   }
 
   getData() {

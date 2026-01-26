@@ -119,10 +119,10 @@ Hooks.once('init', async function() {
 
 Hooks.once('ready', async function() {
   
-  const enableCarisma = game.settings.get('ryf', 'enableCarisma');
-  const enableMagia = game.settings.get('ryf', 'enableMagia');
-  const healthMult = game.settings.get('ryf', 'healthMultiplier');
-  const characterType = game.settings.get('ryf', 'defaultCharacterType');
+  const enableCarisma = game.settings.get('ryf3', 'enableCarisma');
+  const enableMagia = game.settings.get('ryf3', 'enableMagia');
+  const healthMult = game.settings.get('ryf3', 'healthMultiplier');
+  const characterType = game.settings.get('ryf3', 'defaultCharacterType');
   
 });
 
@@ -154,7 +154,7 @@ Hooks.on('createChatMessage', async (message) => {
     wounded: wounded
   };
 
-  const template = 'systems/ryf/templates/chat/initiative-roll.hbs';
+  const template = 'systems/ryf3/templates/chat/initiative-roll.hbs';
   const html = await renderTemplate(template, rollData);
 
   await message.update({ content: html });

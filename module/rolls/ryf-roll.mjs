@@ -333,14 +333,14 @@ export class RyfRoll {
 
   static async toMessage(rollData) {
     const templateMap = {
-      'skill': 'systems/ryf/templates/chat/skill-roll.hbs',
-      'attack': 'systems/ryf/templates/chat/attack-roll.hbs',
-      'damage': 'systems/ryf/templates/chat/damage-roll.hbs',
-      'spell': 'systems/ryf/templates/chat/spell-roll.hbs',
-      'attribute': 'systems/ryf/templates/chat/attribute-roll.hbs',
-      'spell-casting': 'systems/ryf/templates/chat/spell-casting-roll.hbs',
-      'spell-damage': 'systems/ryf/templates/chat/spell-damage.hbs',
-      'healing': 'systems/ryf/templates/chat/healing-roll.hbs'
+      'skill': 'systems/ryf3/templates/chat/skill-roll.hbs',
+      'attack': 'systems/ryf3/templates/chat/attack-roll.hbs',
+      'damage': 'systems/ryf3/templates/chat/damage-roll.hbs',
+      'spell': 'systems/ryf3/templates/chat/spell-roll.hbs',
+      'attribute': 'systems/ryf3/templates/chat/attribute-roll.hbs',
+      'spell-casting': 'systems/ryf3/templates/chat/spell-casting-roll.hbs',
+      'spell-damage': 'systems/ryf3/templates/chat/spell-damage.hbs',
+      'healing': 'systems/ryf3/templates/chat/healing-roll.hbs'
     };
 
     const template = templateMap[rollData.type];

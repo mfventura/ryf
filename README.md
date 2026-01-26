@@ -10,7 +10,7 @@ Sistema de rol genérico "Rápido y Fácil" versión 3.0 implementado para Found
 
 1. Clonar o copiar este directorio en:
    ```
-   [Foundry Data]/systems/ryf/
+   [Foundry Data]/systems/ryf3/
    ```
 
 2. Reiniciar Foundry VTT

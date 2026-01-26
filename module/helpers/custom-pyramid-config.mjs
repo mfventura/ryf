@@ -4,7 +4,7 @@ export class CustomPyramidConfig extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: 'custom-pyramid-config',
       title: game.i18n.localize('RYF.Settings.CustomPyramidMenu.Title'),
-      template: 'systems/ryf/templates/settings/custom-pyramid.hbs',
+      template: 'systems/ryf3/templates/settings/custom-pyramid.hbs',
       width: 500,
       height: 'auto',
       closeOnSubmit: true,
@@ -14,7 +14,7 @@ export class CustomPyramidConfig extends FormApplication {
   }
 
   getData() {
-    const current = game.settings.get('ryf', 'customPyramid');
+    const current = game.settings.get('ryf3', 'customPyramid');
     
     const totalSkills = current.level6 + current.level5 + current.level4 + 
                         current.level3 + current.level2 + current.level1;
@@ -110,7 +110,7 @@ export class CustomPyramidConfig extends FormApplication {
       return;
     }
     
-    await game.settings.set('ryf', 'customPyramid', pyramid);
+    await game.settings.set('ryf3', 'customPyramid', pyramid);
     
     ui.notifications.info(game.i18n.localize('RYF.Notifications.PyramidSaved'));
   }

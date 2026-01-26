@@ -13,7 +13,7 @@ export class RyfActorSheet extends ActorSheet {
   }
 
   get template() {
-    return `systems/ryf/templates/actor/actor-${this.actor.type}-sheet.hbs`;
+    return `systems/ryf3/templates/actor/actor-${this.actor.type}-sheet.hbs`;
   }
 
   getData() {
