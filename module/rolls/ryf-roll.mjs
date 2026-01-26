@@ -22,9 +22,9 @@ export class RyfRoll {
 
     const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance;
 
-    const success = isSuccess(total, difficulty);
-    const margin = total - difficulty;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble);
+    const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
     const rollData = {
@@ -92,9 +92,9 @@ export class RyfRoll {
 
     const total = attributeValue + skillLevel + diceRoll.result + modifier;
 
-    const success = isSuccess(total, targetDefense);
-    const margin = total - targetDefense;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, targetDefense, fumble);
+    const margin = total - targetDefense;
     const criticalDice = success ? calculateCriticalDice(total, targetDefense) : 0;
 
     const rollData = {
@@ -123,12 +123,19 @@ export class RyfRoll {
     return rollData;
   }
   
-  static async rollDamage(weapon, criticalDice = 0, bonus = 0) {
+  static async rollDamage(weapon, criticalDice = 0, bonus = 0, actor = null) {
     const baseDamage = weapon.system.damage?.base || '1d6';
     const damageBonus = weapon.system.damage?.bonus || 0;
 
+    let effectBonus = 0;
+    if (actor) {
+      if (actor.system.activeEffectBonuses?.weapons) {
+        effectBonus = actor.system.activeEffectBonuses.weapons[weapon.name] || 0;
+      }
+    }
+
     const baseRoll = await rollEffect(baseDamage);
-    let total = baseRoll.total + damageBonus + bonus;
+    let total = baseRoll.total + damageBonus + bonus + effectBonus;
 
     let criticalRoll = null;
     if (criticalDice > 0) {
@@ -139,10 +146,12 @@ export class RyfRoll {
     const rollData = {
       type: 'damage',
       weapon: weapon,
+      actor: actor,
       baseDamage: baseDamage,
       baseRoll: baseRoll,
       damageBonus: damageBonus,
       bonus: bonus,
+      effectBonus: effectBonus,
       criticalDice: criticalDice,
       criticalRoll: criticalRoll,
       total: total
@@ -190,9 +199,9 @@ export class RyfRoll {
 
     const total = attributeValue + spellLevel + diceRoll.result;
 
-    const success = isSuccess(total, difficulty);
-    const margin = total - difficulty;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble);
+    const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
     const rollData = {
@@ -228,9 +237,9 @@ export class RyfRoll {
 
     const total = intelligence + spellLevel + diceRoll.result + modifier;
 
-    const success = isSuccess(total, difficulty);
-    const margin = total - difficulty;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble);
+    const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
     const rollData = {
@@ -297,9 +306,9 @@ export class RyfRoll {
 
     const total = attributeValue + diceRoll.result;
 
-    const success = isSuccess(total, difficulty);
-    const margin = total - difficulty;
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble);
+    const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
     const rollData = {

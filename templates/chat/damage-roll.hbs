@@ -47,6 +47,13 @@
     </div>
     {{/if}}
 
+    {{#if (gt effectBonus 0)}}
+    <div class="damage-section effect-bonus">
+      <div class="section-label"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}</div>
+      <div class="damage-value">+{{effectBonus}}</div>
+    </div>
+    {{/if}}
+
     {{#if criticalRoll}}
     <div class="damage-section critical-damage">
       <div class="section-label">

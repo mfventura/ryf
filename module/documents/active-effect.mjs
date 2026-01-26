@@ -7,7 +7,7 @@ export class RyfActiveEffect {
     }
 
     const itemData = {
-      name: effectData.name || game.i18n.localize('RYF.ActiveEffect'),
+      name: effectData.name || game.i18n.localize('RYF.Magic.ActiveEffect'),
       type: 'active-effect',
       img: effectData.img || 'icons/svg/aura.svg',
       system: {

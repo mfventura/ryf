@@ -7,7 +7,6 @@ import { RyfActorSheet } from './sheets/actor-sheet.mjs';
 import { RyfItemSheet } from './sheets/item-sheet.mjs';
 
 Hooks.once('init', async function() {
-  console.log('RyF | Inicializando sistema Rápido y Fácil 3.0');
 
   game.ryf = {
     RyfActor,
@@ -116,26 +115,15 @@ Hooks.once('init', async function() {
 
   await preloadHandlebarsTemplates();
 
-  console.log('RyF | Sistema inicializado correctamente');
 });
 
 Hooks.once('ready', async function() {
-  console.log('RyF | Sistema listo');
   
   const enableCarisma = game.settings.get('ryf', 'enableCarisma');
   const enableMagia = game.settings.get('ryf', 'enableMagia');
   const healthMult = game.settings.get('ryf', 'healthMultiplier');
   const characterType = game.settings.get('ryf', 'defaultCharacterType');
   
-  console.log(`RyF | Configuración actual:`);
-  console.log(`  - Carisma: ${enableCarisma ? 'Activo' : 'Inactivo'}`);
-  console.log(`  - Magia: ${enableMagia ? 'Activo' : 'Inactivo'}`);
-  console.log(`  - Multiplicador de Vida: ×${healthMult}`);
-  console.log(`  - Tipo de Personaje: ${characterType}`);
-});
-
-Hooks.once('setup', function() {
-  console.log('RyF | Configurando sistema');
 });
 
 Hooks.on('createChatMessage', async (message) => {
@@ -195,7 +183,7 @@ Hooks.on('renderChatMessage', (message, html) => {
     }
 
     const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(weapon, criticalDice, 0);
+    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor);
   });
 
   html.find('.apply-damage-button').click(async (event) => {
@@ -220,43 +208,27 @@ Hooks.on('renderChatMessage', (message, html) => {
 });
 
 Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
-  console.log('RyF | ========== updateCombat HOOK FIRED ==========');
-  console.log('RyF | Combat updated:', updateData);
-  console.log('RyF | updateData.turn:', updateData.turn);
-  console.log('RyF | updateData.round:', updateData.round);
 
   if (!updateData.turn && !updateData.round) {
-    console.log('RyF | Not a turn/round change, skipping');
     return;
   }
 
-  console.log('RyF | Combat turn/round changed, decrementing active effects');
 
   const combatant = combat.combatant;
 
   if (!combatant || !combatant.actor) {
-    console.log('RyF | No combatant or actor found');
     return;
   }
 
   const actor = combatant.actor;
-  console.log(`RyF | Decrementing effects for ${actor.name}`);
 
   const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
 
   const effectsBefore = actor.items.filter(i => i.type === 'active-effect');
-  console.log(`RyF | Effects before decrement: ${effectsBefore.length}`);
-  effectsBefore.forEach(e => {
-    console.log(`  - ${e.name}: ${e.system.duration.remaining}/${e.system.duration.total}`);
-  });
 
   await RyfActiveEffect.decrementAllEffects(actor);
 
   const activeEffects = actor.items.filter(i => i.type === 'active-effect');
-  console.log(`RyF | Effects after decrement: ${activeEffects.length}`);
-  activeEffects.forEach(e => {
-    console.log(`  - ${e.name}: ${e.system.duration.remaining}/${e.system.duration.total}`);
-  });
 
   if (activeEffects.length > 0) {
     const effectsList = activeEffects.map(e => {
@@ -267,15 +239,11 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: actor }),
       content: `<div class="ryf chat-card">
-        <h3>${game.i18n.localize('RYF.ActiveEffects')}</h3>
+        <h3>${game.i18n.localize('RYF.Magic.ActiveEffects')}</h3>
         <p>${effectsList}</p>
       </div>`,
       whisper: [game.user.id]
     });
   }
-});
-
-Hooks.on('combatRound', async (combat, updateData, updateOptions) => {
-  console.log('RyF | Combat round changed');
 });
 
