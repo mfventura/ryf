@@ -37,30 +37,18 @@ export class RyfItem extends Item {
     if (itemData.type !== 'weapon') return;
 
     const system = itemData.system;
-
-    if (system.equipped && this.actor) {
-      console.log(`RyF | Weapon ${itemData.name} is equipped`);
-    }
   }
 
   _prepareArmorData(itemData) {
     if (itemData.type !== 'armor') return;
 
     const system = itemData.system;
-
-    if (system.equipped && this.actor) {
-      console.log(`RyF | Armor ${itemData.name} is equipped (Protection: ${system.protection}, Hindrance: ${system.hindrance})`);
-    }
   }
 
   _prepareShieldData(itemData) {
     if (itemData.type !== 'shield') return;
 
     const system = itemData.system;
-
-    if (system.equipped && this.actor) {
-      console.log(`RyF | Shield ${itemData.name} is equipped (Defense: ${system.defense}, Hindrance: ${system.hindrance})`);
-    }
   }
 
   _prepareSpellData(itemData) {
@@ -247,7 +235,6 @@ export class RyfItem extends Item {
       cost: manaCost
     }));
 
-    console.log(`RyF | ${this.actor.name} cast ${this.name} (Cost: ${manaCost} mana)`);
   }
 }
 

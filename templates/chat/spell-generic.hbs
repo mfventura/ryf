@@ -1,0 +1,41 @@
+<div class="ryf chat-card spell-cast">
+  <header class="card-header flexrow">
+    <img src="{{spell.img}}" title="{{spell.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{spell.name}}</h3>
+  </header>
+
+  <div class="card-content">
+    <div class="spell-info">
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Caster"}}:</span>
+        <span class="info-value">{{actor.name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Level"}}:</span>
+        <span class="info-value">{{spell.system.level}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.ManaCost"}}:</span>
+        <span class="info-value">{{spell.system.manaCost}}</span>
+      </div>
+    </div>
+
+    {{#if description}}
+    <div class="spell-description">
+      {{{description}}}
+    </div>
+    {{/if}}
+
+    {{#if targets}}
+    <div class="spell-targets">
+      <span class="targets-label">{{localize "RYF.Targets"}}:</span>
+      <ul>
+        {{#each targets as |target|}}
+        <li>{{target.name}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div>
+</div>
+

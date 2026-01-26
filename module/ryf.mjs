@@ -7,7 +7,6 @@ import { RyfActorSheet } from './sheets/actor-sheet.mjs';
 import { RyfItemSheet } from './sheets/item-sheet.mjs';
 
 Hooks.once('init', async function() {
-  console.log('RyF | Inicializando sistema Rápido y Fácil 3.0');
 
   game.ryf = {
     RyfActor,
@@ -34,14 +33,12 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
 
   registerSystemSettings();
-
-  await preloadHandlebarsTemplates();
 
   Handlebars.registerHelper('times', function(n, block) {
     let accum = '';
@@ -103,10 +100,6 @@ Hooks.once('init', async function() {
     return a + b;
   });
 
-  Handlebars.registerHelper('multiply', function(a, b) {
-    return a * b;
-  });
-
   Handlebars.registerHelper('checked', function(value) {
     return value ? 'checked' : '';
   });
@@ -120,26 +113,17 @@ Hooks.once('init', async function() {
     return args.join('');
   });
 
-  console.log('RyF | Sistema inicializado correctamente');
+  await preloadHandlebarsTemplates();
+
 });
 
 Hooks.once('ready', async function() {
-  console.log('RyF | Sistema listo');
   
   const enableCarisma = game.settings.get('ryf', 'enableCarisma');
   const enableMagia = game.settings.get('ryf', 'enableMagia');
   const healthMult = game.settings.get('ryf', 'healthMultiplier');
   const characterType = game.settings.get('ryf', 'defaultCharacterType');
   
-  console.log(`RyF | Configuración actual:`);
-  console.log(`  - Carisma: ${enableCarisma ? 'Activo' : 'Inactivo'}`);
-  console.log(`  - Magia: ${enableMagia ? 'Activo' : 'Inactivo'}`);
-  console.log(`  - Multiplicador de Vida: ×${healthMult}`);
-  console.log(`  - Tipo de Personaje: ${characterType}`);
-});
-
-Hooks.once('setup', function() {
-  console.log('RyF | Configurando sistema');
 });
 
 Hooks.on('createChatMessage', async (message) => {
@@ -199,7 +183,7 @@ Hooks.on('renderChatMessage', (message, html) => {
     }
 
     const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(weapon, criticalDice, 0);
+    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor);
   });
 
   html.find('.apply-damage-button').click(async (event) => {
@@ -221,5 +205,45 @@ Hooks.on('renderChatMessage', (message, html) => {
       }
     }
   });
+});
+
+Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
+
+  if (!updateData.turn && !updateData.round) {
+    return;
+  }
+
+
+  const combatant = combat.combatant;
+
+  if (!combatant || !combatant.actor) {
+    return;
+  }
+
+  const actor = combatant.actor;
+
+  const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
+
+  const effectsBefore = actor.items.filter(i => i.type === 'active-effect');
+
+  await RyfActiveEffect.decrementAllEffects(actor);
+
+  const activeEffects = actor.items.filter(i => i.type === 'active-effect');
+
+  if (activeEffects.length > 0) {
+    const effectsList = activeEffects.map(e => {
+      const remaining = e.system.duration.remaining;
+      return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
+    }).join(', ');
+
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      content: `<div class="ryf chat-card">
+        <h3>${game.i18n.localize('RYF.Magic.ActiveEffects')}</h3>
+        <p>${effectsList}</p>
+      </div>`,
+      whisper: [game.user.id]
+    });
+  }
 });
 

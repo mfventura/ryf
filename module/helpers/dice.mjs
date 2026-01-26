@@ -138,7 +138,8 @@ export function getSuccessMargin(result, difficulty) {
   return result - difficulty;
 }
 
-export function isSuccess(result, difficulty) {
+export function isSuccess(result, difficulty, fumble = false) {
+  if (fumble) return false;
   return result >= difficulty;
 }
 

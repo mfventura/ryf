@@ -1,0 +1,48 @@
+<div class="ryf chat-card spell-effect">
+  <header class="card-header flexrow">
+    <img src="{{spell.img}}" title="{{spell.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{spell.name}}</h3>
+  </header>
+
+  <div class="card-content">
+    <div class="spell-info">
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Caster"}}:</span>
+        <span class="info-value">{{actor.name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.EffectType"}}:</span>
+        <span class="info-value">{{effectType}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">{{localize "RYF.Duration"}}:</span>
+        <span class="info-value">{{duration}} {{localize "RYF.Turns"}}</span>
+      </div>
+    </div>
+
+    {{#if description}}
+    <div class="spell-description">
+      {{{description}}}
+    </div>
+    {{/if}}
+
+    {{#if targets}}
+    <div class="spell-targets">
+      <h4>{{localize "RYF.Targets"}}</h4>
+      <ul>
+        {{#each targets as |target|}}
+        <li>
+          <strong>{{target.name}}</strong>
+          {{#if target.saved}}
+            <span class="save-success">{{localize "RYF.Saved"}}</span>
+          {{else}}
+            <span class="effect-applied">{{localize "RYF.EffectApplied"}}</span>
+          {{/if}}
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div>
+</div>
+

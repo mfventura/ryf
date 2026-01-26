@@ -1,15 +1,16 @@
 <div class="ryf-roll damage-roll">
   <div class="roll-header">
     <div class="roll-title">
-      <h3>{{localize "RYF.Damage"}}: {{weapon.name}}</h3>
+      <h3>{{localize "RYF.Damage"}}: {{attackName}}</h3>
+      <div class="roll-subtitle">{{actorName}}</div>
     </div>
   </div>
 
   <div class="damage-breakdown">
     <div class="damage-section base-damage">
       <div class="section-label">{{localize "RYF.BaseDamage"}}</div>
-      <div class="damage-formula">{{baseDamage}}</div>
-      
+      <div class="damage-formula">{{damageBase}}</div>
+
       <div class="dice-results">
         {{#each baseRoll.rolls as |roll|}}
           <div class="die d6">
@@ -17,7 +18,7 @@
             <span class="die-value">{{roll}}</span>
           </div>
         {{/each}}
-        
+
         {{#if baseRoll.explosions.length}}
         <div class="explosions">
           <i class="fas fa-burst"></i>
@@ -27,7 +28,7 @@
         </div>
         {{/if}}
       </div>
-      
+
       <div class="damage-subtotal">
         {{localize "RYF.Subtotal"}}: {{baseRoll.total}}
       </div>
@@ -40,26 +41,12 @@
     </div>
     {{/if}}
 
-    {{#if (gt bonus 0)}}
-    <div class="damage-section extra-bonus">
-      <div class="section-label">{{localize "RYF.ExtraBonus"}}</div>
-      <div class="damage-value">+{{bonus}}</div>
-    </div>
-    {{/if}}
-
-    {{#if (gt effectBonus 0)}}
-    <div class="damage-section effect-bonus">
-      <div class="section-label"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}</div>
-      <div class="damage-value">+{{effectBonus}}</div>
-    </div>
-    {{/if}}
-
     {{#if criticalRoll}}
     <div class="damage-section critical-damage">
       <div class="section-label">
         <i class="fas fa-star"></i> {{localize "RYF.CriticalDamage"}} ({{criticalDice}}d6)
       </div>
-      
+
       <div class="dice-results">
         {{#each criticalRoll.rolls as |roll|}}
           <div class="die d6 critical">
@@ -67,7 +54,7 @@
             <span class="die-value">{{roll}}</span>
           </div>
         {{/each}}
-        
+
         {{#if criticalRoll.explosions.length}}
         <div class="explosions">
           <i class="fas fa-burst"></i>
@@ -77,7 +64,7 @@
         </div>
         {{/if}}
       </div>
-      
+
       <div class="damage-subtotal">
         {{localize "RYF.Subtotal"}}: {{criticalRoll.total}}
       </div>

@@ -1,8 +1,8 @@
-<div class="ryf-roll skill-roll {{#if success}}success{{else}}failure{{/if}} {{#if fumble}}fumble{{/if}}">
+<div class="ryf-roll spell-casting-roll {{#if success}}success{{else}}failure{{/if}} {{#if fumble}}fumble{{/if}}">
   <div class="roll-header">
     <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
     <div class="roll-title">
-      <h3>{{skillName}}</h3>
+      <h3>{{localize "RYF.SpellCasting"}}: {{spell.name}}</h3>
       <div class="roll-subtitle">{{actor.name}}</div>
     </div>
   </div>
@@ -15,13 +15,9 @@
   {{/if}}
 
   <div class="roll-formula">
-    <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
+    <span class="formula-part">{{localize "RYF.Attributes.inteligencia"}}: {{intelligence}}</span>
     <span class="formula-separator">+</span>
-    <span class="formula-part">{{localize "RYF.Level"}}: {{skillLevel}}</span>
-    {{#if (gt effectBonus 0)}}
-    <span class="formula-separator">+</span>
-    <span class="formula-part effect-bonus"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}: {{effectBonus}}</span>
-    {{/if}}
+    <span class="formula-part">{{localize "RYF.Level"}}: {{spellLevel}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
@@ -32,9 +28,12 @@
         {{diceRoll.chosen}}
       {{/if}}
     </span>
-    {{#if (gt hindrance 0)}}
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: +{{modifier}}</span>
+    {{else if (lt modifier 0)}}
     <span class="formula-separator">-</span>
-    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{modifier}}</span>
     {{/if}}
   </div>
 
@@ -47,7 +46,7 @@
         </div>
       {{/each}}
     </div>
-    
+
     {{#if diceRoll.exploded}}
     <div class="explosions">
       <i class="fas fa-burst"></i> {{localize "RYF.Exploded"}}:
@@ -63,9 +62,9 @@
       <span class="result-label">{{localize "RYF.Total"}}</span>
       <span class="result-value">{{total}}</span>
     </div>
-    
+
     <div class="result-difficulty">
-      <span class="difficulty-label">{{localize "RYF.Difficulty"}}</span>
+      <span class="difficulty-label">{{localize "RYF.Magic.CastingDifficulty"}}</span>
       <span class="difficulty-value">{{difficulty}}</span>
     </div>
   </div>
@@ -84,7 +83,7 @@
           <span class="margin">{{localize "RYF.Margin"}}: +{{margin}}</span>
         {{/if}}
       </div>
-      
+
       {{#if (gt criticalDice 0)}}
       <div class="critical-success">
         <i class="fas fa-star"></i>

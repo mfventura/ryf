@@ -1,0 +1,59 @@
+<div class="ryf chat-card attribute-roll">
+  <header class="card-header flexrow">
+    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{localize (concat "RYF.Attributes." attribute)}}</h3>
+  </header>
+
+  <div class="card-content">
+    <div class="roll-result {{#if success}}success{{else}}failure{{/if}}">
+      <h2 class="result-total">{{total}}</h2>
+      <p class="result-label">
+        {{#if success}}
+          {{localize "RYF.Success"}}
+        {{else}}
+          {{localize "RYF.Failure"}}
+        {{/if}}
+      </p>
+    </div>
+
+    <div class="roll-formula">
+      <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
+      <span class="formula-separator">+</span>
+      <span class="formula-part dice-part">
+        {{#if (eq mode "advantage")}}
+          <i class="fas fa-arrow-up"></i> {{diceRoll.chosen}}
+        {{else if (eq mode "disadvantage")}}
+          <i class="fas fa-arrow-down"></i> {{diceRoll.chosen}}
+        {{else}}
+          {{diceRoll.chosen}}
+        {{/if}}
+      </span>
+    </div>
+
+    <div class="dice-rolls">
+      <span class="dice-label">{{localize "RYF.DiceRolled"}}:</span>
+      {{#each diceRoll.dice as |die|}}
+        <span class="die {{#if (eq die diceRoll.chosen)}}chosen{{/if}}">{{die}}</span>
+      {{/each}}
+    </div>
+
+    <div class="roll-details">
+      <div class="detail-row">
+        <span class="detail-label">{{localize "RYF.Difficulty"}}:</span>
+        <span class="detail-value">{{difficulty}}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">{{localize "RYF.Margin"}}:</span>
+        <span class="detail-value {{#if (gte margin 0)}}positive{{else}}negative{{/if}}">
+          {{#if (gte margin 0)}}+{{/if}}{{margin}}
+        </span>
+      </div>
+      {{#if fumble}}
+      <div class="detail-row fumble">
+        <span class="fumble-label">{{localize "RYF.Fumble"}}</span>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+

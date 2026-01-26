@@ -8,8 +8,8 @@
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
     <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
   <section class="sheet-body">
@@ -21,7 +21,22 @@
     </div>
 
     <div class="tab details" data-group="primary" data-tab="details">
-      
+
+      <h3>{{localize "RYF.BasicInfo"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.SpellType"}}</label>
+        <select name="system.spellType" data-dtype="String">
+          <option value="generic" {{#if (eq system.spellType "generic")}}selected{{/if}}>{{localize "RYF.SpellTypes.generic"}}</option>
+          <option value="damage" {{#if (eq system.spellType "damage")}}selected{{/if}}>{{localize "RYF.SpellTypes.damage"}}</option>
+          <option value="healing" {{#if (eq system.spellType "healing")}}selected{{/if}}>{{localize "RYF.SpellTypes.healing"}}</option>
+          <option value="buff-skill" {{#if (eq system.spellType "buff-skill")}}selected{{/if}}>{{localize "RYF.SpellTypes.buff-skill"}}</option>
+          <option value="buff-weapon" {{#if (eq system.spellType "buff-weapon")}}selected{{/if}}>{{localize "RYF.SpellTypes.buff-weapon"}}</option>
+          <option value="buff-armor" {{#if (eq system.spellType "buff-armor")}}selected{{/if}}>{{localize "RYF.SpellTypes.buff-armor"}}</option>
+          <option value="effect" {{#if (eq system.spellType "effect")}}selected{{/if}}>{{localize "RYF.SpellTypes.effect"}}</option>
+        </select>
+      </div>
+
       <div class="form-group">
         <label>{{localize "RYF.Level"}}</label>
         <input type="number" name="system.level" value="{{system.level}}" data-dtype="Number" min="1" max="10"/>
@@ -33,19 +48,228 @@
       </div>
 
       <div class="form-group">
+        <label>{{localize "RYF.Magic.CastingDifficulty"}}</label>
+        <input type="number" name="system.castingDifficulty" value="{{system.castingDifficulty}}" data-dtype="Number" min="5" max="30"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.School"}}</label>
+        <input type="text" name="system.school" value="{{system.school}}" placeholder="{{localize 'RYF.Evocation'}}"/>
+      </div>
+
+      <div class="form-group">
         <label>{{localize "RYF.CastingTime"}}</label>
         <input type="text" name="system.castingTime" value="{{system.castingTime}}" placeholder="{{localize 'RYF.Action'}}"/>
       </div>
 
+      <h3>{{localize "RYF.RangeAndTargets"}}</h3>
+
       <div class="form-group">
-        <label>{{localize "RYF.Range"}}</label>
-        <input type="text" name="system.range" value="{{system.range}}" placeholder="{{localize 'RYF.Touch'}}"/>
+        <label>{{localize "RYF.RangeType"}}</label>
+        <select name="system.range.type" data-dtype="String">
+          <option value="self" {{#if (eq system.range.type "self")}}selected{{/if}}>{{localize "RYF.RangeTypes.self"}}</option>
+          <option value="touch" {{#if (eq system.range.type "touch")}}selected{{/if}}>{{localize "RYF.RangeTypes.touch"}}</option>
+          <option value="ranged" {{#if (eq system.range.type "ranged")}}selected{{/if}}>{{localize "RYF.RangeTypes.ranged"}}</option>
+        </select>
       </div>
 
       <div class="form-group">
-        <label>{{localize "RYF.Duration"}}</label>
-        <input type="text" name="system.duration" value="{{system.duration}}" placeholder="{{localize 'RYF.Instantaneous'}}"/>
+        <label>{{localize "RYF.RangeValue"}}</label>
+        <input type="number" name="system.range.value" value="{{system.range.value}}" data-dtype="Number" min="0"/>
       </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.TargetType"}}</label>
+        <select name="system.targets.type" data-dtype="String">
+          <option value="single" {{#if (eq system.targets.type "single")}}selected{{/if}}>{{localize "RYF.TargetTypes.single"}}</option>
+          <option value="multiple" {{#if (eq system.targets.type "multiple")}}selected{{/if}}>{{localize "RYF.TargetTypes.multiple"}}</option>
+          <option value="area" {{#if (eq system.targets.type "area")}}selected{{/if}}>{{localize "RYF.TargetTypes.area"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.TargetCount"}}</label>
+        <input type="number" name="system.targets.count" value="{{system.targets.count}}" data-dtype="Number" min="1"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.AreaRadius"}}</label>
+        <input type="number" name="system.targets.areaRadius" value="{{system.targets.areaRadius}}" data-dtype="Number" min="0"/>
+      </div>
+
+      {{#if (eq system.spellType "damage")}}
+      <h3>{{localize "RYF.DamageSettings"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.AttackType"}}</label>
+        <select name="system.attackType" data-dtype="String">
+          <option value="none" {{#if (eq system.attackType "none")}}selected{{/if}}>{{localize "RYF.AttackTypes.none"}}</option>
+          <option value="melee" {{#if (eq system.attackType "melee")}}selected{{/if}}>{{localize "RYF.AttackTypes.melee"}}</option>
+          <option value="ranged" {{#if (eq system.attackType "ranged")}}selected{{/if}}>{{localize "RYF.AttackTypes.ranged"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DamageFormula"}}</label>
+        <input type="text" name="system.damage.formula" value="{{system.damage.formula}}" placeholder="2d6"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DamageType"}}</label>
+        <select name="system.damage.type" data-dtype="String">
+          <option value="physical" {{#if (eq system.damage.type "physical")}}selected{{/if}}>{{localize "RYF.DamageTypes.physical"}}</option>
+          <option value="fire" {{#if (eq system.damage.type "fire")}}selected{{/if}}>{{localize "RYF.DamageTypes.fire"}}</option>
+          <option value="cold" {{#if (eq system.damage.type "cold")}}selected{{/if}}>{{localize "RYF.DamageTypes.cold"}}</option>
+          <option value="lightning" {{#if (eq system.damage.type "lightning")}}selected{{/if}}>{{localize "RYF.DamageTypes.lightning"}}</option>
+          <option value="force" {{#if (eq system.damage.type "force")}}selected{{/if}}>{{localize "RYF.DamageTypes.force"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" name="system.savingThrow.enabled" {{checked system.savingThrow.enabled}}/>
+          {{localize "RYF.RequiresSavingThrow"}}
+        </label>
+      </div>
+
+      {{#if system.savingThrow.enabled}}
+      <div class="form-group">
+        <label>{{localize "RYF.SavingThrowDifficulty"}}</label>
+        <input type="number" name="system.savingThrow.difficulty" value="{{system.savingThrow.difficulty}}" data-dtype="Number" min="5"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.SavingThrowAttribute"}}</label>
+        <select name="system.savingThrow.attribute" data-dtype="String">
+          <option value="fisico" {{#if (eq system.savingThrow.attribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+          <option value="destreza" {{#if (eq system.savingThrow.attribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+          <option value="percepcion" {{#if (eq system.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+          <option value="inteligencia" {{#if (eq system.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+          <option value="carisma" {{#if (eq system.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+        </select>
+      </div>
+      {{/if}}
+      {{/if}}
+
+      {{#if (eq system.spellType "healing")}}
+      <h3>{{localize "RYF.HealingSettings"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.HealingFormula"}}</label>
+        <input type="text" name="system.healing.formula" value="{{system.healing.formula}}" placeholder="2d6"/>
+      </div>
+      {{/if}}
+
+      {{#if (or (eq system.spellType "buff-skill") (eq system.spellType "buff-weapon") (eq system.spellType "buff-armor"))}}
+      <h3>{{localize "RYF.BuffSettings"}}</h3>
+
+      {{#if (or (eq system.spellType "buff-skill") (eq system.spellType "buff-weapon"))}}
+      <div class="form-group">
+        <label>
+          {{#if (eq system.spellType "buff-skill")}}
+            {{localize "RYF.SkillName"}}
+          {{else}}
+            {{localize "RYF.WeaponName"}}
+          {{/if}}
+        </label>
+        <input type="text" name="system.effect.targetName" value="{{system.effect.targetName}}" placeholder="{{#if (eq system.spellType 'buff-skill')}}{{localize 'RYF.SkillName'}}{{else}}{{localize 'RYF.WeaponName'}}{{/if}}"/>
+      </div>
+      {{/if}}
+
+      <div class="form-group">
+        <label>{{localize "RYF.Modifier"}}</label>
+        <input type="number" name="system.effect.modifier" value="{{system.effect.modifier}}" data-dtype="Number"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DurationType"}}</label>
+        <select name="system.effect.duration.type" data-dtype="String">
+          <option value="fixed" {{#if (eq system.effect.duration.type "fixed")}}selected{{/if}}>{{localize "RYF.DurationTypes.fixed"}}</option>
+          <option value="perLevel" {{#if (eq system.effect.duration.type "perLevel")}}selected{{/if}}>{{localize "RYF.DurationTypes.perLevel"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DurationValue"}}</label>
+        <input type="number" name="system.effect.duration.value" value="{{system.effect.duration.value}}" data-dtype="Number" min="1"/>
+      </div>
+      {{/if}}
+
+      {{#if (eq system.spellType "effect")}}
+      <h3>{{localize "RYF.EffectSettings"}}</h3>
+
+      <div class="form-group">
+        <label>{{localize "RYF.EffectType"}}</label>
+        <input type="text" name="system.effect.type" value="{{system.effect.type}}" placeholder="paralysis"/>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" name="system.savingThrow.enabled" {{checked system.savingThrow.enabled}}/>
+          {{localize "RYF.RequiresSavingThrow"}}
+        </label>
+      </div>
+
+      {{#if system.savingThrow.enabled}}
+      <div class="form-group">
+        <label>{{localize "RYF.SavingThrowDifficulty"}}</label>
+        <input type="number" name="system.savingThrow.difficulty" value="{{system.savingThrow.difficulty}}" data-dtype="Number" min="5"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.SavingThrowAttribute"}}</label>
+        <select name="system.savingThrow.attribute" data-dtype="String">
+          <option value="fisico" {{#if (eq system.savingThrow.attribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+          <option value="destreza" {{#if (eq system.savingThrow.attribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+          <option value="percepcion" {{#if (eq system.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+          <option value="inteligencia" {{#if (eq system.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+          <option value="carisma" {{#if (eq system.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+        </select>
+      </div>
+      {{/if}}
+
+      <div class="form-group">
+        <label>{{localize "RYF.DurationType"}}</label>
+        <select name="system.effect.duration.type" data-dtype="String">
+          <option value="fixed" {{#if (eq system.effect.duration.type "fixed")}}selected{{/if}}>{{localize "RYF.DurationTypes.fixed"}}</option>
+          <option value="perLevel" {{#if (eq system.effect.duration.type "perLevel")}}selected{{/if}}>{{localize "RYF.DurationTypes.perLevel"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DurationValue"}}</label>
+        <input type="number" name="system.effect.duration.value" value="{{system.effect.duration.value}}" data-dtype="Number" min="1"/>
+      </div>
+      {{/if}}
+
+      {{#if (eq system.spellType "generic")}}
+      <h3>{{localize "RYF.GenericSettings"}}</h3>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" name="system.requiresRoll" {{checked system.requiresRoll}}/>
+          {{localize "RYF.RequiresRoll"}}
+        </label>
+      </div>
+
+      {{#if system.requiresRoll}}
+      <div class="form-group">
+        <label>{{localize "RYF.RollAttribute"}}</label>
+        <select name="system.rollAttribute" data-dtype="String">
+          <option value="fisico" {{#if (eq system.rollAttribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+          <option value="destreza" {{#if (eq system.rollAttribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+          <option value="percepcion" {{#if (eq system.rollAttribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+          <option value="inteligencia" {{#if (eq system.rollAttribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+          <option value="carisma" {{#if (eq system.rollAttribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Difficulty"}}</label>
+        <input type="number" name="system.genericDifficulty" value="{{system.genericDifficulty}}" data-dtype="Number" min="5"/>
+      </div>
+      {{/if}}
+      {{/if}}
 
       {{#if actor}}
       <div class="form-group">

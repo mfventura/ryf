@@ -1,27 +1,21 @@
-<div class="ryf-roll skill-roll {{#if success}}success{{else}}failure{{/if}} {{#if fumble}}fumble{{/if}}">
+<div class="ryf-roll attack-roll {{#if success}}success{{else}}failure{{/if}} {{#if fumble}}fumble{{/if}}">
   <div class="roll-header">
-    <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
+    <img src="{{actorImg}}" alt="{{actorName}}" class="actor-image"/>
     <div class="roll-title">
-      <h3>{{skillName}}</h3>
-      <div class="roll-subtitle">{{actor.name}}</div>
+      <h3>{{localize "RYF.Attack"}}: {{attackName}}</h3>
+      <div class="roll-subtitle">
+        {{actorName}} -
+        {{#if (eq attackType "melee")}}
+          <i class="fas fa-hand-fist"></i> {{localize "RYF.Melee"}}
+        {{else}}
+          <i class="fas fa-bullseye"></i> {{localize "RYF.Ranged"}}
+        {{/if}}
+      </div>
     </div>
   </div>
 
-  {{#if actor.system.states.wounded}}
-  <div class="wounded-indicator">
-    <i class="fas fa-heart-broken"></i>
-    <strong>{{localize "RYF.States.Wounded"}}</strong> - {{localize "RYF.Combat.AutoDisadvantage"}}
-  </div>
-  {{/if}}
-
   <div class="roll-formula">
-    <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
-    <span class="formula-separator">+</span>
-    <span class="formula-part">{{localize "RYF.Level"}}: {{skillLevel}}</span>
-    {{#if (gt effectBonus 0)}}
-    <span class="formula-separator">+</span>
-    <span class="formula-part effect-bonus"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}: {{effectBonus}}</span>
-    {{/if}}
+    <span class="formula-part">{{localize "RYF.NPC.AttackBonus"}}: +{{attackBonus}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
@@ -32,9 +26,12 @@
         {{diceRoll.chosen}}
       {{/if}}
     </span>
-    {{#if (gt hindrance 0)}}
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: +{{modifier}}</span>
+    {{else if (lt modifier 0)}}
     <span class="formula-separator">-</span>
-    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{modifier}}</span>
     {{/if}}
   </div>
 
@@ -47,7 +44,7 @@
         </div>
       {{/each}}
     </div>
-    
+
     {{#if diceRoll.exploded}}
     <div class="explosions">
       <i class="fas fa-burst"></i> {{localize "RYF.Exploded"}}:
@@ -60,12 +57,12 @@
 
   <div class="roll-result">
     <div class="result-total {{#if success}}success{{else}}failure{{/if}}">
-      <span class="result-label">{{localize "RYF.Total"}}</span>
+      <span class="result-label">{{localize "RYF.AttackRoll"}}</span>
       <span class="result-value">{{total}}</span>
     </div>
-    
+
     <div class="result-difficulty">
-      <span class="difficulty-label">{{localize "RYF.Difficulty"}}</span>
+      <span class="difficulty-label">{{localize "RYF.TargetDefense"}}</span>
       <span class="difficulty-value">{{difficulty}}</span>
     </div>
   </div>
@@ -78,24 +75,24 @@
       </div>
     {{else if success}}
       <div class="outcome success">
-        <i class="fas fa-check-circle"></i>
-        <strong>{{localize "RYF.Success"}}</strong>
+        <i class="fas fa-bullseye"></i>
+        <strong>{{localize "RYF.Hit"}}</strong>
         {{#if (gt margin 0)}}
           <span class="margin">{{localize "RYF.Margin"}}: +{{margin}}</span>
         {{/if}}
       </div>
-      
+
       {{#if (gt criticalDice 0)}}
       <div class="critical-success">
         <i class="fas fa-star"></i>
-        <strong>{{localize "RYF.CriticalSuccess"}}</strong>
-        <span class="critical-dice">+{{criticalDice}}d6 {{localize "RYF.ExtraDice"}}</span>
+        <strong>{{localize "RYF.CriticalHit"}}</strong>
+        <span class="critical-dice">+{{criticalDice}}d6 {{localize "RYF.ExtraDamage"}}</span>
       </div>
       {{/if}}
     {{else}}
       <div class="outcome failure">
-        <i class="fas fa-times-circle"></i>
-        <strong>{{localize "RYF.Failure"}}</strong>
+        <i class="fas fa-shield-alt"></i>
+        <strong>{{localize "RYF.Miss"}}</strong>
         {{#if (lt margin 0)}}
           <span class="margin">{{localize "RYF.Margin"}}: {{margin}}</span>
         {{/if}}
