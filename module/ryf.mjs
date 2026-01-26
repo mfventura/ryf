@@ -220,7 +220,10 @@ Hooks.on('renderChatMessage', (message, html) => {
 });
 
 Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
+  console.log('RyF | ========== updateCombat HOOK FIRED ==========');
   console.log('RyF | Combat updated:', updateData);
+  console.log('RyF | updateData.turn:', updateData.turn);
+  console.log('RyF | updateData.round:', updateData.round);
 
   if (!updateData.turn && !updateData.round) {
     console.log('RyF | Not a turn/round change, skipping');

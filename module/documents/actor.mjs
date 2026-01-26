@@ -41,6 +41,7 @@ export class RyfActor extends Actor {
   }
 
   _prepareCharacterData(actorData) {
+    console.log(`RyF | _prepareCharacterData called for ${actorData.name}, type: ${actorData.type}`);
     if (actorData.type !== 'character') return;
 
     const system = actorData.system;
@@ -110,10 +111,11 @@ export class RyfActor extends Actor {
     });
 
     system.combat = system.combat || {};
+    system.combat.baseHindrance = totalHindrance;
     system.combat.hindrance = totalHindrance;
+    system.combat.baseAbsorption = armorAbsorption;
     system.combat.absorption = armorAbsorption;
-
-    this._applyActiveEffects(system);
+    console.log(`RyF | _prepareCharacterData set baseAbsorption = ${armorAbsorption}`);
 
     system.states.wounded = system.health.value <= system.attributes.fisico.value;
     system.states.unconscious = system.health.value <= 0;
@@ -177,7 +179,7 @@ export class RyfActor extends Actor {
         }
         system.activeEffectBonuses.weapons[targetName] += modifier;
         console.log(`RyF | Stored weapon bonus for ${targetName}: ${modifier}`);
-      } else if (effectType === 'armor-bonus' && targetType === 'armor') {
+      } else if (effectType === 'armor-bonus') {
         system.activeEffectBonuses.armor += modifier;
         console.log(`RyF | Stored armor bonus: ${modifier}`);
       }
@@ -192,8 +194,15 @@ export class RyfActor extends Actor {
     }
 
     if (system.combat) {
-      system.combat.hindrance = Math.max(0, system.combat.hindrance - system.activeEffectBonuses.hindranceReduction);
-      system.combat.absorption += system.activeEffectBonuses.absorption;
+      console.log(`RyF | _applyActiveEffects: system.combat.baseAbsorption = ${system.combat.baseAbsorption}, system.combat.absorption = ${system.combat.absorption}`);
+
+      const baseHindrance = system.combat.baseHindrance || system.combat.hindrance;
+      const baseAbsorption = system.combat.baseAbsorption || system.combat.absorption;
+
+      system.combat.hindrance = Math.max(0, baseHindrance - system.activeEffectBonuses.hindranceReduction);
+      system.combat.absorption = baseAbsorption + system.activeEffectBonuses.absorption + system.activeEffectBonuses.armor;
+
+      console.log(`RyF | Absorption: ${baseAbsorption} (base) + ${system.activeEffectBonuses.absorption} (absorption bonus) + ${system.activeEffectBonuses.armor} (armor bonus) = ${system.combat.absorption} (total)`);
     }
   }
 
@@ -254,7 +263,9 @@ export class RyfActor extends Actor {
     });
 
     system.combat = system.combat || {};
+    system.combat.baseHindrance = totalHindrance;
     system.combat.hindrance = totalHindrance;
+    system.combat.baseAbsorption = armorAbsorption;
     system.combat.absorption = armorAbsorption;
   }
 
@@ -580,6 +591,11 @@ export class RyfActor extends Actor {
 
   async applyDamage(damageAmount, damageType = 'physical', source = null) {
     let finalDamage = damageAmount;
+
+    console.log(`RyF | applyDamage called for ${this.name}`);
+    console.log(`RyF | system.combat:`, this.system.combat);
+    console.log(`RyF | activeEffectBonuses:`, this.system.activeEffectBonuses);
+
     const absorption = this.system.combat?.absorption || 0;
 
     if (damageType === 'physical' && absorption > 0) {
@@ -827,8 +843,8 @@ export class RyfActor extends Actor {
         sourceName: spell.name,
         sourceId: spell.id,
         effectType: this._getEffectTypeFromSpellType(spell.system.spellType),
-        targetType: spell.system.effect.targetType,
-        targetName: spell.system.effect.targetName,
+        targetType: this._getTargetTypeFromSpellType(spell.system.spellType),
+        targetName: spell.system.effect.targetName || '',
         modifier: spell.system.effect.modifier,
         duration: {
           remaining: duration,
@@ -1032,6 +1048,19 @@ export class RyfActor extends Actor {
         return 'armor-bonus';
       default:
         return 'skill-bonus';
+    }
+  }
+
+  _getTargetTypeFromSpellType(spellType) {
+    switch (spellType) {
+      case 'buff-skill':
+        return 'skill';
+      case 'buff-weapon':
+        return 'weapon';
+      case 'buff-armor':
+        return 'armor';
+      default:
+        return 'skill';
     }
   }
 }

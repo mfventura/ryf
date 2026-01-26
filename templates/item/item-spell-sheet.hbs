@@ -163,15 +163,18 @@
       {{#if (or (eq system.spellType "buff-skill") (eq system.spellType "buff-weapon") (eq system.spellType "buff-armor"))}}
       <h3>{{localize "RYF.BuffSettings"}}</h3>
 
+      {{#if (or (eq system.spellType "buff-skill") (eq system.spellType "buff-weapon"))}}
       <div class="form-group">
-        <label>{{localize "RYF.TargetType"}}</label>
-        <input type="text" name="system.effect.targetType" value="{{system.effect.targetType}}" placeholder="skill"/>
+        <label>
+          {{#if (eq system.spellType "buff-skill")}}
+            {{localize "RYF.SkillName"}}
+          {{else}}
+            {{localize "RYF.WeaponName"}}
+          {{/if}}
+        </label>
+        <input type="text" name="system.effect.targetName" value="{{system.effect.targetName}}" placeholder="{{#if (eq system.spellType 'buff-skill')}}{{localize 'RYF.SkillName'}}{{else}}{{localize 'RYF.WeaponName'}}{{/if}}"/>
       </div>
-
-      <div class="form-group">
-        <label>{{localize "RYF.TargetName"}}</label>
-        <input type="text" name="system.effect.targetName" value="{{system.effect.targetName}}" placeholder="{{localize 'RYF.SkillName'}}"/>
-      </div>
+      {{/if}}
 
       <div class="form-group">
         <label>{{localize "RYF.Modifier"}}</label>
