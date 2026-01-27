@@ -9,6 +9,7 @@
 
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
     <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
@@ -94,7 +95,17 @@
         {{/if}}
       </div>
 
+      {{#if actor}}
+      <div class="form-group">
+        <button type="button" class="spell-cast">
+          <i class="fas fa-magic"></i> {{localize "RYF.CastSpell"}}
+        </button>
+      </div>
+      {{/if}}
 
+    </div>
+
+    <div class="tab effects" data-group="primary" data-tab="effects">
       <h3>{{localize "RYF.SpellEffects"}}</h3>
 
       <div class="effects-list">
@@ -154,16 +165,10 @@
           <i class="fas fa-plus"></i> {{localize "RYF.AddEffect"}}
         </button>
       </div>
-
-      {{#if actor}}
-      <div class="form-group">
-        <button type="button" class="spell-cast">
-          <i class="fas fa-magic"></i> {{localize "RYF.CastSpell"}}
-        </button>
-      </div>
-      {{/if}}
-
     </div>
+
+  </section>
+</form>
 
   </section>
 </form>

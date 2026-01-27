@@ -141,6 +141,73 @@ export class RyfItem extends Item {
     ui.notifications.info(message);
   }
 
+  async _onUpdate(changed, options, userId) {
+    await super._onUpdate(changed, options, userId);
+
+    if (!this.actor) return;
+
+    if (changed.system?.equipped !== undefined) {
+      const isEquipped = changed.system.equipped;
+
+      if (isEquipped) {
+        await this._applyItemEffects();
+      } else {
+        await this._removeItemEffects();
+      }
+    }
+  }
+
+  async _applyItemEffects() {
+    if (!this.actor) return;
+
+    const currentEffects = this.system.effects || [];
+    const effects = Array.isArray(currentEffects)
+      ? currentEffects
+      : Object.values(currentEffects);
+
+    if (effects.length === 0) return;
+
+    const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
+
+    for (const effect of effects) {
+      const effectType = this.actor._getEffectTypeFromTarget(effect.target);
+
+      const effectData = {
+        name: `${this.name} (${game.i18n.localize('RYF.Effect')})`,
+        img: this.img,
+        sourceType: 'item',
+        sourceName: this.name,
+        sourceId: this.id,
+        effectType: effectType,
+        targetType: effect.target,
+        targetName: effect.targetName || '',
+        modifier: effect.modifier || 0,
+        appliedBy: game.user.name
+      };
+
+      await RyfActiveEffect.createFromItem(this.actor, this, effectData);
+    }
+  }
+
+  async _removeItemEffects() {
+    if (!this.actor) return;
+
+    const itemEffects = this.actor.effects.filter(e =>
+      e.flags?.ryf3?.sourceType === 'item' &&
+      e.flags?.ryf3?.sourceId === this.id
+    );
+
+    if (itemEffects.length > 0) {
+      const effectIds = itemEffects.map(e => e.id);
+      await this.actor.deleteEmbeddedDocuments('ActiveEffect', effectIds);
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.EffectsRemoved', {
+        count: effectIds.length,
+        item: this.name
+      }));
+    }
+  }
+
   async increaseLevel() {
     if (this.type !== 'skill' && this.type !== 'spell') {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkillOrSpell'));

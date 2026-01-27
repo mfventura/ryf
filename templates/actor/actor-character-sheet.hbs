@@ -108,6 +108,7 @@
     {{#if isMagicEnabled}}
     <a class="item" data-tab="magic">{{localize "RYF.Tabs.Magic"}}</a>
     {{/if}}
+    <a class="item" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
     <a class="item" data-tab="equipment">{{localize "RYF.Tabs.Equipment"}}</a>
     <a class="item" data-tab="biography">{{localize "RYF.Tabs.Biography"}}</a>
   </nav>
@@ -378,55 +379,55 @@
         </li>
         {{/each}}
       </ol>
-
-      <div class="active-effects-section">
-        <div class="active-effects-header flexrow">
-          <h3>{{localize "RYF.Magic.ActiveEffects"}}</h3>
-        </div>
-
-        {{#if activeEffects}}
-        <ol class="items-list active-effects-list">
-          {{#each activeEffects as |effect id|}}
-          <li class="item flexrow active-effect-item" data-effect-id="{{effect._id}}">
-            <div class="item-name">
-              <div class="item-image"><img src="{{effect.icon}}" title="{{effect.name}}" width="24" height="24"/></div>
-              <h4>{{effect.name}}</h4>
-            </div>
-            <div class="effect-source">{{localize "RYF.Source"}}: {{effect.sourceName}}</div>
-            {{#if effect.isTemporary}}
-            <div class="effect-duration">
-              <div class="duration-bar">
-                <div class="duration-fill" style="width: {{multiply (divide effect.durationRemaining effect.durationTotal) 100}}%"></div>
-              </div>
-              <span class="duration-text">{{effect.durationRemaining}}/{{effect.durationTotal}} {{localize "RYF.Turns"}}</span>
-            </div>
-            {{else}}
-            <div class="effect-duration">
-              <span class="duration-text">{{localize "RYF.Permanent"}}</span>
-            </div>
-            {{/if}}
-            <div class="effect-modifier">
-              {{#if (gt effect.modifier 0)}}+{{/if}}{{effect.modifier}}
-            </div>
-            <div class="item-controls">
-              <a class="item-control effect-toggle" data-effect-id="{{effect._id}}" title="{{localize 'RYF.Toggle'}}">
-                {{#if effect.disabled}}
-                <i class="fas fa-eye-slash"></i>
-                {{else}}
-                <i class="fas fa-eye"></i>
-                {{/if}}
-              </a>
-              <a class="item-control effect-remove" data-effect-id="{{effect._id}}" title="{{localize 'RYF.Remove'}}"><i class="fas fa-times"></i></a>
-            </div>
-          </li>
-          {{/each}}
-        </ol>
-        {{else}}
-        <p class="no-effects">{{localize "RYF.Magic.NoActiveEffects"}}</p>
-        {{/if}}
-      </div>
     </div>
     {{/if}}
+
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      <div class="active-effects-header flexrow">
+        <h3>{{localize "RYF.Magic.ActiveEffects"}}</h3>
+      </div>
+
+      {{#if activeEffects}}
+      <ol class="items-list active-effects-list">
+        {{#each activeEffects as |effect id|}}
+        <li class="item flexrow active-effect-item" data-effect-id="{{effect._id}}">
+          <div class="item-name">
+            <div class="item-image"><img src="{{effect.icon}}" title="{{effect.name}}" width="24" height="24"/></div>
+            <h4>{{effect.name}}</h4>
+          </div>
+          <div class="effect-source">{{localize "RYF.Source"}}: {{effect.sourceName}}</div>
+          {{#if effect.isTemporary}}
+          <div class="effect-duration">
+            <div class="duration-bar">
+              <div class="duration-fill" style="width: {{multiply (divide effect.durationRemaining effect.durationTotal) 100}}%"></div>
+            </div>
+            <span class="duration-text">{{effect.durationRemaining}}/{{effect.durationTotal}} {{localize "RYF.Turns"}}</span>
+          </div>
+          {{else}}
+          <div class="effect-duration">
+            <span class="duration-text">{{localize "RYF.Permanent"}}</span>
+          </div>
+          {{/if}}
+          <div class="effect-modifier">
+            {{#if (gt effect.modifier 0)}}+{{/if}}{{effect.modifier}}
+          </div>
+          <div class="item-controls">
+            <a class="item-control effect-toggle" data-effect-id="{{effect._id}}" title="{{localize 'RYF.Toggle'}}">
+              {{#if effect.disabled}}
+              <i class="fas fa-eye-slash"></i>
+              {{else}}
+              <i class="fas fa-eye"></i>
+              {{/if}}
+            </a>
+            <a class="item-control effect-remove" data-effect-id="{{effect._id}}" title="{{localize 'RYF.Remove'}}"><i class="fas fa-times"></i></a>
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+      {{else}}
+      <p class="no-effects">{{localize "RYF.Magic.NoActiveEffects"}}</p>
+      {{/if}}
+    </div>
 
     <div class="tab equipment" data-group="primary" data-tab="equipment">
       <div class="equipment-header flexrow">

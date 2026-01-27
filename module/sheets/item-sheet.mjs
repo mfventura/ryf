@@ -91,8 +91,21 @@ export class RyfItemSheet extends ItemSheet {
   async _onEffectAdd(event) {
     event.preventDefault();
 
-    const { createDefaultEffect } = await import('../config/spell-effects.mjs');
-    const newEffect = createDefaultEffect('buff');
+    let newEffect;
+
+    if (['weapon', 'armor', 'shield', 'equipment'].includes(this.item.type)) {
+      newEffect = {
+        id: foundry.utils.randomID(),
+        type: 'buff',
+        target: 'skill',
+        targetName: '',
+        modifier: 1,
+        collapsed: false
+      };
+    } else {
+      const { createDefaultEffect } = await import('../config/spell-effects.mjs');
+      newEffect = createDefaultEffect('buff');
+    }
 
     const currentEffects = this.item.system.effects || [];
     const effects = Array.isArray(currentEffects)

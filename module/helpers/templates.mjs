@@ -19,6 +19,7 @@ export async function preloadHandlebarsTemplates() {
     'systems/ryf3/templates/item/partials/effect-buff.hbs',
     'systems/ryf3/templates/item/partials/effect-debuff.hbs',
     'systems/ryf3/templates/item/partials/effect-condition.hbs',
+    'systems/ryf3/templates/item/partials/effect-item.hbs',
     'systems/ryf3/templates/chat/skill-roll.hbs',
     'systems/ryf3/templates/chat/attack-roll.hbs',
     'systems/ryf3/templates/chat/damage-roll.hbs',

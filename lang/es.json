@@ -978,7 +978,8 @@
       "SpellDecreased": "{name} reducido a nivel {level}",
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
-      "EffectRemoved": "Efecto {name} eliminado"
+      "EffectRemoved": "Efecto {name} eliminado",
+      "EffectsRemoved": "Se eliminaron {count} efecto(s) de {item}"
     },
 
     "SheetLabels": {
@@ -995,7 +996,8 @@
       "Biography": "Biografía",
       "Description": "Descripción",
       "Details": "Detalles",
-      "Main": "Principal"
+      "Main": "Principal",
+      "Effects": "Efectos"
     },
 
     "CharacterName": "Nombre del Personaje",
@@ -1320,6 +1322,8 @@
       "EffectSettings": "Configuración de Efecto",
       "GenericSettings": "Configuración Genérica",
       "SpellEffects": "Efectos del Hechizo",
+      "ItemEffects": "Efectos del Item",
+      "NoEffects": "Sin efectos",
       "AddEffect": "Agregar Efecto",
       "EffectTarget": "Objetivo del Efecto",
       "RequiresAttack": "Requiere Ataque",
