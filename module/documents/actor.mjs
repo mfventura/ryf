@@ -104,8 +104,10 @@ export class RyfActor extends Actor {
     system.initiative.base = system.attributes.percepcion.value + initiativeBonus;
     system.initiative.value = system.initiative.base;
 
-    system.willpower.base = 5;
-    system.willpower.value = system.attributes.carisma.value + system.attributes.inteligencia.value + system.willpower.base;
+    if (CONFIG.RYF.isCarismaEnabled() && system.attributes.carisma) {
+      system.willpower.base = 5;
+      system.willpower.value = system.attributes.carisma.value + system.attributes.inteligencia.value + system.willpower.base;
+    }
 
     const equippedArmor = this.items.find(i => i.type === 'armor' && i.system.equipped);
     const equippedShields = this.items.filter(i => i.type === 'shield' && i.system.equipped);
@@ -143,11 +145,19 @@ export class RyfActor extends Actor {
 
   _applyActiveEffectBonuses(system) {
     if (system.defense) {
-      system.defense.value += system.activeEffectBonuses.defense;
+      if (typeof system.defense === 'object' && system.defense.value !== undefined) {
+        system.defense.value += system.activeEffectBonuses.defense;
+      } else if (typeof system.defense === 'number') {
+        system.defense += system.activeEffectBonuses.defense;
+      }
     }
 
     if (system.initiative) {
-      system.initiative.value += system.activeEffectBonuses.initiative;
+      if (typeof system.initiative === 'object' && system.initiative.value !== undefined) {
+        system.initiative.value += system.activeEffectBonuses.initiative;
+      } else if (typeof system.initiative === 'number') {
+        system.initiative += system.activeEffectBonuses.initiative;
+      }
     }
 
     if (system.combat) {
