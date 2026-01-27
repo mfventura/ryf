@@ -1,0 +1,1280 @@
+{
+  "RYF": {
+    "SystemName": "Quick and Easy 3.0",
+
+    "COMPENDIUM": {
+      "skills": "Skills",
+      "spells": "Spells",
+      "npcs": "NPCs",
+      "weapons": "Weapons",
+      "armor": "Armor",
+      "shields": "Shields",
+      "equipment": "Equipment"
+    },
+
+    "ITEMS": {
+      "ARMOR": {
+        "KevlarLigero": {
+          "name": "Light Kevlar",
+          "description": "Light kevlar armor that provides basic protection without affecting mobility."
+        },
+        "KevlarMedio": {
+          "name": "Medium Kevlar",
+          "description": "Reinforced kevlar armor that offers balanced protection with moderate hindrance."
+        },
+        "Exoesqueleto": {
+          "name": "Exoskeleton",
+          "description": "Advanced technological exoskeleton armor that provides maximum protection at the cost of reduced mobility."
+        },
+        "Cuero": {
+          "name": "Leather",
+          "description": "Light leather armor that offers basic protection without affecting mobility."
+        },
+        "Malla": {
+          "name": "Chainmail",
+          "description": "Chainmail armor that provides good protection with moderate hindrance."
+        },
+        "Placas": {
+          "name": "Plate Armor",
+          "description": "Heavy metal plate armor that offers maximum protection at the cost of reduced mobility."
+        }
+      },
+      "WEAPON": {
+        "ArcoPrecision": {
+          "name": "Precision Bow",
+          "description": "High precision bow designed for long-range shooting."
+        },
+        "BallestaLigera": {
+          "name": "Light Crossbow",
+          "description": "Light and manageable crossbow, ideal for medium-range combat."
+        },
+        "Revolver": {
+          "name": "Revolver",
+          "description": "Classic six-shot revolver, reliable and powerful."
+        },
+        "PistolaSemiautomatica": {
+          "name": "Semi-automatic Pistol",
+          "description": "Modern semi-automatic pistol with high-capacity magazine."
+        },
+        "Subfusil": {
+          "name": "Submachine Gun",
+          "description": "Compact submachine gun with high rate of fire."
+        },
+        "Machete": {
+          "name": "Machete",
+          "description": "Heavy machete ideal for melee combat."
+        },
+        "EscopetaRecortada": {
+          "name": "Sawed-off Shotgun",
+          "description": "Sawed-off shotgun with great stopping power at close range. Damage decreases with distance."
+        },
+        "Katana": {
+          "name": "Katana",
+          "description": "Japanese curved blade sword, sharp and deadly."
+        },
+        "Sable": {
+          "name": "Saber",
+          "description": "Cavalry saber with curved blade. Can be used one or two-handed."
+        },
+        "PistolaLaser": {
+          "name": "Laser Pistol",
+          "description": "High-tech directed energy weapon."
+        },
+        "ArcoCorto": {
+          "name": "Short Bow",
+          "description": "Short and manageable bow, ideal for quick combat."
+        },
+        "ArcoLargo": {
+          "name": "Long Bow",
+          "description": "Long war bow with great range and power."
+        },
+        "Ballesta": {
+          "name": "Crossbow",
+          "description": "Heavy crossbow with great penetration power."
+        },
+        "Baston": {
+          "name": "Staff",
+          "description": "Sturdy wooden staff, useful for defense."
+        },
+        "Cimitarra": {
+          "name": "Scimitar",
+          "description": "Curved sword of oriental origin, fast and lethal."
+        },
+        "Cuchillo": {
+          "name": "Knife",
+          "description": "Combat knife, can be thrown at short distance."
+        },
+        "Daga": {
+          "name": "Dagger",
+          "description": "Double-edged dagger, perfect for quick and stealthy attacks."
+        },
+        "EspadaCorta": {
+          "name": "Short Sword",
+          "description": "Versatile short sword, balanced between speed and damage."
+        },
+        "EspadaLarga": {
+          "name": "Long Sword",
+          "description": "Classic long sword, the quintessential weapon of warriors."
+        },
+        "HachaCombate": {
+          "name": "Battle Axe",
+          "description": "Two-handed war axe with great destructive power."
+        },
+        "HachaGuerra": {
+          "name": "War Axe",
+          "description": "One-handed war axe, brutal and effective."
+        },
+        "Honda": {
+          "name": "Sling",
+          "description": "Simple but effective sling for throwing projectiles."
+        },
+        "LanzaLigera": {
+          "name": "Light Spear",
+          "description": "Light spear that can be used in melee combat or thrown."
+        },
+        "LanzaPesada": {
+          "name": "Heavy Lance",
+          "description": "Heavy cavalry lance. Deals extra damage when used mounted (3d6)."
+        },
+        "Mandoble": {
+          "name": "Greatsword",
+          "description": "Huge two-handed sword with devastating power."
+        },
+        "Mangual": {
+          "name": "Flail",
+          "description": "Flail with chain and spiked ball, difficult to block."
+        },
+        "Maza": {
+          "name": "Mace",
+          "description": "Heavy metal mace, effective against armor."
+        },
+        "Vara": {
+          "name": "Rod",
+          "description": "Simple wooden rod, useful as improvised weapon."
+        }
+      },
+      "SHIELD": {
+        "Normal": {
+          "name": "Normal Shield",
+          "description": "Light wooden or metal shield that provides basic protection without hindering movement."
+        },
+        "Mediano": {
+          "name": "Medium Shield",
+          "description": "Medium-sized shield that offers good protection balancing defense and mobility."
+        },
+        "Pesado": {
+          "name": "Heavy Shield",
+          "description": "Sturdy metal shield that provides excellent protection at the cost of some mobility."
+        },
+        "Torre": {
+          "name": "Tower Shield",
+          "description": "Massive shield that covers almost the entire body, offering maximum protection but significantly limiting movement."
+        },
+        "Tactico": {
+          "name": "Tactical Shield",
+          "description": "Modern composite material shield used by special forces and riot police."
+        },
+        "Antidisturbios": {
+          "name": "Riot Shield",
+          "description": "Transparent polycarbonate shield designed for crowd control and police protection."
+        },
+        "Ballistico": {
+          "name": "Ballistic Shield",
+          "description": "Heavy reinforced shield capable of stopping firearm projectiles."
+        },
+        "Energia": {
+          "name": "Personal Energy Shield",
+          "description": "Portable device that generates a protective force field against physical and energy attacks."
+        },
+        "CampoFuerza": {
+          "name": "Advanced Force Field",
+          "description": "Latest generation energy shield system with high absorption capacity."
+        },
+        "Deflector": {
+          "name": "Portable Deflector",
+          "description": "Light energy shield that deflects projectiles and laser attacks with minimal hindrance."
+        }
+      },
+      "NPC": {
+        "Doscabezas": {
+          "name": "Two-headed",
+          "description": "Monstrous beast with two heads that can attack multiple targets.",
+          "attack": "Bite"
+        },
+        "DragonGrande": {
+          "name": "Large Dragon",
+          "description": "Adult large dragon with resistant scales and devastating fire breath.",
+          "attack": "Claw/Bite"
+        },
+        "DragonPequeno": {
+          "name": "Small Dragon",
+          "description": "Young dragon or wyvern with resistant scales and fire breath.",
+          "attack": "Claw/Bite"
+        },
+        "Esqueleto": {
+          "name": "Skeleton",
+          "description": "Undead animated by dark magic. Vulnerable to bludgeoning damage.",
+          "attack": "Rusty sword"
+        },
+        "EsqueletoCaballero": {
+          "name": "Skeleton Knight",
+          "description": "Undead warrior with armor and martial training. More dangerous than a common skeleton.",
+          "attack": "Long sword"
+        },
+        "Gargola": {
+          "name": "Gargoyle",
+          "description": "Animated stone creature that can fly. Its stone skin protects it from physical attacks.",
+          "attack": "Claw"
+        },
+        "Goblin": {
+          "name": "Goblin",
+          "description": "Small and cunning creature that usually attacks in groups. Cowardly when alone.",
+          "attack": "Dagger/Short bow"
+        },
+        "Arpia": {
+          "name": "Harpy",
+          "description": "Winged creature with woman's torso and bird of prey body. Its song can enchant the unwary.",
+          "attack": "Claw"
+        },
+        "HombreLagarto": {
+          "name": "Lizardman",
+          "description": "Agile and territorial reptilian humanoid. Excellent swimmer.",
+          "attack": "Spear/Claw"
+        },
+        "HombreRata": {
+          "name": "Ratman",
+          "description": "Rodent humanoid that inhabits sewers and tunnels. Fast and elusive.",
+          "attack": "Dagger/Bite"
+        },
+        "Liche": {
+          "name": "Lich",
+          "description": "Undead wizard of great power. Master of necromantic magic.",
+          "attack": "Freezing touch"
+        },
+        "Lobo": {
+          "name": "Wolf",
+          "description": "Wild predator that hunts in packs. Fast and lethal.",
+          "attack": "Bite"
+        },
+        "LordEsqueleto": {
+          "name": "Skeleton Lord",
+          "description": "Elite undead warrior with full armor and superior combat skills.",
+          "attack": "Bastard sword"
+        },
+        "LordLiche": {
+          "name": "Lich Lord",
+          "description": "Undead archmage of devastating power. Masters the darkest arcane arts.",
+          "attack": "Death touch"
+        },
+        "Ogro": {
+          "name": "Ogre",
+          "description": "Brutal giant of great strength but little intelligence. Its thick skin absorbs damage.",
+          "attack": "Club"
+        },
+        "Orco": {
+          "name": "Orc",
+          "description": "Savage and aggressive warrior. Fights fiercely and fearlessly.",
+          "attack": "War axe"
+        },
+        "Troll": {
+          "name": "Troll",
+          "description": "Large regenerative creature. Its thick skin absorbs damage and regenerates quickly.",
+          "attack": "Claw"
+        }
+      },
+      "EQUIPMENT": {
+        "Antorcha": {
+          "name": "Torch",
+          "description": "Portable light source that illuminates 10 meters for 1 hour."
+        },
+        "Cuerda": {
+          "name": "Rope (15m)",
+          "description": "Sturdy hemp or fiber rope, useful for climbing or tying."
+        },
+        "Mochila": {
+          "name": "Backpack",
+          "description": "Travel backpack with capacity to carry equipment and supplies."
+        },
+        "Yesca": {
+          "name": "Tinder and Flint",
+          "description": "Basic kit for starting fire in normal conditions."
+        },
+        "Odre": {
+          "name": "Waterskin",
+          "description": "Leather container for transporting liquids, 2 liter capacity."
+        },
+        "RacionesViaje": {
+          "name": "Travel Rations (1 day)",
+          "description": "Preserved food sufficient for one person for one day."
+        },
+        "Tienda": {
+          "name": "Tent",
+          "description": "Portable shelter for 2 people, protects from the elements."
+        },
+        "KitEscalada": {
+          "name": "Climbing Kit",
+          "description": "Hooks, pitons and specialized equipment for ascents. Grants +2 to Climbing rolls."
+        },
+        "HerramientasLadron": {
+          "name": "Thieves' Tools",
+          "description": "Lockpicks and tools for forcing locks. Necessary to use Traps/Locks."
+        },
+        "KitCuracion": {
+          "name": "Healing Kit",
+          "description": "Bandages, ointments and medicinal herbs. Grants +2 to Medicine or Healing/Herbs rolls."
+        },
+        "Linterna": {
+          "name": "Lantern",
+          "description": "Portable light source that illuminates 15 meters. Requires oil."
+        },
+        "Catalejo": {
+          "name": "Spyglass",
+          "description": "Portable telescope that allows seeing at great distance. Grants +2 to Notice/Spot at long distance."
+        },
+        "Movil": {
+          "name": "Mobile Phone",
+          "description": "Modern communication device with internet access and applications."
+        },
+        "Portatil": {
+          "name": "Laptop",
+          "description": "Portable personal computer. Necessary for advanced Computer Science rolls."
+        },
+        "Linterna LED": {
+          "name": "LED Flashlight",
+          "description": "Modern high-power flashlight that illuminates 30 meters for 8 hours."
+        },
+        "KitMedicoModerno": {
+          "name": "Modern Medical Kit",
+          "description": "Complete first aid kit with advanced medical supplies. Grants +3 to Medicine rolls."
+        },
+        "ChalecoPrensa": {
+          "name": "Press Vest",
+          "description": "Identification vest that can provide basic protection in conflict zones."
+        },
+        "Binoculares": {
+          "name": "Binoculars",
+          "description": "High-quality binoculars. Grants +3 to Notice/Spot at long distance."
+        },
+        "GPS": {
+          "name": "GPS",
+          "description": "Global positioning system. Grants +3 to Navigation rolls."
+        },
+        "RadioComunicacion": {
+          "name": "Communication Radio",
+          "description": "Portable transceiver with 5 km range in open terrain."
+        },
+        "KitForense": {
+          "name": "Forensic Kit",
+          "description": "Equipment for evidence collection. Grants +2 to Search rolls at crime scenes."
+        },
+        "Dron": {
+          "name": "Reconnaissance Drone",
+          "description": "Small unmanned aerial vehicle with camera for surveillance and exploration."
+        },
+        "Datapad": {
+          "name": "Datapad",
+          "description": "Futuristic tablet with access to galactic databases and communication systems."
+        },
+        "EscaneoBio": {
+          "name": "Biometric Scanner",
+          "description": "Device that analyzes life forms and vital signs. Grants +3 to Medicine and Fauna."
+        },
+        "Traductor": {
+          "name": "Universal Translator",
+          "description": "Real-time translation device for multiple languages and alien tongues."
+        },
+        "KitReparacion": {
+          "name": "Advanced Repair Kit",
+          "description": "Tools and components for repairing advanced technology. Necessary for Engineering."
+        },
+        "GeneradorCampo": {
+          "name": "Personal Field Generator",
+          "description": "Device that creates a temporary force field (1 use per day, absorbs 10 damage points)."
+        },
+        "Jetpack": {
+          "name": "Personal Jetpack",
+          "description": "Personal propulsion device that allows limited flight (10 minutes autonomy)."
+        },
+        "VisorRA": {
+          "name": "Augmented Reality Visor",
+          "description": "Glasses that overlay digital information on the environment. Grants +2 to Notice/Spot and Search."
+        },
+        "Holocom": {
+          "name": "Holocommunicator",
+          "description": "Long-range holographic communication device (planetary range)."
+        },
+        "Antigrav": {
+          "name": "Portable Antigravity Unit",
+          "description": "Device that reduces weight of objects up to 100 kg. Grants +3 to Athletics for carrying."
+        }
+      },
+      "SPELL": {
+        "DisiparMagia": {
+          "name": "Dispel Magic",
+          "description": "Cancels an active magical effect. Difficulty equals original spell +2, and cost is the same as the spell to dispel."
+        },
+        "ComunicacionDistancia": {
+          "name": "Long Distance Communication",
+          "description": "Allows two wizards using the spell simultaneously to communicate mentally."
+        },
+        "ConvertirAgua": {
+          "name": "Convert Water",
+          "description": "Converts 1 liter per skill level into wine, beer, oil or ice."
+        },
+        "Luz": {
+          "name": "Light",
+          "description": "Illuminates a non-living object for 1 hour/level or emits a blinding ray that paralyzes 1 turn (Save: Perception 10)."
+        },
+        "ManoDeMago": {
+          "name": "Mage Hand",
+          "description": "Telekinesis on objects up to 2 kg for 1 turn/level."
+        },
+        "DetectarMagia": {
+          "name": "Detect Magic",
+          "description": "Detects nearby traces, spells or magical objects and identifies their nature."
+        },
+        "ToqueElectrico": {
+          "name": "Electric Touch",
+          "description": "Inflicts 2d6 damage ignoring armor (requires melee attack roll)."
+        },
+        "AmistadAnimal": {
+          "name": "Animal Friendship",
+          "description": "Turns an animal into an ally for 1 minute/level."
+        },
+        "CaidaPluma": {
+          "name": "Feather Fall",
+          "description": "An object or creature falls slowly (9 meters per turn) for 1 turn/level."
+        },
+        "Convocatoria": {
+          "name": "Summons",
+          "description": "Notifies a known person of the mage's location and need."
+        },
+        "Curacion": {
+          "name": "Healing",
+          "description": "Heals 1d6 HP for each mana point spent (maximum 3 points)."
+        },
+        "MaterializarArma": {
+          "name": "Materialize Weapon",
+          "description": "Summons a physical weapon for 1 turn/level."
+        },
+        "PiesArana": {
+          "name": "Spider Feet",
+          "description": "Allows walking on any surface negating gravity for 1 turn/level."
+        },
+        "ArmaFuego": {
+          "name": "Fire Weapon",
+          "description": "Target weapon inflicts +1d6 fire damage for 1 turn/level."
+        },
+        "Atravesar": {
+          "name": "Pass Through",
+          "description": "Allows passing through solids up to 1 meter thick."
+        },
+        "AuraCuracion": {
+          "name": "Healing Aura",
+          "description": "Heals 2 HP per turn to all allies within 10 m radius for 1 turn/level."
+        },
+        "Espejo": {
+          "name": "Mirror",
+          "description": "Returns the next received spell directly to its caster (lasts 1 day or until activated)."
+        },
+        "Invisibilidad": {
+          "name": "Invisibility",
+          "description": "Lasts 1 minute/level or until the mage makes an attack."
+        },
+        "RastroSecreto": {
+          "name": "Secret Trail",
+          "description": "After touching a target, the mage sees an imaginary thread connecting them for 1 hour/level."
+        },
+        "RespirarBajoAgua": {
+          "name": "Water Breathing",
+          "description": "Allows aquatic breathing for 10 minutes/level."
+        },
+        "Silencio": {
+          "name": "Silence",
+          "description": "Generates a 1 m radius silence zone for 1 minute/level."
+        },
+        "Amistad": {
+          "name": "Friendship",
+          "description": "The affected becomes an ally for 1 turn/level (Save: Intelligence 15)."
+        },
+        "ProyectilMagico": {
+          "name": "Magic Missile",
+          "description": "Projectile that inflicts 2d6 damage."
+        },
+        "InvocarLobo": {
+          "name": "Summon Wolf",
+          "description": "Summons a wolf under the mage's orders for 1 turn/level (maximum one active)."
+        },
+        "LanzaSombras": {
+          "name": "Shadow Lance",
+          "description": "Inflicts 3d6 damage."
+        },
+        "Relampago": {
+          "name": "Lightning",
+          "description": "Inflicts 2d6 damage ignoring armor."
+        },
+        "AtarDemonio": {
+          "name": "Bind Demon",
+          "description": "Immobilizes a demon for 1 turn/level (Save: Physical 18)."
+        },
+        "TentaculosNegros": {
+          "name": "Black Tentacles",
+          "description": "Immobilizes everything within 10 m radius for 1 turn/level (Save: Dexterity 15)."
+        },
+        "InfundirTerror": {
+          "name": "Instill Terror",
+          "description": "Target flees or is paralyzed for 1 turn/level (Save: Intelligence 15)."
+        },
+        "EspejoSombras": {
+          "name": "Mirror of Shadows",
+          "description": "Creates copies of the mage; attacks against them have 50% chance of failure for 1 turn/level."
+        },
+        "Niebla": {
+          "name": "Fog",
+          "description": "Creates a 10x10 m area that subtracts -2 to visual Perception for 1 turn/level."
+        },
+        "SentidosPuros": {
+          "name": "Pure Senses",
+          "description": "Grants +4 to Perception for 1 turn/level."
+        },
+        "Absorcion": {
+          "name": "Absorption",
+          "description": "Grants +4 to damage Absorption for 1 turn/level."
+        },
+        "FuerzaSobrehumana": {
+          "name": "Superhuman Strength",
+          "description": "Grants +4 to Physical for 1 turn/level."
+        },
+        "DefensaMental": {
+          "name": "Mental Defense",
+          "description": "Grants +4 to saving throws against magic for 1 turn/level."
+        },
+        "AuraPoder": {
+          "name": "Aura of Power",
+          "description": "Grants +1 to hit and damage to all allies within 10 m radius for 1 turn/level."
+        },
+        "BaileViento": {
+          "name": "Wind Dance",
+          "description": "Grants +4 to Defense (also against projectiles) for 1 turn/level."
+        },
+        "CaminarEntreSuenos": {
+          "name": "Walk Between Dreams",
+          "description": "Travels to the dreams of someone known (Save: Intelligence 16)."
+        },
+        "Anticipacion": {
+          "name": "Anticipation",
+          "description": "Grants +2 to Defense and Attack for 1 turn/level."
+        },
+        "AlzarMuertoViviente": {
+          "name": "Raise Undead",
+          "description": "Raises a corpse under the mage's orders for 1 turn/level."
+        },
+        "BolaFuego": {
+          "name": "Fireball",
+          "description": "Explosion of 3d6 damage in 5 m radius."
+        },
+        "ToqueVampirico": {
+          "name": "Vampiric Touch",
+          "description": "Steals 2d6 HP from target and gives them to the mage; ignores armor."
+        },
+        "CampoAntimagico": {
+          "name": "Antimagic Field",
+          "description": "Prevents casting magic within 10 m radius for 1 turn/level."
+        },
+        "Terremoto": {
+          "name": "Earthquake",
+          "description": "10x10 m area; inflicts 2d6 damage and requires Save (Dexterity 15) to not fall."
+        },
+        "RobarIdentidad": {
+          "name": "Steal Identity",
+          "description": "Copies victim's appearance for 1 hour/level (requires visual contact)."
+        },
+        "PosesionMental": {
+          "name": "Mental Possession",
+          "description": "Controls victim's body for 1 turn/level (Save: Intelligence 16); mage becomes unconscious."
+        },
+        "Olvido": {
+          "name": "Oblivion",
+          "description": "Erases a memory (Save: Intelligence between 8 and 12 + spell level)."
+        },
+        "EsconderseSombras": {
+          "name": "Hide in Shadows",
+          "description": "Grants +10 to Stealth while there are shadows for 1 turn/level."
+        },
+        "CadenaRelampagos": {
+          "name": "Chain Lightning",
+          "description": "2d6 damage ray that jumps to up to 3 targets ignoring armor."
+        },
+        "RayoSolar": {
+          "name": "Solar Ray",
+          "description": "Fire aura that inflicts 4d6 damage in 5 m radius."
+        },
+        "Duplicacion": {
+          "name": "Duplication",
+          "description": "Creates a copy with half HP; if one dies, the rest transfers to the other."
+        },
+        "EscudoAntimagia": {
+          "name": "Anti-magic Shield",
+          "description": "Blocks any spell attempting to pass through it for 1 turn/level."
+        },
+        "OjosLince": {
+          "name": "Lynx Eyes",
+          "description": "Allows repeating observed spells at the same level as the caster for 1 turn/level."
+        },
+        "TormentaFuego": {
+          "name": "Firestorm",
+          "description": "Inflicts 4d6 damage in 10x10 m area."
+        },
+        "Teleportarse": {
+          "name": "Teleport",
+          "description": "Instant transport to a known position."
+        }
+      },
+      "SKILL": {
+        "ArmasCuerpoACuerpo": {
+          "name": "Melee Weapons",
+          "description": "Experience in close combat with swords, axes, maces or unarmed combat and martial arts."
+        },
+        "Atletismo": {
+          "name": "Athletics",
+          "description": "Ability to run swiftly, perform running jumps or descend heights safely."
+        },
+        "Fauna": {
+          "name": "Fauna",
+          "description": "Knowledge of animals, their habits and techniques to tame or domesticate them."
+        },
+        "ArmasADistancia": {
+          "name": "Ranged Weapons",
+          "description": "Use and maintenance of bows, crossbows, firearms, whips or throwing knives."
+        },
+        "Artilleria": {
+          "name": "Artillery",
+          "description": "Handling of heavy weapons, cannons, missile launchers or spaceship weaponry."
+        },
+        "Cabalgar": {
+          "name": "Riding",
+          "description": "Handling of horses and mounts, including galloping, jumping and controlling the animal in stressful situations."
+        },
+        "Conducir": {
+          "name": "Driving",
+          "description": "Expert handling of ground vehicles like cars or motorcycles, useful in chases."
+        },
+        "Escalar": {
+          "name": "Climbing",
+          "description": "Ascending vertical or steep walls with or without specialized equipment."
+        },
+        "Esquivar": {
+          "name": "Dodge",
+          "description": "Ability to avoid blows in combat; this value is the base for calculating the character's Defense."
+        },
+        "Nadar": {
+          "name": "Swimming",
+          "description": "Ability to move in water; a single point allows swimming without risk in normal conditions."
+        },
+        "Pilotar": {
+          "name": "Piloting",
+          "description": "Aptitude for flying aircraft, performing emergency maneuvers and following flight protocols."
+        },
+        "RobarBolsillos": {
+          "name": "Pickpocket",
+          "description": "Manual dexterity focused on discreetly stealing objects from bags, wallets or a victim's body."
+        },
+        "Sigilo": {
+          "name": "Stealth",
+          "description": "Ability to move silently or hide in shadows or crowds to avoid being seen."
+        },
+        "TrampasCerraduras": {
+          "name": "Traps/Locks",
+          "description": "Aptitude for forcing security mechanisms, opening locks and disabling traps."
+        },
+        "Astrofisica": {
+          "name": "Astrophysics",
+          "description": "Theoretical knowledge of space physics, ship design and study of astrological phenomena."
+        },
+        "Callejeo": {
+          "name": "Streetwise",
+          "description": "Knowledge of the underworld, black market, urban crime and escape routes through alleys."
+        },
+        "Comercio": {
+          "name": "Commerce",
+          "description": "Ability to appraise goods, know trade routes and conduct effective bargaining."
+        },
+        "Criptografia": {
+          "name": "Cryptography",
+          "description": "Ability to create and decipher complex codes or secret messages."
+        },
+        "HistoriaTradicion": {
+          "name": "History / Tradition",
+          "description": "Knowledge of past events, historical personalities, political geography and legends."
+        },
+        "Idiomas": {
+          "name": "Languages",
+          "description": "Ability to speak, read and learn languages other than native."
+        },
+        "Informatica": {
+          "name": "Computer Science",
+          "description": "Use of computerized systems, programming, digital security and software creation."
+        },
+        "Ingenieria": {
+          "name": "Engineering",
+          "description": "Knowledge in construction of artifacts, engines or robots (specialized according to setting)."
+        },
+        "Leyes": {
+          "name": "Law",
+          "description": "Knowledge of a region's legal system and ability to find legal loopholes."
+        },
+        "Medicina": {
+          "name": "Medicine",
+          "description": "Treatment of diseases and wounds; a successful roll heals 1d6 HP (realistic) or 2d6 HP (heroic) once per day."
+        },
+        "Navegar": {
+          "name": "Navigation",
+          "description": "Governing vessels, knowledge of sea routes and orientation by stars."
+        },
+        "Ocultismo": {
+          "name": "Occultism",
+          "description": "Knowledge of arcane and mystical sciences; allows identifying when someone casts a spell."
+        },
+        "Religion": {
+          "name": "Religion",
+          "description": "Knowledge of theology, ceremonies, history and anthropology of religions."
+        },
+        "SanacionHierbas": {
+          "name": "Healing/Herbs",
+          "description": "Use of natural resources to heal wounds; has the same mechanical effect as Medicine."
+        },
+        "SupervivenciaCazar": {
+          "name": "Survival / Hunting",
+          "description": "Art of surviving in nature, including making fire, orientation and obtaining food."
+        },
+        "AdvertirNotar": {
+          "name": "Notice/Spot",
+          "description": "Use of senses to detect hidden people, subtle noises or unusual details in the environment."
+        },
+        "Bailar": {
+          "name": "Dancing",
+          "description": "Skill in dancing, fundamental in social environments, nightclubs or medieval courts."
+        },
+        "Buscar": {
+          "name": "Search",
+          "description": "Thorough sensory focus to find hidden objects, secret passages or non-obvious clues."
+        },
+        "Disfraz": {
+          "name": "Disguise",
+          "description": "Ability to alter one's own appearance and go unnoticed or impersonate another person."
+        },
+        "Etiqueta": {
+          "name": "Etiquette",
+          "description": "Knowledge of protocols, manners and correct behavior in various social strata or countries."
+        },
+        "Musica": {
+          "name": "Music",
+          "description": "Theoretical and practical knowledge of musical instruments and singing."
+        },
+        "NavegacionEspacial": {
+          "name": "Space Navigation",
+          "description": "Handling of stellar maps, plotting travel routes and knowledge of alien cultures."
+        },
+        "Rastrear": {
+          "name": "Tracking",
+          "description": "Ability to follow tracks, footprints or characteristic signs on terrain."
+        },
+        "Reflejos": {
+          "name": "Reflexes",
+          "description": "Quick physical reaction to unexpected events (like catching objects) and determination of attack speed."
+        },
+        "Rumores": {
+          "name": "Rumors",
+          "description": "Ability to collect reliable information and gossip within a community."
+        },
+        "Amenazar": {
+          "name": "Threaten",
+          "description": "Pressuring someone through physical or psychological fears to obtain information or objects."
+        },
+        "Interrogar": {
+          "name": "Interrogate",
+          "description": "Extracting information through structured questions that force contradictions in the target."
+        },
+        "Labia": {
+          "name": "Fast Talk",
+          "description": "Convincing others that an argument is logical or true, regardless of reality."
+        },
+        "Liderazgo": {
+          "name": "Leadership",
+          "description": "Persuading and directing groups of people through social or military command."
+        },
+        "Regatear": {
+          "name": "Bargain",
+          "description": "Negotiating to achieve favorable prices in commercial transactions."
+        },
+        "Seducir": {
+          "name": "Seduce",
+          "description": "Ability to be attractive or pleasant to another person to influence them."
+        }
+      }
+    },
+
+    "Attributes": {
+      "Fisico": "Physical",
+      "Destreza": "Dexterity",
+      "Inteligencia": "Intelligence",
+      "Percepcion": "Perception",
+      "Carisma": "Charisma"
+    },
+
+    "Skills": {
+      "Acrobacias": "Acrobatics",
+      "Alerta": "Alert",
+      "ArmasBlancas": "Melee Weapons",
+      "ArmasDistancia": "Ranged Weapons",
+      "ArmasFuego": "Firearms",
+      "Atletismo": "Athletics",
+      "Buscar": "Search",
+      "Callejeo": "Streetwise",
+      "Ciencias": "Sciences",
+      "Conducir": "Driving",
+      "Conocimiento": "Knowledge",
+      "Descubrir": "Discover",
+      "Disfraz": "Disguise",
+      "Empatia": "Empathy",
+      "Equitacion": "Riding",
+      "Escalar": "Climbing",
+      "Esconderse": "Hide",
+      "Esquivar": "Dodge",
+      "Fortaleza": "Fortitude",
+      "Humanidades": "Humanities",
+      "Idiomas": "Languages",
+      "Informatica": "Computer Science",
+      "Juego": "Gambling",
+      "Latrocinio": "Larceny",
+      "Medicina": "Medicine",
+      "Nadar": "Swimming",
+      "Navegacion": "Navigation",
+      "Ocultismo": "Occultism",
+      "Oficio": "Craft",
+      "Pelea": "Brawl",
+      "Pilotar": "Piloting",
+      "PrimAuxilios": "First Aid",
+      "Rastrear": "Tracking",
+      "Reflejos": "Reflexes",
+      "Sigilo": "Stealth",
+      "Subterfugio": "Subterfuge",
+      "Supervivencia": "Survival",
+      "Trato": "Dealing",
+      "Voluntad": "Willpower",
+      "Amenazar": "Threaten",
+      "Interrogar": "Interrogate",
+      "Labia": "Fast Talk",
+      "Liderazgo": "Leadership",
+      "Regatear": "Bargain",
+      "Seducir": "Seduce"
+    },
+
+    "Settings": {
+      "EnableCarisma": {
+        "Name": "Enable Charisma",
+        "Hint": "Activates the Charisma attribute and the 6 social skills. Requires world reload."
+      },
+      "EnableMagia": {
+        "Name": "Enable Magic",
+        "Hint": "Activates the magic system, Mana points and spells. Requires world reload."
+      },
+      "HealthMultiplier": {
+        "Name": "Health Multiplier",
+        "Hint": "Multiplier to calculate maximum HP (Physical × multiplier). Realistic: 3, Standard: 4, Heroic: 5+"
+      },
+      "ManaMultiplier": {
+        "Name": "Mana Multiplier",
+        "Hint": "Multiplier to calculate maximum Mana (Intelligence × multiplier). Only if magic is active."
+      },
+      "DefaultCharacterType": {
+        "Name": "Default Character Type",
+        "Hint": "Defines the skill pyramid that will be applied to new characters."
+      },
+      "CharacterTypes": {
+        "SpecialistHeroic": "Heroic Specialist (1×6, 3×5, 3×4, 3×3, 3×2, 3×1)",
+        "VersatileHeroic": "Heroic Versatile (1×6, 2×5, 3×4, 4×3, 5×2, 6×1)",
+        "SpecialistRealistic": "Realistic Specialist (2×5, 2×4, 2×3, 2×2, 2×1)",
+        "VersatileRealistic": "Realistic Versatile (1×5, 2×4, 3×3, 4×2, 5×1)",
+        "Custom": "Custom"
+      },
+      "CustomPyramidMenu": {
+        "Name": "Configure Custom Pyramid",
+        "Label": "Configure Pyramid",
+        "Hint": "Opens a form to define a custom skill pyramid.",
+        "Title": "Custom Pyramid Configuration",
+        "Description": "Define how many skills of each level characters will have. You can use presets or create your own distribution."
+      },
+      "AttributePoints": {
+        "Name": "Attribute Points",
+        "Hint": "Amount of points available to distribute in attributes. Realistic: 22, Heroic: 30, Epic: 35+"
+      },
+      "AutoCalculateDefense": {
+        "Name": "Auto Calculate Defense",
+        "Hint": "If active, Defense is calculated automatically (Dexterity + Dodge + 5). If inactive, can be edited manually."
+      },
+      "Presets": "Predefined Presets",
+      "CustomPyramid": "Custom Pyramid",
+      "SkillLevel": "Skills Level",
+      "SkillLevel6Hint": "Master skills",
+      "SkillLevel5Hint": "Expert skills",
+      "SkillLevel4Hint": "Advanced skills",
+      "SkillLevel3Hint": "Competent skills",
+      "SkillLevel2Hint": "Basic skills",
+      "SkillLevel1Hint": "Initial skills",
+      "TotalSkills": "Total Skills",
+      "Save": "Save"
+    },
+
+    "Warnings": {
+      "MagicDisabled": "Magic is not enabled in this world. Activate it in system settings.",
+      "CarismaDisabled": "Charisma is not enabled in this world. Activate it in system settings.",
+      "SkillNotFound": "Skill {skill} not found",
+      "NoActor": "This item is not associated with any actor",
+      "EmptyPyramid": "Pyramid cannot be empty. Define at least one skill.",
+      "TooManySkillsAtLevel": "Too many skills at level {level}. Expected: {expected}, Current: {actual}",
+      "SkillPyramidMismatch": "Level {level}: expected {expected} skills, but there are {actual}",
+      "SkillsAbovePyramid": "Level {level}: there are {actual} skills above the pyramid maximum",
+      "NotEnoughExperience": "You don't have enough experience to perform this action",
+      "NotEnoughMana": "You don't have enough mana to cast this spell",
+      "CannotEquip": "This type of item cannot be equipped",
+      "NotASkill": "This item is not a skill",
+      "NotASpell": "This item is not a spell",
+      "MaxSkillLevel": "Skill is already at maximum level (10)",
+      "MinSkillLevel": "Skill is already at minimum level (0)",
+      "NoWeaponSkill": "Could not determine appropriate skill for this weapon",
+      "WeaponNotFound": "Weapon not found",
+      "SkillNotFoundCategory": "No skill found with category {category}",
+      "CannotActInCurrentState": "You cannot act in your current state",
+      "NoTargetSelected": "No targets selected",
+      "NoRangeSelected": "No range selected for ranged attack",
+      "SelectTargets": "Select {count} targets",
+      "SpellCastingFailed": "Failed to cast {name}"
+    },
+
+    "Info": {
+      "AreaSpell": "Area spell with radius {radius}. Select targets manually or it will be applied automatically.",
+      "NoTargetsForDamage": "No targets selected. Only attack roll is shown.",
+      "NoTargetsSelected": "No targets selected. Spell will be cast without applying effects.",
+      "NoTargetsForMultiple": "No targets selected. Spell requires {count} targets.",
+      "NoTargetsForHealing": "No targets selected for healing.",
+      "NoTargetsForBuff": "No targets selected to apply buff."
+    },
+
+    "Notifications": {
+      "PyramidSaved": "Custom pyramid saved successfully",
+      "ExperienceGained": "You gained {amount} XP for {reason}. Total: {total} XP",
+      "ActorUnconscious": "{name} has fallen unconscious",
+      "ActorDead": "{name} has died",
+      "ShortRest": "{name} has rested briefly and recovered {amount} HP",
+      "LongRest": "{name} has rested completely and recovered all health and mana",
+      "ItemEquipped": "{name} equipped",
+      "ItemUnequipped": "{name} unequipped",
+      "SkillIncreased": "{name} increased to level {level}",
+      "SkillDecreased": "{name} decreased to level {level}",
+      "ManaSpent": "Spent {cost} mana to cast {name}",
+      "SpellCast": "You cast {name} (Cost: {cost} mana)",
+      "EffectRemoved": "Effect {name} removed"
+    },
+
+    "SheetLabels": {
+      "Actor": "Actor Sheet",
+      "Item": "Item Sheet"
+    },
+
+    "Tabs": {
+      "Attributes": "Attributes",
+      "Skills": "Skills",
+      "Combat": "Combat",
+      "Magic": "Magic",
+      "Equipment": "Equipment",
+      "Biography": "Biography",
+      "Description": "Description",
+      "Details": "Details",
+      "Main": "Main"
+    },
+
+    "CharacterName": "Character Name",
+    "NPCName": "NPC Name",
+    "SkillName": "Skill Name",
+    "WeaponName": "Weapon Name",
+    "ArmorName": "Armor Name",
+    "ShieldName": "Shield Name",
+    "EquipmentName": "Equipment Name",
+    "SpellName": "Spell Name",
+
+    "Health": "Hit Points",
+    "Mana": "Mana",
+    "Defense": "Defense",
+    "DefenseMelee": "Melee Defense",
+    "DefenseMeleeShort": "Melee Def.",
+    "DefenseRanged": "Ranged Defense (Cover)",
+    "DefenseRangedShort": "Ranged Def.",
+    "Initiative": "Initiative",
+    "Willpower": "Willpower",
+    "TargetWillpower": "Target Willpower",
+    "InitiativeBase": "Base Initiative",
+    "Experience": "Experience",
+    "AttributePoints": "Attribute Points",
+    "Remaining": "Remaining",
+    "DerivedStats": "Derived Stats",
+    "State": "State",
+
+    "Level": "Level",
+    "EffectBonus": "Effect Bonus",
+    "Attribute": "Attribute",
+    "Controls": "Controls",
+    "Roll": "Roll",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Cast": "Cast",
+    "SpellCasting": "Spell Casting",
+    "Intelligence": "Intelligence",
+    "Healing": "Healing",
+    "Target": "Target",
+    "Formula": "Formula",
+    "BaseHealing": "Base Healing",
+    "CriticalHealing": "Critical Healing",
+    "TotalHealing": "Total Healing",
+
+    "AddSkill": "Add Skill",
+    "AddWeapon": "Add Weapon",
+    "AddArmor": "Add Armor",
+    "AddShield": "Add Shield",
+    "AddEquipment": "Add Equipment",
+    "AddSpell": "Add Spell",
+    "AddExperience": "Add Experience",
+    "ExperienceAmount": "Experience Amount",
+    "Reason": "Reason",
+    "ReasonPlaceholder": "E.g.: Complete quest, defeat enemies",
+
+    "PyramidValid": "Skill pyramid is valid",
+    "PyramidInvalid": "Skill pyramid is not valid",
+
+    "ShortRest": "Short Rest",
+    "LongRest": "Long Rest",
+
+    "Weapons": "Weapons",
+    "Armor": "Armor",
+    "Shields": "Shields",
+    "Spells": "Spells",
+    "Equipment": "Equipment",
+
+    "Damage": "Damage",
+    "DamageBonus": "Damage Bonus",
+    "Range": "Range",
+    "RangeShort": "Short Range",
+    "RangeMedium": "Medium Range",
+    "RangeLong": "Long Range",
+    "IsMelee": "Melee",
+    "IsRanged": "Ranged",
+    "TwoHanded": "Two-Handed",
+    "Properties": "Properties",
+    "PropertiesPlaceholder": "E.g.: Versatile, Two-handed",
+    "Equipped": "Equipped",
+    "Protection": "Protection",
+    "Hindrance": "Hindrance",
+    "Quantity": "Quantity",
+    "Weight": "Weight",
+    "ManaCost": "Mana Cost",
+    "CurrentMana": "Current Mana",
+    "CastingTime": "Casting Time",
+    "Duration": "Duration",
+    "CastSpell": "Cast Spell",
+
+    "Melee": "Melee",
+    "Touch": "Touch",
+    "Action": "Action",
+    "Instantaneous": "Instantaneous",
+
+    "IncreaseLevel": "Increase Level",
+    "DecreaseLevel": "Decrease Level",
+    "UpgradeCost": "Upgrade Cost",
+    "CurrentLevel": "Current Level",
+    "NextLevelCost": "Next Level Cost",
+    "XP": "XP",
+
+    "Items": {
+      "New": "New {type}"
+    },
+
+    "Dialogs": {
+      "DeleteItem": "Delete Item",
+      "DeleteItemConfirm": "Are you sure you want to delete {name}?",
+      "RemoveEffect": "Remove Effect",
+      "RemoveEffectConfirm": "Are you sure you want to remove effect {name}?"
+    },
+
+    "States": {
+      "healthy": "Healthy",
+      "wounded": "Wounded",
+      "unconscious": "Unconscious",
+      "dead": "Dead"
+    },
+
+    "RollMode": "Roll Mode",
+    "Normal": "Normal",
+    "Advantage": "Advantage",
+    "Disadvantage": "Disadvantage",
+    "Modifier": "Modifier",
+
+    "Success": "Success",
+    "Failure": "Failure",
+    "Fumble": "Fumble",
+    "Hit": "Hit",
+    "Miss": "Miss",
+
+    "Attack": "Attack",
+    "AttackRoll": "Attack Roll",
+    "TargetDefense": "Target Defense",
+    "RollDamage": "Roll Damage",
+
+    "CriticalSuccess": "Critical Success",
+    "CriticalHit": "Critical Hit",
+    "CriticalDamage": "Critical Damage",
+    "ExtraDice": "extra dice",
+    "ExtraDamage": "extra damage",
+    "ExtraEffect": "extra effect",
+    "ExtraBonus": "Extra Bonus",
+
+    "BaseDamage": "Base Damage",
+    "TotalDamage": "Total Damage",
+    "DamageNote": "Armor absorbs damage according to its protection",
+    "SpellDamage": "Spell Damage",
+    "SpellDamageNote": "Magical damage can be absorbed by armor depending on type",
+    "Subtotal": "Subtotal",
+
+    "SpellSuccess": "Spell Success",
+    "SpellFailure": "Spell Failure",
+    "SpellFumble": "Spell fails catastrophically",
+    "Effect": "Effect",
+
+    "Exploded": "Exploded",
+    "Margin": "Margin",
+    "Total": "Total",
+
+    "Difficulty": {
+      "VeryEasy": "Very Easy",
+      "Easy": "Easy",
+      "Average": "Average",
+      "Hard": "Hard",
+      "VeryHard": "Very Hard",
+      "NearlyImpossible": "Nearly Impossible"
+    },
+
+    "SkillCategories": {
+      "defense": "Defense",
+      "initiative": "Initiative",
+      "melee": "Melee Combat",
+      "ranged": "Ranged Combat",
+      "firearms": "Firearms",
+      "magic": "Magic",
+      "social": "Social",
+      "knowledge": "Knowledge",
+      "physical": "Physical",
+      "perception": "Perception",
+      "stealth": "Stealth",
+      "survival": "Survival",
+      "technical": "Technical",
+      "none": "None"
+    },
+
+    "Category": "Category",
+    "SelectCategory": "Select Category",
+
+    "Combat": {
+      "AutoDisadvantage": "Auto Disadvantage",
+      "ReceivesDamage": "receives damage",
+      "GrossDamage": "Gross Damage",
+      "Absorption": "Absorption",
+      "FinalDamage": "Final Damage",
+      "SelectWeapon": "Select Weapon",
+      "SelectRange": "Select Range",
+      "Range": "Range",
+      "RangePointBlank": "Point Blank",
+      "RangeShort": "Short",
+      "RangeMedium": "Medium",
+      "RangeLong": "Long",
+      "EnterTargetDefense": "Enter Target Defense",
+      "AttackSuccess": "Attack Success",
+      "RollDamageQuestion": "Roll damage?",
+      "ApplyDamage": "Apply Damage",
+      "DamageAmount": "Damage Amount",
+      "DamageType": "Damage Type",
+      "DamagePhysical": "Physical",
+      "DamageMagical": "Magical",
+      "DamageFire": "Fire",
+      "DamageCold": "Cold",
+      "DamageElectric": "Electric",
+      "DamagePoison": "Poison",
+      "DamagePsychic": "Psychic",
+      "DamagePreview": "Final Damage",
+      "NoWeaponsEquipped": "No weapons equipped",
+      "Untrained": "Untrained",
+      "UntrainedAttack": "Attacking without {category} skill - Auto disadvantage",
+      "Attacks": "Attacks",
+      "AddAttack": "Add Attack",
+      "AttackName": "Attack Name",
+      "AttackType": "Attack Type",
+      "AttackBonus": "Attack Bonus",
+      "RollAttack": "Roll Attack",
+      "NoAttacks": "No configured attacks"
+    },
+
+    "Magic": {
+      "SpellType": "Spell Type",
+      "CastingDifficulty": "Casting Difficulty",
+      "SpellTypes": {
+        "generic": "Generic",
+        "damage": "Damage",
+        "healing": "Healing",
+        "buff-skill": "Skill Buff",
+        "buff-weapon": "Weapon Buff",
+        "buff-armor": "Armor Buff",
+        "effect": "Effect"
+      },
+      "AttackType": "Attack Type",
+      "AttackTypes": {
+        "none": "None",
+        "melee": "Melee",
+        "ranged": "Ranged"
+      },
+      "DamageTypes": {
+        "physical": "Physical",
+        "fire": "Fire",
+        "cold": "Cold",
+        "lightning": "Lightning",
+        "force": "Force",
+        "necrotic": "Necrotic",
+        "psychic": "Psychic"
+      },
+      "TargetType": "Target Type",
+      "TargetTypes": {
+        "self": "Self",
+        "single": "Single",
+        "multiple": "Multiple",
+        "area": "Area"
+      },
+      "AreaRadius": "Area Radius",
+      "TargetCount": "Target Count",
+      "BuffTarget": "Buff Target",
+      "BuffTargets": {
+        "skill": "Skill",
+        "weapon": "Weapon",
+        "armor": "Armor",
+        "attribute": "Attribute"
+      },
+      "BuffBonus": "Buff Bonus",
+      "EffectDescription": "Effect Description"
+    },
+
+    "Biography": {
+      "Appearance": "Appearance",
+      "Personality": "Personality",
+      "Background": "Background",
+      "Goals": "Goals",
+      "Notes": "Notes"
+    }
+  }
+}
+
