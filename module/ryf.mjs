@@ -108,6 +108,22 @@ Hooks.once('init', async function() {
     return game.i18n.localize(key);
   });
 
+  Handlebars.registerHelper('localizeItem', function(item, field) {
+    if (!item?.flags?.ryf?.translationKey) {
+      return field === 'name' ? item?.name : item?.system?.description;
+    }
+
+    const translationKey = item.flags.ryf.translationKey;
+    const key = `RYF.ITEMS.${translationKey}.${field}`;
+    const translated = game.i18n.localize(key);
+
+    if (translated !== key) {
+      return field === 'description' ? `<p>${translated}</p>` : translated;
+    }
+
+    return field === 'name' ? item.name : item.system.description;
+  });
+
   Handlebars.registerHelper('concat', function(...args) {
     args.pop();
     return args.join('');
@@ -244,6 +260,87 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
       </div>`,
       whisper: [game.user.id]
     });
+  }
+});
+
+Hooks.on('renderItemSheet', (app, html, data) => {
+  const item = app.object;
+
+  if (!item.flags?.ryf?.translationKey) return;
+
+  const translationKey = item.flags.ryf.translationKey;
+  const nameKey = `RYF.ITEMS.${translationKey}.name`;
+  const descKey = `RYF.ITEMS.${translationKey}.description`;
+
+  const translatedName = game.i18n.localize(nameKey);
+  const translatedDesc = game.i18n.localize(descKey);
+
+  if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
+    html.find('input[name="name"]').val(translatedName);
+  }
+
+  if (translatedDesc !== descKey && item.system.description?.startsWith('RYF.ITEMS.')) {
+    const descEditor = html.find('.editor-content .editor');
+    if (descEditor.length > 0) {
+      descEditor.html(`<p>${translatedDesc}</p>`);
+    }
+  }
+});
+
+Hooks.on('renderActorSheet', (app, html, data) => {
+  const actor = app.object;
+
+  html.find('.item .item-name').each(function() {
+    const itemId = $(this).closest('.item').data('item-id');
+    const item = actor.items.get(itemId);
+
+    if (!item || !item.flags?.ryf?.translationKey) return;
+
+    const translationKey = item.flags.ryf.translationKey;
+    const nameKey = `RYF.ITEMS.${translationKey}.name`;
+    const translatedName = game.i18n.localize(nameKey);
+
+    if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
+      $(this).find('h4').text(translatedName);
+    }
+  });
+});
+
+Hooks.on('renderCompendium', (app, html, data) => {
+  html.find('.directory-item').each(function() {
+    const itemId = $(this).data('document-id');
+    const item = app.collection.get(itemId);
+
+    if (!item || !item.flags?.ryf?.translationKey) return;
+
+    const translationKey = item.flags.ryf.translationKey;
+    const nameKey = `RYF.ITEMS.${translationKey}.name`;
+    const translatedName = game.i18n.localize(nameKey);
+
+    if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
+      $(this).find('.document-name').text(translatedName);
+    }
+  });
+});
+
+Hooks.on('preCreateItem', async (item, data, options, userId) => {
+  if (!item.flags?.ryf?.translationKey) return;
+
+  if (item.pack) return;
+
+  const translationKey = item.flags.ryf.translationKey;
+  const nameKey = `RYF.ITEMS.${translationKey}.name`;
+  const descKey = `RYF.ITEMS.${translationKey}.description`;
+
+  const translatedName = game.i18n.localize(nameKey);
+  const translatedDesc = game.i18n.localize(descKey);
+
+  if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
+    item.updateSource({ name: translatedName });
+  }
+
+  if (translatedDesc !== descKey && item.system.description?.startsWith('RYF.ITEMS.')) {
+    item.updateSource({ 'system.description': `<p>${translatedDesc}</p>` });
   }
 });
 

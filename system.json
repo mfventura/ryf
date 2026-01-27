@@ -52,6 +52,57 @@
   },
   "primaryTokenAttribute": "health",
   "secondaryTokenAttribute": "mana",
+  "packs": [
+    {
+      "name": "skills",
+      "label": "RYF.COMPENDIUM.skills",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "spells",
+      "label": "RYF.COMPENDIUM.spells",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "npcs",
+      "label": "RYF.COMPENDIUM.npcs",
+      "type": "Actor",
+      "system": "ryf3"
+    },
+    {
+      "name": "weapons",
+      "label": "RYF.COMPENDIUM.weapons",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "armor",
+      "label": "RYF.COMPENDIUM.armor",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "shields",
+      "label": "RYF.COMPENDIUM.shields",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "equipment",
+      "label": "RYF.COMPENDIUM.equipment",
+      "type": "Item",
+      "system": "ryf3"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Rápido y Fácil 3.0",
+      "color": "#8B4513",
+      "packs": ["skills", "spells", "npcs", "weapons", "armor", "shields", "equipment"]
+    }
+  ],
   "url": "",
   "manifest": "",
   "download": "",
