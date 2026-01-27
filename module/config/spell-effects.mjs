@@ -37,6 +37,7 @@ export const DAMAGE_TYPES = {
 };
 
 export const EFFECT_TARGETS = {
+  'attribute': 'RYF.EffectTargets.Attribute',
   'skill': 'RYF.EffectTargets.Skill',
   'weapon': 'RYF.EffectTargets.Weapon',
   'armor': 'RYF.EffectTargets.Armor',

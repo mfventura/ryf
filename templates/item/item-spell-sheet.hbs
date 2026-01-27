@@ -120,10 +120,10 @@
                 <span class="summary-details">{{effect.formula}}</span>
               {{else if (eq effect.type "buff")}}
                 <span class="summary-type">{{localize "RYF.EffectTypes.Buff"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (capitalize effect.target))}}{{#if effect.targetName}} ({{effect.targetName}}){{/if}} +{{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}</span>
+                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} +{{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}</span>
               {{else if (eq effect.type "debuff")}}
                 <span class="summary-type">{{localize "RYF.EffectTypes.Debuff"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (capitalize effect.target))}}{{#if effect.targetName}} ({{effect.targetName}}){{/if}} {{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
+                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} {{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{else if (eq effect.type "condition")}}
                 <span class="summary-type">{{localize "RYF.EffectTypes.Condition"}}:</span>
                 <span class="summary-details">{{localize (concat "RYF.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
@@ -136,15 +136,15 @@
 
           <div class="effect-config">
             {{#if (eq effect.type "immediate-damage")}}
-              {{> "systems/ryf3/templates/item/partials/effect-immediate-damage.hbs" effect=effect index=index}}
+              {{> "systems/ryf3/templates/item/partials/effect-immediate-damage.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
             {{else if (eq effect.type "immediate-healing")}}
-              {{> "systems/ryf3/templates/item/partials/effect-immediate-healing.hbs" effect=effect index=index}}
+              {{> "systems/ryf3/templates/item/partials/effect-immediate-healing.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
             {{else if (eq effect.type "buff")}}
-              {{> "systems/ryf3/templates/item/partials/effect-buff.hbs" effect=effect index=index}}
+              {{> "systems/ryf3/templates/item/partials/effect-buff.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
             {{else if (eq effect.type "debuff")}}
-              {{> "systems/ryf3/templates/item/partials/effect-debuff.hbs" effect=effect index=index}}
+              {{> "systems/ryf3/templates/item/partials/effect-debuff.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
             {{else if (eq effect.type "condition")}}
-              {{> "systems/ryf3/templates/item/partials/effect-condition.hbs" effect=effect index=index}}
+              {{> "systems/ryf3/templates/item/partials/effect-condition.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
             {{/if}}
           </div>
         </div>

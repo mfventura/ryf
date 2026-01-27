@@ -1438,6 +1438,8 @@ export class RyfActor extends Actor {
 
   _getEffectTypeFromTarget(target) {
     switch (target) {
+      case 'attribute':
+        return 'attribute-bonus';
       case 'skill':
         return 'skill-bonus';
       case 'weapon':

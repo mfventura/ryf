@@ -70,33 +70,39 @@ export class RyfActiveEffect extends ActiveEffect {
 
   static getAttributeKey(effectType, targetType, targetName) {
     switch (effectType) {
+      case 'attribute-bonus':
+        if (targetType === 'attribute' && targetName) {
+          return `system.attributes.${targetName}.value`;
+        }
+        return 'system.attributes.fisico.value';
+
       case 'skill-bonus':
         if (targetType === 'skill' && targetName) {
           return `system.activeEffectBonuses.skills.${targetName}`;
         }
         return 'system.activeEffectBonuses.skills.unknown';
-      
+
       case 'defense-bonus':
         return 'system.activeEffectBonuses.defense';
-      
+
       case 'weapon-bonus':
         if (targetType === 'weapon' && targetName) {
           return `system.activeEffectBonuses.weapons.${targetName}`;
         }
         return 'system.activeEffectBonuses.weapons.unknown';
-      
+
       case 'armor-bonus':
         return 'system.activeEffectBonuses.armor';
-      
+
       case 'hindrance-reduction':
         return 'system.activeEffectBonuses.hindranceReduction';
-      
+
       case 'initiative-bonus':
         return 'system.activeEffectBonuses.initiative';
-      
+
       case 'absorption-bonus':
         return 'system.activeEffectBonuses.absorption';
-      
+
       default:
         console.warn(`Unknown effect type: ${effectType}`);
         return 'system.activeEffectBonuses.defense';

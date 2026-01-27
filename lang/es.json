@@ -1272,12 +1272,6 @@
         "multiple": "Múltiple",
         "area": "Área"
       },
-      "TargetCount": "Cantidad de Objetivos",
-      "AreaRadius": "Radio de Área",
-      "DurationTypes": {
-        "fixed": "Fijo",
-        "perLevel": "Por Nivel"
-      },
       "DurationType": "Tipo de Duración",
       "DurationValue": "Valor de Duración",
       "EffectType": "Tipo de Efecto",
@@ -1296,6 +1290,7 @@
         "absorption-bonus": "Bonus a Absorción"
       },
       "EffectTargets": {
+        "Attribute": "Atributo",
         "Skill": "Habilidad",
         "Weapon": "Arma",
         "Armor": "Armadura",

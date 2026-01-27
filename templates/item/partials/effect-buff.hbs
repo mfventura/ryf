@@ -1,6 +1,7 @@
 <div class="form-group">
   <label>{{localize "RYF.EffectTarget"}}</label>
   <select name="system.effects.{{index}}.target" data-dtype="String" class="effect-target-select">
+    <option value="attribute" {{#if (eq effect.target "attribute")}}selected{{/if}}>{{localize "RYF.EffectTargets.Attribute"}}</option>
     <option value="skill" {{#if (eq effect.target "skill")}}selected{{/if}}>{{localize "RYF.EffectTargets.Skill"}}</option>
     <option value="weapon" {{#if (eq effect.target "weapon")}}selected{{/if}}>{{localize "RYF.EffectTargets.Weapon"}}</option>
     <option value="armor" {{#if (eq effect.target "armor")}}selected{{/if}}>{{localize "RYF.EffectTargets.Armor"}}</option>
@@ -11,16 +12,29 @@
   </select>
 </div>
 
-{{#if (or (eq effect.target "skill") (eq effect.target "weapon"))}}
+{{#if (eq effect.target "attribute")}}
 <div class="form-group effect-target-name">
-  <label>
-    {{#if (eq effect.target "skill")}}
-      {{localize "RYF.SkillName"}}
-    {{else}}
-      {{localize "RYF.WeaponName"}}
+  <label>{{localize "RYF.Attribute"}}</label>
+  {{log "effect-buff.hbs - isCarismaEnabled:" isCarismaEnabled}}
+  <select name="system.effects.{{index}}.targetName" data-dtype="String">
+    <option value="fisico" {{#if (eq effect.targetName "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+    <option value="destreza" {{#if (eq effect.targetName "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+    <option value="inteligencia" {{#if (eq effect.targetName "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+    <option value="percepcion" {{#if (eq effect.targetName "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+    {{#if isCarismaEnabled}}
+    <option value="carisma" {{#if (eq effect.targetName "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
     {{/if}}
-  </label>
-  <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{#if (eq effect.target 'skill')}}{{localize 'RYF.SkillName'}}{{else}}{{localize 'RYF.WeaponName'}}{{/if}}"/>
+  </select>
+</div>
+{{else if (eq effect.target "skill")}}
+<div class="form-group effect-target-name">
+  <label>{{localize "RYF.SkillName"}}</label>
+  <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{localize 'RYF.SkillName'}}"/>
+</div>
+{{else if (eq effect.target "weapon")}}
+<div class="form-group effect-target-name">
+  <label>{{localize "RYF.WeaponName"}}</label>
+  <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{localize 'RYF.WeaponName'}}"/>
 </div>
 {{/if}}
 

@@ -137,6 +137,17 @@ Hooks.once('init', async function() {
     return str.charAt(0).toUpperCase() + str.slice(1);
   });
 
+  Handlebars.registerHelper('targetToPascalCase', function(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  });
+
+  Handlebars.registerHelper('log', function(...args) {
+    args.pop();
+    console.log('Handlebars log:', ...args);
+    return '';
+  });
+
   await preloadHandlebarsTemplates();
 
 });
@@ -250,6 +261,7 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
 
   if (activeEffects.length > 0) {
     const effectsList = activeEffects.map(e => {
+      console.log('Active effect: ', e)
       const remaining = e.duration.remaining || e.duration.turns;
       return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
     }).join(', ');
