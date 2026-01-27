@@ -195,6 +195,93 @@
           "description": "Escudo ligero de energía que desvía proyectiles y ataques láser con mínimo estorbo."
         }
       },
+      "NPC": {
+        "Doscabezas": {
+          "name": "Doscabezas",
+          "description": "Bestia monstruosa con dos cabezas que puede atacar a múltiples objetivos.",
+          "attack": "Mordisco"
+        },
+        "DragonGrande": {
+          "name": "Dragón Grande",
+          "description": "Dragón adulto de gran tamaño con escamas resistentes y aliento de fuego devastador.",
+          "attack": "Garra/Mordisco"
+        },
+        "DragonPequeno": {
+          "name": "Dragón Pequeño",
+          "description": "Dragón joven o wyvern con escamas resistentes y aliento de fuego.",
+          "attack": "Garra/Mordisco"
+        },
+        "Esqueleto": {
+          "name": "Esqueleto",
+          "description": "Muerto viviente animado por magia oscura. Vulnerable al daño contundente.",
+          "attack": "Espada oxidada"
+        },
+        "EsqueletoCaballero": {
+          "name": "Esqueleto Caballero",
+          "description": "Guerrero no-muerto con armadura y entrenamiento marcial. Más peligroso que un esqueleto común.",
+          "attack": "Espada larga"
+        },
+        "Gargola": {
+          "name": "Gárgola",
+          "description": "Criatura de piedra animada que puede volar. Su piel pétrea la protege de ataques físicos.",
+          "attack": "Garra"
+        },
+        "Goblin": {
+          "name": "Goblin",
+          "description": "Criatura pequeña y astuta que suele atacar en grupo. Cobarde cuando está solo.",
+          "attack": "Daga/Arco corto"
+        },
+        "Arpia": {
+          "name": "Arpía",
+          "description": "Criatura alada con torso de mujer y cuerpo de ave rapaz. Su canto puede hechizar a los incautos.",
+          "attack": "Garra"
+        },
+        "HombreLagarto": {
+          "name": "Hombre-lagarto",
+          "description": "Humanoide reptiliano ágil y territorial. Excelente nadador.",
+          "attack": "Lanza/Garra"
+        },
+        "HombreRata": {
+          "name": "Hombre-rata",
+          "description": "Humanoide roedor que habita en alcantarillas y túneles. Rápido y escurridizo.",
+          "attack": "Daga/Mordisco"
+        },
+        "Liche": {
+          "name": "Liche",
+          "description": "Mago no-muerto de gran poder. Maestro de la magia necromántica.",
+          "attack": "Toque helado"
+        },
+        "Lobo": {
+          "name": "Lobo",
+          "description": "Depredador salvaje que caza en manada. Rápido y letal.",
+          "attack": "Mordisco"
+        },
+        "LordEsqueleto": {
+          "name": "Lord Esqueleto",
+          "description": "Guerrero no-muerto de élite con armadura completa y habilidades de combate superiores.",
+          "attack": "Espada bastarda"
+        },
+        "LordLiche": {
+          "name": "Lord Liche",
+          "description": "Archimago no-muerto de poder devastador. Domina las artes arcanas más oscuras.",
+          "attack": "Toque de muerte"
+        },
+        "Ogro": {
+          "name": "Ogro",
+          "description": "Gigante brutal de gran fuerza pero poca inteligencia. Su piel gruesa absorbe daño.",
+          "attack": "Garrote"
+        },
+        "Orco": {
+          "name": "Orco",
+          "description": "Guerrero salvaje y agresivo. Lucha ferozmente y sin miedo.",
+          "attack": "Hacha de guerra"
+        },
+        "Troll": {
+          "name": "Troll",
+          "description": "Criatura regenerativa de gran tamaño. Su piel gruesa absorbe daño y se regenera rápidamente.",
+          "attack": "Garra"
+        }
+      },
       "EQUIPMENT": {
         "Antorcha": {
           "name": "Antorcha",
@@ -1124,7 +1211,14 @@
       "DamagePreview": "Daño Final",
       "NoWeaponsEquipped": "No hay armas equipadas",
       "Untrained": "Sin Entrenamiento",
-      "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática"
+      "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática",
+      "Attacks": "Ataques",
+      "AddAttack": "Añadir Ataque",
+      "AttackName": "Nombre del Ataque",
+      "AttackType": "Tipo de Ataque",
+      "AttackBonus": "Bono de Ataque",
+      "RollAttack": "Tirar Ataque",
+      "NoAttacks": "No tiene ataques configurados"
     },
 
     "Magic": {
@@ -1235,22 +1329,6 @@
       "Failure": "Fallo",
       "CriticalDice": "Dados Críticos",
       "Fumble": "Pifia"
-    },
-
-    "NPC": {
-      "PV": "PV",
-      "INI": "INI",
-      "DEF": "DEF",
-      "ABS": "ABS",
-      "ATK": "ATK",
-      "Willpower": "Voluntad",
-      "Attacks": "Ataques",
-      "AddAttack": "Añadir Ataque",
-      "AttackName": "Nombre del Ataque",
-      "AttackType": "Tipo de Ataque",
-      "AttackBonus": "Bono de Ataque",
-      "RollAttack": "Tirar Ataque",
-      "NoAttacks": "Este NPC no tiene ataques configurados"
     }
   }
 }

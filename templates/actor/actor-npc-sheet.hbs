@@ -8,7 +8,7 @@
 
       <div class="resources grid grid-4col">
         <div class="resource">
-          <label class="resource-label">{{localize "RYF.NPC.PV"}}</label>
+          <label class="resource-label">{{localize "RYF.Health"}}</label>
           <div class="resource-content flexrow">
             <input type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number"/>
             <span class="sep"> / </span>
@@ -17,21 +17,21 @@
         </div>
 
         <div class="resource">
-          <label class="resource-label">{{localize "RYF.NPC.INI"}}</label>
+          <label class="resource-label">{{localize "RYF.Initiative"}}</label>
           <div class="resource-content">
             <input type="text" name="system.initiative.base" value="{{#if system.initiative.base}}{{system.initiative.base}}{{else}}{{system.initiative}}{{/if}}" data-dtype="Number"/>
           </div>
         </div>
 
         <div class="resource">
-          <label class="resource-label">{{localize "RYF.NPC.DEF"}}</label>
+          <label class="resource-label">{{localize "RYF.Defense"}}</label>
           <div class="resource-content">
             <input type="text" name="system.defense" value="{{system.defense}}" data-dtype="Number"/>
           </div>
         </div>
 
         <div class="resource">
-          <label class="resource-label">{{localize "RYF.NPC.ABS"}}</label>
+          <label class="resource-label">{{localize "RYF.Combat.Absorption"}}</label>
           <div class="resource-content">
             <input type="text" name="system.absorption" value="{{system.absorption}}" data-dtype="Number"/>
           </div>
@@ -41,7 +41,7 @@
       {{#if isCarismaEnabled}}
       <div class="resources grid grid-1col">
         <div class="resource">
-          <label class="resource-label">{{localize "RYF.NPC.Willpower"}}</label>
+          <label class="resource-label">{{localize "RYF.Willpower"}}</label>
           <div class="resource-content">
             <input type="text" name="system.willpower" value="{{system.willpower}}" data-dtype="Number"/>
           </div>
@@ -52,16 +52,16 @@
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="attacks">{{localize "RYF.NPC.Attacks"}}</a>
+    <a class="item" data-tab="attacks">{{localize "RYF.Combat.Attacks"}}</a>
     <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
   <section class="sheet-body">
 
     <div class="tab attacks" data-group="primary" data-tab="attacks">
-      <h3>{{localize "RYF.NPC.Attacks"}}</h3>
+      <h3>{{localize "RYF.Combat.Attacks"}}</h3>
       <div class="items-header flexrow">
-        <a class="item-create" data-type="npc-attack"><i class="fas fa-plus"></i> {{localize "RYF.NPC.AddAttack"}}</a>
+        <a class="item-create" data-type="npc-attack"><i class="fas fa-plus"></i> {{localize "RYF.Combat.AddAttack"}}</a>
       </div>
 
       <ol class="items-list npc-attacks-list">
@@ -81,7 +81,7 @@
           <div class="item-attack">{{localize "RYF.NPC.ATK"}}: +{{item.system.attackBonus}}</div>
           <div class="item-damage">{{localize "RYF.Damage"}}: {{item.system.damage.base}}{{#if (gt item.system.damage.bonus 0)}}+{{item.system.damage.bonus}}{{/if}}</div>
           <div class="item-controls">
-            <a class="item-control npc-attack-roll" title="{{localize 'RYF.NPC.RollAttack'}}"><i class="fas fa-dice-d20"></i></a>
+            <a class="item-control npc-attack-roll" title="{{localize 'RYF.Combat.RollAttack'}}"><i class="fas fa-dice-d20"></i></a>
             <a class="item-control item-edit" title="{{localize 'RYF.Edit'}}"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="{{localize 'RYF.Delete'}}"><i class="fas fa-trash"></i></a>
           </div>
@@ -90,7 +90,7 @@
       </ol>
 
       {{#unless npcAttacks.length}}
-      <p class="no-attacks">{{localize "RYF.NPC.NoAttacks"}}</p>
+      <p class="no-attacks">{{localize "RYF.Combat.NoAttacks"}}</p>
       {{/unless}}
     </div>
 

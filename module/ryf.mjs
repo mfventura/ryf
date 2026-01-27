@@ -344,3 +344,54 @@ Hooks.on('preCreateItem', async (item, data, options, userId) => {
   }
 });
 
+Hooks.on('preCreateActor', async (actor, data, options, userId) => {
+  if (actor.type !== 'npc') return;
+
+  if (!actor.flags?.ryf?.translationKey) return;
+
+  if (actor.pack) return;
+
+  const translationKey = actor.flags.ryf.translationKey;
+  const nameKey = `RYF.ITEMS.${translationKey}.name`;
+  const descKey = `RYF.ITEMS.${translationKey}.description`;
+
+  const translatedName = game.i18n.localize(nameKey);
+  const translatedDesc = game.i18n.localize(descKey);
+
+  if (translatedName !== nameKey && actor.name.startsWith('RYF.ITEMS.')) {
+    actor.updateSource({ name: translatedName });
+  }
+
+  if (translatedDesc !== descKey && actor.system.biography?.startsWith('RYF.ITEMS.')) {
+    actor.updateSource({ 'system.biography': `<p>${translatedDesc}</p>` });
+  }
+});
+
+Hooks.on('createActor', async (actor, options, userId) => {
+  if (actor.type !== 'npc') return;
+
+  if (!actor.flags?.ryf?.translationKey) return;
+
+  if (actor.pack) return;
+
+  if (actor.items && actor.items.size > 0) {
+    const updates = [];
+    for (const item of actor.items) {
+      if (item.type === 'npc-attack' && item.name.startsWith('RYF.ITEMS.')) {
+        const attackKey = item.name;
+        const translatedAttackName = game.i18n.localize(attackKey);
+        if (translatedAttackName !== attackKey) {
+          updates.push({
+            _id: item.id,
+            name: translatedAttackName
+          });
+        }
+      }
+    }
+
+    if (updates.length > 0) {
+      await actor.updateEmbeddedDocuments('Item', updates);
+    }
+  }
+});
+
