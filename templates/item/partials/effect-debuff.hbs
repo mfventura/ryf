@@ -1,0 +1,70 @@
+<div class="form-group">
+  <label>{{localize "RYF.EffectTarget"}}</label>
+  <select name="system.effects.{{index}}.target" data-dtype="String" class="effect-target-select">
+    <option value="skill" {{#if (eq effect.target "skill")}}selected{{/if}}>{{localize "RYF.EffectTargets.Skill"}}</option>
+    <option value="weapon" {{#if (eq effect.target "weapon")}}selected{{/if}}>{{localize "RYF.EffectTargets.Weapon"}}</option>
+    <option value="armor" {{#if (eq effect.target "armor")}}selected{{/if}}>{{localize "RYF.EffectTargets.Armor"}}</option>
+    <option value="defense" {{#if (eq effect.target "defense")}}selected{{/if}}>{{localize "RYF.EffectTargets.Defense"}}</option>
+    <option value="initiative" {{#if (eq effect.target "initiative")}}selected{{/if}}>{{localize "RYF.EffectTargets.Initiative"}}</option>
+    <option value="absorption" {{#if (eq effect.target "absorption")}}selected{{/if}}>{{localize "RYF.EffectTargets.Absorption"}}</option>
+    <option value="hindrance-reduction" {{#if (eq effect.target "hindrance-reduction")}}selected{{/if}}>{{localize "RYF.EffectTargets.HindranceReduction"}}</option>
+  </select>
+</div>
+
+{{#if (or (eq effect.target "skill") (eq effect.target "weapon"))}}
+<div class="form-group effect-target-name">
+  <label>
+    {{#if (eq effect.target "skill")}}
+      {{localize "RYF.SkillName"}}
+    {{else}}
+      {{localize "RYF.WeaponName"}}
+    {{/if}}
+  </label>
+  <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{#if (eq effect.target 'skill')}}{{localize 'RYF.SkillName'}}{{else}}{{localize 'RYF.WeaponName'}}{{/if}}"/>
+</div>
+{{/if}}
+
+<div class="form-group">
+  <label>{{localize "RYF.Modifier"}}</label>
+  <input type="number" name="system.effects.{{index}}.modifier" value="{{effect.modifier}}" data-dtype="Number"/>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.DurationType"}}</label>
+  <select name="system.effects.{{index}}.duration.type" data-dtype="String">
+    <option value="fixed" {{#if (eq effect.duration.type "fixed")}}selected{{/if}}>{{localize "RYF.DurationTypes.Fixed"}}</option>
+    <option value="perLevel" {{#if (eq effect.duration.type "perLevel")}}selected{{/if}}>{{localize "RYF.DurationTypes.PerLevel"}}</option>
+    <option value="concentration" {{#if (eq effect.duration.type "concentration")}}selected{{/if}}>{{localize "RYF.DurationTypes.Concentration"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.DurationValue"}}</label>
+  <input type="number" name="system.effects.{{index}}.duration.value" value="{{effect.duration.value}}" data-dtype="Number" min="1"/>
+</div>
+
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="system.effects.{{index}}.savingThrow.enabled" {{checked effect.savingThrow.enabled}}/>
+    {{localize "RYF.RequiresSavingThrow"}}
+  </label>
+</div>
+
+{{#if effect.savingThrow.enabled}}
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowAttribute"}}</label>
+  <select name="system.effects.{{index}}.savingThrow.attribute" data-dtype="String">
+    <option value="fisico" {{#if (eq effect.savingThrow.attribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+    <option value="destreza" {{#if (eq effect.savingThrow.attribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+    <option value="percepcion" {{#if (eq effect.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+    <option value="inteligencia" {{#if (eq effect.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+    <option value="carisma" {{#if (eq effect.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowDifficulty"}}</label>
+  <input type="number" name="system.effects.{{index}}.savingThrow.difficulty" value="{{effect.savingThrow.difficulty}}" data-dtype="Number" min="5"/>
+</div>
+{{/if}}
+

@@ -18,6 +18,10 @@
     <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part">{{skillName}}: {{skillLevel}}</span>
+    {{#if (gt skillEffectBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}: {{skillEffectBonus}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}

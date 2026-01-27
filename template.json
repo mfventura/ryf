@@ -86,7 +86,7 @@
     }
   },
   "Item": {
-    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
+    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack"],
     "templates": {
       "base": {
         "description": "",
@@ -148,57 +148,14 @@
       "castingTime": "action",
       "range": {
         "type": "touch",
-        "value": 0
+        "maxDistance": 0
       },
       "targets": {
         "type": "single",
         "count": 1,
         "areaRadius": 0
       },
-      "spellType": "generic",
-      "attackType": "none",
-      "savingThrow": {
-        "enabled": false,
-        "difficulty": 15,
-        "attribute": "destreza"
-      },
-      "damage": {
-        "formula": "1d6",
-        "type": "physical"
-      },
-      "healing": {
-        "formula": "1d6"
-      },
-      "effect": {
-        "type": "none",
-        "duration": {
-          "type": "fixed",
-          "value": 3,
-          "perLevel": false
-        },
-        "targetType": "skill",
-        "targetName": "",
-        "modifier": 0
-      },
-      "genericDifficulty": 15,
-      "requiresRoll": false,
-      "rollAttribute": "inteligencia"
-    },
-    "active-effect": {
-      "templates": ["base"],
-      "sourceType": "spell",
-      "sourceName": "",
-      "sourceId": "",
-      "effectType": "skill-bonus",
-      "targetType": "skill",
-      "targetName": "",
-      "modifier": 0,
-      "duration": {
-        "remaining": 3,
-        "total": 3
-      },
-      "appliedAt": 0,
-      "appliedBy": ""
+      "effects": []
     },
     "npc-attack": {
       "description": "",

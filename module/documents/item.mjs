@@ -142,8 +142,8 @@ export class RyfItem extends Item {
   }
 
   async increaseLevel() {
-    if (this.type !== 'skill') {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkill'));
+    if (this.type !== 'skill' && this.type !== 'spell') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkillOrSpell'));
       return;
     }
 
@@ -169,15 +169,16 @@ export class RyfItem extends Item {
 
     await this.update({ 'system.level': newLevel });
 
-    ui.notifications.info(game.i18n.format('RYF.Notifications.SkillIncreased', {
+    const messageKey = this.type === 'spell' ? 'RYF.Notifications.SpellIncreased' : 'RYF.Notifications.SkillIncreased';
+    ui.notifications.info(game.i18n.format(messageKey, {
       name: this.name,
       level: newLevel
     }));
   }
 
   async decreaseLevel() {
-    if (this.type !== 'skill') {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkill'));
+    if (this.type !== 'skill' && this.type !== 'spell') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkillOrSpell'));
       return;
     }
 
@@ -192,7 +193,8 @@ export class RyfItem extends Item {
 
     await this.update({ 'system.level': newLevel });
 
-    ui.notifications.info(game.i18n.format('RYF.Notifications.SkillDecreased', {
+    const messageKey = this.type === 'spell' ? 'RYF.Notifications.SpellDecreased' : 'RYF.Notifications.SkillDecreased';
+    ui.notifications.info(game.i18n.format(messageKey, {
       name: this.name,
       level: newLevel
     }));

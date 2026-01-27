@@ -84,7 +84,6 @@ export class RyfActorSheet extends ActorSheet {
     const shields = [];
     const equipment = [];
     const spells = [];
-    const activeEffects = [];
     const npcAttacks = [];
 
     for (let i of context.items) {
@@ -102,15 +101,41 @@ export class RyfActorSheet extends ActorSheet {
         equipment.push(i);
       } else if (i.type === 'spell') {
         spells.push(i);
-      } else if (i.type === 'active-effect') {
-        activeEffects.push(i);
       } else if (i.type === 'npc-attack') {
         npcAttacks.push(i);
       }
     }
 
     skills.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
-    activeEffects.sort((a, b) => (b.system.duration.remaining || 0) - (a.system.duration.remaining || 0));
+    spells.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
+
+    const activeEffects = this.actor.effects
+      .filter(e => !e.disabled)
+      .map(e => {
+        const effect = e.toObject();
+        effect.isTemporary = e.duration?.turns > 0;
+
+        const totalTurns = e.duration?.turns || 0;
+        let remainingTurns = totalTurns;
+
+        if (e.duration?.startTurn !== undefined && game.combat) {
+          const currentTurn = game.combat.turn;
+          const currentRound = game.combat.round;
+          const startTurn = e.duration.startTurn;
+          const startRound = e.duration.startRound || 1;
+
+          const elapsedRounds = currentRound - startRound;
+          const elapsedTurns = elapsedRounds * game.combat.combatants.size + (currentTurn - startTurn);
+          remainingTurns = Math.max(0, totalTurns - elapsedTurns);
+        }
+
+        effect.durationRemaining = remainingTurns;
+        effect.durationTotal = totalTurns;
+        effect.sourceName = e.flags?.ryf3?.sourceName || game.i18n.localize('RYF.Unknown');
+        effect.modifier = e.changes?.[0]?.value || 0;
+        return effect;
+      })
+      .sort((a, b) => (b.durationRemaining || 0) - (a.durationRemaining || 0));
 
     context.skills = skills;
     context.weapons = weapons;
@@ -118,6 +143,7 @@ export class RyfActorSheet extends ActorSheet {
     context.shields = shields;
     context.equipment = equipment;
     context.spells = spells;
+    context.hasSpells = spells.length > 0;
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
   }
@@ -140,6 +166,7 @@ export class RyfActorSheet extends ActorSheet {
 
     html.find('.spell-cast').click(this._onSpellCast.bind(this));
     html.find('.effect-remove').click(this._onRemoveEffect.bind(this));
+    html.find('.effect-toggle').click(this._onToggleEffect.bind(this));
 
     html.find('.npc-attack-roll').click(this._onNpcAttackRoll.bind(this));
 
@@ -516,7 +543,7 @@ export class RyfActorSheet extends ActorSheet {
   async _onRemoveEffect(event) {
     event.preventDefault();
     const effectId = event.currentTarget.dataset.effectId;
-    const effect = this.actor.items.get(effectId);
+    const effect = this.actor.effects.get(effectId);
 
     if (effect) {
       const confirmed = await Dialog.confirm({
@@ -528,6 +555,16 @@ export class RyfActorSheet extends ActorSheet {
         await effect.delete();
         ui.notifications.info(game.i18n.format('RYF.Notifications.EffectRemoved', { name: effect.name }));
       }
+    }
+  }
+
+  async _onToggleEffect(event) {
+    event.preventDefault();
+    const effectId = event.currentTarget.dataset.effectId;
+    const effect = this.actor.effects.get(effectId);
+
+    if (effect) {
+      await effect.update({ disabled: !effect.disabled });
     }
   }
 

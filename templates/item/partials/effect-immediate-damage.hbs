@@ -1,0 +1,67 @@
+<div class="form-group">
+  <label>{{localize "RYF.DamageFormula"}}</label>
+  <input type="text" name="system.effects.{{index}}.formula" value="{{effect.formula}}" placeholder="2d6"/>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.DamageType"}}</label>
+  <select name="system.effects.{{index}}.damageType" data-dtype="String">
+    <option value="physical" {{#if (eq effect.damageType "physical")}}selected{{/if}}>{{localize "RYF.DamageTypes.Physical"}}</option>
+    <option value="fire" {{#if (eq effect.damageType "fire")}}selected{{/if}}>{{localize "RYF.DamageTypes.Fire"}}</option>
+    <option value="cold" {{#if (eq effect.damageType "cold")}}selected{{/if}}>{{localize "RYF.DamageTypes.Cold"}}</option>
+    <option value="lightning" {{#if (eq effect.damageType "lightning")}}selected{{/if}}>{{localize "RYF.DamageTypes.Lightning"}}</option>
+    <option value="force" {{#if (eq effect.damageType "force")}}selected{{/if}}>{{localize "RYF.DamageTypes.Force"}}</option>
+    <option value="necrotic" {{#if (eq effect.damageType "necrotic")}}selected{{/if}}>{{localize "RYF.DamageTypes.Necrotic"}}</option>
+    <option value="psychic" {{#if (eq effect.damageType "psychic")}}selected{{/if}}>{{localize "RYF.DamageTypes.Psychic"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="system.effects.{{index}}.requiresAttack" {{checked effect.requiresAttack}}/>
+    {{localize "RYF.RequiresAttack"}}
+  </label>
+</div>
+
+{{#if effect.requiresAttack}}
+<div class="form-group">
+  <label>{{localize "RYF.AttackType"}}</label>
+  <select name="system.effects.{{index}}.attackType" data-dtype="String">
+    <option value="melee" {{#if (eq effect.attackType "melee")}}selected{{/if}}>{{localize "RYF.AttackTypes.Melee"}}</option>
+    <option value="ranged" {{#if (eq effect.attackType "ranged")}}selected{{/if}}>{{localize "RYF.AttackTypes.Ranged"}}</option>
+  </select>
+</div>
+{{/if}}
+
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="system.effects.{{index}}.savingThrow.enabled" {{checked effect.savingThrow.enabled}}/>
+    {{localize "RYF.RequiresSavingThrow"}}
+  </label>
+</div>
+
+{{#if effect.savingThrow.enabled}}
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowAttribute"}}</label>
+  <select name="system.effects.{{index}}.savingThrow.attribute" data-dtype="String">
+    <option value="fisico" {{#if (eq effect.savingThrow.attribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+    <option value="destreza" {{#if (eq effect.savingThrow.attribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+    <option value="percepcion" {{#if (eq effect.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+    <option value="inteligencia" {{#if (eq effect.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+    <option value="carisma" {{#if (eq effect.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowDifficulty"}}</label>
+  <input type="number" name="system.effects.{{index}}.savingThrow.difficulty" value="{{effect.savingThrow.difficulty}}" data-dtype="Number" min="5"/>
+</div>
+
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="system.effects.{{index}}.savingThrow.halfDamageOnSave" {{checked effect.savingThrow.halfDamageOnSave}}/>
+    {{localize "RYF.HalfDamageOnSave"}}
+  </label>
+</div>
+{{/if}}
+

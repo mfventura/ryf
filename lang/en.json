@@ -1265,7 +1265,11 @@
         "attribute": "Attribute"
       },
       "BuffBonus": "Buff Bonus",
-      "EffectDescription": "Effect Description"
+      "EffectDescription": "Effect Description",
+      "ActiveEffects": "Active Effects",
+      "ActiveEffect": "Active Effect",
+      "NoActiveEffects": "No active effects",
+      "EffectsExpired": "Effects Expired"
     },
 
     "Biography": {

@@ -14,7 +14,7 @@ export class RyfRoll {
     const attributeValue = attribute ? attribute.value : 0;
     const skillLevel = skill.system.level || 0;
 
-    const effectBonus = actor.system.activeEffectBonuses?.skills?.[skillName] || 0;
+    const effectBonus = actor.system.activeEffectBonuses?.skills?.[skill.name] || 0;
 
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
@@ -88,9 +88,11 @@ export class RyfRoll {
     const attribute = actor.system.attributes[attributeName];
     const attributeValue = attribute ? attribute.value : 0;
 
+    const skillEffectBonus = (skill && actor.system.activeEffectBonuses?.skills?.[skill.name]) || 0;
+
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + diceRoll.result + modifier;
+    const total = attributeValue + skillLevel + skillEffectBonus + diceRoll.result + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, targetDefense, fumble);
@@ -106,6 +108,7 @@ export class RyfRoll {
       attribute: attributeName,
       attributeValue: attributeValue,
       skillLevel: skillLevel,
+      skillEffectBonus: skillEffectBonus,
       targetDefense: targetDefense,
       mode: mode,
       modifier: modifier,

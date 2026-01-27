@@ -1,0 +1,51 @@
+<div class="form-group">
+  <label>{{localize "RYF.Condition"}}</label>
+  <select name="system.effects.{{index}}.condition" data-dtype="String">
+    <option value="paralyzed" {{#if (eq effect.condition "paralyzed")}}selected{{/if}}>{{localize "RYF.Conditions.Paralyzed"}}</option>
+    <option value="blinded" {{#if (eq effect.condition "blinded")}}selected{{/if}}>{{localize "RYF.Conditions.Blinded"}}</option>
+    <option value="stunned" {{#if (eq effect.condition "stunned")}}selected{{/if}}>{{localize "RYF.Conditions.Stunned"}}</option>
+    <option value="prone" {{#if (eq effect.condition "prone")}}selected{{/if}}>{{localize "RYF.Conditions.Prone"}}</option>
+    <option value="frightened" {{#if (eq effect.condition "frightened")}}selected{{/if}}>{{localize "RYF.Conditions.Frightened"}}</option>
+    <option value="charmed" {{#if (eq effect.condition "charmed")}}selected{{/if}}>{{localize "RYF.Conditions.Charmed"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.DurationType"}}</label>
+  <select name="system.effects.{{index}}.duration.type" data-dtype="String">
+    <option value="fixed" {{#if (eq effect.duration.type "fixed")}}selected{{/if}}>{{localize "RYF.DurationTypes.Fixed"}}</option>
+    <option value="perLevel" {{#if (eq effect.duration.type "perLevel")}}selected{{/if}}>{{localize "RYF.DurationTypes.PerLevel"}}</option>
+    <option value="concentration" {{#if (eq effect.duration.type "concentration")}}selected{{/if}}>{{localize "RYF.DurationTypes.Concentration"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.DurationValue"}}</label>
+  <input type="number" name="system.effects.{{index}}.duration.value" value="{{effect.duration.value}}" data-dtype="Number" min="1"/>
+</div>
+
+<div class="form-group">
+  <label>
+    <input type="checkbox" name="system.effects.{{index}}.savingThrow.enabled" {{checked effect.savingThrow.enabled}}/>
+    {{localize "RYF.RequiresSavingThrow"}}
+  </label>
+</div>
+
+{{#if effect.savingThrow.enabled}}
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowAttribute"}}</label>
+  <select name="system.effects.{{index}}.savingThrow.attribute" data-dtype="String">
+    <option value="fisico" {{#if (eq effect.savingThrow.attribute "fisico")}}selected{{/if}}>{{localize "RYF.Attributes.fisico"}}</option>
+    <option value="destreza" {{#if (eq effect.savingThrow.attribute "destreza")}}selected{{/if}}>{{localize "RYF.Attributes.destreza"}}</option>
+    <option value="percepcion" {{#if (eq effect.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.percepcion"}}</option>
+    <option value="inteligencia" {{#if (eq effect.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.inteligencia"}}</option>
+    <option value="carisma" {{#if (eq effect.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label>{{localize "RYF.SavingThrowDifficulty"}}</label>
+  <input type="number" name="system.effects.{{index}}.savingThrow.difficulty" value="{{effect.savingThrow.difficulty}}" data-dtype="Number" min="5"/>
+</div>
+{{/if}}
+

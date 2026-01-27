@@ -3,6 +3,7 @@ import { registerSystemSettings } from './helpers/settings.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { RyfActor } from './documents/actor.mjs';
 import { RyfItem } from './documents/item.mjs';
+import { RyfActiveEffect } from './documents/ryf-active-effect.mjs';
 import { RyfActorSheet } from './sheets/actor-sheet.mjs';
 import { RyfItemSheet } from './sheets/item-sheet.mjs';
 
@@ -11,6 +12,7 @@ Hooks.once('init', async function() {
   game.ryf = {
     RyfActor,
     RyfItem,
+    RyfActiveEffect,
     config: RYF
   };
 
@@ -18,6 +20,7 @@ Hooks.once('init', async function() {
 
   CONFIG.Actor.documentClass = RyfActor;
   CONFIG.Item.documentClass = RyfItem;
+  CONFIG.ActiveEffect.documentClass = RyfActiveEffect;
 
   CONFIG.Combat.initiative = {
     formula: '1d10x + @initiative.base - @combat.hindrance',
@@ -33,7 +36,7 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
@@ -127,6 +130,11 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper('concat', function(...args) {
     args.pop();
     return args.join('');
+  });
+
+  Handlebars.registerHelper('capitalize', function(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
   });
 
   await preloadHandlebarsTemplates();
@@ -238,17 +246,11 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
 
   const actor = combatant.actor;
 
-  const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
-
-  const effectsBefore = actor.items.filter(i => i.type === 'active-effect');
-
-  await RyfActiveEffect.decrementAllEffects(actor);
-
-  const activeEffects = actor.items.filter(i => i.type === 'active-effect');
+  const activeEffects = actor.effects.filter(e => !e.disabled && e.duration?.turns > 0);
 
   if (activeEffects.length > 0) {
     const effectsList = activeEffects.map(e => {
-      const remaining = e.system.duration.remaining;
+      const remaining = e.duration.remaining || e.duration.turns;
       return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
     }).join(', ');
 
