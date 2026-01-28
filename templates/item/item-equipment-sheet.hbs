@@ -56,9 +56,9 @@
               <i class="fas {{#if effect.collapsed}}fa-chevron-right{{else}}fa-chevron-down{{/if}}"></i>
             </button>
             <div class="effect-summary">
-              <span class="effect-type {{effect.type}}">{{localize (concat "RYF.EffectTypes." (capitalize effect.type))}}</span>
+              <span class="effect-type {{effect.type}}">{{localize (concat "RYF.Magic.EffectTypes." (capitalize effect.type))}}</span>
               <span class="effect-target-summary">
-                {{localize (concat "RYF.EffectTargets." (targetToPascalCase effect.target))}}
+                {{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}
                 {{#if effect.targetName}}
                   ({{effect.targetName}})
                 {{/if}}

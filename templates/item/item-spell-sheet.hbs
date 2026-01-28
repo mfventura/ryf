@@ -52,15 +52,15 @@
         </div>
       </div>
 
-      <h3>{{localize "RYF.RangeAndTargets"}}</h3>
+      <h3>{{localize "RYF.Magic.RangeAndTargets"}}</h3>
 
       <div class="form-grid">
         <div class="form-group">
-          <label>{{localize "RYF.RangeType"}}</label>
+          <label>{{localize "RYF.Magic.RangeType"}}</label>
           <select name="system.range.type" data-dtype="String" class="range-type-select">
-            <option value="self" {{#if (eq system.range.type "self")}}selected{{/if}}>{{localize "RYF.RangeTypes.self"}}</option>
-            <option value="touch" {{#if (eq system.range.type "touch")}}selected{{/if}}>{{localize "RYF.RangeTypes.touch"}}</option>
-            <option value="ranged" {{#if (eq system.range.type "ranged")}}selected{{/if}}>{{localize "RYF.RangeTypes.ranged"}}</option>
+            <option value="self" {{#if (eq system.range.type "self")}}selected{{/if}}>{{localize "RYF.Magic.RangeTypes.self"}}</option>
+            <option value="touch" {{#if (eq system.range.type "touch")}}selected{{/if}}>{{localize "RYF.Magic.RangeTypes.touch"}}</option>
+            <option value="ranged" {{#if (eq system.range.type "ranged")}}selected{{/if}}>{{localize "RYF.Magic.RangeTypes.ranged"}}</option>
           </select>
         </div>
 
@@ -72,11 +72,11 @@
         {{/if}}
 
         <div class="form-group">
-          <label>{{localize "RYF.TargetType"}}</label>
+          <label>{{localize "RYF.Magic.TargetType"}}</label>
           <select name="system.targets.type" data-dtype="String" class="target-type-select">
-            <option value="single" {{#if (eq system.targets.type "single")}}selected{{/if}}>{{localize "RYF.TargetTypes.single"}}</option>
-            <option value="multiple" {{#if (eq system.targets.type "multiple")}}selected{{/if}}>{{localize "RYF.TargetTypes.multiple"}}</option>
-            <option value="area" {{#if (eq system.targets.type "area")}}selected{{/if}}>{{localize "RYF.TargetTypes.area"}}</option>
+            <option value="single" {{#if (eq system.targets.type "single")}}selected{{/if}}>{{localize "RYF.Magic.TargetTypes.single"}}</option>
+            <option value="multiple" {{#if (eq system.targets.type "multiple")}}selected{{/if}}>{{localize "RYF.Magic.TargetTypes.multiple"}}</option>
+            <option value="area" {{#if (eq system.targets.type "area")}}selected{{/if}}>{{localize "RYF.Magic.TargetTypes.area"}}</option>
           </select>
         </div>
 
@@ -106,7 +106,7 @@
     </div>
 
     <div class="tab effects" data-group="primary" data-tab="effects">
-      <h3>{{localize "RYF.SpellEffects"}}</h3>
+      <h3>{{localize "RYF.Magic.SpellEffects"}}</h3>
 
       <div class="effects-list">
         {{#each system.effects as |effect index|}}
@@ -116,28 +116,28 @@
               <i class="fas fa-chevron-down"></i>
             </button>
             <select name="system.effects.{{index}}.type" data-dtype="String" class="effect-type-select">
-              <option value="immediate-damage" {{#if (eq effect.type "immediate-damage")}}selected{{/if}}>{{localize "RYF.EffectTypes.ImmediateDamage"}}</option>
-              <option value="immediate-healing" {{#if (eq effect.type "immediate-healing")}}selected{{/if}}>{{localize "RYF.EffectTypes.ImmediateHealing"}}</option>
-              <option value="buff" {{#if (eq effect.type "buff")}}selected{{/if}}>{{localize "RYF.EffectTypes.Buff"}}</option>
-              <option value="debuff" {{#if (eq effect.type "debuff")}}selected{{/if}}>{{localize "RYF.EffectTypes.Debuff"}}</option>
-              <option value="condition" {{#if (eq effect.type "condition")}}selected{{/if}}>{{localize "RYF.EffectTypes.Condition"}}</option>
+              <option value="immediate-damage" {{#if (eq effect.type "immediate-damage")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.ImmediateDamage"}}</option>
+              <option value="immediate-healing" {{#if (eq effect.type "immediate-healing")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.ImmediateHealing"}}</option>
+              <option value="buff" {{#if (eq effect.type "buff")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Buff"}}</option>
+              <option value="debuff" {{#if (eq effect.type "debuff")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Debuff"}}</option>
+              <option value="condition" {{#if (eq effect.type "condition")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Condition"}}</option>
             </select>
             <div class="effect-summary">
               {{#if (eq effect.type "immediate-damage")}}
-                <span class="summary-type">{{localize "RYF.EffectTypes.ImmediateDamage"}}:</span>
+                <span class="summary-type">{{localize "RYF.Magic.EffectTypes.ImmediateDamage"}}:</span>
                 <span class="summary-details">{{effect.formula}} {{localize (concat "RYF.DamageTypes." (capitalize effect.damageType))}}{{#if effect.requiresAttack}} - {{localize "RYF.RequiresAttack"}}{{/if}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{else if (eq effect.type "immediate-healing")}}
-                <span class="summary-type">{{localize "RYF.EffectTypes.ImmediateHealing"}}:</span>
+                <span class="summary-type">{{localize "RYF.Magic.EffectTypes.ImmediateHealing"}}:</span>
                 <span class="summary-details">{{effect.formula}}</span>
               {{else if (eq effect.type "buff")}}
-                <span class="summary-type">{{localize "RYF.EffectTypes.Buff"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} +{{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}</span>
+                <span class="summary-type">{{localize "RYF.Magic.EffectTypes.Buff"}}:</span>
+                <span class="summary-details">{{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} +{{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}</span>
               {{else if (eq effect.type "debuff")}}
-                <span class="summary-type">{{localize "RYF.EffectTypes.Debuff"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} {{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
+                <span class="summary-type">{{localize "RYF.Magic.EffectTypes.Debuff"}}:</span>
+                <span class="summary-details">{{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} {{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{else if (eq effect.type "condition")}}
-                <span class="summary-type">{{localize "RYF.EffectTypes.Condition"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
+                <span class="summary-type">{{localize "RYF.Magic.EffectTypes.Condition"}}:</span>
+                <span class="summary-details">{{localize (concat "RYF.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{/if}}
             </div>
             <button type="button" class="effect-delete" data-effect-index="{{index}}">

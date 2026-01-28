@@ -1,26 +1,26 @@
 export const SPELL_EFFECT_TYPES = {
   'immediate-damage': {
-    label: 'RYF.EffectTypes.ImmediateDamage',
+    label: 'RYF.Magic.EffectTypes.ImmediateDamage',
     icon: 'fa-burst',
     fields: ['formula', 'damageType', 'requiresAttack', 'attackType', 'savingThrow']
   },
   'immediate-healing': {
-    label: 'RYF.EffectTypes.ImmediateHealing',
+    label: 'RYF.Magic.EffectTypes.ImmediateHealing',
     icon: 'fa-heart',
     fields: ['formula']
   },
   'buff': {
-    label: 'RYF.EffectTypes.Buff',
+    label: 'RYF.Magic.EffectTypes.Buff',
     icon: 'fa-arrow-up',
     fields: ['target', 'targetName', 'modifier', 'duration']
   },
   'debuff': {
-    label: 'RYF.EffectTypes.Debuff',
+    label: 'RYF.Magic.EffectTypes.Debuff',
     icon: 'fa-arrow-down',
     fields: ['target', 'targetName', 'modifier', 'duration', 'savingThrow']
   },
   'condition': {
-    label: 'RYF.EffectTypes.Condition',
+    label: 'RYF.Magic.EffectTypes.Condition',
     icon: 'fa-dizzy',
     fields: ['condition', 'duration', 'savingThrow']
   }
@@ -37,14 +37,14 @@ export const DAMAGE_TYPES = {
 };
 
 export const EFFECT_TARGETS = {
-  'attribute': 'RYF.EffectTargets.Attribute',
-  'skill': 'RYF.EffectTargets.Skill',
-  'weapon': 'RYF.EffectTargets.Weapon',
-  'armor': 'RYF.EffectTargets.Armor',
-  'defense': 'RYF.EffectTargets.Defense',
-  'initiative': 'RYF.EffectTargets.Initiative',
-  'absorption': 'RYF.EffectTargets.Absorption',
-  'hindrance-reduction': 'RYF.EffectTargets.HindranceReduction'
+  'attribute': 'RYF.Magic.EffectTargets.Attribute',
+  'skill': 'RYF.Magic.EffectTargets.Skill',
+  'weapon': 'RYF.Magic.EffectTargets.Weapon',
+  'armor': 'RYF.Magic.EffectTargets.Armor',
+  'defense': 'RYF.Magic.EffectTargets.Defense',
+  'initiative': 'RYF.Magic.EffectTargets.Initiative',
+  'absorption': 'RYF.Magic.EffectTargets.Absorption',
+  'hindrance-reduction': 'RYF.Magic.EffectTargets.HindranceReduction'
 };
 
 export const CONDITIONS = {
@@ -57,9 +57,8 @@ export const CONDITIONS = {
 };
 
 export const DURATION_TYPES = {
-  'fixed': 'RYF.DurationTypes.Fixed',
-  'perLevel': 'RYF.DurationTypes.PerLevel',
-  'concentration': 'RYF.DurationTypes.Concentration'
+  'fixed': 'RYF.Magic.DurationTypes.Fixed',
+  'perLevel': 'RYF.Magic.DurationTypes.PerLevel'
 };
 
 export const ATTACK_TYPES = {
