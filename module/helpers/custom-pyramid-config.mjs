@@ -15,12 +15,21 @@ export class CustomPyramidConfig extends FormApplication {
 
   getData() {
     const current = game.settings.get('ryf3', 'customPyramid');
-    
-    const totalSkills = current.level6 + current.level5 + current.level4 + 
-                        current.level3 + current.level2 + current.level1;
-    
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
+
+    const levels = [];
+    let totalSkills = 0;
+
+    for (let i = maxLevel; i >= 1; i--) {
+      const count = current[`level${i}`] || 0;
+      levels.push({ level: i, count: count });
+      totalSkills += count;
+    }
+
     return {
       pyramid: current,
+      levels: levels,
+      maxLevel: maxLevel,
       totalSkills: totalSkills,
       presets: {
         specialistHeroic: {
@@ -54,23 +63,22 @@ export class CustomPyramidConfig extends FormApplication {
   _onPresetClick(event) {
     event.preventDefault();
     const preset = event.currentTarget.dataset.preset;
-    
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
+
     const presets = {
       specialistHeroic: { level6: 1, level5: 3, level4: 3, level3: 3, level2: 3, level1: 3 },
       versatileHeroic: { level6: 1, level5: 2, level4: 3, level3: 4, level2: 5, level1: 6 },
       specialistRealistic: { level6: 0, level5: 2, level4: 2, level3: 2, level2: 2, level1: 2 },
       versatileRealistic: { level6: 0, level5: 1, level4: 2, level3: 3, level2: 4, level1: 5 }
     };
-    
+
     const values = presets[preset];
     if (values) {
-      this.element.find('input[name="level6"]').val(values.level6);
-      this.element.find('input[name="level5"]').val(values.level5);
-      this.element.find('input[name="level4"]').val(values.level4);
-      this.element.find('input[name="level3"]').val(values.level3);
-      this.element.find('input[name="level2"]').val(values.level2);
-      this.element.find('input[name="level1"]').val(values.level1);
-      
+      for (let i = 1; i <= maxLevel; i++) {
+        const value = values[`level${i}`] || 0;
+        this.element.find(`input[name="level${i}"]`).val(value);
+      }
+
       this._updateTotal();
     }
   }
@@ -80,38 +88,35 @@ export class CustomPyramidConfig extends FormApplication {
   }
 
   _updateTotal() {
-    const level6 = parseInt(this.element.find('input[name="level6"]').val()) || 0;
-    const level5 = parseInt(this.element.find('input[name="level5"]').val()) || 0;
-    const level4 = parseInt(this.element.find('input[name="level4"]').val()) || 0;
-    const level3 = parseInt(this.element.find('input[name="level3"]').val()) || 0;
-    const level2 = parseInt(this.element.find('input[name="level2"]').val()) || 0;
-    const level1 = parseInt(this.element.find('input[name="level1"]').val()) || 0;
-    
-    const total = level6 + level5 + level4 + level3 + level2 + level1;
-    
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
+    let total = 0;
+
+    for (let i = 1; i <= maxLevel; i++) {
+      const value = parseInt(this.element.find(`input[name="level${i}"]`).val()) || 0;
+      total += value;
+    }
+
     this.element.find('.total-skills').text(total);
   }
 
   async _updateObject(event, formData) {
-    const pyramid = {
-      level6: formData.level6 || 0,
-      level5: formData.level5 || 0,
-      level4: formData.level4 || 0,
-      level3: formData.level3 || 0,
-      level2: formData.level2 || 0,
-      level1: formData.level1 || 0
-    };
-    
-    const total = pyramid.level6 + pyramid.level5 + pyramid.level4 + 
-                  pyramid.level3 + pyramid.level2 + pyramid.level1;
-    
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
+    const pyramid = {};
+    let total = 0;
+
+    for (let i = 1; i <= maxLevel; i++) {
+      const value = formData[`level${i}`] || 0;
+      pyramid[`level${i}`] = value;
+      total += value;
+    }
+
     if (total === 0) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.EmptyPyramid'));
       return;
     }
-    
+
     await game.settings.set('ryf3', 'customPyramid', pyramid);
-    
+
     ui.notifications.info(game.i18n.localize('RYF.Notifications.PyramidSaved'));
   }
 }

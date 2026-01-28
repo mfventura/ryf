@@ -191,6 +191,17 @@ export class RyfActor extends Actor {
         hindrance: 0
       };
     }
+
+    if (!system.states) {
+      system.states = {
+        wounded: false,
+        unconscious: false,
+        dead: false
+      };
+    }
+
+    system.states.unconscious = system.health.value <= 0;
+    system.states.dead = system.health.value <= 0;
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -338,6 +349,72 @@ export class RyfActor extends Actor {
       ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
     }
 
+  }
+
+  async _updateStatusEffects() {
+    const stateEffects = ['dead', 'unconscious', 'wounded'];
+
+    const currentStateEffects = this.effects.filter(e =>
+      e.statuses && stateEffects.some(s => e.statuses.has(s))
+    );
+
+    const shouldHaveEffects = new Set();
+
+    if (this.system.states?.dead) {
+      shouldHaveEffects.add('dead');
+    } else if (this.system.states?.unconscious) {
+      shouldHaveEffects.add('unconscious');
+    } else if (this.system.states?.wounded) {
+      shouldHaveEffects.add('wounded');
+    }
+
+    const currentEffectIds = new Set();
+    for (const effect of currentStateEffects) {
+      for (const status of effect.statuses) {
+        if (stateEffects.includes(status)) {
+          currentEffectIds.add(status);
+        }
+      }
+    }
+
+    const toAdd = [...shouldHaveEffects].filter(e => !currentEffectIds.has(e));
+    const toRemove = currentStateEffects.filter(e => {
+      for (const status of e.statuses) {
+        if (stateEffects.includes(status) && !shouldHaveEffects.has(status)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (toRemove.length > 0) {
+      const removeIds = toRemove.map(e => e.id);
+      await this.deleteEmbeddedDocuments('ActiveEffect', removeIds);
+    }
+
+    for (const statusId of toAdd) {
+      const statusEffect = CONFIG.statusEffects.find(s => s.id === statusId);
+      const statusName = statusEffect ? game.i18n.localize(statusEffect.name) : game.i18n.localize(`RYF.States.${statusId}`);
+
+      const effectConfig = {
+        name: statusName,
+        icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+        disabled: false,
+        transfer: false,
+        statuses: [statusId],
+        flags: {
+          ryf3: {
+            sourceType: 'system',
+            appliedBy: 'system',
+            appliedAt: Date.now(),
+            effectType: 'state',
+            condition: statusId
+          }
+        }
+      };
+
+      await this.createEmbeddedDocuments('ActiveEffect', [effectConfig]);
+    }
   }
 
   async heal(amount) {

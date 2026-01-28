@@ -377,7 +377,7 @@ export class RyfActorSheet extends ActorSheet {
       const rollParams = await this._promptRollDialog(item.name, defaultDifficulty, targetWillpower);
       if (!rollParams) return;
 
-      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode);
+      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier);
     }
   }
 
@@ -421,6 +421,10 @@ export class RyfActorSheet extends ActorSheet {
                 <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
           </form>
         `,
         buttons: {
@@ -430,7 +434,8 @@ export class RyfActorSheet extends ActorSheet {
             callback: (html) => {
               const difficulty = parseInt(html.find('[name="difficulty"]').val());
               const mode = html.find('[name="mode"]').val();
-              resolve({ difficulty, mode });
+              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
+              resolve({ difficulty, mode, modifier });
             }
           },
           cancel: {
@@ -656,10 +661,11 @@ export class RyfActorSheet extends ActorSheet {
     const attributePoints = this.actor.system.attributePoints;
     const newUsed = attributePoints.used + diff;
 
-    if (newUsed > attributePoints.max) {
+    const totalXP = this.actor.system.experience?.total || 0;
+    const hasExperience = totalXP > 0;
+
+    if (!hasExperience && newUsed > attributePoints.max) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotEnoughAttributePoints'));
-      input.value = currentValue;
-      return;
     }
 
     if (value < 1) {

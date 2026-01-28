@@ -32,6 +32,13 @@
         {{diceRoll.chosen}}
       {{/if}}
     </span>
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: {{modifier}}</span>
+    {{else if (lt modifier 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{multiply modifier -1}}</span>
+    {{/if}}
     {{#if (gt hindrance 0)}}
     <span class="formula-separator">-</span>
     <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>

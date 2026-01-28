@@ -905,6 +905,11 @@
         "Title": "Configuración de Pirámide Personalizada",
         "Description": "Define cuántas habilidades de cada nivel tendrán los personajes. Puedes usar los presets o crear tu propia distribución."
       },
+      "MaxSkillLevel": {
+        "Name": "Nivel Máximo de Habilidades",
+        "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
+        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades"
+      },
       "AttributePoints": {
         "Name": "Puntos de Atributos",
         "Hint": "Cantidad de puntos disponibles para distribuir en atributos. Realista: 22, Heroico: 30, Épico: 35+"
@@ -965,6 +970,7 @@
 
     "Notifications": {
       "PyramidSaved": "Pirámide personalizada guardada correctamente",
+      "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
       "ExperienceGained": "Has ganado {amount} PX por {reason}. Total: {total} PX",
       "ActorUnconscious": "{name} ha caído inconsciente",
       "ActorDead": "{name} ha muerto",

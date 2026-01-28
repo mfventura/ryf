@@ -586,6 +586,34 @@
   background: var(--ryf-danger);
 }
 
+/* NPC Attacks List */
+.ryf.sheet .npc-attacks-list .item-type {
+  flex: 0 0 140px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.ryf.sheet .npc-attacks-list .item-attack {
+  flex: 0 0 100px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--ryf-primary);
+}
+
+.ryf.sheet .npc-attacks-list .item-roll {
+  flex: 0 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ryf.sheet .npc-attacks-list .item-controls {
+  flex: 0 0 80px;
+}
+
 /* Level Control */
 .ryf.sheet .level-value {
   display: inline-block;

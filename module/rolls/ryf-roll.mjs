@@ -2,7 +2,7 @@ import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess }
 
 export class RyfRoll {
   
-  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal') {
+  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0) {
     const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
 
     if (!skill) {
@@ -20,7 +20,7 @@ export class RyfRoll {
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance;
+    const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, difficulty, fumble);
@@ -39,6 +39,7 @@ export class RyfRoll {
       difficulty: difficulty,
       mode: mode,
       hindrance: hindrance,
+      modifier: modifier,
       diceRoll: diceRoll,
       total: total,
       success: success,

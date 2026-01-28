@@ -1,6 +1,8 @@
 <form class="custom-pyramid-config">
   <div class="form-header">
     <p class="notes">{{localize "RYF.Settings.CustomPyramidMenu.Description"}}</p>
+    <p class="notes"><strong>{{localize "RYF.Settings.MaxSkillLevel.Name"}}:</strong> {{maxLevel}}</p>
+    <p class="hint">{{localize "RYF.Settings.MaxSkillLevel.ConfigHint"}}</p>
   </div>
 
   <div class="presets-section">
@@ -17,42 +19,13 @@
 
   <div class="pyramid-inputs">
     <h3>{{localize "RYF.Settings.CustomPyramid"}}</h3>
-    
-    <div class="form-group">
-      <label for="level6">{{localize "RYF.Settings.SkillLevel"}} 6:</label>
-      <input type="number" name="level6" value="{{pyramid.level6}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel6Hint"}}</span>
-    </div>
 
+    {{#each levels as |levelData|}}
     <div class="form-group">
-      <label for="level5">{{localize "RYF.Settings.SkillLevel"}} 5:</label>
-      <input type="number" name="level5" value="{{pyramid.level5}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel5Hint"}}</span>
+      <label for="level{{levelData.level}}">{{localize "RYF.Settings.SkillLevel"}} {{levelData.level}}:</label>
+      <input type="number" name="level{{levelData.level}}" value="{{levelData.count}}" min="0" max="20" />
     </div>
-
-    <div class="form-group">
-      <label for="level4">{{localize "RYF.Settings.SkillLevel"}} 4:</label>
-      <input type="number" name="level4" value="{{pyramid.level4}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel4Hint"}}</span>
-    </div>
-
-    <div class="form-group">
-      <label for="level3">{{localize "RYF.Settings.SkillLevel"}} 3:</label>
-      <input type="number" name="level3" value="{{pyramid.level3}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel3Hint"}}</span>
-    </div>
-
-    <div class="form-group">
-      <label for="level2">{{localize "RYF.Settings.SkillLevel"}} 2:</label>
-      <input type="number" name="level2" value="{{pyramid.level2}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel2Hint"}}</span>
-    </div>
-
-    <div class="form-group">
-      <label for="level1">{{localize "RYF.Settings.SkillLevel"}} 1:</label>
-      <input type="number" name="level1" value="{{pyramid.level1}}" min="0" max="20" />
-      <span class="hint">{{localize "RYF.Settings.SkillLevel1Hint"}}</span>
-    </div>
+    {{/each}}
   </div>
 
   <div class="pyramid-summary">

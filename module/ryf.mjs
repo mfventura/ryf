@@ -23,9 +23,15 @@ Hooks.once('init', async function() {
   CONFIG.ActiveEffect.documentClass = RyfActiveEffect;
 
   CONFIG.Combat.initiative = {
-    formula: '1d10x + @initiative.base - @combat.hindrance',
+    formula: '3d10 + @initiative.base - @combat.hindrance',
     decimals: 2
   };
+
+  CONFIG.statusEffects.push({
+    id: 'wounded',
+    name: 'RYF.States.wounded',
+    icon: 'icons/svg/blood.svg'
+  });
 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ryf", RyfActorSheet, {
@@ -177,14 +183,42 @@ Hooks.on('createChatMessage', async (message) => {
   const hindrance = actor.system?.combat?.hindrance || 0;
   const wounded = actor.system?.states?.wounded || false;
 
-  const diceResult = roll.total - initiativeBase + hindrance;
+  const diceTerm = roll.terms.find(t => t.faces === 10);
+  let dice = [];
+  let explosions = [];
+  let exploded = false;
+
+  if (diceTerm && diceTerm.results) {
+    dice = diceTerm.results.map(r => r.result);
+
+    for (const result of diceTerm.results) {
+      if (result.exploded) {
+        exploded = true;
+      }
+    }
+  }
+
+  const sorted = [...dice].sort((a, b) => a - b);
+  const chosenIndex = 1;
+  const chosen = sorted[chosenIndex] || dice[0] || 0;
+
+  const diceRoll = {
+    dice: dice,
+    sorted: sorted,
+    chosen: chosen,
+    chosenIndex: chosenIndex,
+    exploded: exploded,
+    explosions: explosions,
+    result: roll.total - initiativeBase + hindrance
+  };
+
   const total = roll.total;
 
   const rollData = {
     actor: actor,
     initiativeBase: initiativeBase,
     hindrance: hindrance,
-    diceResult: diceResult,
+    diceRoll: diceRoll,
     total: total,
     wounded: wounded
   };
@@ -407,5 +441,11 @@ Hooks.on('createActor', async (actor, options, userId) => {
       await actor.updateEmbeddedDocuments('Item', updates);
     }
   }
+});
+
+Hooks.on('updateActor', async (actor, updateData, options, userId) => {
+  if (!updateData.system?.health) return;
+
+  await actor._updateStatusEffects();
 });
 
