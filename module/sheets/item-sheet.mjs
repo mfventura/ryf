@@ -5,7 +5,10 @@ export class RyfItemSheet extends ItemSheet {
       classes: ["ryf", "sheet", "item"],
       width: 520,
       height: 480,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "details" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "details" }],
+      submitOnChange: true,
+      closeOnSubmit: false,
+      scrollY: [".tab", ".scrollable", ".sheet-body"]
     });
   }
 
@@ -66,6 +69,19 @@ export class RyfItemSheet extends ItemSheet {
     html.find('.range-type-select').change(this._onRangeTypeChange.bind(this));
     html.find('.target-type-select').change(this._onTargetTypeChange.bind(this));
     html.find('.effect-target-select').change(this._onEffectTargetChange.bind(this));
+  }
+
+  _onChangeInput(event) {
+    const target = event.target;
+
+    if (target.classList.contains('effect-type-select') ||
+        target.classList.contains('effect-target-select') ||
+        target.classList.contains('range-type-select') ||
+        target.classList.contains('target-type-select')) {
+      return;
+    }
+
+    return super._onChangeInput(event);
   }
 
   async _onSkillIncrease(event) {

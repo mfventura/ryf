@@ -1,9 +1,9 @@
 <form class="{{cssClass}} flexcol" autocomplete="off">
 
-  <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+  <header class="sheet-header spell-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ShieldName'}}"/></h1>
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ShieldName'}}" class="spell-name-input"/>
     </div>
   </header>
 

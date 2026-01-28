@@ -8,7 +8,10 @@ export class RyfActorSheet extends ActorSheet {
       width: 720,
       height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }],
-      dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
+      dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
+      submitOnChange: true,
+      closeOnSubmit: false,
+      scrollY: [".tab", ".scrollable", ".sheet-body", ".item-list"]
     });
   }
 
@@ -105,9 +108,6 @@ export class RyfActorSheet extends ActorSheet {
         npcAttacks.push(i);
       }
     }
-
-    skills.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
-    spells.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
 
     const activeEffects = this.actor.effects
       .filter(e => !e.disabled)

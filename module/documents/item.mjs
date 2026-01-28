@@ -26,7 +26,6 @@ export class RyfItem extends Item {
     const system = itemData.system;
 
     if (system.level < 0) system.level = 0;
-    if (system.level > 10) system.level = 10;
 
     if (!CONFIG.RYF.isCarismaEnabled() && system.attribute === 'carisma') {
       system.attribute = 'fisico';
@@ -218,7 +217,6 @@ export class RyfItem extends Item {
 
     if (currentLevel >= 10) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.MaxSkillLevel'));
-      return;
     }
 
     const newLevel = currentLevel + 1;
