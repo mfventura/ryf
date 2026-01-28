@@ -131,8 +131,32 @@ export class RyfActorSheet extends ActorSheet {
 
         effect.durationRemaining = remainingTurns;
         effect.durationTotal = totalTurns;
-        effect.sourceName = e.flags?.ryf3?.sourceName || game.i18n.localize('RYF.Unknown');
-        effect.modifier = e.changes?.[0]?.value || 0;
+
+        const isNativeCondition = e.statuses && e.statuses.size > 0;
+
+        if (e.flags?.ryf3) {
+          effect.sourceName = e.flags.ryf3.sourceName || e.name;
+          effect.sourceType = e.flags.ryf3.sourceType || 'unknown';
+          effect.effectType = e.flags.ryf3.effectType || 'unknown';
+          effect.targetType = e.flags.ryf3.targetType || 'unknown';
+          effect.targetName = e.flags.ryf3.targetName || '';
+          effect.modifier = e.changes?.[0]?.value || 0;
+        } else if (isNativeCondition) {
+          effect.sourceName = e.name;
+          effect.sourceType = 'condition';
+          effect.effectType = 'condition';
+          effect.targetType = 'condition';
+          effect.targetName = '';
+          effect.modifier = 0;
+        } else {
+          effect.sourceName = e.name || game.i18n.localize('RYF.Unknown');
+          effect.sourceType = 'other';
+          effect.effectType = 'other';
+          effect.targetType = 'other';
+          effect.targetName = '';
+          effect.modifier = e.changes?.[0]?.value || 0;
+        }
+
         return effect;
       })
       .sort((a, b) => (b.durationRemaining || 0) - (a.durationRemaining || 0));

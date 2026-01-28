@@ -979,7 +979,9 @@
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
       "EffectRemoved": "Efecto {name} eliminado",
-      "EffectsRemoved": "Se eliminaron {count} efecto(s) de {item}"
+      "EffectsRemoved": "Se eliminaron {count} efecto(s) de {item}",
+      "EffectApplied": "Efecto {effect} aplicado a {actor}",
+      "ConditionApplied": "Condición {condition} aplicada a {actor} por {duration} turnos"
     },
 
     "SheetLabels": {
@@ -1038,6 +1040,7 @@
     "Intelligence": "Inteligencia",
     "Healing": "Curación",
     "Target": "Objetivo",
+    "TargetValue": "Valor del Objetivo",
     "Formula": "Fórmula",
     "BaseHealing": "Curación Base",
     "CriticalHealing": "Curación Crítica",
@@ -1092,6 +1095,14 @@
     "Touch": "Toque",
     "Action": "Acción",
     "Instantaneous": "Instantáneo",
+
+    "Spell": "Hechizo",
+    "Item": "Item",
+    "Condition": "Condición",
+    "Effect": "Efecto",
+    "StatusEffect": "Efecto de Estado",
+    "Custom": "Personalizado",
+    "Unknown": "Desconocido",
 
     "IncreaseLevel": "Aumentar Nivel",
     "DecreaseLevel": "Disminuir Nivel",

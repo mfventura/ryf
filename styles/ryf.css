@@ -1447,7 +1447,20 @@
   font-size: 1.1rem;
   font-weight: bold;
   text-align: center;
+}
+
+.effect-modifier.positive {
   color: var(--ryf-success);
+}
+
+.effect-modifier.negative {
+  color: var(--ryf-danger);
+}
+
+.effect-modifier-header {
+  font-size: 1rem;
+  font-weight: normal;
+  text-align: center;
 }
 
 .no-effects {

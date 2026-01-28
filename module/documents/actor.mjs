@@ -1040,6 +1040,105 @@ export class RyfActor extends Actor {
     return results;
   }
 
+  async _applyCondition(effect, targets, spell) {
+    const results = [];
+
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
+      return results;
+    }
+
+    const conditionMapping = {
+      'paralyzed': 'paralysis',
+      'blinded': 'blind',
+      'stunned': 'stun',
+      'prone': 'prone',
+      'frightened': 'fear',
+      'charmed': 'charmed'
+    };
+
+    for (const target of targets) {
+      let applyEffect = true;
+
+      if (effect.savingThrow?.enabled) {
+        const savingThrow = await this._rollSavingThrowForEffect(target, spell, effect);
+        applyEffect = !savingThrow.success;
+      }
+
+      if (applyEffect) {
+        const targetActor = target.actor || target;
+
+        let duration = effect.duration.value;
+
+        if (effect.duration.type === 'perLevel') {
+          duration = duration * spell.system.level;
+        }
+
+        const statusId = conditionMapping[effect.condition] || effect.condition;
+
+        const durationConfig = {
+          turns: duration
+        };
+
+        if (game.combat && game.combat.started && game.combat.round >= 1) {
+          durationConfig.startRound = game.combat.round;
+          durationConfig.startTurn = game.combat.turn;
+        }
+
+        const statusEffect = CONFIG.statusEffects.find(s => s.id === statusId);
+        const conditionName = statusEffect ? game.i18n.localize(statusEffect.name) : game.i18n.localize(`RYF.Magic.Conditions.${effect.condition.charAt(0).toUpperCase() + effect.condition.slice(1)}`);
+
+        const effectConfig = {
+          name: conditionName,
+          icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+          origin: spell.uuid,
+          disabled: false,
+          transfer: false,
+          statuses: [statusId],
+          duration: durationConfig,
+          flags: {
+            ryf3: {
+              sourceType: 'spell',
+              sourceName: spell.name,
+              sourceId: spell.id,
+              appliedBy: this.name,
+              appliedAt: Date.now(),
+              effectType: 'condition',
+              targetType: 'condition',
+              targetName: '',
+              condition: statusId
+            }
+          }
+        };
+
+        const created = await targetActor.createEmbeddedDocuments('ActiveEffect', [effectConfig]);
+
+        if (created && created.length > 0) {
+          const notificationName = `${spell.name} (${conditionName})`;
+          ui.notifications.info(game.i18n.format('RYF.Notifications.ConditionApplied', {
+            condition: notificationName,
+            actor: targetActor.name,
+            duration: duration
+          }));
+
+          results.push({
+            target: targetActor,
+            condition: effect.condition,
+            duration: duration,
+            effect: created[0]
+          });
+        }
+      } else {
+        results.push({
+          target: target,
+          saved: true
+        });
+      }
+    }
+
+    return results;
+  }
+
   async _castDamageSpell(spell, targets) {
     const results = [];
 
