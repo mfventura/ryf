@@ -10,17 +10,17 @@
         {{#if system.states.dead}}
         <div class="status-indicator dead">
           <i class="fas fa-skull"></i>
-          <strong>{{localize "RYF.States.Dead"}}</strong>
+          <strong>{{localize "RYF.States.dead"}}</strong>
         </div>
         {{else if system.states.unconscious}}
         <div class="status-indicator unconscious">
           <i class="fas fa-dizzy"></i>
-          <strong>{{localize "RYF.States.Unconscious"}}</strong>
+          <strong>{{localize "RYF.States.unconscious"}}</strong>
         </div>
         {{else if system.states.wounded}}
         <div class="status-indicator wounded">
           <i class="fas fa-heart-broken"></i>
-          <strong>{{localize "RYF.States.Wounded"}}</strong>
+          <strong>{{localize "RYF.States.wounded"}}</strong>
           <span class="status-effect">({{localize "RYF.Combat.AutoDisadvantage"}})</span>
         </div>
         {{/if}}

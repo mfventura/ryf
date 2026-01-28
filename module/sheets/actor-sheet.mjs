@@ -285,7 +285,7 @@ export class RyfActorSheet extends ActorSheet {
           ` : ''}
           ${isWounded ? `
           <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
           </div>
           ` : ''}
           <div class="form-group">
@@ -369,7 +369,7 @@ export class RyfActorSheet extends ActorSheet {
           <form>
             ${isWounded ? `
             <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
             </div>
             ` : ''}
             ${targetWillpower ? `
@@ -471,7 +471,7 @@ export class RyfActorSheet extends ActorSheet {
           <form>
             ${isWounded ? `
             <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
             </div>
             ` : ''}
             <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
