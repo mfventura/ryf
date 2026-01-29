@@ -490,6 +490,7 @@ export class RyfActorSheet extends ActorSheet {
     const isWounded = this.actor.system.states?.wounded || false;
     const defaultMode = isWounded ? 'disadvantage' : 'normal';
     const castingDifficulty = spell.system.castingDifficulty || 15;
+    const isNPC = this.actor.type === 'npc';
     const manaCost = spell.system.manaCost || 0;
     const currentMana = this.actor.system.mana?.value || 0;
 
@@ -506,11 +507,11 @@ export class RyfActorSheet extends ActorSheet {
             <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                 <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
-                <span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>
+                ${!isNPC ? `<span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>` : ''}
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Magic.CastingDifficulty')}: ${castingDifficulty}</span>
-                <span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>
+                ${!isNPC ? `<span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>` : ''}
               </div>
             </div>
             <div class="form-group">

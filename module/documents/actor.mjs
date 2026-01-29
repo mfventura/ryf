@@ -11,11 +11,17 @@ export class RyfActor extends Actor {
 
     system.activeEffectBonuses = {
       defense: 0,
+      defenseMelee: 0,
+      defenseRanged: 0,
+      attackMelee: 0,
+      attackRanged: 0,
+      maxHealth: 0,
       initiative: 0,
       hindranceReduction: 0,
       absorption: 0,
       skills: {},
-      weapons: {},
+      weaponsDamage: {},
+      weaponsAttack: {},
       armor: 0
     };
   }
@@ -146,9 +152,17 @@ export class RyfActor extends Actor {
   _applyActiveEffectBonuses(system) {
     if (system.defense) {
       if (typeof system.defense === 'object' && system.defense.value !== undefined) {
-        system.defense.value += system.activeEffectBonuses.defense;
+        system.defense.value += system.activeEffectBonuses.defense + system.activeEffectBonuses.defenseMelee;
+        system.defense.ranged = (system.defense.ranged || 0) + system.activeEffectBonuses.defenseRanged;
       } else if (typeof system.defense === 'number') {
-        system.defense += system.activeEffectBonuses.defense;
+        system.defense += system.activeEffectBonuses.defense + system.activeEffectBonuses.defenseMelee;
+      }
+    }
+
+    if (system.health && typeof system.health === 'object' && system.health.max !== undefined) {
+      system.health.max += system.activeEffectBonuses.maxHealth;
+      if (system.health.value > system.health.max) {
+        system.health.value = system.health.max;
       }
     }
 
@@ -853,25 +867,27 @@ export class RyfActor extends Actor {
       return null;
     }
 
-    const manaCost = spell.system.manaCost || 0;
-    const currentMana = this.system.mana?.value || 0;
+    if (this.type === 'character') {
+      const manaCost = spell.system.manaCost || 0;
+      const currentMana = this.system.mana?.value || 0;
 
-    if (currentMana < manaCost) {
-      ui.notifications.warn(game.i18n.format('RYF.Warnings.NotEnoughMana', {
-        required: manaCost,
-        current: currentMana
+      if (currentMana < manaCost) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.NotEnoughMana', {
+          required: manaCost,
+          current: currentMana
+        }));
+        return null;
+      }
+
+      await this.update({
+        'system.mana.value': currentMana - manaCost
+      });
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.ManaSpent', {
+        name: spell.name,
+        cost: manaCost
       }));
-      return null;
     }
-
-    await this.update({
-      'system.mana.value': currentMana - manaCost
-    });
-
-    ui.notifications.info(game.i18n.format('RYF.Notifications.ManaSpent', {
-      name: spell.name,
-      cost: manaCost
-    }));
 
     const castingDifficulty = spell.system.castingDifficulty || 15;
 
@@ -1628,12 +1644,24 @@ export class RyfActor extends Actor {
         return 'attribute-bonus';
       case 'skill':
         return 'skill-bonus';
-      case 'weapon':
-        return 'weapon-bonus';
+      case 'weapon-damage':
+        return 'weapon-damage-bonus';
+      case 'weapon-attack':
+        return 'weapon-attack-bonus';
       case 'armor':
         return 'armor-bonus';
       case 'defense':
         return 'defense-bonus';
+      case 'defense-melee':
+        return 'defense-melee-bonus';
+      case 'defense-ranged':
+        return 'defense-ranged-bonus';
+      case 'attack-melee':
+        return 'attack-melee-bonus';
+      case 'attack-ranged':
+        return 'attack-ranged-bonus';
+      case 'max-health':
+        return 'max-health-bonus';
       case 'initiative':
         return 'initiative-bonus';
       case 'absorption':

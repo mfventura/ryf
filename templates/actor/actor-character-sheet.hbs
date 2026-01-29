@@ -352,7 +352,6 @@
       <ol class="items-list spell-list">
         <li class="item flexrow item-header">
           <div class="item-name">{{localize "RYF.SpellName"}}</div>
-          <div class="item-school">{{localize "RYF.School"}}</div>
           <div class="item-level">{{localize "RYF.Level"}}</div>
           <div class="item-mana">{{localize "RYF.ManaCost"}}</div>
           <div class="item-controls">{{localize "RYF.Controls"}}</div>
@@ -364,7 +363,6 @@
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
             <h4>{{item.name}}</h4>
           </div>
-          <div class="item-school">{{localize (concat "RYF.Schools." (capitalize item.system.school))}}</div>
           <div class="item-level">
             <a class="skill-decrease" title="{{localize 'RYF.DecreaseLevel'}}"><i class="fas fa-minus"></i></a>
             <span class="level-value">{{item.system.level}}</span>

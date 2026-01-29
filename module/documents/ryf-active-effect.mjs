@@ -85,11 +85,32 @@ export class RyfActiveEffect extends ActiveEffect {
       case 'defense-bonus':
         return 'system.activeEffectBonuses.defense';
 
-      case 'weapon-bonus':
-        if (targetType === 'weapon' && targetName) {
-          return `system.activeEffectBonuses.weapons.${targetName}`;
+      case 'defense-melee-bonus':
+        return 'system.activeEffectBonuses.defenseMelee';
+
+      case 'defense-ranged-bonus':
+        return 'system.activeEffectBonuses.defenseRanged';
+
+      case 'attack-melee-bonus':
+        return 'system.activeEffectBonuses.attackMelee';
+
+      case 'attack-ranged-bonus':
+        return 'system.activeEffectBonuses.attackRanged';
+
+      case 'max-health-bonus':
+        return 'system.activeEffectBonuses.maxHealth';
+
+      case 'weapon-damage-bonus':
+        if (targetType === 'weapon-damage' && targetName) {
+          return `system.activeEffectBonuses.weaponsDamage.${targetName}`;
         }
-        return 'system.activeEffectBonuses.weapons.unknown';
+        return 'system.activeEffectBonuses.weaponsDamage.unknown';
+
+      case 'weapon-attack-bonus':
+        if (targetType === 'weapon-attack' && targetName) {
+          return `system.activeEffectBonuses.weaponsAttack.${targetName}`;
+        }
+        return 'system.activeEffectBonuses.weaponsAttack.unknown';
 
       case 'armor-bonus':
         return 'system.activeEffectBonuses.armor';

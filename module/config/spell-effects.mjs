@@ -39,9 +39,15 @@ export const DAMAGE_TYPES = {
 export const EFFECT_TARGETS = {
   'attribute': 'RYF.Magic.EffectTargets.Attribute',
   'skill': 'RYF.Magic.EffectTargets.Skill',
-  'weapon': 'RYF.Magic.EffectTargets.Weapon',
+  'weapon-damage': 'RYF.Magic.EffectTargets.WeaponDamage',
+  'weapon-attack': 'RYF.Magic.EffectTargets.WeaponAttack',
   'armor': 'RYF.Magic.EffectTargets.Armor',
   'defense': 'RYF.Magic.EffectTargets.Defense',
+  'defense-melee': 'RYF.Magic.EffectTargets.DefenseMelee',
+  'defense-ranged': 'RYF.Magic.EffectTargets.DefenseRanged',
+  'attack-melee': 'RYF.Magic.EffectTargets.AttackMelee',
+  'attack-ranged': 'RYF.Magic.EffectTargets.AttackRanged',
+  'max-health': 'RYF.Magic.EffectTargets.MaxHealth',
   'initiative': 'RYF.Magic.EffectTargets.Initiative',
   'absorption': 'RYF.Magic.EffectTargets.Absorption',
   'hindrance-reduction': 'RYF.Magic.EffectTargets.HindranceReduction'

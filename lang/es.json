@@ -1036,6 +1036,8 @@
 
     "Level": "Nivel",
     "EffectBonus": "Bono de Efecto",
+    "AttackBonus": "Bono de Ataque",
+    "WeaponAttackBonus": "Bono de Ataque de Arma",
     "Attribute": "Atributo",
     "Controls": "Controles",
     "Roll": "Tirar",
@@ -1175,6 +1177,15 @@
     "Exploded": "Explosión",
     "Margin": "Margen",
     "Total": "Total",
+    "Bonus": "Bono",
+    "Difficulty": "Dificultad",
+    "SavingThrow": "Tirada de Salvación",
+
+    "NPC": {
+      "SavingThrowBonus": "Tirada de Salvación - PNJ",
+      "SavingThrowBonusDescription": "Los PNJs no tienen atributos. Ingresa el bono que se sumará a la tirada de salvación (1o3d10 + bono).",
+      "SavingThrowBonusLabel": "Bono de Salvación"
+    },
 
     "Difficulty": {
       "VeryEasy": "Muy Fácil",
@@ -1311,9 +1322,15 @@
       "EffectTargets": {
         "Attribute": "Atributo",
         "Skill": "Habilidad",
-        "Weapon": "Arma",
+        "WeaponDamage": "Daño de Arma",
+        "WeaponAttack": "Ataque de Arma",
         "Armor": "Armadura",
         "Defense": "Defensa",
+        "DefenseMelee": "Defensa Cuerpo a Cuerpo",
+        "DefenseRanged": "Defensa a Distancia",
+        "AttackMelee": "Ataque Cuerpo a Cuerpo",
+        "AttackRanged": "Ataque a Distancia",
+        "MaxHealth": "Vida Máxima",
         "Initiative": "Iniciativa",
         "Absorption": "Absorción",
         "HindranceReduction": "Reducción de Estorbo"

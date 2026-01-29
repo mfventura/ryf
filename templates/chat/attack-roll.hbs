@@ -22,6 +22,20 @@
     <span class="formula-separator">+</span>
     <span class="formula-part effect-bonus"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}: {{skillEffectBonus}}</span>
     {{/if}}
+    {{#if (gt attackBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-crosshairs"></i> {{localize "RYF.AttackBonus"}}: {{attackBonus}}</span>
+    {{else if (lt attackBonus 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part effect-penalty"><i class="fas fa-crosshairs"></i> {{localize "RYF.AttackBonus"}}: {{attackBonus}}</span>
+    {{/if}}
+    {{#if (gt weaponAttackBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-sword"></i> {{localize "RYF.WeaponAttackBonus"}}: {{weaponAttackBonus}}</span>
+    {{else if (lt weaponAttackBonus 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part effect-penalty"><i class="fas fa-sword"></i> {{localize "RYF.WeaponAttackBonus"}}: {{weaponAttackBonus}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}

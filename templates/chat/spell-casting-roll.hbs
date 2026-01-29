@@ -15,8 +15,10 @@
   {{/if}}
 
   <div class="roll-formula">
+    {{#unless isNPC}}
     <span class="formula-part">{{localize "RYF.Attributes.Inteligencia"}}: {{intelligence}}</span>
     <span class="formula-separator">+</span>
+    {{/unless}}
     <span class="formula-part">{{localize "RYF.Level"}}: {{spellLevel}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">

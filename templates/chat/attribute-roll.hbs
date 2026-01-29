@@ -15,7 +15,11 @@
   {{/if}}
 
   <div class="roll-formula">
+    {{#if isNPC}}
+    <span class="formula-part">{{localize "RYF.Bonus"}}: {{attributeValue}}</span>
+    {{else}}
     <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
