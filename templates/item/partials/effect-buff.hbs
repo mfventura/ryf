@@ -28,7 +28,7 @@
     <option value="inteligencia" {{#if (eq effect.targetName "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.Inteligencia"}}</option>
     <option value="percepcion" {{#if (eq effect.targetName "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.Percepcion"}}</option>
     {{#if isCarismaEnabled}}
-    <option value="carisma" {{#if (eq effect.targetName "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+    <option value="carisma" {{#if (eq effect.targetName "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.Carisma"}}</option>
     {{/if}}
   </select>
 </div>
@@ -63,7 +63,7 @@
 </div>
 
 <div class="form-group">
-  <label>{{localize "RYF.DurationValue"}}</label>
+  <label>{{localize "RYF.Magic.DurationValue"}}</label>
   <input type="number" name="system.effects.{{index}}.duration.value" value="{{effect.duration.value}}" data-dtype="Number" min="1"/>
 </div>
 

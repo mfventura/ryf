@@ -47,9 +47,6 @@ export class RyfItemSheet extends ItemSheet {
       key: key,
       label: value
     }));
-
-    const availableSkills = CONFIG.RYF.getAvailableSkills();
-    context.availableSkills = availableSkills;
   }
 
   activateListeners(html) {
@@ -202,7 +199,7 @@ export class RyfItemSheet extends ItemSheet {
     if (effects[index]) {
       effects[index].target = newTarget;
 
-      if (newTarget === 'skill' || newTarget === 'weapon') {
+      if (newTarget === 'skill' || newTarget === 'weapon-damage' || newTarget === 'weapon-attack') {
         effects[index].targetName = '';
       } else {
         delete effects[index].targetName;

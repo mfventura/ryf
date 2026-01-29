@@ -721,10 +721,10 @@ export class RyfActor extends Actor {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Range')}</label>
               <select name="range">
-                <option value="pointblank">${game.i18n.localize('RYF.Ranges.Pointblank')}</option>
-                <option value="short">${game.i18n.localize('RYF.Ranges.Short')}</option>
-                <option value="medium">${game.i18n.localize('RYF.Ranges.Medium')}</option>
-                <option value="long">${game.i18n.localize('RYF.Ranges.Long')}</option>
+                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')}</option>
+                <option value="short">${game.i18n.localize('RYF.Combat.RangeShort')}</option>
+                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')}</option>
+                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')}</option>
               </select>
             </div>
           </form>
@@ -1098,7 +1098,7 @@ export class RyfActor extends Actor {
           duration = duration * spell.system.level;
         }
 
-        const effectType = effect.type === 'buff' ? 'RYF.Buff' : 'RYF.Debuff';
+        const effectType = effect.type === 'buff' ? 'RYF.Magic.EffectTypes.Buff' : 'RYF.Magic.EffectTypes.Debuff';
 
         const effectData = {
           name: `${spell.name} (${game.i18n.localize(effectType)})`,
@@ -1360,7 +1360,7 @@ export class RyfActor extends Actor {
       }
 
       const effectData = {
-        name: `${spell.name} (${game.i18n.localize('RYF.Buff')})`,
+        name: `${spell.name} (${game.i18n.localize('RYF.Magic.EffectTypes.Buff')})`,
         img: spell.img,
         sourceType: 'spell',
         sourceName: spell.name,
@@ -1496,7 +1496,7 @@ export class RyfActor extends Actor {
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('Cancel'),
+            label: game.i18n.localize('RYF.Cancel'),
             callback: () => resolve(null)
           }
         },

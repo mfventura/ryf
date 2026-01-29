@@ -297,7 +297,7 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
     const effectsList = activeEffects.map(e => {
       console.log('Active effect: ', e)
       const remaining = e.duration.remaining || e.duration.turns;
-      return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
+      return `${e.name} (${remaining} ${game.i18n.localize('RYF.Magic.Turns')})`;
     }).join(', ');
 
     ChatMessage.create({

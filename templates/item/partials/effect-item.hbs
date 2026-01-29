@@ -11,9 +11,15 @@
   <select name="system.effects.{{index}}.target" data-dtype="String" class="effect-target-select">
     <option value="attribute" {{#if (eq effect.target "attribute")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Attribute"}}</option>
     <option value="skill" {{#if (eq effect.target "skill")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Skill"}}</option>
-    <option value="weapon" {{#if (eq effect.target "weapon")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Weapon"}}</option>
+    <option value="weapon-damage" {{#if (eq effect.target "weapon-damage")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.WeaponDamage"}}</option>
+    <option value="weapon-attack" {{#if (eq effect.target "weapon-attack")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.WeaponAttack"}}</option>
     <option value="armor" {{#if (eq effect.target "armor")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Armor"}}</option>
     <option value="defense" {{#if (eq effect.target "defense")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Defense"}}</option>
+    <option value="defense-melee" {{#if (eq effect.target "defense-melee")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.DefenseMelee"}}</option>
+    <option value="defense-ranged" {{#if (eq effect.target "defense-ranged")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.DefenseRanged"}}</option>
+    <option value="attack-melee" {{#if (eq effect.target "attack-melee")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.AttackMelee"}}</option>
+    <option value="attack-ranged" {{#if (eq effect.target "attack-ranged")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.AttackRanged"}}</option>
+    <option value="max-health" {{#if (eq effect.target "max-health")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.MaxHealth"}}</option>
     <option value="initiative" {{#if (eq effect.target "initiative")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Initiative"}}</option>
     <option value="absorption" {{#if (eq effect.target "absorption")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Absorption"}}</option>
     <option value="hindrance-reduction" {{#if (eq effect.target "hindrance-reduction")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.HindranceReduction"}}</option>
@@ -29,7 +35,7 @@
     <option value="inteligencia" {{#if (eq effect.targetName "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.Inteligencia"}}</option>
     <option value="percepcion" {{#if (eq effect.targetName "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.Percepcion"}}</option>
     {{#if isCarismaEnabled}}
-    <option value="carisma" {{#if (eq effect.targetName "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+    <option value="carisma" {{#if (eq effect.targetName "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.Carisma"}}</option>
     {{/if}}
   </select>
 </div>
@@ -38,7 +44,12 @@
   <label>{{localize "RYF.SkillName"}}</label>
   <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{localize 'RYF.SkillName'}}"/>
 </div>
-{{else if (eq effect.target "weapon")}}
+{{else if (eq effect.target "weapon-damage")}}
+<div class="form-group effect-target-name">
+  <label>{{localize "RYF.WeaponName"}}</label>
+  <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{localize 'RYF.WeaponName'}}"/>
+</div>
+{{else if (eq effect.target "weapon-attack")}}
 <div class="form-group effect-target-name">
   <label>{{localize "RYF.WeaponName"}}</label>
   <input type="text" name="system.effects.{{index}}.targetName" value="{{effect.targetName}}" placeholder="{{localize 'RYF.WeaponName'}}"/>

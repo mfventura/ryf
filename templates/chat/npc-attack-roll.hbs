@@ -8,14 +8,14 @@
         {{#if (eq attackType "melee")}}
           <i class="fas fa-hand-fist"></i> {{localize "RYF.Melee"}}
         {{else}}
-          <i class="fas fa-bullseye"></i> {{localize "RYF.Ranged"}}
+          <i class="fas fa-bullseye"></i> {{localize "RYF.Magic.AttackTypes.ranged"}}
         {{/if}}
       </div>
     </div>
   </div>
 
   <div class="roll-formula">
-    <span class="formula-part">{{localize "RYF.NPC.AttackBonus"}}: +{{attackBonus}}</span>
+    <span class="formula-part">{{localize "RYF.AttackBonus"}}: +{{attackBonus}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}

@@ -27,13 +27,13 @@ export const SPELL_EFFECT_TYPES = {
 };
 
 export const DAMAGE_TYPES = {
-  'physical': 'RYF.DamageTypes.Physical',
-  'fire': 'RYF.DamageTypes.Fire',
-  'cold': 'RYF.DamageTypes.Cold',
-  'lightning': 'RYF.DamageTypes.Lightning',
-  'force': 'RYF.DamageTypes.Force',
-  'necrotic': 'RYF.DamageTypes.Necrotic',
-  'psychic': 'RYF.DamageTypes.Psychic'
+  'physical': 'RYF.Magic.DamageTypes.Physical',
+  'fire': 'RYF.Magic.DamageTypes.Fire',
+  'cold': 'RYF.Magic.DamageTypes.Cold',
+  'lightning': 'RYF.Magic.DamageTypes.Lightning',
+  'force': 'RYF.Magic.DamageTypes.Force',
+  'necrotic': 'RYF.Magic.DamageTypes.Necrotic',
+  'psychic': 'RYF.Magic.DamageTypes.Psychic'
 };
 
 export const EFFECT_TARGETS = {
@@ -54,12 +54,12 @@ export const EFFECT_TARGETS = {
 };
 
 export const CONDITIONS = {
-  'paralyzed': 'RYF.Conditions.Paralyzed',
-  'blinded': 'RYF.Conditions.Blinded',
-  'stunned': 'RYF.Conditions.Stunned',
-  'prone': 'RYF.Conditions.Prone',
-  'frightened': 'RYF.Conditions.Frightened',
-  'charmed': 'RYF.Conditions.Charmed'
+  'paralyzed': 'RYF.Magic.Conditions.Paralyzed',
+  'blinded': 'RYF.Magic.Conditions.Blinded',
+  'stunned': 'RYF.Magic.Conditions.Stunned',
+  'prone': 'RYF.Magic.Conditions.Prone',
+  'frightened': 'RYF.Magic.Conditions.Frightened',
+  'charmed': 'RYF.Magic.Conditions.Charmed'
 };
 
 export const DURATION_TYPES = {
@@ -68,8 +68,8 @@ export const DURATION_TYPES = {
 };
 
 export const ATTACK_TYPES = {
-  'melee': 'RYF.AttackTypes.Melee',
-  'ranged': 'RYF.AttackTypes.Ranged'
+  'melee': 'RYF.Magic.AttackTypes.Melee',
+  'ranged': 'RYF.Magic.AttackTypes.Ranged'
 };
 
 export function createDefaultEffect(type) {

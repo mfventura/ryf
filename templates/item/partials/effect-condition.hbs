@@ -1,12 +1,12 @@
 <div class="form-group">
   <label>{{localize "RYF.Condition"}}</label>
   <select name="system.effects.{{index}}.condition" data-dtype="String">
-    <option value="paralyzed" {{#if (eq effect.condition "paralyzed")}}selected{{/if}}>{{localize "RYF.Conditions.Paralyzed"}}</option>
-    <option value="blinded" {{#if (eq effect.condition "blinded")}}selected{{/if}}>{{localize "RYF.Conditions.Blinded"}}</option>
-    <option value="stunned" {{#if (eq effect.condition "stunned")}}selected{{/if}}>{{localize "RYF.Conditions.Stunned"}}</option>
-    <option value="prone" {{#if (eq effect.condition "prone")}}selected{{/if}}>{{localize "RYF.Conditions.Prone"}}</option>
-    <option value="frightened" {{#if (eq effect.condition "frightened")}}selected{{/if}}>{{localize "RYF.Conditions.Frightened"}}</option>
-    <option value="charmed" {{#if (eq effect.condition "charmed")}}selected{{/if}}>{{localize "RYF.Conditions.Charmed"}}</option>
+    <option value="paralyzed" {{#if (eq effect.condition "paralyzed")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Paralyzed"}}</option>
+    <option value="blinded" {{#if (eq effect.condition "blinded")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Blinded"}}</option>
+    <option value="stunned" {{#if (eq effect.condition "stunned")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Stunned"}}</option>
+    <option value="prone" {{#if (eq effect.condition "prone")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Prone"}}</option>
+    <option value="frightened" {{#if (eq effect.condition "frightened")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Frightened"}}</option>
+    <option value="charmed" {{#if (eq effect.condition "charmed")}}selected{{/if}}>{{localize "RYF.Magic.Conditions.Charmed"}}</option>
   </select>
 </div>
 
@@ -19,7 +19,7 @@
 </div>
 
 <div class="form-group">
-  <label>{{localize "RYF.DurationValue"}}</label>
+  <label>{{localize "RYF.Magic.DurationValue"}}</label>
   <input type="number" name="system.effects.{{index}}.duration.value" value="{{effect.duration.value}}" data-dtype="Number" min="1"/>
 </div>
 
@@ -39,7 +39,7 @@
     <option value="percepcion" {{#if (eq effect.savingThrow.attribute "percepcion")}}selected{{/if}}>{{localize "RYF.Attributes.Percepcion"}}</option>
     <option value="inteligencia" {{#if (eq effect.savingThrow.attribute "inteligencia")}}selected{{/if}}>{{localize "RYF.Attributes.Inteligencia"}}</option>
     {{#if @root.isCarismaEnabled}}
-    <option value="carisma" {{#if (eq effect.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.carisma"}}</option>
+    <option value="carisma" {{#if (eq effect.savingThrow.attribute "carisma")}}selected{{/if}}>{{localize "RYF.Attributes.Carisma"}}</option>
     {{/if}}
   </select>
 </div>

@@ -1,7 +1,11 @@
 {
   "RYF": {
     "SystemName": "Rápido y Fácil 3.0",
-
+    "Cancel": "Cancelar",
+    "NoSpells": "No hay hechizos",
+    "Permanent": "Permanente",
+    "Remove": "Eliminar",
+    "Toggle": "Alternar",
     "COMPENDIUM": {
       "skills": "Habilidades",
       "spells": "Hechizos",
@@ -12,862 +16,12 @@
       "equipment": "Equipamiento"
     },
 
-    "ITEMS": {
-      "ARMOR": {
-        "KevlarLigero": {
-          "name": "Kevlar Ligero",
-          "description": "Armadura ligera de kevlar que proporciona protección básica sin afectar la movilidad."
-        },
-        "KevlarMedio": {
-          "name": "Kevlar Medio",
-          "description": "Armadura de kevlar reforzada que ofrece una protección equilibrada con un estorbo moderado."
-        },
-        "Exoesqueleto": {
-          "name": "Exoesqueleto",
-          "description": "Armadura tecnológica avanzada tipo exoesqueleto que proporciona máxima protección a costa de movilidad reducida."
-        },
-        "Cuero": {
-          "name": "Cuero",
-          "description": "Armadura ligera de cuero curtido que ofrece protección básica sin afectar la movilidad."
-        },
-        "Malla": {
-          "name": "Malla",
-          "description": "Armadura de cota de malla que proporciona buena protección con un estorbo moderado."
-        },
-        "Placas": {
-          "name": "Placas",
-          "description": "Armadura pesada de placas de metal que ofrece la máxima protección a costa de movilidad reducida."
-        }
-      },
-      "WEAPON": {
-        "ArcoPrecision": {
-          "name": "Arco de Precisión",
-          "description": "Arco de alta precisión diseñado para tiro a larga distancia."
-        },
-        "BallestaLigera": {
-          "name": "Ballesta Ligera",
-          "description": "Ballesta ligera y manejable, ideal para combate a media distancia."
-        },
-        "Revolver": {
-          "name": "Revólver",
-          "description": "Revólver clásico de seis balas, fiable y potente."
-        },
-        "PistolaSemiautomatica": {
-          "name": "Pistola Semiautomática",
-          "description": "Pistola moderna semiautomática con cargador de alta capacidad."
-        },
-        "Subfusil": {
-          "name": "Subfusil",
-          "description": "Subfusil compacto con alta cadencia de fuego."
-        },
-        "Machete": {
-          "name": "Machete",
-          "description": "Machete pesado ideal para combate cuerpo a cuerpo."
-        },
-        "EscopetaRecortada": {
-          "name": "Escopeta Recortada",
-          "description": "Escopeta recortada con gran poder de parada a corta distancia. El daño disminuye con la distancia."
-        },
-        "Katana": {
-          "name": "Katana",
-          "description": "Espada japonesa de hoja curva, afilada y mortal."
-        },
-        "Sable": {
-          "name": "Sable",
-          "description": "Sable de caballería con hoja curva. Puede usarse a una o dos manos."
-        },
-        "PistolaLaser": {
-          "name": "Pistola Láser",
-          "description": "Arma de energía dirigida de alta tecnología."
-        },
-        "ArcoCorto": {
-          "name": "Arco Corto",
-          "description": "Arco corto y manejable, ideal para combate rápido."
-        },
-        "ArcoLargo": {
-          "name": "Arco Largo",
-          "description": "Arco largo de guerra con gran alcance y potencia."
-        },
-        "Ballesta": {
-          "name": "Ballesta",
-          "description": "Ballesta pesada con gran poder de penetración."
-        },
-        "Baston": {
-          "name": "Bastón",
-          "description": "Bastón de madera resistente, útil para defensa."
-        },
-        "Cimitarra": {
-          "name": "Cimitarra",
-          "description": "Espada curva de origen oriental, rápida y letal."
-        },
-        "Cuchillo": {
-          "name": "Cuchillo",
-          "description": "Cuchillo de combate, puede lanzarse a corta distancia."
-        },
-        "Daga": {
-          "name": "Daga",
-          "description": "Daga de doble filo, perfecta para ataques rápidos y sigilosos."
-        },
-        "EspadaCorta": {
-          "name": "Espada Corta",
-          "description": "Espada corta versátil, equilibrada entre velocidad y daño."
-        },
-        "EspadaLarga": {
-          "name": "Espada Larga",
-          "description": "Espada larga clásica, el arma por excelencia de los guerreros."
-        },
-        "HachaCombate": {
-          "name": "Hacha de Combate",
-          "description": "Hacha de guerra de dos manos con gran poder destructivo."
-        },
-        "HachaGuerra": {
-          "name": "Hacha de Guerra",
-          "description": "Hacha de guerra de una mano, brutal y efectiva."
-        },
-        "Honda": {
-          "name": "Honda",
-          "description": "Honda simple pero efectiva para lanzar proyectiles."
-        },
-        "LanzaLigera": {
-          "name": "Lanza Ligera",
-          "description": "Lanza ligera que puede usarse en combate cuerpo a cuerpo o lanzarse."
-        },
-        "LanzaPesada": {
-          "name": "Lanza Pesada",
-          "description": "Lanza de caballería pesada. Causa daño extra cuando se usa montado (3d6)."
-        },
-        "Mandoble": {
-          "name": "Mandoble",
-          "description": "Espada enorme de dos manos con poder devastador."
-        },
-        "Mangual": {
-          "name": "Mangual",
-          "description": "Mangual con cadena y bola con púas, difícil de bloquear."
-        },
-        "Maza": {
-          "name": "Maza",
-          "description": "Maza pesada de metal, efectiva contra armaduras."
-        },
-        "Vara": {
-          "name": "Vara",
-          "description": "Vara simple de madera, útil como arma improvisada."
-        }
-      },
-      "SHIELD": {
-        "Normal": {
-          "name": "Escudo Normal",
-          "description": "Escudo ligero de madera o metal que proporciona protección básica sin dificultar el movimiento."
-        },
-        "Mediano": {
-          "name": "Escudo Mediano",
-          "description": "Escudo de tamaño medio que ofrece buena protección equilibrando defensa y movilidad."
-        },
-        "Pesado": {
-          "name": "Escudo Pesado",
-          "description": "Escudo robusto de metal que proporciona excelente protección a costa de algo de movilidad."
-        },
-        "Torre": {
-          "name": "Escudo de Torre",
-          "description": "Escudo masivo que cubre casi todo el cuerpo, ofreciendo máxima protección pero limitando significativamente el movimiento."
-        },
-        "Tactico": {
-          "name": "Escudo Táctico",
-          "description": "Escudo moderno de materiales compuestos usado por fuerzas especiales y antidisturbios."
-        },
-        "Antidisturbios": {
-          "name": "Escudo Antidisturbios",
-          "description": "Escudo transparente de policarbonato diseñado para control de multitudes y protección policial."
-        },
-        "Ballistico": {
-          "name": "Escudo Balístico",
-          "description": "Escudo pesado reforzado capaz de detener proyectiles de armas de fuego."
-        },
-        "Energia": {
-          "name": "Escudo de Energía Personal",
-          "description": "Dispositivo portátil que genera un campo de fuerza protector contra ataques físicos y energéticos."
-        },
-        "CampoFuerza": {
-          "name": "Campo de Fuerza Avanzado",
-          "description": "Sistema de escudo energético de última generación con alta capacidad de absorción."
-        },
-        "Deflector": {
-          "name": "Deflector Portátil",
-          "description": "Escudo ligero de energía que desvía proyectiles y ataques láser con mínimo estorbo."
-        }
-      },
-      "NPC": {
-        "Doscabezas": {
-          "name": "Doscabezas",
-          "description": "Bestia monstruosa con dos cabezas que puede atacar a múltiples objetivos.",
-          "attack": "Mordisco"
-        },
-        "DragonGrande": {
-          "name": "Dragón Grande",
-          "description": "Dragón adulto de gran tamaño con escamas resistentes y aliento de fuego devastador.",
-          "attack": "Garra/Mordisco"
-        },
-        "DragonPequeno": {
-          "name": "Dragón Pequeño",
-          "description": "Dragón joven o wyvern con escamas resistentes y aliento de fuego.",
-          "attack": "Garra/Mordisco"
-        },
-        "Esqueleto": {
-          "name": "Esqueleto",
-          "description": "Muerto viviente animado por magia oscura. Vulnerable al daño contundente.",
-          "attack": "Espada oxidada"
-        },
-        "EsqueletoCaballero": {
-          "name": "Esqueleto Caballero",
-          "description": "Guerrero no-muerto con armadura y entrenamiento marcial. Más peligroso que un esqueleto común.",
-          "attack": "Espada larga"
-        },
-        "Gargola": {
-          "name": "Gárgola",
-          "description": "Criatura de piedra animada que puede volar. Su piel pétrea la protege de ataques físicos.",
-          "attack": "Garra"
-        },
-        "Goblin": {
-          "name": "Goblin",
-          "description": "Criatura pequeña y astuta que suele atacar en grupo. Cobarde cuando está solo.",
-          "attack": "Daga/Arco corto"
-        },
-        "Arpia": {
-          "name": "Arpía",
-          "description": "Criatura alada con torso de mujer y cuerpo de ave rapaz. Su canto puede hechizar a los incautos.",
-          "attack": "Garra"
-        },
-        "HombreLagarto": {
-          "name": "Hombre-lagarto",
-          "description": "Humanoide reptiliano ágil y territorial. Excelente nadador.",
-          "attack": "Lanza/Garra"
-        },
-        "HombreRata": {
-          "name": "Hombre-rata",
-          "description": "Humanoide roedor que habita en alcantarillas y túneles. Rápido y escurridizo.",
-          "attack": "Daga/Mordisco"
-        },
-        "Liche": {
-          "name": "Liche",
-          "description": "Mago no-muerto de gran poder. Maestro de la magia necromántica.",
-          "attack": "Toque helado"
-        },
-        "Lobo": {
-          "name": "Lobo",
-          "description": "Depredador salvaje que caza en manada. Rápido y letal.",
-          "attack": "Mordisco"
-        },
-        "LordEsqueleto": {
-          "name": "Lord Esqueleto",
-          "description": "Guerrero no-muerto de élite con armadura completa y habilidades de combate superiores.",
-          "attack": "Espada bastarda"
-        },
-        "LordLiche": {
-          "name": "Lord Liche",
-          "description": "Archimago no-muerto de poder devastador. Domina las artes arcanas más oscuras.",
-          "attack": "Toque de muerte"
-        },
-        "Ogro": {
-          "name": "Ogro",
-          "description": "Gigante brutal de gran fuerza pero poca inteligencia. Su piel gruesa absorbe daño.",
-          "attack": "Garrote"
-        },
-        "Orco": {
-          "name": "Orco",
-          "description": "Guerrero salvaje y agresivo. Lucha ferozmente y sin miedo.",
-          "attack": "Hacha de guerra"
-        },
-        "Troll": {
-          "name": "Troll",
-          "description": "Criatura regenerativa de gran tamaño. Su piel gruesa absorbe daño y se regenera rápidamente.",
-          "attack": "Garra"
-        }
-      },
-      "EQUIPMENT": {
-        "Antorcha": {
-          "name": "Antorcha",
-          "description": "Fuente de luz portátil que ilumina 10 metros durante 1 hora."
-        },
-        "Cuerda": {
-          "name": "Cuerda (15m)",
-          "description": "Cuerda resistente de cáñamo o fibra, útil para escalar o atar."
-        },
-        "Mochila": {
-          "name": "Mochila",
-          "description": "Mochila de viaje con capacidad para transportar equipo y provisiones."
-        },
-        "Yesca": {
-          "name": "Yesca y Pedernal",
-          "description": "Kit básico para encender fuego en condiciones normales."
-        },
-        "Odre": {
-          "name": "Odre de Agua",
-          "description": "Recipiente de cuero para transportar líquidos, capacidad de 2 litros."
-        },
-        "RacionesViaje": {
-          "name": "Raciones de Viaje (1 día)",
-          "description": "Comida preservada suficiente para una persona durante un día."
-        },
-        "Tienda": {
-          "name": "Tienda de Campaña",
-          "description": "Refugio portátil para 2 personas, protege de la intemperie."
-        },
-        "KitEscalada": {
-          "name": "Kit de Escalada",
-          "description": "Ganchos, clavijas y equipo especializado para ascensos. Otorga +2 a tiradas de Escalar."
-        },
-        "HerramientasLadron": {
-          "name": "Herramientas de Ladrón",
-          "description": "Ganzúas y herramientas para forzar cerraduras. Necesarias para usar Trampas/Cerraduras."
-        },
-        "KitCuracion": {
-          "name": "Kit de Curación",
-          "description": "Vendajes, ungüentos y hierbas medicinales. Otorga +2 a tiradas de Medicina o Sanación/Hierbas."
-        },
-        "Linterna": {
-          "name": "Linterna",
-          "description": "Fuente de luz portátil que ilumina 15 metros. Requiere aceite."
-        },
-        "Catalejo": {
-          "name": "Catalejo",
-          "description": "Telescopio portátil que permite ver a gran distancia. Otorga +2 a Advertir/Notar a larga distancia."
-        },
-        "Movil": {
-          "name": "Teléfono Móvil",
-          "description": "Dispositivo de comunicación moderna con acceso a internet y aplicaciones."
-        },
-        "Portatil": {
-          "name": "Ordenador Portátil",
-          "description": "Computadora personal portátil. Necesaria para tiradas avanzadas de Informática."
-        },
-        "Linterna LED": {
-          "name": "Linterna LED",
-          "description": "Linterna moderna de alta potencia que ilumina 30 metros durante 8 horas."
-        },
-        "KitMedicoModerno": {
-          "name": "Kit Médico Moderno",
-          "description": "Botiquín completo con suministros médicos avanzados. Otorga +3 a tiradas de Medicina."
-        },
-        "ChalecoPrensa": {
-          "name": "Chaleco de Prensa",
-          "description": "Chaleco identificativo que puede proporcionar protección básica en zonas de conflicto."
-        },
-        "Binoculares": {
-          "name": "Binoculares",
-          "description": "Prismáticos de alta calidad. Otorga +3 a Advertir/Notar a larga distancia."
-        },
-        "GPS": {
-          "name": "GPS",
-          "description": "Sistema de posicionamiento global. Otorga +3 a tiradas de Navegar."
-        },
-        "RadioComunicacion": {
-          "name": "Radio de Comunicación",
-          "description": "Transmisor-receptor portátil con alcance de 5 km en terreno abierto."
-        },
-        "KitForense": {
-          "name": "Kit Forense",
-          "description": "Equipo para recolección de evidencias. Otorga +2 a tiradas de Buscar en escenas del crimen."
-        },
-        "Dron": {
-          "name": "Dron de Reconocimiento",
-          "description": "Pequeño vehículo aéreo no tripulado con cámara para vigilancia y exploración."
-        },
-        "Datapad": {
-          "name": "Datapad",
-          "description": "Tableta futurista con acceso a bases de datos galácticas y sistemas de comunicación."
-        },
-        "EscaneoBio": {
-          "name": "Escáner Biométrico",
-          "description": "Dispositivo que analiza formas de vida y signos vitales. Otorga +3 a Medicina y Fauna."
-        },
-        "Traductor": {
-          "name": "Traductor Universal",
-          "description": "Dispositivo de traducción en tiempo real para múltiples idiomas y lenguas alienígenas."
-        },
-        "KitReparacion": {
-          "name": "Kit de Reparación Avanzado",
-          "description": "Herramientas y componentes para reparar tecnología avanzada. Necesario para Ingeniería."
-        },
-        "GeneradorCampo": {
-          "name": "Generador de Campo Personal",
-          "description": "Dispositivo que crea un campo de fuerza temporal (1 uso por día, absorbe 10 puntos de daño)."
-        },
-        "Jetpack": {
-          "name": "Jetpack Personal",
-          "description": "Propulsor personal que permite vuelo limitado (10 minutos de autonomía)."
-        },
-        "VisorRA": {
-          "name": "Visor de Realidad Aumentada",
-          "description": "Gafas que superponen información digital sobre el entorno. Otorga +2 a Advertir/Notar y Buscar."
-        },
-        "Holocom": {
-          "name": "Holocomunicador",
-          "description": "Dispositivo de comunicación holográfica de largo alcance (alcance planetario)."
-        },
-        "Antigrav": {
-          "name": "Unidad Antigravedad Portátil",
-          "description": "Dispositivo que reduce el peso de objetos hasta 100 kg. Otorga +3 a Atletismo para cargar."
-        }
-      },
-      "SPELL": {
-        "DisiparMagia": {
-          "name": "Disipar Magia",
-          "description": "Cancela un efecto mágico activo. La dificultad es igual a la del conjuro original +2, y el coste es el mismo que el del hechizo a disipar."
-        },
-        "ComunicacionDistancia": {
-          "name": "Comunicación a Distancia",
-          "description": "Permite a dos magos que usen el hechizo a la vez comunicarse mentalmente."
-        },
-        "ConvertirAgua": {
-          "name": "Convertir Agua",
-          "description": "Convierte 1 litro por nivel de habilidad en vino, cerveza, aceite o hielo."
-        },
-        "Luz": {
-          "name": "Luz",
-          "description": "Ilumina un objeto no vivo por 1 hora/nivel o emite un rayo cegador que paraliza 1 turno (Salvación: Percepción 10)."
-        },
-        "ManoDeMago": {
-          "name": "Mano de Mago",
-          "description": "Telequinesis sobre objetos de hasta 2 kg por 1 turno/nivel."
-        },
-        "DetectarMagia": {
-          "name": "Detectar Magia",
-          "description": "Detecta rastros, hechizos u objetos mágicos cercanos e identifica su naturaleza."
-        },
-        "ToqueElectrico": {
-          "name": "Toque Eléctrico",
-          "description": "Inflige 2d6 de daño ignorando la armadura (requiere tirada de ataque cuerpo a cuerpo)."
-        },
-        "AmistadAnimal": {
-          "name": "Amistad Animal",
-          "description": "Convierte a un animal en aliado durante 1 minuto/nivel."
-        },
-        "CaidaPluma": {
-          "name": "Caída de Pluma",
-          "description": "Un objeto o criatura cae lentamente (9 metros por turno) durante 1 turno/nivel."
-        },
-        "Convocatoria": {
-          "name": "Convocatoria",
-          "description": "Notifica a una persona conocida la ubicación y necesidad del mago."
-        },
-        "Curacion": {
-          "name": "Curación",
-          "description": "Cura 1d6 PV por cada punto de maná gastado (máximo 3 puntos)."
-        },
-        "MaterializarArma": {
-          "name": "Materializar Arma",
-          "description": "Invoca un arma física durante 1 turno/nivel."
-        },
-        "PiesArana": {
-          "name": "Pies de Araña",
-          "description": "Permite caminar por cualquier superficie negando la gravedad por 1 turno/nivel."
-        },
-        "ArmaFuego": {
-          "name": "Arma de Fuego",
-          "description": "El arma objetivo inflige +1d6 de daño por fuego durante 1 turno/nivel."
-        },
-        "Atravesar": {
-          "name": "Atravesar",
-          "description": "Permite pasar a través de sólidos de hasta 1 metro de espesor."
-        },
-        "AuraCuracion": {
-          "name": "Aura de Curación",
-          "description": "Cura 2 PV por turno a todos los aliados en un radio de 10 m por 1 turno/nivel."
-        },
-        "Espejo": {
-          "name": "Espejo",
-          "description": "Devuelve el siguiente hechizo recibido directamente a su lanzador (dura 1 día o hasta activarse)."
-        },
-        "Invisibilidad": {
-          "name": "Invisibilidad",
-          "description": "Dura 1 minuto/nivel o hasta que el mago realice un ataque."
-        },
-        "RastroSecreto": {
-          "name": "Rastro Secreto",
-          "description": "Tras tocar un objetivo, el mago ve un hilo imaginario que lo une a él por 1 hora/nivel."
-        },
-        "RespirarBajoAgua": {
-          "name": "Respirar Bajo el Agua",
-          "description": "Permite la respiración acuática durante 10 minutos/nivel."
-        },
-        "Silencio": {
-          "name": "Silencio",
-          "description": "Genera una zona de silencio de 1 m de radio durante 1 minuto/nivel."
-        },
-        "Amistad": {
-          "name": "Amistad",
-          "description": "El afectado se vuelve un aliado por 1 turno/nivel (Salvación: Inteligencia 15)."
-        },
-        "ProyectilMagico": {
-          "name": "Proyectil Mágico",
-          "description": "Proyectil que inflige 2d6 de daño."
-        },
-        "InvocarLobo": {
-          "name": "Invocar Lobo",
-          "description": "Invoca un lobo bajo las órdenes del mago por 1 turno/nivel (máximo uno activo)."
-        },
-        "LanzaSombras": {
-          "name": "Lanza de Sombras",
-          "description": "Inflige 3d6 de daño."
-        },
-        "Relampago": {
-          "name": "Relámpago",
-          "description": "Inflige 2d6 de daño ignorando la armadura."
-        },
-        "AtarDemonio": {
-          "name": "Atar Demonio",
-          "description": "Inmoviliza a un demonio por 1 turno/nivel (Salvación: Físico 18)."
-        },
-        "TentaculosNegros": {
-          "name": "Tentáculos Negros",
-          "description": "Inmoviliza todo en un radio de 10 m por 1 turno/nivel (Salvación: Destreza 15)."
-        },
-        "InfundirTerror": {
-          "name": "Infundir Terror",
-          "description": "El objetivo huye o queda paralizado por 1 turno/nivel (Salvación: Inteligencia 15)."
-        },
-        "EspejoSombras": {
-          "name": "Espejo de Sombras",
-          "description": "Crea copias del mago; los ataques contra él tienen 50% de probabilidad de fallo por 1 turno/nivel."
-        },
-        "Niebla": {
-          "name": "Niebla",
-          "description": "Crea un área de 10x10 m que resta -2 a la Percepción visual por 1 turno/nivel."
-        },
-        "SentidosPuros": {
-          "name": "Sentidos Puros",
-          "description": "Otorga +4 a la Percepción por 1 turno/nivel."
-        },
-        "Absorcion": {
-          "name": "Absorción",
-          "description": "Otorga +4 a la Absorción de daño por 1 turno/nivel."
-        },
-        "FuerzaSobrehumana": {
-          "name": "Fuerza Sobrehumana",
-          "description": "Otorga +4 al Físico por 1 turno/nivel."
-        },
-        "DefensaMental": {
-          "name": "Defensa Mental",
-          "description": "Otorga +4 a las tiradas de salvación contra magia por 1 turno/nivel."
-        },
-        "AuraPoder": {
-          "name": "Aura de Poder",
-          "description": "Otorga +1 a impactar y al daño a todos los aliados en un radio de 10 m por 1 turno/nivel."
-        },
-        "BaileViento": {
-          "name": "Baile de Viento",
-          "description": "Otorga +4 a la Defensa (también contra proyectiles) por 1 turno/nivel."
-        },
-        "CaminarEntreSuenos": {
-          "name": "Caminar entre Sueños",
-          "description": "Viaja a los sueños de alguien conocido (Salvación: Inteligencia 16)."
-        },
-        "Anticipacion": {
-          "name": "Anticipación",
-          "description": "Otorga +2 a la Defensa y el Ataque por 1 turno/nivel."
-        },
-        "AlzarMuertoViviente": {
-          "name": "Alzar Muerto Viviente",
-          "description": "Levanta un cadáver bajo las órdenes del mago por 1 turno/nivel."
-        },
-        "BolaFuego": {
-          "name": "Bola de Fuego",
-          "description": "Explosión de 3d6 de daño en un radio de 5 m."
-        },
-        "ToqueVampirico": {
-          "name": "Toque Vampírico",
-          "description": "Roba 2d6 PV al objetivo y los da al mago; ignora armadura."
-        },
-        "CampoAntimagico": {
-          "name": "Campo Antimágico",
-          "description": "Impide conjurar magia en un radio de 10 m por 1 turno/nivel."
-        },
-        "Terremoto": {
-          "name": "Terremoto",
-          "description": "Área de 10x10 m; inflige 2d6 de daño y requiere Salvación (Destreza 15) para no caer."
-        },
-        "RobarIdentidad": {
-          "name": "Robar Identidad",
-          "description": "Copia la apariencia de la víctima por 1 hora/nivel (requiere contacto visual)."
-        },
-        "PosesionMental": {
-          "name": "Posesión Mental",
-          "description": "Controla el cuerpo de la víctima por 1 turno/nivel (Salvación: Inteligencia 16); el mago queda inconsciente."
-        },
-        "Olvido": {
-          "name": "Olvido",
-          "description": "Borra un recuerdo (Salvación: Inteligencia entre 8 y 12 + nivel del hechizo)."
-        },
-        "EsconderseSombras": {
-          "name": "Esconderse en las Sombras",
-          "description": "Otorga +10 al Sigilo mientras haya sombras por 1 turno/nivel."
-        },
-        "CadenaRelampagos": {
-          "name": "Cadena de Relámpagos",
-          "description": "Rayo de 2d6 de daño que salta hasta a 3 objetivos ignorando armadura."
-        },
-        "RayoSolar": {
-          "name": "Rayo Solar",
-          "description": "Aura de fuego que inflige 4d6 de daño en un radio de 5 m."
-        },
-        "Duplicacion": {
-          "name": "Duplicación",
-          "description": "Crea una copia con la mitad de los PV; si una muere, el resto se transfiere a la otra."
-        },
-        "EscudoAntimagia": {
-          "name": "Escudo Anti-magia",
-          "description": "Bloquea cualquier hechizo que intente traspasarlo por 1 turno/nivel."
-        },
-        "OjosLince": {
-          "name": "Ojos de Lince",
-          "description": "Permite repetir hechizos observados al mismo nivel del lanzador por 1 turno/nivel."
-        },
-        "TormentaFuego": {
-          "name": "Tormenta de Fuego",
-          "description": "Inflige 4d6 de daño en un área de 10x10 m."
-        },
-        "Teleportarse": {
-          "name": "Teleportarse",
-          "description": "Transporte instantáneo a una posición conocida."
-        }
-      },
-      "SKILL": {
-        "ArmasCuerpoACuerpo": {
-          "name": "Armas cuerpo a cuerpo",
-          "description": "Experiencia en combate cercano con espadas, hachas, mazas o combate desarmado y artes marciales."
-        },
-        "Atletismo": {
-          "name": "Atletismo",
-          "description": "Capacidad para correr velozmente, realizar saltos en carrera o descender alturas de forma segura."
-        },
-        "Fauna": {
-          "name": "Fauna",
-          "description": "Conocimiento de los animales, sus costumbres y técnicas para domarlos o domesticarlos."
-        },
-        "ArmasADistancia": {
-          "name": "Armas a distancia",
-          "description": "Uso y mantenimiento de arcos, ballestas, armas de fuego, látigos o cuchillos arrojadizos."
-        },
-        "Artilleria": {
-          "name": "Artillería",
-          "description": "Manejo de armas pesadas, cañones, lanzamisiles o armamento de naves espaciales."
-        },
-        "Cabalgar": {
-          "name": "Cabalgar",
-          "description": "Manejo de caballos y monturas, incluyendo galope, saltos y control del animal en situaciones de estrés."
-        },
-        "Conducir": {
-          "name": "Conducir",
-          "description": "Manejo experto de vehículos terrestres como coches o motos, útil en persecuciones."
-        },
-        "Escalar": {
-          "name": "Escalar",
-          "description": "Ascenso por paredes verticales o escarpadas con o sin el uso de equipo especializado."
-        },
-        "Esquivar": {
-          "name": "Esquivar",
-          "description": "Capacidad de evitar golpes en combate; este valor es la base para calcular la Defensa del personaje."
-        },
-        "Nadar": {
-          "name": "Nadar",
-          "description": "Capacidad para desplazarse en el agua; un solo punto permite nadar sin riesgo en condiciones normales."
-        },
-        "Pilotar": {
-          "name": "Pilotar",
-          "description": "Aptitud para conducir aeronaves, realizar maniobras de emergencia y seguir protocolos de vuelo."
-        },
-        "RobarBolsillos": {
-          "name": "Robar bolsillos",
-          "description": "Destreza manual enfocada en sustraer objetos discretamente de bolsos, carteras o del cuerpo de una víctima."
-        },
-        "Sigilo": {
-          "name": "Sigilo",
-          "description": "Capacidad de moverse en silencio o esconderse en sombras o multitudes para evitar ser visto."
-        },
-        "TrampasCerraduras": {
-          "name": "Trampas/Cerraduras",
-          "description": "Aptitud para forzar mecanismos de seguridad, abrir cerraduras y desactivar trampas."
-        },
-        "Astrofisica": {
-          "name": "Astrofísica",
-          "description": "Conocimiento teórico de física espacial, diseño de naves y estudio de fenómenos astrológicos."
-        },
-        "Callejeo": {
-          "name": "Callejeo",
-          "description": "Conocimiento de los bajos fondos, mercado negro, criminalidad urbana y rutas de escape por callejones."
-        },
-        "Comercio": {
-          "name": "Comercio",
-          "description": "Capacidad para tasar mercancías, conocer rutas mercantiles y realizar regateos efectivos."
-        },
-        "Criptografia": {
-          "name": "Criptografía",
-          "description": "Capacidad para crear y descifrar códigos complejos o mensajes secretos."
-        },
-        "HistoriaTradicion": {
-          "name": "Historia / Tradición",
-          "description": "Conocimiento de eventos pasados, personalidades históricas, geografía política y leyendas."
-        },
-        "Idiomas": {
-          "name": "Idiomas",
-          "description": "Capacidad para hablar, leer y aprender lenguas distintas a la natal."
-        },
-        "Informatica": {
-          "name": "Informática",
-          "description": "Uso de sistemas computerizados, programación, seguridad digital y creación de software."
-        },
-        "Ingenieria": {
-          "name": "Ingeniería",
-          "description": "Conocimiento en construcción de artefactos, motores o robots (especializado según la ambientación)."
-        },
-        "Leyes": {
-          "name": "Leyes",
-          "description": "Conocimiento del sistema legal de una región y habilidad para encontrar resquicios legales."
-        },
-        "Medicina": {
-          "name": "Medicina",
-          "description": "Tratamiento de enfermedades y heridas; una tirada exitosa cura 1d6 PV (realista) o 2d6 PV (heroica) una vez al día."
-        },
-        "Navegar": {
-          "name": "Navegar",
-          "description": "Gobierno de embarcaciones, conocimiento de rutas marítimas y orientación mediante las estrellas."
-        },
-        "Ocultismo": {
-          "name": "Ocultismo",
-          "description": "Conocimiento de ciencias arcanas y místicas; permite identificar cuando alguien lanza un hechizo."
-        },
-        "Religion": {
-          "name": "Religión",
-          "description": "Conocimiento del campo de la teología, ceremonias, historia y antropología de las religiones."
-        },
-        "SanacionHierbas": {
-          "name": "Sanación/Hierbas",
-          "description": "Uso de recursos naturales para curar heridas; tiene el mismo efecto mecánico que Medicina."
-        },
-        "SupervivenciaCazar": {
-          "name": "Supervivencia / Cazar",
-          "description": "Arte de sobrevivir en la naturaleza, incluyendo hacer fuego, orientación y obtención de alimento."
-        },
-        "AdvertirNotar": {
-          "name": "Advertir/Notar",
-          "description": "Uso de los sentidos para detectar personas escondidas, ruidos sutiles o detalles inusuales en el entorno."
-        },
-        "Bailar": {
-          "name": "Bailar",
-          "description": "Destreza en el baile, fundamental en entornos sociales, discotecas o cortes medievales."
-        },
-        "Buscar": {
-          "name": "Buscar",
-          "description": "Enfoque sensorial minucioso para hallar objetos ocultos, pasadizos secretos o pistas no evidentes."
-        },
-        "Disfraz": {
-          "name": "Disfraz",
-          "description": "Habilidad para alterar la apariencia propia y pasar desapercibido o suplantar a otra persona."
-        },
-        "Etiqueta": {
-          "name": "Etiqueta",
-          "description": "Conocimiento de protocolos, modales y comportamiento correcto en diversos estratos sociales o países."
-        },
-        "Musica": {
-          "name": "Música",
-          "description": "Conocimiento teórico y práctico de instrumentos musicales y canto."
-        },
-        "NavegacionEspacial": {
-          "name": "Navegación Espacial",
-          "description": "Manejo de mapas estelares, trazado de rutas de viaje y conocimiento de culturas alienígenas."
-        },
-        "Rastrear": {
-          "name": "Rastrear",
-          "description": "Habilidad para seguir huellas, pisadas o señales características en el terreno."
-        },
-        "Reflejos": {
-          "name": "Reflejos",
-          "description": "Reacción física rápida ante eventos inesperados (como atrapar objetos) y determinación de la velocidad de ataque."
-        },
-        "Rumores": {
-          "name": "Rumores",
-          "description": "Capacidad para recolectar información y chismes fiables dentro de una comunidad."
-        },
-        "Amenazar": {
-          "name": "Amenazar",
-          "description": "Presionar a alguien mediante miedos físicos o psicológicos para obtener información u objetos."
-        },
-        "Interrogar": {
-          "name": "Interrogar",
-          "description": "Extraer información mediante preguntas estructuradas que fuercen contradicciones en el objetivo."
-        },
-        "Labia": {
-          "name": "Labia",
-          "description": "Convencer a otros de que un argumento es lógico o cierto, independientemente de la realidad."
-        },
-        "Liderazgo": {
-          "name": "Liderazgo",
-          "description": "Persuadir y dirigir grupos de personas mediante el mando social o militar."
-        },
-        "Regatear": {
-          "name": "Regatear",
-          "description": "Negociar para conseguir precios favorables en transacciones comerciales."
-        },
-        "Seducir": {
-          "name": "Seducir",
-          "description": "Capacidad de resultar atractivo o agradable a otra persona para influir en ella."
-        }
-      }
-    },
-
     "Attributes": {
       "Fisico": "Físico",
       "Destreza": "Destreza",
       "Inteligencia": "Inteligencia",
       "Percepcion": "Percepción",
       "Carisma": "Carisma"
-    },
-    
-    "Skills": {
-      "Acrobacias": "Acrobacias",
-      "Alerta": "Alerta",
-      "ArmasBlancas": "Armas Blancas",
-      "ArmasDistancia": "Armas a Distancia",
-      "ArmasFuego": "Armas de Fuego",
-      "Atletismo": "Atletismo",
-      "Buscar": "Buscar",
-      "Callejeo": "Callejeo",
-      "Ciencias": "Ciencias",
-      "Conducir": "Conducir",
-      "Conocimiento": "Conocimiento",
-      "Descubrir": "Descubrir",
-      "Disfraz": "Disfraz",
-      "Empatia": "Empatía",
-      "Equitacion": "Equitación",
-      "Escalar": "Escalar",
-      "Esconderse": "Esconderse",
-      "Esquivar": "Esquivar",
-      "Fortaleza": "Fortaleza",
-      "Humanidades": "Humanidades",
-      "Idiomas": "Idiomas",
-      "Informatica": "Informática",
-      "Juego": "Juego",
-      "Latrocinio": "Latrocinio",
-      "Medicina": "Medicina",
-      "Nadar": "Nadar",
-      "Navegacion": "Navegación",
-      "Ocultismo": "Ocultismo",
-      "Oficio": "Oficio",
-      "Pelea": "Pelea",
-      "Pilotar": "Pilotar",
-      "PrimAuxilios": "Primeros Auxilios",
-      "Rastrear": "Rastrear",
-      "Reflejos": "Reflejos",
-      "Sigilo": "Sigilo",
-      "Subterfugio": "Subterfugio",
-      "Supervivencia": "Supervivencia",
-      "Trato": "Trato",
-      "Voluntad": "Voluntad",
-      "Amenazar": "Amenazar",
-      "Interrogar": "Interrogar",
-      "Labia": "Labia",
-      "Liderazgo": "Liderazgo",
-      "Regatear": "Regatear",
-      "Seducir": "Seducir"
     },
     
     "Settings": {
@@ -921,12 +75,6 @@
       "Presets": "Presets Predefinidos",
       "CustomPyramid": "Pirámide Personalizada",
       "SkillLevel": "Habilidades Nivel",
-      "SkillLevel6Hint": "Habilidades maestras",
-      "SkillLevel5Hint": "Habilidades expertas",
-      "SkillLevel4Hint": "Habilidades avanzadas",
-      "SkillLevel3Hint": "Habilidades competentes",
-      "SkillLevel2Hint": "Habilidades básicas",
-      "SkillLevel1Hint": "Habilidades iniciales",
       "TotalSkills": "Total de Habilidades",
       "Save": "Guardar"
     },
@@ -937,26 +85,26 @@
       "SkillNotFound": "No se encontró la habilidad {skill}",
       "NoActor": "Este item no está asociado a ningún actor",
       "EmptyPyramid": "La pirámide no puede estar vacía. Define al menos una habilidad.",
-      "TooManySkillsAtLevel": "Demasiadas habilidades de nivel {level}. Esperadas: {expected}, Actuales: {actual}",
       "SkillPyramidMismatch": "Nivel {level}: se esperan {expected} habilidades, pero hay {actual}",
       "SkillsAbovePyramid": "Nivel {level}: hay {actual} habilidades por encima del máximo de la pirámide",
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
       "CannotEquip": "Este tipo de item no se puede equipar",
-      "NotASkill": "Este item no es una habilidad",
       "NotASkillOrSpell": "Este item no es una habilidad ni un hechizo",
       "NotASpell": "Este item no es un hechizo",
       "MaxSkillLevel": "La habilidad ya está al nivel máximo (10)",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
       "WeaponNotFound": "No se encontró el arma",
-      "SkillNotFoundCategory": "No se encontró ninguna habilidad con la categoría {category}",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
       "NoTargetSelected": "No hay objetivos seleccionados",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
-      "SelectTargets": "Selecciona {count} objetivos",
       "SpellCastingFailed": "Fallo al lanzar {name}",
-      "SpellHasNoEffects": "El hechizo no tiene efectos configurados"
+      "SpellHasNoEffects": "El hechizo no tiene efectos configurados",
+      "InvalidSpell": "Hechizo inválido",
+      "MinAttributeValue": "No se pudo determinar el valor del atributo principal",
+      "NotEnoughAttributePoints": "No tienes suficientes puntos de atributo disponibles",
+      "AttributeNotFound": "No se encontró el atributo {attribute}"
     },
 
     "Info": {
@@ -1004,7 +152,6 @@
       "Biography": "Biografía",
       "Description": "Descripción",
       "Details": "Detalles",
-      "Main": "Principal",
       "Effects": "Efectos"
     },
 
@@ -1045,11 +192,9 @@
     "Delete": "Eliminar",
     "Cast": "Lanzar",
     "SpellCasting": "Lanzamiento de Hechizo",
-    "Intelligence": "Inteligencia",
     "Healing": "Curación",
     "Target": "Objetivo",
     "TargetValue": "Valor del Objetivo",
-    "Formula": "Fórmula",
     "BaseHealing": "Curación Base",
     "CriticalHealing": "Curación Crítica",
     "TotalHealing": "Curación Total",
@@ -1083,11 +228,7 @@
     "RangeShort": "Alcance Corto",
     "RangeMedium": "Alcance Medio",
     "RangeLong": "Alcance Largo",
-    "IsMelee": "Cuerpo a Cuerpo",
-    "IsRanged": "A Distancia",
     "TwoHanded": "Dos Manos",
-    "Properties": "Propiedades",
-    "PropertiesPlaceholder": "Ej: Versátil, Dos manos",
     "Equipped": "Equipado",
     "Protection": "Protección",
     "Hindrance": "Estorbo",
@@ -1095,19 +236,13 @@
     "Weight": "Peso",
     "ManaCost": "Coste de Maná",
     "CurrentMana": "Maná Actual",
-    "CastingTime": "Tiempo de Lanzamiento",
     "Duration": "Duración",
     "CastSpell": "Lanzar Hechizo",
 
     "Melee": "Cuerpo a cuerpo",
-    "Touch": "Toque",
-    "Action": "Acción",
-    "Instantaneous": "Instantáneo",
-
     "Spell": "Hechizo",
     "Item": "Item",
     "Condition": "Condición",
-    "Effect": "Efecto",
     "StatusEffect": "Efecto de Estado",
     "Custom": "Personalizado",
     "Unknown": "Desconocido",
@@ -1178,7 +313,7 @@
     "Margin": "Margen",
     "Total": "Total",
     "Bonus": "Bono",
-    "Difficulty": "Dificultad",
+    "DifficultyLabel": "Dificultad",
     "SavingThrow": "Tirada de Salvación",
 
     "NPC": {
@@ -1214,7 +349,6 @@
     },
 
     "Category": "Categoría",
-    "SelectCategory": "Seleccionar Categoría",
 
     "Combat": {
       "AutoDisadvantage": "Desventaja Automática",
@@ -1256,22 +390,12 @@
     },
 
     "Magic": {
-      "SpellType": "Tipo de Hechizo",
       "CastingDifficulty": "Dificultad de Casteo",
-      "SpellTypes": {
-        "generic": "Genérico",
-        "damage": "Daño",
-        "healing": "Curación",
-        "buff-skill": "Mejora de Habilidad",
-        "buff-weapon": "Mejora de Arma",
-        "buff-armor": "Mejora de Armadura",
-        "effect": "Efecto"
-      },
       "AttackType": "Tipo de Ataque",
       "AttackTypes": {
-        "none": "Ninguno",
-        "melee": "Cuerpo a Cuerpo",
-        "ranged": "A Distancia"
+        "ranged": "A Distancia",
+        "Melee": "Cuerpo a Cuerpo",
+        "Ranged": "A Distancia"
       },
       "DamageTypes": {
         "Physical": "Físico",
@@ -1280,14 +404,7 @@
         "Lightning": "Relámpago",
         "Force": "Fuerza",
         "Necrotic": "Necrótico",
-        "Psychic": "Psíquico",
-        "physical": "Físico",
-        "fire": "Fuego",
-        "cold": "Frío",
-        "lightning": "Relámpago",
-        "force": "Fuerza",
-        "necrotic": "Necrótico",
-        "psychic": "Psíquico"
+        "Psychic": "Psíquico"
       },
       "RangeType": "Tipo de Alcance",
       "RangeTypes": {
@@ -1295,7 +412,6 @@
         "touch": "Toque",
         "ranged": "A Distancia"
       },
-      "RangeValue": "Valor de Alcance",
       "TargetType": "Tipo de Objetivo",
       "TargetTypes": {
         "single": "Individual",
@@ -1310,14 +426,7 @@
         "ImmediateHealing": "Curación Inmediata",
         "Buff": "Mejora",
         "Debuff": "Penalización",
-        "Condition": "Condición",
-        "skill-bonus": "Bonus a Habilidad",
-        "defense-bonus": "Bonus a Defensa",
-        "weapon-bonus": "Bonus a Arma",
-        "armor-bonus": "Bonus a Armadura",
-        "hindrance-reduction": "Reducción de Estorbo",
-        "initiative-bonus": "Bonus a Iniciativa",
-        "absorption-bonus": "Bonus a Absorción"
+        "Condition": "Condición"
       },
       "EffectTargets": {
         "Attribute": "Atributo",
@@ -1345,16 +454,10 @@
       },
       "DurationTypes": {
         "Fixed": "Fija",
-        "PerLevel": "Por Nivel",
-        "Concentration": "Concentración"
+        "PerLevel": "Por Nivel"
       },
       "BasicInfo": "Información Básica",
       "RangeAndTargets": "Alcance y Objetivos",
-      "DamageSettings": "Configuración de Daño",
-      "HealingSettings": "Configuración de Curación",
-      "BuffSettings": "Configuración de Mejora",
-      "EffectSettings": "Configuración de Efecto",
-      "GenericSettings": "Configuración Genérica",
       "SpellEffects": "Efectos del Hechizo",
       "ItemEffects": "Efectos del Item",
       "NoEffects": "Sin efectos",
@@ -1362,7 +465,6 @@
       "EffectTarget": "Objetivo del Efecto",
       "RequiresAttack": "Requiere Ataque",
       "HalfDamageOnSave": "Medio Daño si Salva",
-      "Condition": "Condición",
       "MaxDistance": "Distancia Máxima",
       "TargetCount": "Cantidad de Objetivos",
       "AreaRadius": "Radio del Área",
@@ -1371,58 +473,20 @@
       "RequiresSavingThrow": "Requiere Tirada de Salvación",
       "SavingThrowDifficulty": "Dificultad de Salvación",
       "SavingThrowAttribute": "Atributo de Salvación",
-      "RequiresRoll": "Requiere Tirada",
-      "RollAttribute": "Atributo para Tirar",
-      "Modifier": "Modificador",
-      "TargetName": "Nombre del Objetivo",
       "ActiveEffects": "Efectos Activos",
-      "ActiveEffect": "Efecto Activo",
       "NoActiveEffects": "No hay efectos activos",
-      "EffectsExpired": "Efectos Expirados",
       "Source": "Fuente",
-      "SourceInfo": "Información de Fuente",
       "SourceType": "Tipo de Fuente",
-      "SourceName": "Nombre de Fuente",
-      "AppliedBy": "Aplicado Por",
-      "EffectInfo": "Información del Efecto",
-      "Duration": "Duración",
-      "RemainingTurns": "Turnos Restantes",
-      "TotalTurns": "Turnos Totales",
       "Turns": "turnos",
-      "RemoveEffect": "Eliminar Efecto",
       "CastSpell": "Lanzar Hechizo",
       "Caster": "Lanzador",
-      "SpellLevel": "Nivel del Hechizo",
-      "ManaCost": "Coste de Maná",
-      "School": "Escuela",
-      "Schools": {
-        "Evocation": "Evocación",
-        "Abjuration": "Abjuración",
-        "Conjuration": "Conjuración",
-        "Divination": "Adivinación",
-        "Enchantment": "Encantamiento",
-        "Illusion": "Ilusión",
-        "Necromancy": "Nigromancia",
-        "Transmutation": "Transmutación"
-      },
-      "CastingTime": "Tiempo de Lanzamiento",
-      "Action": "Acción",
       "Targets": "Objetivos",
       "TargetsHealed": "Objetivos Curados",
       "AffectedTargets": "Objetivos Afectados",
       "HealingAmount": "Cantidad de Curación",
-      "HP": "PV",
-      "Hit": "Impacto",
-      "Miss": "Fallo",
       "Saved": "Salvado",
       "BuffApplied": "Mejora Aplicada",
-      "EffectApplied": "Efecto Aplicado",
-      "EffectExpired": "Efecto Expirado",
-      "DiceRolled": "Dados Tirados",
-      "Success": "Éxito",
-      "Failure": "Fallo",
-      "CriticalDice": "Dados Críticos",
-      "Fumble": "Pifia"
+      "EffectApplied": "Efecto Aplicado"
     }
   }
 }

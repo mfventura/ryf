@@ -369,7 +369,7 @@ export class RyfRoll {
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span><i class="fas fa-shield-alt"></i> ${game.i18n.localize('RYF.SavingThrow')}: ${attributeLabel}</span>
-                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Difficulty')}: ${difficulty}</span>
+                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.DifficultyLabel')}: ${difficulty}</span>
               </div>
             </div>
             <p style="margin-bottom: 12px; color: var(--ryf-text-secondary);">
@@ -392,7 +392,7 @@ export class RyfRoll {
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('Cancel'),
+            label: game.i18n.localize('RYF.Cancel'),
             callback: () => resolve(null)
           }
         },

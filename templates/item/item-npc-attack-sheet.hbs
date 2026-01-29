@@ -3,7 +3,7 @@
   <header class="sheet-header spell-header">
     <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
     <div class="header-fields">
-      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.NPC.AttackName'}}" class="spell-name-input"/>
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.Combat.AttackName'}}" class="spell-name-input"/>
     </div>
   </header>
 
@@ -23,15 +23,15 @@
     <div class="tab details" data-group="primary" data-tab="details">
       
       <div class="form-group">
-        <label>{{localize "RYF.NPC.AttackType"}}</label>
+        <label>{{localize "RYF.Combat.AttackType"}}</label>
         <select name="system.attackType" data-dtype="String">
           <option value="melee" {{#if (eq system.attackType "melee")}}selected{{/if}}>{{localize "RYF.Melee"}}</option>
-          <option value="ranged" {{#if (eq system.attackType "ranged")}}selected{{/if}}>{{localize "RYF.Ranged"}}</option>
+          <option value="ranged" {{#if (eq system.attackType "ranged")}}selected{{/if}}>{{localize "RYF.Magic.AttackTypes.ranged"}}</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>{{localize "RYF.NPC.AttackBonus"}}</label>
+        <label>{{localize "RYF.AttackBonus"}}</label>
         <input type="number" name="system.attackBonus" value="{{system.attackBonus}}" data-dtype="Number" placeholder="0"/>
       </div>
 

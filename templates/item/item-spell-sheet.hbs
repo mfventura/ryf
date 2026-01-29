@@ -56,7 +56,7 @@
 
         {{#if (eq system.range.type "ranged")}}
         <div class="form-group range-distance">
-          <label>{{localize "RYF.MaxDistance"}}</label>
+          <label>{{localize "RYF.Magic.MaxDistance"}}</label>
           <input type="number" name="system.range.maxDistance" value="{{system.range.maxDistance}}" data-dtype="Number" min="0"/>
         </div>
         {{/if}}
@@ -72,14 +72,14 @@
 
         {{#if (eq system.targets.type "multiple")}}
         <div class="form-group target-count">
-          <label>{{localize "RYF.TargetCount"}}</label>
+          <label>{{localize "RYF.Magic.TargetCount"}}</label>
           <input type="number" name="system.targets.count" value="{{system.targets.count}}" data-dtype="Number" min="1"/>
         </div>
         {{/if}}
 
         {{#if (eq system.targets.type "area")}}
         <div class="form-group target-area">
-          <label>{{localize "RYF.AreaRadius"}}</label>
+          <label>{{localize "RYF.Magic.AreaRadius"}}</label>
           <input type="number" name="system.targets.areaRadius" value="{{system.targets.areaRadius}}" data-dtype="Number" min="0"/>
         </div>
         {{/if}}
@@ -115,7 +115,7 @@
             <div class="effect-summary">
               {{#if (eq effect.type "immediate-damage")}}
                 <span class="summary-type">{{localize "RYF.Magic.EffectTypes.ImmediateDamage"}}:</span>
-                <span class="summary-details">{{effect.formula}} {{localize (concat "RYF.DamageTypes." (capitalize effect.damageType))}}{{#if effect.requiresAttack}} - {{localize "RYF.RequiresAttack"}}{{/if}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
+                <span class="summary-details">{{effect.formula}} {{localize (concat "RYF.Magic.DamageTypes." (capitalize effect.damageType))}}{{#if effect.requiresAttack}} - {{localize "RYF.Magic.RequiresAttack"}}{{/if}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{else if (eq effect.type "immediate-healing")}}
                 <span class="summary-type">{{localize "RYF.Magic.EffectTypes.ImmediateHealing"}}:</span>
                 <span class="summary-details">{{effect.formula}}</span>
@@ -127,7 +127,7 @@
                 <span class="summary-details">{{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}{{#if (eq effect.target "attribute")}} ({{localize (concat "RYF.Attributes." effect.targetName)}}){{else if effect.targetName}} ({{effect.targetName}}){{/if}} {{effect.modifier}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{else if (eq effect.type "condition")}}
                 <span class="summary-type">{{localize "RYF.Magic.EffectTypes.Condition"}}:</span>
-                <span class="summary-details">{{localize (concat "RYF.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
+                <span class="summary-details">{{localize (concat "RYF.Magic.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{/if}}
             </div>
             <button type="button" class="effect-delete" data-effect-index="{{index}}">
@@ -152,7 +152,7 @@
         {{/each}}
 
         <button type="button" class="effect-add">
-          <i class="fas fa-plus"></i> {{localize "RYF.AddEffect"}}
+          <i class="fas fa-plus"></i> {{localize "RYF.Magic.AddEffect"}}
         </button>
       </div>
     </div>

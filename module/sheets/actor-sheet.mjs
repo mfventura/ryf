@@ -344,7 +344,7 @@ export class RyfActorSheet extends ActorSheet {
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('Cancel'),
+            label: game.i18n.localize('RYF.Cancel'),
             callback: () => resolve(null)
           }
         },
@@ -402,7 +402,7 @@ export class RyfActorSheet extends ActorSheet {
             </div>
             ` : ''}
             <div class="form-group">
-              <label>${game.i18n.localize('RYF.Difficulty')}</label>
+              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
               <select name="difficulty" autofocus>
                 <option value="10" ${difficulty === 10 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryEasy')} (10)</option>
                 <option value="15" ${difficulty === 15 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Easy')} (15)</option>
@@ -440,7 +440,7 @@ export class RyfActorSheet extends ActorSheet {
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('Cancel'),
+            label: game.i18n.localize('RYF.Cancel'),
             callback: () => resolve(null)
           }
         },
@@ -540,7 +540,7 @@ export class RyfActorSheet extends ActorSheet {
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('Cancel'),
+            label: game.i18n.localize('RYF.Cancel'),
             callback: () => resolve(null)
           }
         },
