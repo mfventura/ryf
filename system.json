@@ -54,53 +54,114 @@
   "secondaryTokenAttribute": "mana",
   "packs": [
     {
-      "name": "skills",
-      "label": "RYF.COMPENDIUM.skills",
+      "name": "skills-es",
+      "label": "Habilidades (ES)",
+      "path": "packs/es/skills",
       "type": "Item",
       "system": "ryf3"
     },
     {
-      "name": "spells",
-      "label": "RYF.COMPENDIUM.spells",
+      "name": "weapons-es",
+      "label": "Armas (ES)",
+      "path": "packs/es/weapons",
       "type": "Item",
       "system": "ryf3"
     },
     {
-      "name": "npcs",
-      "label": "RYF.COMPENDIUM.npcs",
+      "name": "armor-es",
+      "label": "Armaduras (ES)",
+      "path": "packs/es/armor",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "shields-es",
+      "label": "Escudos (ES)",
+      "path": "packs/es/shields",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "equipment-es",
+      "label": "Equipamiento (ES)",
+      "path": "packs/es/equipment",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "spells-es",
+      "label": "Hechizos (ES)",
+      "path": "packs/es/spells",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "npcs-es",
+      "label": "NPCs (ES)",
+      "path": "packs/es/npcs",
       "type": "Actor",
       "system": "ryf3"
     },
     {
-      "name": "weapons",
-      "label": "RYF.COMPENDIUM.weapons",
+      "name": "skills-en",
+      "label": "Skills (EN)",
+      "path": "packs/en/skills",
       "type": "Item",
       "system": "ryf3"
     },
     {
-      "name": "armor",
-      "label": "RYF.COMPENDIUM.armor",
+      "name": "weapons-en",
+      "label": "Weapons (EN)",
+      "path": "packs/en/weapons",
       "type": "Item",
       "system": "ryf3"
     },
     {
-      "name": "shields",
-      "label": "RYF.COMPENDIUM.shields",
+      "name": "armor-en",
+      "label": "Armor (EN)",
+      "path": "packs/en/armor",
       "type": "Item",
       "system": "ryf3"
     },
     {
-      "name": "equipment",
-      "label": "RYF.COMPENDIUM.equipment",
+      "name": "shields-en",
+      "label": "Shields (EN)",
+      "path": "packs/en/shields",
       "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "equipment-en",
+      "label": "Equipment (EN)",
+      "path": "packs/en/equipment",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "spells-en",
+      "label": "Spells (EN)",
+      "path": "packs/en/spells",
+      "type": "Item",
+      "system": "ryf3"
+    },
+    {
+      "name": "npcs-en",
+      "label": "NPCs (EN)",
+      "path": "packs/en/npcs",
+      "type": "Actor",
       "system": "ryf3"
     }
   ],
   "packFolders": [
     {
-      "name": "Rápido y Fácil 3.0",
-      "color": "#8B4513",
-      "packs": ["skills", "spells", "npcs", "weapons", "armor", "shields", "equipment"]
+      "name": "RyF 3.0 - Español",
+      "color": "#C41E3A",
+      "packs": ["skills-es", "weapons-es", "armor-es", "shields-es", "equipment-es", "spells-es", "npcs-es"]
+    },
+    {
+      "name": "RyF 3.0 - English",
+      "color": "#012169",
+      "packs": ["skills-en", "weapons-en", "armor-en", "shields-en", "equipment-en", "spells-en", "npcs-en"]
     }
   ],
   "url": "https://github.com/mfventura/ryf",

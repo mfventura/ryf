@@ -178,15 +178,6 @@
       "Untrained": "Sin Entrenamiento",
       "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática"
     },
-    "COMPENDIUM": {
-      "armor": "Armaduras",
-      "equipment": "Equipamiento",
-      "npcs": "PNJs",
-      "shields": "Escudos",
-      "skills": "Habilidades",
-      "spells": "Hechizos",
-      "weapons": "Armas"
-    },
     "Dialogs": {
       "DeleteItem": "Eliminar Item",
       "DeleteItemConfirm": "¿Estás seguro de que quieres eliminar {name}?",
