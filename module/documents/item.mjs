@@ -26,7 +26,6 @@ export class RyfItem extends Item {
     const system = itemData.system;
 
     if (system.level < 0) system.level = 0;
-    if (system.level > 10) system.level = 10;
 
     if (!CONFIG.RYF.isCarismaEnabled() && system.attribute === 'carisma') {
       system.attribute = 'fisico';
@@ -141,9 +140,76 @@ export class RyfItem extends Item {
     ui.notifications.info(message);
   }
 
+  async _onUpdate(changed, options, userId) {
+    await super._onUpdate(changed, options, userId);
+
+    if (!this.actor) return;
+
+    if (changed.system?.equipped !== undefined) {
+      const isEquipped = changed.system.equipped;
+
+      if (isEquipped) {
+        await this._applyItemEffects();
+      } else {
+        await this._removeItemEffects();
+      }
+    }
+  }
+
+  async _applyItemEffects() {
+    if (!this.actor) return;
+
+    const currentEffects = this.system.effects || [];
+    const effects = Array.isArray(currentEffects)
+      ? currentEffects
+      : Object.values(currentEffects);
+
+    if (effects.length === 0) return;
+
+    const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
+
+    for (const effect of effects) {
+      const effectType = this.actor._getEffectTypeFromTarget(effect.target);
+
+      const effectData = {
+        name: `${this.name} (${game.i18n.localize('RYF.Effect')})`,
+        img: this.img,
+        sourceType: 'item',
+        sourceName: this.name,
+        sourceId: this.id,
+        effectType: effectType,
+        targetType: effect.target,
+        targetName: effect.targetName || '',
+        modifier: effect.modifier || 0,
+        appliedBy: game.user.name
+      };
+
+      await RyfActiveEffect.createFromItem(this.actor, this, effectData);
+    }
+  }
+
+  async _removeItemEffects() {
+    if (!this.actor) return;
+
+    const itemEffects = this.actor.effects.filter(e =>
+      e.flags?.ryf3?.sourceType === 'item' &&
+      e.flags?.ryf3?.sourceId === this.id
+    );
+
+    if (itemEffects.length > 0) {
+      const effectIds = itemEffects.map(e => e.id);
+      await this.actor.deleteEmbeddedDocuments('ActiveEffect', effectIds);
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.EffectsRemoved', {
+        count: effectIds.length,
+        item: this.name
+      }));
+    }
+  }
+
   async increaseLevel() {
-    if (this.type !== 'skill') {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkill'));
+    if (this.type !== 'skill' && this.type !== 'spell') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkillOrSpell'));
       return;
     }
 
@@ -151,7 +217,6 @@ export class RyfItem extends Item {
 
     if (currentLevel >= 10) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.MaxSkillLevel'));
-      return;
     }
 
     const newLevel = currentLevel + 1;
@@ -169,15 +234,16 @@ export class RyfItem extends Item {
 
     await this.update({ 'system.level': newLevel });
 
-    ui.notifications.info(game.i18n.format('RYF.Notifications.SkillIncreased', {
+    const messageKey = this.type === 'spell' ? 'RYF.Notifications.SpellIncreased' : 'RYF.Notifications.SkillIncreased';
+    ui.notifications.info(game.i18n.format(messageKey, {
       name: this.name,
       level: newLevel
     }));
   }
 
   async decreaseLevel() {
-    if (this.type !== 'skill') {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkill'));
+    if (this.type !== 'skill' && this.type !== 'spell') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotASkillOrSpell'));
       return;
     }
 
@@ -192,7 +258,8 @@ export class RyfItem extends Item {
 
     await this.update({ 'system.level': newLevel });
 
-    ui.notifications.info(game.i18n.format('RYF.Notifications.SkillDecreased', {
+    const messageKey = this.type === 'spell' ? 'RYF.Notifications.SpellDecreased' : 'RYF.Notifications.SkillDecreased';
+    ui.notifications.info(game.i18n.format(messageKey, {
       name: this.name,
       level: newLevel
     }));

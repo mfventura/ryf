@@ -3,6 +3,7 @@ import { registerSystemSettings } from './helpers/settings.mjs';
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { RyfActor } from './documents/actor.mjs';
 import { RyfItem } from './documents/item.mjs';
+import { RyfActiveEffect } from './documents/ryf-active-effect.mjs';
 import { RyfActorSheet } from './sheets/actor-sheet.mjs';
 import { RyfItemSheet } from './sheets/item-sheet.mjs';
 
@@ -11,6 +12,7 @@ Hooks.once('init', async function() {
   game.ryf = {
     RyfActor,
     RyfItem,
+    RyfActiveEffect,
     config: RYF
   };
 
@@ -18,11 +20,18 @@ Hooks.once('init', async function() {
 
   CONFIG.Actor.documentClass = RyfActor;
   CONFIG.Item.documentClass = RyfItem;
+  CONFIG.ActiveEffect.documentClass = RyfActiveEffect;
 
   CONFIG.Combat.initiative = {
-    formula: '1d10x + @initiative.base - @combat.hindrance',
+    formula: '3d10 + @initiative.base - @combat.hindrance',
     decimals: 2
   };
+
+  CONFIG.statusEffects.push({
+    id: 'wounded',
+    name: 'RYF.States.wounded',
+    icon: 'icons/svg/blood.svg'
+  });
 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ryf", RyfActorSheet, {
@@ -33,7 +42,7 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "active-effect", "npc-attack"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
@@ -129,6 +138,22 @@ Hooks.once('init', async function() {
     return args.join('');
   });
 
+  Handlebars.registerHelper('capitalize', function(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  });
+
+  Handlebars.registerHelper('targetToPascalCase', function(str) {
+    if (!str || typeof str !== 'string') return '';
+    return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  });
+
+  Handlebars.registerHelper('log', function(...args) {
+    args.pop();
+    console.log('Handlebars log:', ...args);
+    return '';
+  });
+
   await preloadHandlebarsTemplates();
 
 });
@@ -158,14 +183,42 @@ Hooks.on('createChatMessage', async (message) => {
   const hindrance = actor.system?.combat?.hindrance || 0;
   const wounded = actor.system?.states?.wounded || false;
 
-  const diceResult = roll.total - initiativeBase + hindrance;
+  const diceTerm = roll.terms.find(t => t.faces === 10);
+  let dice = [];
+  let explosions = [];
+  let exploded = false;
+
+  if (diceTerm && diceTerm.results) {
+    dice = diceTerm.results.map(r => r.result);
+
+    for (const result of diceTerm.results) {
+      if (result.exploded) {
+        exploded = true;
+      }
+    }
+  }
+
+  const sorted = [...dice].sort((a, b) => a - b);
+  const chosenIndex = 1;
+  const chosen = sorted[chosenIndex] || dice[0] || 0;
+
+  const diceRoll = {
+    dice: dice,
+    sorted: sorted,
+    chosen: chosen,
+    chosenIndex: chosenIndex,
+    exploded: exploded,
+    explosions: explosions,
+    result: roll.total - initiativeBase + hindrance
+  };
+
   const total = roll.total;
 
   const rollData = {
     actor: actor,
     initiativeBase: initiativeBase,
     hindrance: hindrance,
-    diceResult: diceResult,
+    diceRoll: diceRoll,
     total: total,
     wounded: wounded
   };
@@ -238,17 +291,12 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
 
   const actor = combatant.actor;
 
-  const { RyfActiveEffect } = await import('./documents/active-effect.mjs');
-
-  const effectsBefore = actor.items.filter(i => i.type === 'active-effect');
-
-  await RyfActiveEffect.decrementAllEffects(actor);
-
-  const activeEffects = actor.items.filter(i => i.type === 'active-effect');
+  const activeEffects = actor.effects.filter(e => !e.disabled && e.duration?.turns > 0);
 
   if (activeEffects.length > 0) {
     const effectsList = activeEffects.map(e => {
-      const remaining = e.system.duration.remaining;
+      console.log('Active effect: ', e)
+      const remaining = e.duration.remaining || e.duration.turns;
       return `${e.name} (${remaining} ${game.i18n.localize('RYF.Turns')})`;
     }).join(', ');
 
@@ -393,5 +441,11 @@ Hooks.on('createActor', async (actor, options, userId) => {
       await actor.updateEmbeddedDocuments('Item', updates);
     }
   }
+});
+
+Hooks.on('updateActor', async (actor, updateData, options, userId) => {
+  if (!updateData.system?.health) return;
+
+  await actor._updateStatusEffects();
 });
 

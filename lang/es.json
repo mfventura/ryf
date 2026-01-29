@@ -905,6 +905,11 @@
         "Title": "Configuración de Pirámide Personalizada",
         "Description": "Define cuántas habilidades de cada nivel tendrán los personajes. Puedes usar los presets o crear tu propia distribución."
       },
+      "MaxSkillLevel": {
+        "Name": "Nivel Máximo de Habilidades",
+        "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
+        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades"
+      },
       "AttributePoints": {
         "Name": "Puntos de Atributos",
         "Hint": "Cantidad de puntos disponibles para distribuir en atributos. Realista: 22, Heroico: 30, Épico: 35+"
@@ -939,6 +944,7 @@
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
       "CannotEquip": "Este tipo de item no se puede equipar",
       "NotASkill": "Este item no es una habilidad",
+      "NotASkillOrSpell": "Este item no es una habilidad ni un hechizo",
       "NotASpell": "Este item no es un hechizo",
       "MaxSkillLevel": "La habilidad ya está al nivel máximo (10)",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
@@ -949,7 +955,8 @@
       "NoTargetSelected": "No hay objetivos seleccionados",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
       "SelectTargets": "Selecciona {count} objetivos",
-      "SpellCastingFailed": "Fallo al lanzar {name}"
+      "SpellCastingFailed": "Fallo al lanzar {name}",
+      "SpellHasNoEffects": "El hechizo no tiene efectos configurados"
     },
 
     "Info": {
@@ -963,6 +970,7 @@
 
     "Notifications": {
       "PyramidSaved": "Pirámide personalizada guardada correctamente",
+      "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
       "ExperienceGained": "Has ganado {amount} PX por {reason}. Total: {total} PX",
       "ActorUnconscious": "{name} ha caído inconsciente",
       "ActorDead": "{name} ha muerto",
@@ -972,9 +980,14 @@
       "ItemUnequipped": "{name} desequipado",
       "SkillIncreased": "{name} aumentado a nivel {level}",
       "SkillDecreased": "{name} reducido a nivel {level}",
+      "SpellIncreased": "{name} aumentado a nivel {level}",
+      "SpellDecreased": "{name} reducido a nivel {level}",
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
-      "EffectRemoved": "Efecto {name} eliminado"
+      "EffectRemoved": "Efecto {name} eliminado",
+      "EffectsRemoved": "Se eliminaron {count} efecto(s) de {item}",
+      "EffectApplied": "Efecto {effect} aplicado a {actor}",
+      "ConditionApplied": "Condición {condition} aplicada a {actor} por {duration} turnos"
     },
 
     "SheetLabels": {
@@ -991,7 +1004,8 @@
       "Biography": "Biografía",
       "Description": "Descripción",
       "Details": "Detalles",
-      "Main": "Principal"
+      "Main": "Principal",
+      "Effects": "Efectos"
     },
 
     "CharacterName": "Nombre del Personaje",
@@ -1022,6 +1036,8 @@
 
     "Level": "Nivel",
     "EffectBonus": "Bono de Efecto",
+    "AttackBonus": "Bono de Ataque",
+    "WeaponAttackBonus": "Bono de Ataque de Arma",
     "Attribute": "Atributo",
     "Controls": "Controles",
     "Roll": "Tirar",
@@ -1032,6 +1048,7 @@
     "Intelligence": "Inteligencia",
     "Healing": "Curación",
     "Target": "Objetivo",
+    "TargetValue": "Valor del Objetivo",
     "Formula": "Fórmula",
     "BaseHealing": "Curación Base",
     "CriticalHealing": "Curación Crítica",
@@ -1086,6 +1103,14 @@
     "Touch": "Toque",
     "Action": "Acción",
     "Instantaneous": "Instantáneo",
+
+    "Spell": "Hechizo",
+    "Item": "Item",
+    "Condition": "Condición",
+    "Effect": "Efecto",
+    "StatusEffect": "Efecto de Estado",
+    "Custom": "Personalizado",
+    "Unknown": "Desconocido",
 
     "IncreaseLevel": "Aumentar Nivel",
     "DecreaseLevel": "Disminuir Nivel",
@@ -1152,6 +1177,15 @@
     "Exploded": "Explosión",
     "Margin": "Margen",
     "Total": "Total",
+    "Bonus": "Bono",
+    "Difficulty": "Dificultad",
+    "SavingThrow": "Tirada de Salvación",
+
+    "NPC": {
+      "SavingThrowBonus": "Tirada de Salvación - PNJ",
+      "SavingThrowBonusDescription": "Los PNJs no tienen atributos. Ingresa el bono que se sumará a la tirada de salvación (1o3d10 + bono).",
+      "SavingThrowBonusLabel": "Bono de Salvación"
+    },
 
     "Difficulty": {
       "VeryEasy": "Muy Fácil",
@@ -1240,11 +1274,20 @@
         "ranged": "A Distancia"
       },
       "DamageTypes": {
+        "Physical": "Físico",
+        "Fire": "Fuego",
+        "Cold": "Frío",
+        "Lightning": "Relámpago",
+        "Force": "Fuerza",
+        "Necrotic": "Necrótico",
+        "Psychic": "Psíquico",
         "physical": "Físico",
         "fire": "Fuego",
         "cold": "Frío",
         "lightning": "Relámpago",
-        "force": "Fuerza"
+        "force": "Fuerza",
+        "necrotic": "Necrótico",
+        "psychic": "Psíquico"
       },
       "RangeType": "Tipo de Alcance",
       "RangeTypes": {
@@ -1259,21 +1302,51 @@
         "multiple": "Múltiple",
         "area": "Área"
       },
-      "TargetCount": "Cantidad de Objetivos",
-      "AreaRadius": "Radio de Área",
-      "DurationTypes": {
-        "fixed": "Fijo",
-        "perLevel": "Por Nivel"
-      },
       "DurationType": "Tipo de Duración",
       "DurationValue": "Valor de Duración",
       "EffectType": "Tipo de Efecto",
       "EffectTypes": {
+        "ImmediateDamage": "Daño Inmediato",
+        "ImmediateHealing": "Curación Inmediata",
+        "Buff": "Mejora",
+        "Debuff": "Penalización",
+        "Condition": "Condición",
         "skill-bonus": "Bonus a Habilidad",
         "defense-bonus": "Bonus a Defensa",
         "weapon-bonus": "Bonus a Arma",
         "armor-bonus": "Bonus a Armadura",
-        "hindrance-reduction": "Reducción de Estorbo"
+        "hindrance-reduction": "Reducción de Estorbo",
+        "initiative-bonus": "Bonus a Iniciativa",
+        "absorption-bonus": "Bonus a Absorción"
+      },
+      "EffectTargets": {
+        "Attribute": "Atributo",
+        "Skill": "Habilidad",
+        "WeaponDamage": "Daño de Arma",
+        "WeaponAttack": "Ataque de Arma",
+        "Armor": "Armadura",
+        "Defense": "Defensa",
+        "DefenseMelee": "Defensa Cuerpo a Cuerpo",
+        "DefenseRanged": "Defensa a Distancia",
+        "AttackMelee": "Ataque Cuerpo a Cuerpo",
+        "AttackRanged": "Ataque a Distancia",
+        "MaxHealth": "Vida Máxima",
+        "Initiative": "Iniciativa",
+        "Absorption": "Absorción",
+        "HindranceReduction": "Reducción de Estorbo"
+      },
+      "Conditions": {
+        "Paralyzed": "Paralizado",
+        "Blinded": "Cegado",
+        "Stunned": "Aturdido",
+        "Prone": "Derribado",
+        "Frightened": "Asustado",
+        "Charmed": "Hechizado"
+      },
+      "DurationTypes": {
+        "Fixed": "Fija",
+        "PerLevel": "Por Nivel",
+        "Concentration": "Concentración"
       },
       "BasicInfo": "Información Básica",
       "RangeAndTargets": "Alcance y Objetivos",
@@ -1282,6 +1355,17 @@
       "BuffSettings": "Configuración de Mejora",
       "EffectSettings": "Configuración de Efecto",
       "GenericSettings": "Configuración Genérica",
+      "SpellEffects": "Efectos del Hechizo",
+      "ItemEffects": "Efectos del Item",
+      "NoEffects": "Sin efectos",
+      "AddEffect": "Agregar Efecto",
+      "EffectTarget": "Objetivo del Efecto",
+      "RequiresAttack": "Requiere Ataque",
+      "HalfDamageOnSave": "Medio Daño si Salva",
+      "Condition": "Condición",
+      "MaxDistance": "Distancia Máxima",
+      "TargetCount": "Cantidad de Objetivos",
+      "AreaRadius": "Radio del Área",
       "DamageFormula": "Fórmula de Daño",
       "HealingFormula": "Fórmula de Curación",
       "RequiresSavingThrow": "Requiere Tirada de Salvación",
@@ -1294,6 +1378,7 @@
       "ActiveEffects": "Efectos Activos",
       "ActiveEffect": "Efecto Activo",
       "NoActiveEffects": "No hay efectos activos",
+      "EffectsExpired": "Efectos Expirados",
       "Source": "Fuente",
       "SourceInfo": "Información de Fuente",
       "SourceType": "Tipo de Fuente",
@@ -1310,7 +1395,16 @@
       "SpellLevel": "Nivel del Hechizo",
       "ManaCost": "Coste de Maná",
       "School": "Escuela",
-      "Evocation": "Evocación",
+      "Schools": {
+        "Evocation": "Evocación",
+        "Abjuration": "Abjuración",
+        "Conjuration": "Conjuración",
+        "Divination": "Adivinación",
+        "Enchantment": "Encantamiento",
+        "Illusion": "Ilusión",
+        "Necromancy": "Nigromancia",
+        "Transmutation": "Transmutación"
+      },
       "CastingTime": "Tiempo de Lanzamiento",
       "Action": "Acción",
       "Targets": "Objetivos",

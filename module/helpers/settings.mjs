@@ -28,11 +28,6 @@ export function registerSystemSettings() {
     scope: 'world',
     config: true,
     type: Number,
-    range: {
-      min: 1,
-      max: 10,
-      step: 1
-    },
     default: 4,
     onChange: value => {
       game.actors.forEach(actor => {
@@ -49,11 +44,6 @@ export function registerSystemSettings() {
     scope: 'world',
     config: true,
     type: Number,
-    range: {
-      min: 1,
-      max: 10,
-      step: 1
-    },
     default: 3,
     onChange: value => {
       game.actors.forEach(actor => {
@@ -90,18 +80,23 @@ export function registerSystemSettings() {
     restricted: true
   });
 
+  game.settings.register('ryf3', 'maxSkillLevel', {
+    name: 'RYF.Settings.MaxSkillLevel.Name',
+    hint: 'RYF.Settings.MaxSkillLevel.Hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 10,
+    onChange: () => {
+      ui.notifications.info(game.i18n.localize('RYF.Notifications.ReloadRequired'));
+    }
+  });
+
   game.settings.register('ryf3', 'customPyramid', {
     scope: 'world',
     config: false,
     type: Object,
-    default: {
-      level6: 0,
-      level5: 0,
-      level4: 0,
-      level3: 0,
-      level2: 0,
-      level1: 0
-    }
+    default: {}
   });
 
   game.settings.register('ryf3', 'attributePoints', {
@@ -110,11 +105,6 @@ export function registerSystemSettings() {
     scope: 'world',
     config: true,
     type: Number,
-    range: {
-      min: 16,
-      max: 40,
-      step: 1
-    },
     default: 30
   });
 

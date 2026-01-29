@@ -10,7 +10,7 @@
   {{#if actor.system.states.wounded}}
   <div class="wounded-indicator">
     <i class="fas fa-heart-broken"></i>
-    <strong>{{localize "RYF.States.Wounded"}}</strong> - {{localize "RYF.Combat.AutoDisadvantage"}}
+    <strong>{{localize "RYF.States.wounded"}}</strong> - {{localize "RYF.Combat.AutoDisadvantage"}}
   </div>
   {{/if}}
 
@@ -18,6 +18,24 @@
     <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part">{{skillName}}: {{skillLevel}}</span>
+    {{#if (gt skillEffectBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-star"></i> {{localize "RYF.EffectBonus"}}: {{skillEffectBonus}}</span>
+    {{/if}}
+    {{#if (gt attackBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-crosshairs"></i> {{localize "RYF.AttackBonus"}}: {{attackBonus}}</span>
+    {{else if (lt attackBonus 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part effect-penalty"><i class="fas fa-crosshairs"></i> {{localize "RYF.AttackBonus"}}: {{attackBonus}}</span>
+    {{/if}}
+    {{#if (gt weaponAttackBonus 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-sword"></i> {{localize "RYF.WeaponAttackBonus"}}: {{weaponAttackBonus}}</span>
+    {{else if (lt weaponAttackBonus 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part effect-penalty"><i class="fas fa-sword"></i> {{localize "RYF.WeaponAttackBonus"}}: {{weaponAttackBonus}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}

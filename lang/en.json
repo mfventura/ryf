@@ -905,6 +905,11 @@
         "Title": "Custom Pyramid Configuration",
         "Description": "Define how many skills of each level characters will have. You can use presets or create your own distribution."
       },
+      "MaxSkillLevel": {
+        "Name": "Maximum Skill Level",
+        "Hint": "Defines the maximum level skills can reach. Standard: 10, Extended: 15-20. Requires reload to apply changes to custom pyramid.",
+        "ConfigHint": "To change this value, go to System Settings → Maximum Skill Level"
+      },
       "AttributePoints": {
         "Name": "Attribute Points",
         "Hint": "Amount of points available to distribute in attributes. Realistic: 22, Heroic: 30, Epic: 35+"
@@ -963,6 +968,7 @@
 
     "Notifications": {
       "PyramidSaved": "Custom pyramid saved successfully",
+      "ReloadRequired": "Reload the world (F5) for changes to take effect",
       "ExperienceGained": "You gained {amount} XP for {reason}. Total: {total} XP",
       "ActorUnconscious": "{name} has fallen unconscious",
       "ActorDead": "{name} has died",
@@ -1265,7 +1271,11 @@
         "attribute": "Attribute"
       },
       "BuffBonus": "Buff Bonus",
-      "EffectDescription": "Effect Description"
+      "EffectDescription": "Effect Description",
+      "ActiveEffects": "Active Effects",
+      "ActiveEffect": "Active Effect",
+      "NoActiveEffects": "No active effects",
+      "EffectsExpired": "Effects Expired"
     },
 
     "Biography": {

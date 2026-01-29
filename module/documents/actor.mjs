@@ -6,6 +6,24 @@ export class RyfActor extends Actor {
 
   prepareBaseData() {
     super.prepareBaseData();
+
+    const system = this.system;
+
+    system.activeEffectBonuses = {
+      defense: 0,
+      defenseMelee: 0,
+      defenseRanged: 0,
+      attackMelee: 0,
+      attackRanged: 0,
+      maxHealth: 0,
+      initiative: 0,
+      hindranceReduction: 0,
+      absorption: 0,
+      skills: {},
+      weaponsDamage: {},
+      weaponsAttack: {},
+      armor: 0
+    };
   }
 
   prepareDerivedData() {
@@ -15,7 +33,8 @@ export class RyfActor extends Actor {
 
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
-    this._applyActiveEffects(system);
+
+    this._applyActiveEffectBonuses(system);
   }
 
   async _preCreate(data, options, user) {
@@ -91,8 +110,10 @@ export class RyfActor extends Actor {
     system.initiative.base = system.attributes.percepcion.value + initiativeBonus;
     system.initiative.value = system.initiative.base;
 
-    system.willpower.base = 5;
-    system.willpower.value = system.attributes.carisma.value + system.attributes.inteligencia.value + system.willpower.base;
+    if (CONFIG.RYF.isCarismaEnabled() && system.attributes.carisma) {
+      system.willpower.base = 5;
+      system.willpower.value = system.attributes.carisma.value + system.attributes.inteligencia.value + system.willpower.base;
+    }
 
     const equippedArmor = this.items.find(i => i.type === 'armor' && i.system.equipped);
     const equippedShields = this.items.filter(i => i.type === 'shield' && i.system.equipped);
@@ -128,68 +149,37 @@ export class RyfActor extends Actor {
     system.attributePoints.used = usedPoints;
   }
 
-  _applyActiveEffects(system) {
-    const activeEffects = this.items.filter(i => i.type === 'active-effect');
-
-    system.activeEffectBonuses = {
-      defense: 0,
-      initiative: 0,
-      hindranceReduction: 0,
-      absorption: 0,
-      skills: {},
-      weapons: {},
-      armor: 0
-    };
-
-    if (activeEffects.length === 0) return;
-
-
-    for (const effect of activeEffects) {
-      const effectType = effect.system.effectType;
-      const targetType = effect.system.targetType;
-      const targetName = effect.system.targetName;
-      const modifier = effect.system.modifier || 0;
-
-
-      if (effectType === 'defense-bonus') {
-        system.activeEffectBonuses.defense += modifier;
-      } else if (effectType === 'initiative-bonus') {
-        system.activeEffectBonuses.initiative += modifier;
-      } else if (effectType === 'hindrance-reduction') {
-        system.activeEffectBonuses.hindranceReduction += modifier;
-      } else if (effectType === 'absorption-bonus') {
-        system.activeEffectBonuses.absorption += modifier;
-      } else if (effectType === 'skill-bonus' && targetType === 'skill') {
-        if (!system.activeEffectBonuses.skills[targetName]) {
-          system.activeEffectBonuses.skills[targetName] = 0;
-        }
-        system.activeEffectBonuses.skills[targetName] += modifier;
-      } else if (effectType === 'weapon-bonus' && targetType === 'weapon') {
-        if (!system.activeEffectBonuses.weapons[targetName]) {
-          system.activeEffectBonuses.weapons[targetName] = 0;
-        }
-        system.activeEffectBonuses.weapons[targetName] += modifier;
-      } else if (effectType === 'armor-bonus') {
-        system.activeEffectBonuses.armor += modifier;
+  _applyActiveEffectBonuses(system) {
+    if (system.defense) {
+      if (typeof system.defense === 'object' && system.defense.value !== undefined) {
+        system.defense.value += system.activeEffectBonuses.defense + system.activeEffectBonuses.defenseMelee;
+        system.defense.ranged = (system.defense.ranged || 0) + system.activeEffectBonuses.defenseRanged;
+      } else if (typeof system.defense === 'number') {
+        system.defense += system.activeEffectBonuses.defense + system.activeEffectBonuses.defenseMelee;
       }
     }
 
-    if (system.defense) {
-      system.defense.value += system.activeEffectBonuses.defense;
+    if (system.health && typeof system.health === 'object' && system.health.max !== undefined) {
+      system.health.max += system.activeEffectBonuses.maxHealth;
+      if (system.health.value > system.health.max) {
+        system.health.value = system.health.max;
+      }
     }
 
     if (system.initiative) {
-      system.initiative.value += system.activeEffectBonuses.initiative;
+      if (typeof system.initiative === 'object' && system.initiative.value !== undefined) {
+        system.initiative.value += system.activeEffectBonuses.initiative;
+      } else if (typeof system.initiative === 'number') {
+        system.initiative += system.activeEffectBonuses.initiative;
+      }
     }
 
     if (system.combat) {
-
       const baseHindrance = system.combat.baseHindrance || system.combat.hindrance;
       const baseAbsorption = system.combat.baseAbsorption || system.combat.absorption;
 
       system.combat.hindrance = Math.max(0, baseHindrance - system.activeEffectBonuses.hindranceReduction);
       system.combat.absorption = baseAbsorption + system.activeEffectBonuses.absorption + system.activeEffectBonuses.armor;
-
     }
   }
 
@@ -215,6 +205,17 @@ export class RyfActor extends Actor {
         hindrance: 0
       };
     }
+
+    if (!system.states) {
+      system.states = {
+        wounded: false,
+        unconscious: false,
+        dead: false
+      };
+    }
+
+    system.states.unconscious = system.health.value <= 0;
+    system.states.dead = system.health.value <= 0;
   }
 
   async rollSkill(skillName, advantage = 'normal') {
@@ -233,6 +234,8 @@ export class RyfActor extends Actor {
 
   validateSkillPyramid() {
     const skills = this.items.filter(i => i.type === 'skill' && i.system.level > 0);
+    const spells = this.items.filter(i => i.type === 'spell' && i.system.level > 0);
+    const allSkillsAndSpells = [...skills, ...spells];
     const pyramid = CONFIG.RYF.getActivePyramid();
 
     const skillsByLevel = {};
@@ -240,8 +243,8 @@ export class RyfActor extends Actor {
       skillsByLevel[i] = 0;
     }
 
-    skills.forEach(skill => {
-      const level = skill.system.level || 0;
+    allSkillsAndSpells.forEach(item => {
+      const level = item.system.level || 0;
       skillsByLevel[level]++;
     });
 
@@ -360,6 +363,72 @@ export class RyfActor extends Actor {
       ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
     }
 
+  }
+
+  async _updateStatusEffects() {
+    const stateEffects = ['dead', 'unconscious', 'wounded'];
+
+    const currentStateEffects = this.effects.filter(e =>
+      e.statuses && stateEffects.some(s => e.statuses.has(s))
+    );
+
+    const shouldHaveEffects = new Set();
+
+    if (this.system.states?.dead) {
+      shouldHaveEffects.add('dead');
+    } else if (this.system.states?.unconscious) {
+      shouldHaveEffects.add('unconscious');
+    } else if (this.system.states?.wounded) {
+      shouldHaveEffects.add('wounded');
+    }
+
+    const currentEffectIds = new Set();
+    for (const effect of currentStateEffects) {
+      for (const status of effect.statuses) {
+        if (stateEffects.includes(status)) {
+          currentEffectIds.add(status);
+        }
+      }
+    }
+
+    const toAdd = [...shouldHaveEffects].filter(e => !currentEffectIds.has(e));
+    const toRemove = currentStateEffects.filter(e => {
+      for (const status of e.statuses) {
+        if (stateEffects.includes(status) && !shouldHaveEffects.has(status)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (toRemove.length > 0) {
+      const removeIds = toRemove.map(e => e.id);
+      await this.deleteEmbeddedDocuments('ActiveEffect', removeIds);
+    }
+
+    for (const statusId of toAdd) {
+      const statusEffect = CONFIG.statusEffects.find(s => s.id === statusId);
+      const statusName = statusEffect ? game.i18n.localize(statusEffect.name) : game.i18n.localize(`RYF.States.${statusId}`);
+
+      const effectConfig = {
+        name: statusName,
+        icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+        disabled: false,
+        transfer: false,
+        statuses: [statusId],
+        flags: {
+          ryf3: {
+            sourceType: 'system',
+            appliedBy: 'system',
+            appliedAt: Date.now(),
+            effectType: 'state',
+            condition: statusId
+          }
+        }
+      };
+
+      await this.createEmbeddedDocuments('ActiveEffect', [effectConfig]);
+    }
   }
 
   async heal(amount) {
@@ -798,25 +867,27 @@ export class RyfActor extends Actor {
       return null;
     }
 
-    const manaCost = spell.system.manaCost || 0;
-    const currentMana = this.system.mana?.value || 0;
+    if (this.type === 'character') {
+      const manaCost = spell.system.manaCost || 0;
+      const currentMana = this.system.mana?.value || 0;
 
-    if (currentMana < manaCost) {
-      ui.notifications.warn(game.i18n.format('RYF.Warnings.NotEnoughMana', {
-        required: manaCost,
-        current: currentMana
+      if (currentMana < manaCost) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.NotEnoughMana', {
+          required: manaCost,
+          current: currentMana
+        }));
+        return null;
+      }
+
+      await this.update({
+        'system.mana.value': currentMana - manaCost
+      });
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.ManaSpent', {
+        name: spell.name,
+        cost: manaCost
       }));
-      return null;
     }
-
-    await this.update({
-      'system.mana.value': currentMana - manaCost
-    });
-
-    ui.notifications.info(game.i18n.format('RYF.Notifications.ManaSpent', {
-      name: spell.name,
-      cost: manaCost
-    }));
 
     const castingDifficulty = spell.system.castingDifficulty || 15;
 
@@ -843,32 +914,322 @@ export class RyfActor extends Actor {
       targets = [this];
     }
 
-    let result = null;
+    const rawEffects = spell.system.effects || [];
+    const effects = Array.isArray(rawEffects) ? rawEffects : Object.values(rawEffects);
 
-    switch (spell.system.spellType) {
-      case 'damage':
-        result = await this._castDamageSpell(spell, targets);
-        break;
-      case 'healing':
-        result = await this._castHealingSpell(spell, targets, castingRoll);
-        break;
-      case 'buff-skill':
-      case 'buff-weapon':
-      case 'buff-armor':
-        result = await this._castBuffSpell(spell, targets);
-        break;
-      case 'effect':
-        result = await this._castEffectSpell(spell, targets);
-        break;
-      case 'generic':
-        result = await this._castGenericSpell(spell, targets);
-        break;
-      default:
-        ui.notifications.warn(game.i18n.localize('RYF.Warnings.UnknownSpellType'));
-        return null;
+    if (effects.length === 0) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.SpellHasNoEffects'));
+      return null;
     }
 
-    return result;
+    const results = [];
+
+    for (const effect of effects) {
+      let effectResult = null;
+
+      switch (effect.type) {
+        case 'immediate-damage':
+          effectResult = await this._applyImmediateDamage(effect, targets, spell);
+          break;
+        case 'immediate-healing':
+          effectResult = await this._applyImmediateHealing(effect, targets, spell);
+          break;
+        case 'buff':
+        case 'debuff':
+          effectResult = await this._applyTemporalEffect(effect, targets, spell);
+          break;
+        case 'condition':
+          effectResult = await this._applyCondition(effect, targets, spell);
+          break;
+        default:
+          console.warn(`RyF | Unknown effect type: ${effect.type}`);
+      }
+
+      if (effectResult) {
+        results.push(effectResult);
+      }
+    }
+
+    return results;
+  }
+
+  async _applyImmediateDamage(effect, targets, spell) {
+    const results = [];
+
+    let range = null;
+    if (effect.requiresAttack && effect.attackType === 'ranged') {
+      range = await this._promptRangeDialog();
+      if (!range) return null;
+    }
+
+    if (targets.length === 0) {
+      if (effect.requiresAttack) {
+        await this._rollSpellAttackForEffect(spell, effect, null, range);
+      }
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForDamage'));
+      return results;
+    }
+
+    for (const target of targets) {
+      let hitSuccess = true;
+      let attackRoll = null;
+
+      if (effect.requiresAttack) {
+        attackRoll = await this._rollSpellAttackForEffect(spell, effect, target, range);
+        hitSuccess = attackRoll.success;
+
+        if (!hitSuccess) {
+          results.push({
+            target: target,
+            hit: false,
+            damage: 0
+          });
+          continue;
+        }
+      }
+
+      let damageMultiplier = 1;
+
+      if (effect.savingThrow?.enabled) {
+        const savingThrow = await this._rollSavingThrowForEffect(target, spell, effect);
+        if (savingThrow.success) {
+          if (effect.savingThrow.halfDamageOnSave) {
+            damageMultiplier = 0.5;
+          } else {
+            damageMultiplier = 0;
+          }
+        }
+      }
+
+      if (damageMultiplier > 0) {
+        const criticalDice = attackRoll?.criticalDice || 0;
+
+        const roll = new Roll(effect.formula);
+        await roll.evaluate();
+
+        if (criticalDice > 0) {
+          const critRoll = new Roll(`${criticalDice}d10`);
+          await critRoll.evaluate();
+          roll._total += critRoll.total;
+        }
+
+        const damageAmount = Math.floor(roll.total * damageMultiplier);
+
+        const targetActor = target.actor || target;
+        await targetActor.applyDamage(damageAmount, effect.damageType, this);
+
+        results.push({
+          target: target,
+          hit: true,
+          damage: damageAmount,
+          damageRoll: roll,
+          saved: damageMultiplier < 1
+        });
+      } else {
+        results.push({
+          target: target,
+          hit: true,
+          damage: 0,
+          saved: true
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async _applyImmediateHealing(effect, targets, spell) {
+    const results = [];
+
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForHealing'));
+      return results;
+    }
+
+    for (const target of targets) {
+      const targetActor = target.actor || target;
+
+      const roll = new Roll(effect.formula);
+      await roll.evaluate();
+
+      const healingAmount = roll.total;
+
+      const currentHP = targetActor.system.health.value;
+      const maxHP = targetActor.system.health.max;
+      const newHP = Math.min(maxHP, currentHP + healingAmount);
+
+      await targetActor.update({
+        'system.health.value': newHP
+      });
+
+      results.push({
+        target: targetActor,
+        healing: healingAmount,
+        healingRoll: roll
+      });
+    }
+
+    return results;
+  }
+
+  async _applyTemporalEffect(effect, targets, spell) {
+    const results = [];
+    const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
+
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
+      return results;
+    }
+
+    for (const target of targets) {
+      let applyEffect = true;
+
+      if (effect.savingThrow?.enabled) {
+        const savingThrow = await this._rollSavingThrowForEffect(target, spell, effect);
+        applyEffect = !savingThrow.success;
+      }
+
+      if (applyEffect) {
+        const targetActor = target.actor || target;
+
+        let duration = effect.duration.value;
+
+        if (effect.duration.type === 'perLevel') {
+          duration = duration * spell.system.level;
+        }
+
+        const effectType = effect.type === 'buff' ? 'RYF.Buff' : 'RYF.Debuff';
+
+        const effectData = {
+          name: `${spell.name} (${game.i18n.localize(effectType)})`,
+          img: spell.img,
+          sourceType: 'spell',
+          sourceName: spell.name,
+          sourceId: spell.id,
+          effectType: this._getEffectTypeFromTarget(effect.target),
+          targetType: effect.target,
+          targetName: effect.targetName || '',
+          modifier: effect.modifier,
+          duration: {
+            total: duration
+          },
+          appliedBy: this.name
+        };
+
+        const activeEffect = await RyfActiveEffect.createFromSpell(targetActor, spell, effectData);
+
+        results.push({
+          target: targetActor,
+          effect: activeEffect
+        });
+      } else {
+        results.push({
+          target: target,
+          saved: true
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async _applyCondition(effect, targets, spell) {
+    const results = [];
+
+    if (targets.length === 0) {
+      ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
+      return results;
+    }
+
+    const conditionMapping = {
+      'paralyzed': 'paralysis',
+      'blinded': 'blind',
+      'stunned': 'stun',
+      'prone': 'prone',
+      'frightened': 'fear',
+      'charmed': 'charmed'
+    };
+
+    for (const target of targets) {
+      let applyEffect = true;
+
+      if (effect.savingThrow?.enabled) {
+        const savingThrow = await this._rollSavingThrowForEffect(target, spell, effect);
+        applyEffect = !savingThrow.success;
+      }
+
+      if (applyEffect) {
+        const targetActor = target.actor || target;
+
+        let duration = effect.duration.value;
+
+        if (effect.duration.type === 'perLevel') {
+          duration = duration * spell.system.level;
+        }
+
+        const statusId = conditionMapping[effect.condition] || effect.condition;
+
+        const durationConfig = {
+          turns: duration
+        };
+
+        if (game.combat && game.combat.started && game.combat.round >= 1) {
+          durationConfig.startRound = game.combat.round;
+          durationConfig.startTurn = game.combat.turn;
+        }
+
+        const statusEffect = CONFIG.statusEffects.find(s => s.id === statusId);
+        const conditionName = statusEffect ? game.i18n.localize(statusEffect.name) : game.i18n.localize(`RYF.Magic.Conditions.${effect.condition.charAt(0).toUpperCase() + effect.condition.slice(1)}`);
+
+        const effectConfig = {
+          name: conditionName,
+          icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+          origin: spell.uuid,
+          disabled: false,
+          transfer: false,
+          statuses: [statusId],
+          duration: durationConfig,
+          flags: {
+            ryf3: {
+              sourceType: 'spell',
+              sourceName: spell.name,
+              sourceId: spell.id,
+              appliedBy: this.name,
+              appliedAt: Date.now(),
+              effectType: 'condition',
+              targetType: 'condition',
+              targetName: '',
+              condition: statusId
+            }
+          }
+        };
+
+        const created = await targetActor.createEmbeddedDocuments('ActiveEffect', [effectConfig]);
+
+        if (created && created.length > 0) {
+          const notificationName = `${spell.name} (${conditionName})`;
+          ui.notifications.info(game.i18n.format('RYF.Notifications.ConditionApplied', {
+            condition: notificationName,
+            actor: targetActor.name,
+            duration: duration
+          }));
+
+          results.push({
+            target: targetActor,
+            condition: effect.condition,
+            duration: duration,
+            effect: created[0]
+          });
+        }
+      } else {
+        results.push({
+          target: target,
+          saved: true
+        });
+      }
+    }
+
+    return results;
   }
 
   async _castDamageSpell(spell, targets) {
@@ -982,7 +1343,7 @@ export class RyfActor extends Actor {
 
   async _castBuffSpell(spell, targets) {
     const results = [];
-    const { RyfActiveEffect } = await import('./active-effect.mjs');
+    const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
 
     if (targets.length === 0) {
       ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
@@ -994,7 +1355,7 @@ export class RyfActor extends Actor {
 
       let duration = spell.system.effect.duration.value;
 
-      if (spell.system.effect.duration.perLevel) {
+      if (spell.system.effect.duration.type === 'perLevel') {
         duration = duration * spell.system.level;
       }
 
@@ -1009,15 +1370,12 @@ export class RyfActor extends Actor {
         targetName: spell.system.effect.targetName || '',
         modifier: spell.system.effect.modifier,
         duration: {
-          remaining: duration,
           total: duration
         },
         appliedBy: this.name
       };
 
-
-      const effect = await RyfActiveEffect.create(targetActor, effectData);
-
+      const effect = await RyfActiveEffect.createFromSpell(targetActor, spell, effectData);
 
       results.push({
         target: targetActor,
@@ -1030,7 +1388,7 @@ export class RyfActor extends Actor {
 
   async _castEffectSpell(spell, targets) {
     const results = [];
-    const { RyfActiveEffect } = await import('./active-effect.mjs');
+    const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
 
     for (const target of targets) {
       let applyEffect = true;
@@ -1043,7 +1401,7 @@ export class RyfActor extends Actor {
       if (applyEffect) {
         let duration = spell.system.effect.duration.value;
 
-        if (spell.system.effect.duration.perLevel) {
+        if (spell.system.effect.duration.type === 'perLevel') {
           duration = duration * spell.system.level;
         }
 
@@ -1058,13 +1416,12 @@ export class RyfActor extends Actor {
           targetName: spell.system.effect.targetName,
           modifier: spell.system.effect.modifier,
           duration: {
-            remaining: duration,
             total: duration
           },
           appliedBy: this.name
         };
 
-        const effect = await RyfActiveEffect.create(target.actor, effectData);
+        const effect = await RyfActiveEffect.createFromSpell(target.actor, spell, effectData);
 
         results.push({
           target: target,
@@ -1227,5 +1584,92 @@ export class RyfActor extends Actor {
         return 'skill';
     }
   }
-}
 
+  async _rollSpellAttackForEffect(spell, effect, target, range = null) {
+    const spellAsWeapon = {
+      name: spell.name,
+      type: 'weapon',
+      system: {
+        category: effect.attackType
+      }
+    };
+
+    if (effect.attackType === 'melee') {
+      let targetDefense = null;
+
+      if (target) {
+        const targetActor = target.actor || target;
+        if (targetActor.type === 'character') {
+          targetDefense = targetActor.system.defense?.value || 10;
+        } else if (targetActor.type === 'npc') {
+          targetDefense = targetActor.system.defense || 10;
+        }
+      }
+
+      return await this.rollMeleeAttack(spellAsWeapon, targetDefense, null, 0);
+    } else if (effect.attackType === 'ranged') {
+      let targetDefenseRanged = null;
+
+      if (target) {
+        const targetActor = target.actor || target;
+        targetDefenseRanged = targetActor.system.defense?.ranged || 0;
+      }
+
+      return await this.rollRangedAttack(spellAsWeapon, range, null, targetDefenseRanged, 0);
+    }
+
+    return null;
+  }
+
+  async _rollSavingThrowForEffect(target, spell, effect) {
+    const targetActor = target.actor || target;
+    const attribute = effect.savingThrow.attribute;
+    const difficulty = effect.savingThrow.difficulty;
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+
+    const savingRoll = await RyfRoll.rollAttribute(
+      targetActor,
+      attribute,
+      difficulty,
+      'normal'
+    );
+
+    return savingRoll;
+  }
+
+  _getEffectTypeFromTarget(target) {
+    switch (target) {
+      case 'attribute':
+        return 'attribute-bonus';
+      case 'skill':
+        return 'skill-bonus';
+      case 'weapon-damage':
+        return 'weapon-damage-bonus';
+      case 'weapon-attack':
+        return 'weapon-attack-bonus';
+      case 'armor':
+        return 'armor-bonus';
+      case 'defense':
+        return 'defense-bonus';
+      case 'defense-melee':
+        return 'defense-melee-bonus';
+      case 'defense-ranged':
+        return 'defense-ranged-bonus';
+      case 'attack-melee':
+        return 'attack-melee-bonus';
+      case 'attack-ranged':
+        return 'attack-ranged-bonus';
+      case 'max-health':
+        return 'max-health-bonus';
+      case 'initiative':
+        return 'initiative-bonus';
+      case 'absorption':
+        return 'absorption-bonus';
+      case 'hindrance-reduction':
+        return 'hindrance-reduction';
+      default:
+        return 'skill-bonus';
+    }
+  }
+}

@@ -10,7 +10,7 @@
   {{#if wounded}}
   <div class="wounded-indicator">
     <i class="fas fa-heart-broken"></i>
-    <strong>{{localize "RYF.States.Wounded"}}</strong>
+    <strong>{{localize "RYF.States.wounded"}}</strong>
   </div>
   {{/if}}
 
@@ -18,12 +18,32 @@
     <span class="formula-part">{{localize "RYF.InitiativeBase"}}: {{initiativeBase}}</span>
     {{#if (gt hindrance 0)}}
     <span class="formula-separator">-</span>
-    <span class="formula-part hindrance">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
     {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
-      <i class="fas fa-dice-d10"></i> {{diceResult}}
+      {{diceRoll.chosen}}
     </span>
+  </div>
+
+  <div class="dice-results">
+    <div class="dice-pool">
+      {{#each diceRoll.sorted as |die index|}}
+        <div class="die d10 {{#if (eq index diceRoll.chosenIndex)}}chosen{{/if}}">
+          <i class="fas fa-dice-d10"></i>
+          <span class="die-value">{{die}}</span>
+        </div>
+      {{/each}}
+    </div>
+
+    {{#if diceRoll.exploded}}
+    <div class="explosions">
+      <i class="fas fa-burst"></i> {{localize "RYF.Exploded"}}:
+      {{#each diceRoll.explosions as |explosion|}}
+        <span class="explosion-value">+{{explosion}}</span>
+      {{/each}}
+    </div>
+    {{/if}}
   </div>
 
   <div class="roll-total">

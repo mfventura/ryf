@@ -139,21 +139,21 @@ RYF.getAvailableSkills = function() {
 
 RYF.getActivePyramid = function() {
   const type = game.settings.get('ryf3', 'defaultCharacterType');
-  
+
   if (type === 'custom') {
     const custom = game.settings.get('ryf3', 'customPyramid');
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
     const pyramid = [];
-    
-    if (custom.level6 > 0) pyramid.push({ level: 6, count: custom.level6 });
-    if (custom.level5 > 0) pyramid.push({ level: 5, count: custom.level5 });
-    if (custom.level4 > 0) pyramid.push({ level: 4, count: custom.level4 });
-    if (custom.level3 > 0) pyramid.push({ level: 3, count: custom.level3 });
-    if (custom.level2 > 0) pyramid.push({ level: 2, count: custom.level2 });
-    if (custom.level1 > 0) pyramid.push({ level: 1, count: custom.level1 });
-    
+
+    for (let i = maxLevel; i >= 1; i--) {
+      if (custom[`level${i}`] > 0) {
+        pyramid.push({ level: i, count: custom[`level${i}`] });
+      }
+    }
+
     return pyramid;
   }
-  
+
   return RYF.skillPyramids[type] || RYF.skillPyramids.specialistHeroic;
 };
 

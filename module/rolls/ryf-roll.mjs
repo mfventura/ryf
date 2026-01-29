@@ -2,7 +2,7 @@ import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess }
 
 export class RyfRoll {
   
-  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal') {
+  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0) {
     const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
 
     if (!skill) {
@@ -14,13 +14,13 @@ export class RyfRoll {
     const attributeValue = attribute ? attribute.value : 0;
     const skillLevel = skill.system.level || 0;
 
-    const effectBonus = actor.system.activeEffectBonuses?.skills?.[skillName] || 0;
+    const effectBonus = actor.system.activeEffectBonuses?.skills?.[skill.name] || 0;
 
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance;
+    const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, difficulty, fumble);
@@ -39,6 +39,7 @@ export class RyfRoll {
       difficulty: difficulty,
       mode: mode,
       hindrance: hindrance,
+      modifier: modifier,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -88,9 +89,17 @@ export class RyfRoll {
     const attribute = actor.system.attributes[attributeName];
     const attributeValue = attribute ? attribute.value : 0;
 
+    const skillEffectBonus = (skill && actor.system.activeEffectBonuses?.skills?.[skill.name]) || 0;
+
+    const attackBonus = weaponCategory === 'melee'
+      ? (actor.system.activeEffectBonuses?.attackMelee || 0)
+      : (actor.system.activeEffectBonuses?.attackRanged || 0);
+
+    const weaponAttackBonus = (actor.system.activeEffectBonuses?.weaponsAttack?.[weapon.name]) || 0;
+
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + diceRoll.result + modifier;
+    const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + diceRoll.result + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, targetDefense, fumble);
@@ -106,6 +115,9 @@ export class RyfRoll {
       attribute: attributeName,
       attributeValue: attributeValue,
       skillLevel: skillLevel,
+      skillEffectBonus: skillEffectBonus,
+      attackBonus: attackBonus,
+      weaponAttackBonus: weaponAttackBonus,
       targetDefense: targetDefense,
       mode: mode,
       modifier: modifier,
@@ -129,8 +141,8 @@ export class RyfRoll {
 
     let effectBonus = 0;
     if (actor) {
-      if (actor.system.activeEffectBonuses?.weapons) {
-        effectBonus = actor.system.activeEffectBonuses.weapons[weapon.name] || 0;
+      if (actor.system.activeEffectBonuses?.weaponsDamage) {
+        effectBonus = actor.system.activeEffectBonuses.weaponsDamage[weapon.name] || 0;
       }
     }
 
@@ -230,7 +242,8 @@ export class RyfRoll {
   }
 
   static async rollSpellCasting(actor, spell, difficulty, mode = 'normal', modifier = 0) {
-    const intelligence = actor.system.attributes.inteligencia.value;
+    const isNPC = actor.type === 'npc';
+    const intelligence = isNPC ? 0 : actor.system.attributes.inteligencia.value;
     const spellLevel = spell.system.level;
 
     const diceRoll = await roll1o3d10(mode);
@@ -256,7 +269,8 @@ export class RyfRoll {
       success: success,
       margin: margin,
       fumble: fumble,
-      criticalDice: criticalDice
+      criticalDice: criticalDice,
+      isNPC: isNPC
     };
 
     await this.toMessage(rollData);
@@ -293,14 +307,22 @@ export class RyfRoll {
   }
 
   static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal') {
-    const attribute = actor.system.attributes[attributeName];
+    let attributeValue;
 
-    if (!attribute) {
-      ui.notifications.warn(game.i18n.format('RYF.Warnings.AttributeNotFound', { attribute: attributeName }));
-      return null;
+    if (actor.type === 'npc') {
+      const bonus = await this._promptNPCSavingThrowBonus(actor, attributeName, difficulty);
+      if (bonus === null) return null;
+      attributeValue = bonus;
+    } else {
+      const attribute = actor.system.attributes[attributeName];
+
+      if (!attribute) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.AttributeNotFound', { attribute: attributeName }));
+        return null;
+      }
+
+      attributeValue = attribute.value;
     }
-
-    const attributeValue = attribute.value;
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -323,12 +345,61 @@ export class RyfRoll {
       success: success,
       margin: margin,
       fumble: fumble,
-      criticalDice: criticalDice
+      criticalDice: criticalDice,
+      isNPC: actor.type === 'npc'
     };
 
     await this.toMessage(rollData);
 
     return rollData;
+  }
+
+  static async _promptNPCSavingThrowBonus(actor, attributeName, difficulty) {
+    const attributeLabel = game.i18n.localize(`RYF.Attributes.${attributeName.charAt(0).toUpperCase() + attributeName.slice(1)}`);
+
+    return new Promise((resolve) => {
+      new Dialog({
+        title: game.i18n.localize('RYF.NPC.SavingThrowBonus'),
+        content: `
+          <form>
+            <div class="npc-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <img src="${actor.img}" alt="${actor.name}" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--ryf-border);"/>
+                <strong>${actor.name}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span><i class="fas fa-shield-alt"></i> ${game.i18n.localize('RYF.SavingThrow')}: ${attributeLabel}</span>
+                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Difficulty')}: ${difficulty}</span>
+              </div>
+            </div>
+            <p style="margin-bottom: 12px; color: var(--ryf-text-secondary);">
+              ${game.i18n.localize('RYF.NPC.SavingThrowBonusDescription')}
+            </p>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.NPC.SavingThrowBonusLabel')}</label>
+              <input type="number" name="bonus" value="0" step="1" autofocus style="width: 100%;"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d20"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => {
+              const bonus = parseInt(html.find('[name="bonus"]').val()) || 0;
+              resolve(bonus);
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
   }
 
   static async toMessage(rollData) {

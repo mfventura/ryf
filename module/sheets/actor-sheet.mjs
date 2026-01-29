@@ -8,7 +8,10 @@ export class RyfActorSheet extends ActorSheet {
       width: 720,
       height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }],
-      dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
+      dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
+      submitOnChange: true,
+      closeOnSubmit: false,
+      scrollY: [".tab", ".scrollable", ".sheet-body", ".item-list"]
     });
   }
 
@@ -84,7 +87,6 @@ export class RyfActorSheet extends ActorSheet {
     const shields = [];
     const equipment = [];
     const spells = [];
-    const activeEffects = [];
     const npcAttacks = [];
 
     for (let i of context.items) {
@@ -102,15 +104,62 @@ export class RyfActorSheet extends ActorSheet {
         equipment.push(i);
       } else if (i.type === 'spell') {
         spells.push(i);
-      } else if (i.type === 'active-effect') {
-        activeEffects.push(i);
       } else if (i.type === 'npc-attack') {
         npcAttacks.push(i);
       }
     }
 
-    skills.sort((a, b) => (b.system.level || 0) - (a.system.level || 0));
-    activeEffects.sort((a, b) => (b.system.duration.remaining || 0) - (a.system.duration.remaining || 0));
+    const activeEffects = this.actor.effects
+      .filter(e => !e.disabled)
+      .map(e => {
+        const effect = e.toObject();
+        effect.isTemporary = e.duration?.turns > 0;
+
+        const totalTurns = e.duration?.turns || 0;
+        let remainingTurns = totalTurns;
+
+        if (e.duration?.startTurn !== undefined && game.combat) {
+          const currentTurn = game.combat.turn;
+          const currentRound = game.combat.round;
+          const startTurn = e.duration.startTurn;
+          const startRound = e.duration.startRound || 1;
+
+          const elapsedRounds = currentRound - startRound;
+          const elapsedTurns = elapsedRounds * game.combat.combatants.size + (currentTurn - startTurn);
+          remainingTurns = Math.max(0, totalTurns - elapsedTurns);
+        }
+
+        effect.durationRemaining = remainingTurns;
+        effect.durationTotal = totalTurns;
+
+        const isNativeCondition = e.statuses && e.statuses.size > 0;
+
+        if (e.flags?.ryf3) {
+          effect.sourceName = e.flags.ryf3.sourceName || e.name;
+          effect.sourceType = e.flags.ryf3.sourceType || 'unknown';
+          effect.effectType = e.flags.ryf3.effectType || 'unknown';
+          effect.targetType = e.flags.ryf3.targetType || 'unknown';
+          effect.targetName = e.flags.ryf3.targetName || '';
+          effect.modifier = e.changes?.[0]?.value || 0;
+        } else if (isNativeCondition) {
+          effect.sourceName = e.name;
+          effect.sourceType = 'condition';
+          effect.effectType = 'condition';
+          effect.targetType = 'condition';
+          effect.targetName = '';
+          effect.modifier = 0;
+        } else {
+          effect.sourceName = e.name || game.i18n.localize('RYF.Unknown');
+          effect.sourceType = 'other';
+          effect.effectType = 'other';
+          effect.targetType = 'other';
+          effect.targetName = '';
+          effect.modifier = e.changes?.[0]?.value || 0;
+        }
+
+        return effect;
+      })
+      .sort((a, b) => (b.durationRemaining || 0) - (a.durationRemaining || 0));
 
     context.skills = skills;
     context.weapons = weapons;
@@ -118,6 +167,7 @@ export class RyfActorSheet extends ActorSheet {
     context.shields = shields;
     context.equipment = equipment;
     context.spells = spells;
+    context.hasSpells = spells.length > 0;
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
   }
@@ -140,6 +190,7 @@ export class RyfActorSheet extends ActorSheet {
 
     html.find('.spell-cast').click(this._onSpellCast.bind(this));
     html.find('.effect-remove').click(this._onRemoveEffect.bind(this));
+    html.find('.effect-toggle').click(this._onToggleEffect.bind(this));
 
     html.find('.npc-attack-roll').click(this._onNpcAttackRoll.bind(this));
 
@@ -258,7 +309,7 @@ export class RyfActorSheet extends ActorSheet {
           ` : ''}
           ${isWounded ? `
           <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
           </div>
           ` : ''}
           <div class="form-group">
@@ -326,7 +377,7 @@ export class RyfActorSheet extends ActorSheet {
       const rollParams = await this._promptRollDialog(item.name, defaultDifficulty, targetWillpower);
       if (!rollParams) return;
 
-      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode);
+      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier);
     }
   }
 
@@ -342,7 +393,7 @@ export class RyfActorSheet extends ActorSheet {
           <form>
             ${isWounded ? `
             <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
             </div>
             ` : ''}
             ${targetWillpower ? `
@@ -370,6 +421,10 @@ export class RyfActorSheet extends ActorSheet {
                 <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
           </form>
         `,
         buttons: {
@@ -379,7 +434,8 @@ export class RyfActorSheet extends ActorSheet {
             callback: (html) => {
               const difficulty = parseInt(html.find('[name="difficulty"]').val());
               const mode = html.find('[name="mode"]').val();
-              resolve({ difficulty, mode });
+              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
+              resolve({ difficulty, mode, modifier });
             }
           },
           cancel: {
@@ -434,6 +490,7 @@ export class RyfActorSheet extends ActorSheet {
     const isWounded = this.actor.system.states?.wounded || false;
     const defaultMode = isWounded ? 'disadvantage' : 'normal';
     const castingDifficulty = spell.system.castingDifficulty || 15;
+    const isNPC = this.actor.type === 'npc';
     const manaCost = spell.system.manaCost || 0;
     const currentMana = this.actor.system.mana?.value || 0;
 
@@ -444,17 +501,17 @@ export class RyfActorSheet extends ActorSheet {
           <form>
             ${isWounded ? `
             <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.Wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
+              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
             </div>
             ` : ''}
             <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                 <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
-                <span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>
+                ${!isNPC ? `<span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>` : ''}
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Magic.CastingDifficulty')}: ${castingDifficulty}</span>
-                <span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>
+                ${!isNPC ? `<span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>` : ''}
               </div>
             </div>
             <div class="form-group">
@@ -516,7 +573,7 @@ export class RyfActorSheet extends ActorSheet {
   async _onRemoveEffect(event) {
     event.preventDefault();
     const effectId = event.currentTarget.dataset.effectId;
-    const effect = this.actor.items.get(effectId);
+    const effect = this.actor.effects.get(effectId);
 
     if (effect) {
       const confirmed = await Dialog.confirm({
@@ -528,6 +585,16 @@ export class RyfActorSheet extends ActorSheet {
         await effect.delete();
         ui.notifications.info(game.i18n.format('RYF.Notifications.EffectRemoved', { name: effect.name }));
       }
+    }
+  }
+
+  async _onToggleEffect(event) {
+    event.preventDefault();
+    const effectId = event.currentTarget.dataset.effectId;
+    const effect = this.actor.effects.get(effectId);
+
+    if (effect) {
+      await effect.update({ disabled: !effect.disabled });
     }
   }
 
@@ -595,10 +662,11 @@ export class RyfActorSheet extends ActorSheet {
     const attributePoints = this.actor.system.attributePoints;
     const newUsed = attributePoints.used + diff;
 
-    if (newUsed > attributePoints.max) {
+    const totalXP = this.actor.system.experience?.total || 0;
+    const hasExperience = totalXP > 0;
+
+    if (!hasExperience && newUsed > attributePoints.max) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.NotEnoughAttributePoints'));
-      input.value = currentValue;
-      return;
     }
 
     if (value < 1) {

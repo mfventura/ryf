@@ -1,14 +1,15 @@
 <form class="{{cssClass}} flexcol" autocomplete="off">
 
-  <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+  <header class="sheet-header spell-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ArmorName'}}"/></h1>
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.ArmorName'}}" class="spell-name-input"/>
     </div>
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
     <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
@@ -37,6 +38,49 @@
         <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
       </div>
 
+    </div>
+
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      <div class="effects-header">
+        <h3>{{localize "RYF.ItemEffects"}}</h3>
+        <button type="button" class="effect-add" title="{{localize 'RYF.AddEffect'}}">
+          <i class="fas fa-plus"></i> {{localize "RYF.AddEffect"}}
+        </button>
+      </div>
+
+      <div class="effects-list">
+        {{#each system.effects as |effect index|}}
+        <div class="effect-item {{#if effect.collapsed}}collapsed{{/if}}" data-effect-index="{{index}}">
+          <div class="effect-header">
+            <button type="button" class="effect-collapse" data-effect-index="{{index}}">
+              <i class="fas {{#if effect.collapsed}}fa-chevron-right{{else}}fa-chevron-down{{/if}}"></i>
+            </button>
+            <div class="effect-summary">
+              <span class="effect-type {{effect.type}}">{{localize (concat "RYF.Magic.EffectTypes." (capitalize effect.type))}}</span>
+              <span class="effect-target-summary">
+                {{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}
+                {{#if effect.targetName}}
+                  ({{effect.targetName}})
+                {{/if}}
+              </span>
+              <span class="effect-modifier-summary">
+                {{#if (gt effect.modifier 0)}}+{{/if}}{{effect.modifier}}
+              </span>
+            </div>
+            <button type="button" class="effect-delete" data-effect-index="{{index}}" title="{{localize 'RYF.Delete'}}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <div class="effect-config" {{#if effect.collapsed}}style="display: none;"{{/if}}>
+            {{> "systems/ryf3/templates/item/partials/effect-item.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
+          </div>
+        </div>
+        {{/each}}
+
+        {{#unless system.effects.length}}
+        <p class="no-effects">{{localize "RYF.NoEffects"}}</p>
+        {{/unless}}
+      </div>
     </div>
 
   </section>
