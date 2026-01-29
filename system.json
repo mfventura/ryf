@@ -103,9 +103,9 @@
       "packs": ["skills", "spells", "npcs", "weapons", "armor", "shields", "equipment"]
     }
   ],
-  "url": "",
-  "manifest": "",
-  "download": "",
+  "url": "https://github.com/mfventura/ryf",
+  "manifest": "https://github.com/mfventura/ryf/releases/latest/download/system.json",
+  "download": "https://github.com/mfventura/ryf/releases/latest/download/ryf3.zip",
   "license": "LICENSE",
   "readme": "README.md",
   "media": [
