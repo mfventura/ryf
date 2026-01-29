@@ -107,14 +107,5 @@ export function registerSystemSettings() {
     type: Number,
     default: 30
   });
-
-  game.settings.register('ryf3', 'autoCalculateDefense', {
-    name: 'RYF.Settings.AutoCalculateDefense.Name',
-    hint: 'RYF.Settings.AutoCalculateDefense.Hint',
-    scope: 'world',
-    config: true,
-    type: Boolean,
-    default: true
-  });
 }
 

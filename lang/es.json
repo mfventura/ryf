@@ -338,10 +338,6 @@
         "Hint": "Cantidad de puntos disponibles para distribuir en atributos. Realista: 22, Heroico: 30, Épico: 35+",
         "Name": "Puntos de Atributos"
       },
-      "AutoCalculateDefense": {
-        "Hint": "Si está activo, la Defensa se calcula automáticamente (Destreza + Esquivar + 5). Si está inactivo, se puede editar manualmente.",
-        "Name": "Calcular Defensa Automáticamente"
-      },
       "CharacterTypes": {
         "Custom": "Personalizado",
         "SpecialistHeroic": "Especialista Heroico (1×6, 3×5, 3×4, 3×3, 3×2, 3×1)",
