@@ -1,0 +1,35 @@
+{
+  "_id": "VIJTzP6EoAyXYeKa",
+  "name": "Rifle",
+  "type": "weapon",
+  "img": "icons/weapons/guns/rifle-brown.webp",
+  "system": {
+    "description": "Arma de fuego de dos manos, largo alcance y gran precisión.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 1000,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "3d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 20,
+      "medium": 60,
+      "long": 100
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!VIJTzP6EoAyXYeKa"
+}

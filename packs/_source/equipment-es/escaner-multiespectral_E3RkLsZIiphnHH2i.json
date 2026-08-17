@@ -1,0 +1,22 @@
+{
+  "_id": "E3RkLsZIiphnHH2i",
+  "_key": "!items!E3RkLsZIiphnHH2i",
+  "name": "Escáner multiespectral",
+  "type": "equipment",
+  "img": "icons/sundries/gaming/playing-cards-grey.webp",
+  "system": {
+    "description": "Escáner avanzado. Detecta formas de vida, energía y materiales. Otorga +3 a Buscar.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 3000,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

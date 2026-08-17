@@ -1,0 +1,27 @@
+{
+  "_id": "UoEl0Mx8fNNB1om3",
+  "_key": "!items!UoEl0Mx8fNNB1om3",
+  "name": "Campo de fuerza portátil",
+  "type": "shield",
+  "img": "icons/magic/defensive/shield-barrier-glowing-pentagon-blue.webp",
+  "system": {
+    "description": "Escudo de energía de alta tecnología. Excelente protección con mínimo estorbo.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 8000,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 3,
+      "ranged": 6
+    },
+    "hindrance": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

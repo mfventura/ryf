@@ -1,0 +1,45 @@
+{
+  "_id": "436gUg01fSSQ2Ihn",
+  "name": "Toque Vampírico",
+  "type": "spell",
+  "img": "icons/magic/death/hand-dirt-undead-zombie-green.webp",
+  "system": {
+    "description": "Ataque de contacto que inflige 3d6 de daño necrótico y cura al mago por la mitad del daño infligido.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "sOqhZZ89CeOIMBrz",
+        "type": "immediate-damage",
+        "formula": "3d6",
+        "damageType": "necrotic",
+        "requiresAttack": true,
+        "attackType": "melee",
+        "savingThrow": {
+          "enabled": false,
+          "attribute": "destreza",
+          "difficulty": 20,
+          "halfDamageOnSave": false
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!436gUg01fSSQ2Ihn"
+}

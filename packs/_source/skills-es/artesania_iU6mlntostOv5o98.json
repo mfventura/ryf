@@ -1,0 +1,22 @@
+{
+  "_id": "iU6mlntostOv5o98",
+  "_key": "!items!iU6mlntostOv5o98",
+  "name": "Artesanía",
+  "type": "skill",
+  "img": "icons/tools/smithing/hammer-sledge-steel-grey.webp",
+  "system": {
+    "description": "Habilidad para crear y reparar objetos artesanales (carpintería, herrería, etc.).",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "craft",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

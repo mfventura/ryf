@@ -1,0 +1,22 @@
+{
+  "_id": "VHBo5aSL3yBekmTG",
+  "_key": "!items!VHBo5aSL3yBekmTG",
+  "name": "Empatía",
+  "type": "skill",
+  "img": "icons/magic/life/heart-cross-strong-flame-green-yellow.webp",
+  "system": {
+    "description": "Habilidad para comprender emociones, intenciones y detectar mentiras.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "social",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

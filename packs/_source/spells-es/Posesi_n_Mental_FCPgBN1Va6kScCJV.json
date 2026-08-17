@@ -1,0 +1,30 @@
+{
+  "_id": "FCPgBN1Va6kScCJV",
+  "name": "Posesión Mental",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
+  "system": {
+    "description": "Permite al mago poseer el cuerpo de otra criatura. El objetivo puede resistirse con Voluntad. Dura 10 minutos.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "distance",
+      "maxDistance": 10
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!FCPgBN1Va6kScCJV"
+}

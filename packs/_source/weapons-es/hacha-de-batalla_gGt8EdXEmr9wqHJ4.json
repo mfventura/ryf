@@ -1,0 +1,35 @@
+{
+  "_id": "gGt8EdXEmr9wqHJ4",
+  "_key": "!items!gGt8EdXEmr9wqHJ4",
+  "name": "Hacha de batalla",
+  "type": "weapon",
+  "img": "icons/weapons/axes/axe-double-engraved-red.webp",
+  "system": {
+    "description": "Hacha grande de una mano con gran poder de corte.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 75,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "2d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

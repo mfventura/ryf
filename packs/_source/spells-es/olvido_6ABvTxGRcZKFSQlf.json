@@ -1,0 +1,30 @@
+{
+  "_id": "6ABvTxGRcZKFSQlf",
+  "name": "Olvido",
+  "type": "spell",
+  "img": "icons/magic/control/hypnosis-mesmerism-swirl-purple.webp",
+  "system": {
+    "description": "Borra los recuerdos del objetivo de los últimos 10 minutos. El objetivo puede resistirse con Voluntad.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "distance",
+      "maxDistance": 10
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!6ABvTxGRcZKFSQlf"
+}

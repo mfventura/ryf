@@ -1,0 +1,24 @@
+{
+  "_id": "tXl9HunP1nDKSuAd",
+  "name": "Armadura de placas",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-layered-steel-grey.webp",
+  "system": {
+    "description": "Armadura pesada de placas de metal articuladas. Ofrece la máxima protección pero limita significativamente el movimiento.",
+    "quantity": 1,
+    "weight": 25,
+    "price": 1000,
+    "equipped": false,
+    "identified": true,
+    "protection": 4,
+    "hindrance": 3
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!tXl9HunP1nDKSuAd"
+}

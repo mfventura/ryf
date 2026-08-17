@@ -1,0 +1,30 @@
+{
+  "_id": "WXCLlRixySJK9CSg",
+  "name": "Disipar Magia",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-deflect-blue.webp",
+  "system": {
+    "description": "Permite cancelar un hechizo activo. La dificultad es igual a la dificultad del hechizo original +2, y el coste de maná es el mismo que el hechizo a disipar.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 12,
+    "range": {
+      "type": "distance",
+      "maxDistance": 50
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!WXCLlRixySJK9CSg"
+}

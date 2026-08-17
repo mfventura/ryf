@@ -1,0 +1,22 @@
+{
+  "_id": "oaofFEZbl6hxDo8w",
+  "name": "Ciencias",
+  "type": "skill",
+  "img": "icons/tools/laboratory/beaker-fluid-blue.webp",
+  "system": {
+    "description": "Conocimiento profesional en campos científicos (física, química, biología, etc.).",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!oaofFEZbl6hxDo8w"
+}

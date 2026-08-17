@@ -1,0 +1,52 @@
+{
+  "_id": "7iR5Pvkje2lfxZg0",
+  "name": "Orco",
+  "type": "npc",
+  "img": "icons/creatures/humanoids/orc-green.webp",
+  "system": {
+    "biography": "Guerrero salvaje y agresivo. Vive para la batalla y el saqueo.",
+    "health": {
+      "value": 20,
+      "max": 20
+    },
+    "initiative": 14,
+    "defense": 17,
+    "absorption": 0,
+    "willpower": 10,
+    "attacks": [],
+    "cr": 1,
+    "isMinion": true
+  },
+  "items": [
+    {
+      "_id": "V4VTXPX88NMGDz72",
+      "name": "Hacha de batalla",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!7iR5Pvkje2lfxZg0.V4VTXPX88NMGDz72"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!7iR5Pvkje2lfxZg0"
+}

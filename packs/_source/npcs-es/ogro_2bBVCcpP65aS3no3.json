@@ -1,0 +1,52 @@
+{
+  "_id": "2bBVCcpP65aS3no3",
+  "name": "Ogro",
+  "type": "npc",
+  "img": "icons/creatures/humanoids/ogre-giant-brown.webp",
+  "system": {
+    "biography": "Gigante brutal y estúpido. Increíblemente fuerte pero lento.",
+    "health": {
+      "value": 60,
+      "max": 60
+    },
+    "initiative": 10,
+    "defense": 14,
+    "absorption": 1,
+    "willpower": 8,
+    "attacks": [],
+    "cr": 5,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "QrnixZX0clgCR7jN",
+      "name": "Garrote enorme",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 15,
+        "damage": {
+          "base": "3d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!2bBVCcpP65aS3no3.QrnixZX0clgCR7jN"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!2bBVCcpP65aS3no3"
+}

@@ -1,0 +1,27 @@
+{
+  "_id": "MBjLN3TwSzcmfcXL",
+  "_key": "!items!MBjLN3TwSzcmfcXL",
+  "name": "Escudo normal",
+  "type": "shield",
+  "img": "icons/equipment/shield/buckler-wooden-boss-brown.webp",
+  "system": {
+    "description": "Escudo pequeño y manejable. Proporciona protección básica sin estorbar.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 50,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 1,
+      "ranged": 2
+    },
+    "hindrance": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "KShqTADHsfmM1dJ8",
+  "name": "Pistola de plasma",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-pistol-energy-blue.webp",
+  "system": {
+    "description": "Arma de energía compacta que dispara proyectiles de plasma.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 3500,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "3d6",
+      "bonus": 0,
+      "type": "energy"
+    },
+    "range": {
+      "short": 15,
+      "medium": 40,
+      "long": 70
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!KShqTADHsfmM1dJ8"
+}

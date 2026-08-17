@@ -1,0 +1,30 @@
+{
+  "_id": "UshnOKKjbJJsgFNM",
+  "name": "Invisibilidad",
+  "type": "spell",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+  "system": {
+    "description": "Hace invisible al objetivo. Dura 10 minutos o hasta que el objetivo ataque.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!UshnOKKjbJJsgFNM"
+}

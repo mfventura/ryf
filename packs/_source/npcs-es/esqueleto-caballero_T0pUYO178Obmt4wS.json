@@ -1,0 +1,52 @@
+{
+  "_id": "T0pUYO178Obmt4wS",
+  "_key": "!actors!T0pUYO178Obmt4wS",
+  "name": "Esqueleto caballero",
+  "type": "npc",
+  "img": "icons/magic/death/undead-skeleton-armor-helm-blue.webp",
+  "system": {
+    "biography": "Guerrero no-muerto con armadura y armas. Más peligroso que un esqueleto común.",
+    "health": {
+      "value": 32,
+      "max": 32
+    },
+    "initiative": 14,
+    "defense": 16,
+    "absorption": 0,
+    "willpower": 10,
+    "attacks": [],
+    "cr": 2,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "sZcNndeSD9VgBfKI",
+      "_key": "!actors.items!T0pUYO178Obmt4wS.sZcNndeSD9VgBfKI",
+      "name": "Espada larga",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "2d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

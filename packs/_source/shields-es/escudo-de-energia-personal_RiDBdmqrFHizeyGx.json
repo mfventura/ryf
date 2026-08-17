@@ -1,0 +1,27 @@
+{
+  "_id": "RiDBdmqrFHizeyGx",
+  "_key": "!items!RiDBdmqrFHizeyGx",
+  "name": "Escudo de energía personal",
+  "type": "shield",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+  "system": {
+    "description": "Generador de campo de fuerza portátil. Protección avanzada sin peso físico.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 5000,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 2,
+      "ranged": 5
+    },
+    "hindrance": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

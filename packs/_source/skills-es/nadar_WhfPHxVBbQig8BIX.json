@@ -1,0 +1,22 @@
+{
+  "_id": "WhfPHxVBbQig8BIX",
+  "name": "Nadar",
+  "type": "skill",
+  "img": "icons/magic/water/wave-water-blue.webp",
+  "system": {
+    "description": "Habilidad para desplazarse en el agua.",
+    "level": 0,
+    "attribute": "fisico",
+    "category": "movement",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!WhfPHxVBbQig8BIX"
+}

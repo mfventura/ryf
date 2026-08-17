@@ -1,0 +1,22 @@
+{
+  "_id": "aZsZbxVytXVOmn06",
+  "_key": "!items!aZsZbxVytXVOmn06",
+  "name": "Ganzúas",
+  "type": "equipment",
+  "img": "icons/sundries/misc/lockpicks-steel.webp",
+  "system": {
+    "description": "Set de ganzúas para abrir cerraduras. Otorga +2 a Trampas/Cerraduras.",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 50,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

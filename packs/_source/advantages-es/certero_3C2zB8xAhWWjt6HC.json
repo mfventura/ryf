@@ -1,0 +1,31 @@
+{
+  "_id": "3C2zB8xAhWWjt6HC",
+  "name": "Certero",
+  "type": "advantage",
+  "img": "icons/skills/ranged/target-bullseye-arrow-blue.webp",
+  "system": {
+    "description": "+1 al daño en armas a distancia.",
+    "requirement": {
+      "attribute": "percepcion",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "V7ebGjoKXVbYDmNR",
+        "type": "buff",
+        "target": "damage-ranged",
+        "targetName": "",
+        "modifier": 1,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!3C2zB8xAhWWjt6HC"
+}

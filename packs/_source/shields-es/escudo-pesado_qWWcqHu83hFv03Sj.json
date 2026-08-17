@@ -1,0 +1,27 @@
+{
+  "_id": "qWWcqHu83hFv03Sj",
+  "_key": "!items!qWWcqHu83hFv03Sj",
+  "name": "Escudo pesado",
+  "type": "shield",
+  "img": "icons/equipment/shield/kite-steel-grey.webp",
+  "system": {
+    "description": "Escudo grande y robusto. Proporciona excelente protección pero dificulta el movimiento.",
+    "quantity": 1,
+    "weight": 8,
+    "price": 200,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 3,
+      "ranged": 6
+    },
+    "hindrance": 3
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

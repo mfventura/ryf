@@ -1,0 +1,30 @@
+{
+  "_id": "UxIV6GWJcioEQfGv",
+  "name": "Robar Identidad",
+  "type": "spell",
+  "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+  "system": {
+    "description": "Permite al mago adoptar la apariencia física y voz de otra persona. Dura 1 hora por nivel del mago.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!UxIV6GWJcioEQfGv"
+}

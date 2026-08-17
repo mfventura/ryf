@@ -1,0 +1,30 @@
+{
+  "_id": "OpCkQcBYh4VtzlXF",
+  "_key": "!items!OpCkQcBYh4VtzlXF",
+  "name": "Duplicación",
+  "type": "spell",
+  "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+  "system": {
+    "description": "Crea una copia física perfecta del mago que puede actuar independientemente. Dura 1 hora.",
+    "level": 6,
+    "manaCost": 5,
+    "castingDifficulty": 22,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

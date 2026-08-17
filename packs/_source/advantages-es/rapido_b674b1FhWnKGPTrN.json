@@ -1,0 +1,31 @@
+{
+  "_id": "b674b1FhWnKGPTrN",
+  "_key": "!items!b674b1FhWnKGPTrN",
+  "name": "Rápido",
+  "type": "advantage",
+  "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+  "system": {
+    "description": "+2 a iniciativa.",
+    "requirement": {
+      "attribute": "percepcion",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "HTJXiqjD5rNSE5xC",
+        "type": "buff",
+        "target": "initiative",
+        "targetName": "",
+        "modifier": 2,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

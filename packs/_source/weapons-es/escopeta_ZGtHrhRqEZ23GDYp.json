@@ -1,0 +1,35 @@
+{
+  "_id": "ZGtHrhRqEZ23GDYp",
+  "name": "Escopeta",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-blunderbuss-steel.webp",
+  "system": {
+    "description": "Arma de fuego de dos manos, devastadora a corta distancia.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 800,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "4d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 5,
+      "medium": 15,
+      "long": 25
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!ZGtHrhRqEZ23GDYp"
+}

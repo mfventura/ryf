@@ -1,0 +1,22 @@
+{
+  "_id": "zBKPsasCdXbFDT5P",
+  "name": "Odre de agua",
+  "type": "equipment",
+  "img": "icons/consumables/drinks/waterskin-leather-brown-grey.webp",
+  "system": {
+    "description": "Recipiente de cuero para transportar agua (1 litro).",
+    "quantity": 1,
+    "weight": 1,
+    "price": 1,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!zBKPsasCdXbFDT5P"
+}

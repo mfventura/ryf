@@ -1,0 +1,22 @@
+{
+  "_id": "iiYzwlFBg206Wghg",
+  "name": "Disfraz",
+  "type": "skill",
+  "img": "icons/equipment/head/mask-carved-scream-tan.webp",
+  "system": {
+    "description": "Habilidad para cambiar la apariencia y hacerse pasar por otra persona.",
+    "level": 0,
+    "attribute": "carisma",
+    "category": "subterfuge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!iiYzwlFBg206Wghg"
+}

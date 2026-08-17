@@ -1,0 +1,35 @@
+{
+  "_id": "XI5QxOn7BJ6oi93E",
+  "name": "Alabarda",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/halberd-crescent-engraved.webp",
+  "system": {
+    "description": "Arma de asta de dos manos con hacha y punta de lanza.",
+    "quantity": 1,
+    "weight": 6,
+    "price": 100,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "2d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!XI5QxOn7BJ6oi93E"
+}

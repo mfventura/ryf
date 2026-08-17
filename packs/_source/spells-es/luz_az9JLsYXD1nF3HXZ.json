@@ -1,0 +1,30 @@
+{
+  "_id": "az9JLsYXD1nF3HXZ",
+  "name": "Luz",
+  "type": "spell",
+  "img": "icons/magic/light/orb-lightbulb-gray.webp",
+  "system": {
+    "description": "Crea una luz brillante que ilumina 10 metros. Dura 1 hora por nivel del mago.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 12,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!az9JLsYXD1nF3HXZ"
+}

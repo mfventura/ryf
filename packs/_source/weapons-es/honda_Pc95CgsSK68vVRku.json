@@ -1,0 +1,35 @@
+{
+  "_id": "Pc95CgsSK68vVRku",
+  "name": "Honda",
+  "type": "weapon",
+  "img": "icons/weapons/thrown/sling-leather-brown.webp",
+  "system": {
+    "description": "Arma simple que lanza piedras u otros proyectiles.",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 5,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "1d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 10,
+      "medium": 20,
+      "long": 30
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!Pc95CgsSK68vVRku"
+}

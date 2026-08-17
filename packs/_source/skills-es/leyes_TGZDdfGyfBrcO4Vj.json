@@ -1,0 +1,22 @@
+{
+  "_id": "TGZDdfGyfBrcO4Vj",
+  "name": "Leyes",
+  "type": "skill",
+  "img": "icons/sundries/documents/document-sealed-red-tan.webp",
+  "system": {
+    "description": "Conocimiento de sistemas legales, leyes y procedimientos judiciales.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!TGZDdfGyfBrcO4Vj"
+}

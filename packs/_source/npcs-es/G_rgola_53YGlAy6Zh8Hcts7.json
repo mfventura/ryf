@@ -1,0 +1,52 @@
+{
+  "_id": "53YGlAy6Zh8Hcts7",
+  "name": "Gárgola",
+  "type": "npc",
+  "img": "icons/creatures/magical/construct-stone-earth-gray.webp",
+  "system": {
+    "biography": "Criatura de piedra animada que puede volar. Guardián de lugares antiguos.",
+    "health": {
+      "value": 45,
+      "max": 45
+    },
+    "initiative": 16,
+    "defense": 18,
+    "absorption": 2,
+    "willpower": 12,
+    "attacks": [],
+    "cr": 4,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "pG2KEj0iXBZlg6ZX",
+      "name": "Garra de piedra",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 17,
+        "damage": {
+          "base": "2d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!53YGlAy6Zh8Hcts7.pG2KEj0iXBZlg6ZX"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!53YGlAy6Zh8Hcts7"
+}

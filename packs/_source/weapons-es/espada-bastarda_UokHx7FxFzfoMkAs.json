@@ -1,0 +1,35 @@
+{
+  "_id": "UokHx7FxFzfoMkAs",
+  "_key": "!items!UokHx7FxFzfoMkAs",
+  "name": "Espada bastarda",
+  "type": "weapon",
+  "img": "icons/weapons/swords/sword-broad-worn-blue.webp",
+  "system": {
+    "description": "Espada versátil que puede usarse a una o dos manos.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 150,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "2d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

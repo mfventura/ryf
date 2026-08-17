@@ -1,0 +1,22 @@
+{
+  "_id": "noMdtEyJbpZbDb6E",
+  "_key": "!items!noMdtEyJbpZbDb6E",
+  "name": "Comunicador cuántico",
+  "type": "equipment",
+  "img": "icons/sundries/gaming/playing-cards-grey.webp",
+  "system": {
+    "description": "Dispositivo de comunicación instantánea. Alcance ilimitado en el sistema solar.",
+    "quantity": 1,
+    "weight": 0.1,
+    "price": 2000,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

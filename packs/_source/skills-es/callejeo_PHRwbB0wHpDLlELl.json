@@ -1,0 +1,22 @@
+{
+  "_id": "PHRwbB0wHpDLlELl",
+  "name": "Callejeo",
+  "type": "skill",
+  "img": "icons/environment/settlement/building-rubble.webp",
+  "system": {
+    "description": "Conocimiento de las calles, bajos fondos y contactos urbanos.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!PHRwbB0wHpDLlELl"
+}

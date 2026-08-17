@@ -1,0 +1,22 @@
+{
+  "_id": "811crYXu0Q3tYgi6",
+  "name": "Ocultismo",
+  "type": "skill",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+  "system": {
+    "description": "Conocimiento sobre magia, criaturas sobrenaturales y fenómenos ocultos.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!811crYXu0Q3tYgi6"
+}

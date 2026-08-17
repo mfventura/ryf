@@ -1,0 +1,31 @@
+{
+  "_id": "XezUjFKVsJdHwlmY",
+  "_key": "!items!XezUjFKVsJdHwlmY",
+  "name": "Recuperación",
+  "type": "advantage",
+  "img": "icons/magic/life/heart-glowing-red.webp",
+  "system": {
+    "description": "Cura 2 PV adicionales en cada curación, natural o mágica.",
+    "requirement": {
+      "attribute": "fisico",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "GnBWj9n8kX1OYZCr",
+        "type": "buff",
+        "target": "healing-received",
+        "targetName": "",
+        "modifier": 2,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

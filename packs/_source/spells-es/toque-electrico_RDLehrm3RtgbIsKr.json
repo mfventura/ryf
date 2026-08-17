@@ -1,0 +1,45 @@
+{
+  "_id": "RDLehrm3RtgbIsKr",
+  "_key": "!items!RDLehrm3RtgbIsKr",
+  "name": "Toque Eléctrico",
+  "type": "spell",
+  "img": "icons/magic/lightning/bolt-strike-blue.webp",
+  "system": {
+    "description": "Ataque de contacto que inflige 1d6+2 de daño eléctrico.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 14,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "X58ltcvEHh9cOqvk",
+        "type": "immediate-damage",
+        "formula": "1d6+2",
+        "damageType": "lightning",
+        "requiresAttack": true,
+        "attackType": "melee",
+        "savingThrow": {
+          "enabled": false,
+          "attribute": "destreza",
+          "difficulty": 14,
+          "halfDamageOnSave": false
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

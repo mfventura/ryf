@@ -57,6 +57,13 @@ This project is currently implemented for **Foundry VTT v14** using **Applicatio
 
 3. Create a new world selecting "Rápido y Fácil (RyF) 3.0" as the system
 
+4. Compendium packs are built from the JSON sources in `packs/_source/` using the official Foundry CLI. With **Foundry closed**, run:
+   ```bash
+   npm install
+   npm run pack     # compile packs/_source/* into the LevelDB packs Foundry loads
+   npm run unpack   # extract pack contents back to JSON after editing them in Foundry
+   ```
+
 ### 🤝 Contributing
 
 We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or translating content, your help is appreciated.
@@ -175,6 +182,13 @@ Este proyecto está actualmente implementado para **Foundry VTT v14** usando la 
 2. Reinicia Foundry VTT
 
 3. Crea un nuevo mundo seleccionando "Rápido y Fácil (RyF) 3.0" como sistema
+
+4. Los compendios se construyen desde las fuentes JSON de `packs/_source/` con la CLI oficial de Foundry. Con **Foundry cerrado**, ejecuta:
+   ```bash
+   npm install
+   npm run pack     # compila packs/_source/* a los packs LevelDB que carga Foundry
+   npm run unpack   # extrae el contenido de los packs a JSON tras editarlos en Foundry
+   ```
 
 ### 🤝 Contribuir
 

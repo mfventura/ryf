@@ -1,0 +1,30 @@
+{
+  "_id": "8SCpdDUAxAzEPueB",
+  "_key": "!items!8SCpdDUAxAzEPueB",
+  "name": "Invocar Lobo",
+  "type": "spell",
+  "img": "icons/environment/creatures/wolf-shadow-black.webp",
+  "system": {
+    "description": "Invoca un lobo que obedece las órdenes del mago. Dura 1 hora.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "bFk81G0U862jjnwD",
+  "name": "Esqueleto",
+  "type": "npc",
+  "img": "icons/magic/death/undead-skeleton-worn-blue.webp",
+  "system": {
+    "biography": "Muerto viviente animado por magia oscura. Obedece órdenes simples de su creador.",
+    "health": {
+      "value": 29,
+      "max": 29
+    },
+    "initiative": 13,
+    "defense": 15,
+    "absorption": 0,
+    "willpower": 8,
+    "attacks": [],
+    "cr": 1,
+    "isMinion": true
+  },
+  "items": [
+    {
+      "_id": "VfGXQrwgaXHbvV5A",
+      "name": "Espada oxidada",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 13,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!bFk81G0U862jjnwD.VfGXQrwgaXHbvV5A"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!bFk81G0U862jjnwD"
+}

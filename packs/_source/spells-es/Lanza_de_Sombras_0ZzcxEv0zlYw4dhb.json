@@ -1,0 +1,45 @@
+{
+  "_id": "0ZzcxEv0zlYw4dhb",
+  "name": "Lanza de Sombras",
+  "type": "spell",
+  "img": "icons/magic/death/projectile-shadow-bolt-purple.webp",
+  "system": {
+    "description": "Lanza un proyectil de energía necrótica que inflige 3d6 de daño necrótico.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "distance",
+      "maxDistance": 30
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "EzLp5uC0NHfj6b8z",
+        "type": "immediate-damage",
+        "formula": "3d6",
+        "damageType": "necrotic",
+        "requiresAttack": true,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": false,
+          "attribute": "destreza",
+          "difficulty": 18,
+          "halfDamageOnSave": false
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!0ZzcxEv0zlYw4dhb"
+}

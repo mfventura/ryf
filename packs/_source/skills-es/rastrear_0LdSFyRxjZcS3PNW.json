@@ -1,0 +1,22 @@
+{
+  "_id": "0LdSFyRxjZcS3PNW",
+  "name": "Rastrear",
+  "type": "skill",
+  "img": "icons/environment/wilderness/paw-print.webp",
+  "system": {
+    "description": "Habilidad para seguir huellas, rastros y pistas en el terreno.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "perception",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!0LdSFyRxjZcS3PNW"
+}

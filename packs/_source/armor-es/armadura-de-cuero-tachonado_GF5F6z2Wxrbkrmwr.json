@@ -1,0 +1,24 @@
+{
+  "_id": "GF5F6z2Wxrbkrmwr",
+  "_key": "!items!GF5F6z2Wxrbkrmwr",
+  "name": "Armadura de cuero tachonado",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-leather-studded-brown.webp",
+  "system": {
+    "description": "Armadura de cuero reforzada con tachuelas metálicas. Ofrece mejor protección que el cuero simple con poco estorbo adicional.",
+    "quantity": 1,
+    "weight": 8,
+    "price": 100,
+    "equipped": false,
+    "identified": true,
+    "protection": 2,
+    "hindrance": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

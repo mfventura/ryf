@@ -1,0 +1,29 @@
+{
+  "_id": "OgDVvPejEGESWXEX",
+  "name": "Despiadado",
+  "type": "advantage",
+  "img": "icons/skills/melee/strike-dagger-blood-red.webp",
+  "system": {
+    "description": "Puede repetir tiradas de daño usando token o mecanismos similares.",
+    "requirement": {
+      "attribute": "fisico",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "sAMHR8DqM7HFB2ak",
+        "type": "note",
+        "text": "Puede repetir tiradas de daño usando token o mecanismos similares",
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!OgDVvPejEGESWXEX"
+}

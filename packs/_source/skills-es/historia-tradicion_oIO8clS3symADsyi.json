@@ -1,0 +1,22 @@
+{
+  "_id": "oIO8clS3symADsyi",
+  "_key": "!items!oIO8clS3symADsyi",
+  "name": "Historia/Tradición",
+  "type": "skill",
+  "img": "icons/sundries/books/book-embossed-gold-red.webp",
+  "system": {
+    "description": "Conocimiento de historia, leyendas y tradiciones culturales.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

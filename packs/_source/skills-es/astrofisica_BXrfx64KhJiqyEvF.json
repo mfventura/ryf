@@ -1,0 +1,22 @@
+{
+  "_id": "BXrfx64KhJiqyEvF",
+  "_key": "!items!BXrfx64KhJiqyEvF",
+  "name": "Astrofísica",
+  "type": "skill",
+  "img": "icons/magic/cosmic/orb-planet-ringed-purple.webp",
+  "system": {
+    "description": "Conocimiento profesional sobre astronomía, física espacial y navegación estelar.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "AEwA0HMLROXQJVxr",
+  "name": "Informática",
+  "type": "skill",
+  "img": "icons/sundries/gaming/playing-cards-grey.webp",
+  "system": {
+    "description": "Conocimiento profesional de sistemas informáticos, programación y hacking.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!AEwA0HMLROXQJVxr"
+}

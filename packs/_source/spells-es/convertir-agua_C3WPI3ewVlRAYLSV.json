@@ -1,0 +1,30 @@
+{
+  "_id": "C3WPI3ewVlRAYLSV",
+  "_key": "!items!C3WPI3ewVlRAYLSV",
+  "name": "Convertir Agua",
+  "type": "spell",
+  "img": "icons/consumables/drinks/potion-bottle-corked-blue.webp",
+  "system": {
+    "description": "Convierte agua en vino, o purifica agua contaminada. El efecto es permanente.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 12,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

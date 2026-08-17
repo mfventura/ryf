@@ -1,0 +1,45 @@
+{
+  "_id": "AdsjiIrONej3CbtD",
+  "name": "Proyectil Mágico",
+  "type": "spell",
+  "img": "icons/magic/light/projectile-beams-salvo-blue.webp",
+  "system": {
+    "description": "Lanza 3 proyectiles mágicos que impactan automáticamente. Cada proyectil hace 1d6 de daño de fuerza.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "distance",
+      "maxDistance": 30
+    },
+    "targets": {
+      "type": "multiple",
+      "count": 3,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "YFMQjk3YRA08WM7Y",
+        "type": "immediate-damage",
+        "formula": "1d6",
+        "damageType": "force",
+        "requiresAttack": false,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": false,
+          "attribute": "destreza",
+          "difficulty": 16,
+          "halfDamageOnSave": false
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!AdsjiIrONej3CbtD"
+}

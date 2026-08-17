@@ -1,0 +1,22 @@
+{
+  "_id": "xcfByPdSpfDwrez7",
+  "_key": "!items!xcfByPdSpfDwrez7",
+  "name": "Ingeniería",
+  "type": "skill",
+  "img": "icons/tools/smithing/anvil-steel-grey.webp",
+  "system": {
+    "description": "Conocimiento profesional para diseñar, construir y reparar estructuras y máquinas complejas.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

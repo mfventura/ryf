@@ -1,0 +1,30 @@
+{
+  "_id": "edrmmiJO05J2Pl51",
+  "name": "Caminar entre Sueños",
+  "type": "spell",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-small-purple.webp",
+  "system": {
+    "description": "Permite entrar en el plano de los sueños y comunicarse con criaturas dormidas. Dura 1 hora.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!edrmmiJO05J2Pl51"
+}

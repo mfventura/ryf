@@ -1,0 +1,30 @@
+{
+  "_id": "GHtUDqy3N8hmN5t3",
+  "name": "Mano de Mago",
+  "type": "spell",
+  "img": "icons/magic/control/hand-glow-blue.webp",
+  "system": {
+    "description": "Crea una mano invisible que puede manipular objetos a distancia (hasta 5kg). Dura 1 minuto.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 12,
+    "range": {
+      "type": "distance",
+      "maxDistance": 10
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!GHtUDqy3N8hmN5t3"
+}

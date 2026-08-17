@@ -1,0 +1,22 @@
+{
+  "_id": "cVEDNXASD0NZ99se",
+  "name": "Reflejos",
+  "type": "skill",
+  "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+  "system": {
+    "description": "Velocidad de reacción y capacidad de actuar rápidamente en combate.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "initiative",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!cVEDNXASD0NZ99se"
+}

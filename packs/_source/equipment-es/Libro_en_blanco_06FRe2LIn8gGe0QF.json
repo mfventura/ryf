@@ -1,0 +1,22 @@
+{
+  "_id": "06FRe2LIn8gGe0QF",
+  "name": "Libro en blanco",
+  "type": "equipment",
+  "img": "icons/sundries/books/book-worn-brown.webp",
+  "system": {
+    "description": "Libro vacío para escribir notas, hechizos o diario.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 10,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!06FRe2LIn8gGe0QF"
+}

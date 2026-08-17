@@ -1,0 +1,22 @@
+{
+  "_id": "krmbzPNyEu1tw8sE",
+  "_key": "!items!krmbzPNyEu1tw8sE",
+  "name": "Cadena (3m)",
+  "type": "equipment",
+  "img": "icons/sundries/survival/chain-steel.webp",
+  "system": {
+    "description": "Cadena de hierro de 3 metros. Más resistente que la cuerda.",
+    "quantity": 1,
+    "weight": 5,
+    "price": 50,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

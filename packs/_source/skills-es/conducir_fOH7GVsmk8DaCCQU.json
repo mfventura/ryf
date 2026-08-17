@@ -1,0 +1,22 @@
+{
+  "_id": "fOH7GVsmk8DaCCQU",
+  "name": "Conducir",
+  "type": "skill",
+  "img": "icons/tools/hand/hammer-and-nail.webp",
+  "system": {
+    "description": "Habilidad para conducir vehículos terrestres como carros, automóviles, etc.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "movement",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!fOH7GVsmk8DaCCQU"
+}

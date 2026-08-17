@@ -1,0 +1,22 @@
+{
+  "_id": "qcByiNiL9LNZuDu1",
+  "_key": "!items!qcByiNiL9LNZuDu1",
+  "name": "Robar bolsillos",
+  "type": "skill",
+  "img": "icons/containers/bags/coinpouch-gold-red.webp",
+  "system": {
+    "description": "Habilidad para sustraer objetos de otras personas sin ser detectado.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "subterfuge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

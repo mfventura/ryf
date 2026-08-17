@@ -1,0 +1,30 @@
+{
+  "_id": "r972nqmi1tgYYkIH",
+  "_key": "!items!r972nqmi1tgYYkIH",
+  "name": "Comunicación a distancia",
+  "type": "spell",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-large-red.webp",
+  "system": {
+    "description": "Permite comunicación telepática con otra persona conocida a cualquier distancia. Dura 10 minutos mientras se mantenga la concentración.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 12,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 2,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

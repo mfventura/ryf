@@ -1,0 +1,42 @@
+{
+  "_id": "XvKBHDC7cstkpaq2",
+  "_key": "!items!XvKBHDC7cstkpaq2",
+  "name": "Absorción",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-magenta.webp",
+  "system": {
+    "description": "Crea una barrera que reduce todo el daño recibido en 4 puntos. Dura 1 hora por nivel del mago.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "FWrYHjqgc4dN8ZnX",
+        "type": "buff",
+        "target": "absorption",
+        "targetName": "",
+        "modifier": 4,
+        "duration": {
+          "type": "perLevel",
+          "value": 60
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

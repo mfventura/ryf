@@ -1,0 +1,30 @@
+{
+  "_id": "F1WokHDLlu1tCqvI",
+  "_key": "!items!F1WokHDLlu1tCqvI",
+  "name": "Pies de Araña",
+  "type": "spell",
+  "img": "icons/creatures/invertebrates/spider-large-black.webp",
+  "system": {
+    "description": "Permite caminar por paredes y techos como una araña. Dura 10 minutos.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 14,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "y6vnA0r3GuUExdNr",
+  "_key": "!actors!y6vnA0r3GuUExdNr",
+  "name": "Arpía",
+  "type": "npc",
+  "img": "icons/creatures/birds/harpy-flying-wings-blue.webp",
+  "system": {
+    "biography": "Criatura con cuerpo de ave y torso de mujer. Puede volar y tiene un canto hipnótico.",
+    "health": {
+      "value": 36,
+      "max": 36
+    },
+    "initiative": 16,
+    "defense": 15,
+    "absorption": 0,
+    "willpower": 12,
+    "attacks": [],
+    "cr": 3,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "FxoAKOTJZutuBQMC",
+      "_key": "!actors.items!y6vnA0r3GuUExdNr.FxoAKOTJZutuBQMC",
+      "name": "Garras",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 16,
+        "damage": {
+          "base": "2d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

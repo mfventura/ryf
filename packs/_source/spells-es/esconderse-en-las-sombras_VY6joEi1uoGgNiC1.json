@@ -1,0 +1,30 @@
+{
+  "_id": "VY6joEi1uoGgNiC1",
+  "_key": "!items!VY6joEi1uoGgNiC1",
+  "name": "Esconderse en las Sombras",
+  "type": "spell",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+  "system": {
+    "description": "Permite al mago fundirse con las sombras, volviéndose invisible en áreas oscuras. Dura 1 hora.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

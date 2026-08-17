@@ -1,0 +1,22 @@
+{
+  "_id": "W0E2GzCVseOLHbXU",
+  "name": "Vigilar",
+  "type": "skill",
+  "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
+  "system": {
+    "description": "Habilidad para mantener la atención, detectar peligros y observar el entorno.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "perception",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!W0E2GzCVseOLHbXU"
+}

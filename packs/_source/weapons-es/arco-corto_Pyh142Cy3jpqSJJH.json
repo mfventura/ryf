@@ -1,0 +1,35 @@
+{
+  "_id": "Pyh142Cy3jpqSJJH",
+  "_key": "!items!Pyh142Cy3jpqSJJH",
+  "name": "Arco corto",
+  "type": "weapon",
+  "img": "icons/weapons/bows/shortbow-recurve-leather.webp",
+  "system": {
+    "description": "Arco pequeño y manejable, ideal para uso montado.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 50,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "1d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 10,
+      "medium": 30,
+      "long": 50
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "tkDUniGBKYzVGgED",
+  "_key": "!items!tkDUniGBKYzVGgED",
+  "name": "Anticipación",
+  "type": "spell",
+  "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
+  "system": {
+    "description": "Permite anticipar los movimientos del enemigo, otorgando +2 al ataque y +2 a la defensa. Dura 1 minuto.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "w0SHvN5s1Wrae0aN",
+        "type": "buff",
+        "target": "attack-melee",
+        "targetName": "",
+        "modifier": 2,
+        "duration": {
+          "type": "fixed",
+          "value": 10
+        }
+      },
+      {
+        "id": "vZEtrTiJD6oZB9RU",
+        "type": "buff",
+        "target": "defense",
+        "targetName": "",
+        "modifier": 2,
+        "duration": {
+          "type": "fixed",
+          "value": 10
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

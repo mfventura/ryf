@@ -1,0 +1,30 @@
+{
+  "_id": "Ekl9Va11shAXAuBT",
+  "_key": "!items!Ekl9Va11shAXAuBT",
+  "name": "Campo Antimágico",
+  "type": "spell",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+  "system": {
+    "description": "Crea un campo de 5 metros donde la magia no funciona. Dura 10 minutos.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 5
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

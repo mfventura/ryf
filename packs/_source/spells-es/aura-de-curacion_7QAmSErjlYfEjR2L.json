@@ -1,0 +1,36 @@
+{
+  "_id": "7QAmSErjlYfEjR2L",
+  "_key": "!items!7QAmSErjlYfEjR2L",
+  "name": "Aura de Curación",
+  "type": "spell",
+  "img": "icons/magic/life/heart-area-circle-green-yellow.webp",
+  "system": {
+    "description": "Crea un aura de 5 metros que cura 1d6 puntos de vida por turno a todos los aliados dentro. Dura 3 turnos.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 5
+    },
+    "effects": [
+      {
+        "id": "Gb0us7cddyzabA0s",
+        "type": "immediate-healing",
+        "formula": "1d6"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

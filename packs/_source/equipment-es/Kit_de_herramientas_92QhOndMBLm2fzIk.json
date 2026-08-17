@@ -1,0 +1,22 @@
+{
+  "_id": "92QhOndMBLm2fzIk",
+  "name": "Kit de herramientas",
+  "type": "equipment",
+  "img": "icons/tools/hand/hammer-and-nail.webp",
+  "system": {
+    "description": "Set de herramientas mecánicas. Otorga +2 a Ingeniería y reparaciones.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 150,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!92QhOndMBLm2fzIk"
+}

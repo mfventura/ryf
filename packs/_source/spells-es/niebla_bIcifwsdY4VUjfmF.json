@@ -1,0 +1,30 @@
+{
+  "_id": "bIcifwsdY4VUjfmF",
+  "name": "Niebla",
+  "type": "spell",
+  "img": "icons/magic/air/fog-gas-smoke-dense-white.webp",
+  "system": {
+    "description": "Crea una niebla densa en un área de 10 metros que oscurece la visión. Dura 10 minutos.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "distance",
+      "maxDistance": 30
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 10
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!bIcifwsdY4VUjfmF"
+}

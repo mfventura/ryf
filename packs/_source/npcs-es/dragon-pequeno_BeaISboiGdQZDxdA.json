@@ -1,0 +1,52 @@
+{
+  "_id": "BeaISboiGdQZDxdA",
+  "_key": "!actors!BeaISboiGdQZDxdA",
+  "name": "Dragón pequeño",
+  "type": "npc",
+  "img": "icons/creatures/reptiles/dragon-horned-green.webp",
+  "system": {
+    "biography": "Dragón joven pero peligroso. Puede volar y lanzar aliento de fuego.",
+    "health": {
+      "value": 65,
+      "max": 65
+    },
+    "initiative": 10,
+    "defense": 18,
+    "absorption": 3,
+    "willpower": 14,
+    "attacks": [],
+    "cr": 5,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "g4mKlsSIwVZkikKw",
+      "_key": "!actors.items!BeaISboiGdQZDxdA.g4mKlsSIwVZkikKw",
+      "name": "Garra/Mordisco",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 17,
+        "damage": {
+          "base": "2d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "wslrjC1dy0Sn7Bba",
+  "name": "Mochila",
+  "type": "equipment",
+  "img": "icons/containers/bags/pack-leather-brown-white.webp",
+  "system": {
+    "description": "Mochila de viaje que permite cargar más equipo cómodamente.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 5,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!wslrjC1dy0Sn7Bba"
+}

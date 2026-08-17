@@ -1,0 +1,35 @@
+{
+  "_id": "aDC2dis6Qqw4m9md",
+  "_key": "!items!aDC2dis6Qqw4m9md",
+  "name": "Ballesta ligera",
+  "type": "weapon",
+  "img": "icons/weapons/crossbows/crossbow-simple-brown.webp",
+  "system": {
+    "description": "Ballesta de una mano, fácil de usar.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 75,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "2d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 15,
+      "medium": 40,
+      "long": 60
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

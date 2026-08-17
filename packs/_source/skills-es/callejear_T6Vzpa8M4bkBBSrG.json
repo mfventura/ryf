@@ -1,0 +1,22 @@
+{
+  "_id": "T6Vzpa8M4bkBBSrG",
+  "name": "Callejear",
+  "type": "skill",
+  "img": "icons/environment/settlement/gazebo.webp",
+  "system": {
+    "description": "Habilidad para obtener información en las calles, hacer contactos y moverse en ambientes urbanos.",
+    "level": 0,
+    "attribute": "carisma",
+    "category": "social",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!T6Vzpa8M4bkBBSrG"
+}

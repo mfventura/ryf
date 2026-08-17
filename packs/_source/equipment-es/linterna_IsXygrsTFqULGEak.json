@@ -1,0 +1,22 @@
+{
+  "_id": "IsXygrsTFqULGEak",
+  "name": "Linterna",
+  "type": "equipment",
+  "img": "icons/sundries/lights/lantern-iron-yellow.webp",
+  "system": {
+    "description": "Linterna de aceite. Ilumina 10m durante 6 horas con 1 frasco de aceite.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 10,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!IsXygrsTFqULGEak"
+}

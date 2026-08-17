@@ -1,0 +1,35 @@
+{
+  "_id": "0q66Nw34owAKXbBB",
+  "_key": "!items!0q66Nw34owAKXbBB",
+  "name": "Rifle láser",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-laser-orange.webp",
+  "system": {
+    "description": "Arma de energía dirigida que dispara rayos láser.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 4000,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "3d6+2",
+      "bonus": 0,
+      "type": "energy"
+    },
+    "range": {
+      "short": 25,
+      "medium": 75,
+      "long": 150
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

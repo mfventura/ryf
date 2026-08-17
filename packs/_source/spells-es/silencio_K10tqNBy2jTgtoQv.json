@@ -1,0 +1,30 @@
+{
+  "_id": "K10tqNBy2jTgtoQv",
+  "name": "Silencio",
+  "type": "spell",
+  "img": "icons/magic/sonic/scream-wail-shout-teal.webp",
+  "system": {
+    "description": "Crea una zona de silencio absoluto de 5 metros de radio. No se puede lanzar hechizos verbales dentro. Dura 10 minutos.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "distance",
+      "maxDistance": 30
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 5
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!K10tqNBy2jTgtoQv"
+}

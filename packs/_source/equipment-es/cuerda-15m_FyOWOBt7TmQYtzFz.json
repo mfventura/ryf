@@ -1,0 +1,22 @@
+{
+  "_id": "FyOWOBt7TmQYtzFz",
+  "_key": "!items!FyOWOBt7TmQYtzFz",
+  "name": "Cuerda (15m)",
+  "type": "equipment",
+  "img": "icons/sundries/survival/rope-wrapped-brown.webp",
+  "system": {
+    "description": "Cuerda resistente de 15 metros. Útil para escalar, atar o crear trampas.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 10,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "LaUt7rddPrvERg9A",
+  "_key": "!items!LaUt7rddPrvERg9A",
+  "name": "Artillería",
+  "type": "skill",
+  "img": "icons/weapons/artillery/cannon-ball-fire-orange.webp",
+  "system": {
+    "description": "Habilidad profesional para operar armas pesadas como cañones, lanzacohetes, artillería, etc.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "ranged",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

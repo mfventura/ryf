@@ -1,0 +1,42 @@
+{
+  "_id": "jpd43rjuR7hiWjKH",
+  "_key": "!items!jpd43rjuR7hiWjKH",
+  "name": "Baile de Viento",
+  "type": "spell",
+  "img": "icons/magic/air/wind-tornado-wall-blue.webp",
+  "system": {
+    "description": "Crea un vórtice de viento que otorga +4 a Defensa. Dura 1 hora por nivel del mago.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "m36tqHVG9xXuyzrS",
+        "type": "buff",
+        "target": "defense",
+        "targetName": "",
+        "modifier": 4,
+        "duration": {
+          "type": "perLevel",
+          "value": 60
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

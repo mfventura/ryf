@@ -1,0 +1,27 @@
+{
+  "_id": "J3YEFf9TeuSbCL6H",
+  "name": "Escudo torre",
+  "type": "shield",
+  "img": "icons/equipment/shield/tower-steel-blue.webp",
+  "system": {
+    "description": "Escudo enorme que cubre casi todo el cuerpo. Máxima protección pero muy estorboso.",
+    "quantity": 1,
+    "weight": 15,
+    "price": 300,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 4,
+      "ranged": 8
+    },
+    "hindrance": 5
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!J3YEFf9TeuSbCL6H"
+}

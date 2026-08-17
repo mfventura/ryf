@@ -1,0 +1,36 @@
+{
+  "_id": "gcPVGVpWz4qDm9fT",
+  "_key": "!items!gcPVGVpWz4qDm9fT",
+  "name": "Curación",
+  "type": "spell",
+  "img": "icons/magic/life/heart-cross-strong-flame-green-yellow.webp",
+  "system": {
+    "description": "Cura 1d6+2 puntos de vida al objetivo.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 14,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "spti4k27CKfKZMop",
+        "type": "immediate-healing",
+        "formula": "1d6+2"
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

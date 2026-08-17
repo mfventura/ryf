@@ -1,0 +1,52 @@
+{
+  "_id": "AYzAP0WzdoamMap8",
+  "name": "Dragón grande",
+  "type": "npc",
+  "img": "icons/creatures/reptiles/dragon-horned-blue.webp",
+  "system": {
+    "biography": "Dragón antiguo de gran tamaño y poder. Puede volar y lanzar aliento de fuego devastador.",
+    "health": {
+      "value": 125,
+      "max": 125
+    },
+    "initiative": 10,
+    "defense": 20,
+    "absorption": 5,
+    "willpower": 18,
+    "attacks": [],
+    "cr": 10,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "ZtpxaO3FgLlGK5cA",
+      "name": "Garra/Mordisco",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 19,
+        "damage": {
+          "base": "3d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!AYzAP0WzdoamMap8.ZtpxaO3FgLlGK5cA"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!AYzAP0WzdoamMap8"
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "6FFGZ1oDOQqXAamX",
+  "_key": "!items!6FFGZ1oDOQqXAamX",
+  "name": "Puntería",
+  "type": "advantage",
+  "img": "icons/skills/ranged/archery-bow-attack-yellow.webp",
+  "system": {
+    "description": "+2 a tiradas de armas a distancia.",
+    "requirement": {
+      "attribute": "destreza",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "2VZiYtrQ65IeffoP",
+        "type": "buff",
+        "target": "attack-ranged",
+        "targetName": "",
+        "modifier": 2,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

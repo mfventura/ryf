@@ -1,0 +1,42 @@
+{
+  "_id": "YkveOFXGG1PdK0iL",
+  "_key": "!items!YkveOFXGG1PdK0iL",
+  "name": "Fuerza Sobrehumana",
+  "type": "spell",
+  "img": "icons/magic/fire/flame-burning-fist-strike.webp",
+  "system": {
+    "description": "Aumenta la fuerza física del objetivo, otorgando +4 a Físico. Dura 1 hora por nivel del mago.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "7GDaFBPy593UssJv",
+        "type": "buff",
+        "target": "attribute",
+        "targetName": "fisico",
+        "modifier": 4,
+        "duration": {
+          "type": "perLevel",
+          "value": 60
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

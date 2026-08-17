@@ -1,0 +1,30 @@
+{
+  "_id": "DJjDrLeiDqTqkVuL",
+  "_key": "!items!DJjDrLeiDqTqkVuL",
+  "name": "Materializar Arma",
+  "type": "spell",
+  "img": "icons/weapons/swords/sword-guard-steel-blue.webp",
+  "system": {
+    "description": "Crea un arma mágica temporal (espada, hacha, lanza, etc.) que dura 1 hora. El arma hace 2d6 de daño.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 14,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

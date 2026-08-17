@@ -1,0 +1,30 @@
+{
+  "_id": "7fPkLPmsIntnS5cu",
+  "name": "Convocatoria",
+  "type": "spell",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+  "system": {
+    "description": "Invoca a una persona conocida para que aparezca junto al mago. La persona puede resistirse con una tirada de Voluntad.",
+    "level": 1,
+    "manaCost": 1,
+    "castingDifficulty": 14,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!7fPkLPmsIntnS5cu"
+}

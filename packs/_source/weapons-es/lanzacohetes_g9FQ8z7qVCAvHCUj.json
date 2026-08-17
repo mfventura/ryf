@@ -1,0 +1,35 @@
+{
+  "_id": "g9FQ8z7qVCAvHCUj",
+  "name": "Lanzacohetes",
+  "type": "weapon",
+  "img": "icons/weapons/artillery/rocket-launcher.webp",
+  "system": {
+    "description": "Arma pesada que dispara cohetes explosivos.",
+    "quantity": 1,
+    "weight": 8,
+    "price": 5000,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "6d6",
+      "bonus": 0,
+      "type": "explosive"
+    },
+    "range": {
+      "short": 20,
+      "medium": 50,
+      "long": 100
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!g9FQ8z7qVCAvHCUj"
+}

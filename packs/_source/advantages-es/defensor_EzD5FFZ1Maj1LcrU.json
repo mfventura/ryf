@@ -1,0 +1,31 @@
+{
+  "_id": "EzD5FFZ1Maj1LcrU",
+  "name": "Defensor",
+  "type": "advantage",
+  "img": "icons/equipment/shield/heater-steel-boss-red.webp",
+  "system": {
+    "description": "+1 a defensa.",
+    "requirement": {
+      "attribute": "destreza",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "Ae1IoG8ptMT5HQUI",
+        "type": "buff",
+        "target": "defense",
+        "targetName": "",
+        "modifier": 1,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!EzD5FFZ1Maj1LcrU"
+}

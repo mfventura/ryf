@@ -1,0 +1,22 @@
+{
+  "_id": "HJOa6jeKUg8kw3qz",
+  "name": "Fauna",
+  "type": "skill",
+  "img": "icons/environment/creatures/wolf-shadow-black.webp",
+  "system": {
+    "description": "Conocimiento sobre animales, sus comportamientos y hábitats.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!HJOa6jeKUg8kw3qz"
+}

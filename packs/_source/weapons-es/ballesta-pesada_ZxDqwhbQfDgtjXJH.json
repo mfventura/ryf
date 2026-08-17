@@ -1,0 +1,35 @@
+{
+  "_id": "ZxDqwhbQfDgtjXJH",
+  "_key": "!items!ZxDqwhbQfDgtjXJH",
+  "name": "Ballesta pesada",
+  "type": "weapon",
+  "img": "icons/weapons/crossbows/crossbow-heavy-worn.webp",
+  "system": {
+    "description": "Ballesta de dos manos con gran poder de penetración.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 150,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "3d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 20,
+      "medium": 60,
+      "long": 100
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

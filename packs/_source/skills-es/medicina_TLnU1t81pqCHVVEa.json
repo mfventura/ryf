@@ -1,0 +1,22 @@
+{
+  "_id": "TLnU1t81pqCHVVEa",
+  "name": "Medicina",
+  "type": "skill",
+  "img": "icons/tools/cooking/mortar-stone-yellow.webp",
+  "system": {
+    "description": "Conocimiento médico avanzado, cirugía y tratamiento de enfermedades.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!TLnU1t81pqCHVVEa"
+}

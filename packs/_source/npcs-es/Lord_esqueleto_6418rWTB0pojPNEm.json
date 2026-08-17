@@ -1,0 +1,52 @@
+{
+  "_id": "6418rWTB0pojPNEm",
+  "name": "Lord esqueleto",
+  "type": "npc",
+  "img": "icons/magic/death/undead-skeleton-armor-helm-horned-blue.webp",
+  "system": {
+    "biography": "Guerrero no-muerto de élite. Comandante de ejércitos de esqueletos.",
+    "health": {
+      "value": 34,
+      "max": 34
+    },
+    "initiative": 15,
+    "defense": 17,
+    "absorption": 0,
+    "willpower": 12,
+    "attacks": [],
+    "cr": 3,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "1EmvjZUgKTaB1Ql4",
+      "name": "Espadón maldito",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 15,
+        "damage": {
+          "base": "3d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!6418rWTB0pojPNEm.1EmvjZUgKTaB1Ql4"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!6418rWTB0pojPNEm"
+}

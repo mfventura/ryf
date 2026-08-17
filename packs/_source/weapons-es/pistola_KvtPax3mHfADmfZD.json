@@ -1,0 +1,35 @@
+{
+  "_id": "KvtPax3mHfADmfZD",
+  "name": "Pistola",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-pistol-flintlock.webp",
+  "system": {
+    "description": "Arma de fuego de una mano, alcance medio.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 500,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "2d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 10,
+      "medium": 30,
+      "long": 50
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!KvtPax3mHfADmfZD"
+}

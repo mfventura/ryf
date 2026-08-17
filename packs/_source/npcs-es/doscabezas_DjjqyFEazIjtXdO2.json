@@ -1,0 +1,52 @@
+{
+  "_id": "DjjqyFEazIjtXdO2",
+  "name": "Doscabezas",
+  "type": "npc",
+  "img": "icons/creatures/mammals/beast-horned-scaled-glowing-orange.webp",
+  "system": {
+    "biography": "Bestia mutante con dos cabezas que puede atacar dos veces por turno. Agresiva y territorial.",
+    "health": {
+      "value": 50,
+      "max": 50
+    },
+    "initiative": 12,
+    "defense": 15,
+    "absorption": 0,
+    "willpower": 10,
+    "attacks": [],
+    "cr": 3,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "i9rcC48Dgq3axrk2",
+      "name": "Mordisco doble",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "2d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!DjjqyFEazIjtXdO2.i9rcC48Dgq3axrk2"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!DjjqyFEazIjtXdO2"
+}

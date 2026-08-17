@@ -1,0 +1,30 @@
+{
+  "_id": "SIEi1SQD8AeeBHn0",
+  "name": "Espejo",
+  "type": "spell",
+  "img": "icons/magic/control/silhouette-hold-change-blue.webp",
+  "system": {
+    "description": "Crea 1d4 copias ilusorias del mago que lo rodean. Cada vez que es atacado, hay una probabilidad de que el ataque golpee una copia en su lugar. Dura 1 minuto.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!SIEi1SQD8AeeBHn0"
+}

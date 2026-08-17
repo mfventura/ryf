@@ -1,0 +1,22 @@
+{
+  "_id": "0gidTPdLrAJ7iQtG",
+  "name": "Navegar",
+  "type": "skill",
+  "img": "icons/tools/navigation/map-marked-blue.webp",
+  "system": {
+    "description": "Habilidad para pilotar embarcaciones marítimas.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "movement",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!0gidTPdLrAJ7iQtG"
+}

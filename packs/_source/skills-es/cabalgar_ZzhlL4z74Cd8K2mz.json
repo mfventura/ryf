@@ -1,0 +1,22 @@
+{
+  "_id": "ZzhlL4z74Cd8K2mz",
+  "name": "Cabalgar",
+  "type": "skill",
+  "img": "icons/environment/creatures/horse-white.webp",
+  "system": {
+    "description": "Habilidad para montar y controlar caballos y otros animales de monta.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "movement",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!ZzhlL4z74Cd8K2mz"
+}

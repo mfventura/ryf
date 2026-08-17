@@ -1,0 +1,22 @@
+{
+  "_id": "Fai2nEM4hRCCt4d4",
+  "name": "Grimorio",
+  "type": "equipment",
+  "img": "icons/sundries/books/book-embossed-gold-red.webp",
+  "system": {
+    "description": "Libro de hechizos. Necesario para magos. Puede contener hasta 20 hechizos.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 100,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!Fai2nEM4hRCCt4d4"
+}

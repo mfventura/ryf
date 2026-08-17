@@ -1,0 +1,31 @@
+{
+  "_id": "zkdnRntpXeFMcR0R",
+  "name": "Berseker",
+  "type": "advantage",
+  "img": "icons/skills/melee/strike-axe-blood-red.webp",
+  "system": {
+    "description": "+2 a tiradas de combate cuerpo a cuerpo.",
+    "requirement": {
+      "attribute": "fisico",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "6YLTF52DB6NvaLui",
+        "type": "buff",
+        "target": "attack-melee",
+        "targetName": "",
+        "modifier": 2,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!zkdnRntpXeFMcR0R"
+}

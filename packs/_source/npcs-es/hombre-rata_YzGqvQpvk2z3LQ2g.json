@@ -1,0 +1,52 @@
+{
+  "_id": "YzGqvQpvk2z3LQ2g",
+  "_key": "!actors!YzGqvQpvk2z3LQ2g",
+  "name": "Hombre-rata",
+  "type": "npc",
+  "img": "icons/creatures/mammals/rodent-rat-diseased-gray.webp",
+  "system": {
+    "biography": "Humanoide roedor que vive en alcantarillas y túneles. Portador de enfermedades.",
+    "health": {
+      "value": 17,
+      "max": 17
+    },
+    "initiative": 17,
+    "defense": 16,
+    "absorption": 0,
+    "willpower": 8,
+    "attacks": [],
+    "cr": 1,
+    "isMinion": true
+  },
+  "items": [
+    {
+      "_id": "BLIN4wrYkguDlPxE",
+      "_key": "!actors.items!YzGqvQpvk2z3LQ2g.BLIN4wrYkguDlPxE",
+      "name": "Daga sucia",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 12,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

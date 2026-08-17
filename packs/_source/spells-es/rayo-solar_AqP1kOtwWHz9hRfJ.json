@@ -1,0 +1,45 @@
+{
+  "_id": "AqP1kOtwWHz9hRfJ",
+  "_key": "!items!AqP1kOtwWHz9hRfJ",
+  "name": "Rayo Solar",
+  "type": "spell",
+  "img": "icons/magic/light/beam-rays-yellow-large.webp",
+  "system": {
+    "description": "Invoca un rayo de luz solar que inflige 5d6 de daño radiante. Doble daño contra no-muertos.",
+    "level": 6,
+    "manaCost": 5,
+    "castingDifficulty": 22,
+    "range": {
+      "type": "distance",
+      "maxDistance": 50
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "zAKnSXzZVhj20BVW",
+        "type": "immediate-damage",
+        "formula": "5d6",
+        "damageType": "force",
+        "requiresAttack": true,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": false,
+          "attribute": "destreza",
+          "difficulty": 22,
+          "halfDamageOnSave": false
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

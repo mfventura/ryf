@@ -1,0 +1,35 @@
+{
+  "_id": "HWJUWet61iEKmyr8",
+  "name": "Cañón de iones",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-cannon-energy-blue.webp",
+  "system": {
+    "description": "Arma pesada de energía que dispara rayos iónicos devastadores.",
+    "quantity": 1,
+    "weight": 10,
+    "price": 8000,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "5d6",
+      "bonus": 0,
+      "type": "energy"
+    },
+    "range": {
+      "short": 30,
+      "medium": 80,
+      "long": 150
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!HWJUWet61iEKmyr8"
+}

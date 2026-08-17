@@ -1,0 +1,35 @@
+{
+  "_id": "U9yrKKkZiLTkcNsh",
+  "name": "Maza",
+  "type": "weapon",
+  "img": "icons/weapons/maces/mace-round-spiked-steel.webp",
+  "system": {
+    "description": "Arma contundente de una mano, efectiva contra armaduras.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 40,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "1d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!U9yrKKkZiLTkcNsh"
+}

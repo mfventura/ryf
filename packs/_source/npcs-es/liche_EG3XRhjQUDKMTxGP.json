@@ -1,0 +1,52 @@
+{
+  "_id": "EG3XRhjQUDKMTxGP",
+  "name": "Liche",
+  "type": "npc",
+  "img": "icons/magic/death/undead-lich-humanoid-purple.webp",
+  "system": {
+    "biography": "Mago no-muerto de gran poder. Maestro de la magia necrótica y prácticamente inmortal.",
+    "health": {
+      "value": 55,
+      "max": 55
+    },
+    "initiative": 15,
+    "defense": 16,
+    "absorption": 0,
+    "willpower": 18,
+    "attacks": [],
+    "cr": 6,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "BAikE8C95tIwKJwc",
+      "name": "Toque necrótico",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 16,
+        "damage": {
+          "base": "3d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!EG3XRhjQUDKMTxGP.BAikE8C95tIwKJwc"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!EG3XRhjQUDKMTxGP"
+}

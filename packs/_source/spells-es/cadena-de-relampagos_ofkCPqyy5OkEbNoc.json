@@ -1,0 +1,45 @@
+{
+  "_id": "ofkCPqyy5OkEbNoc",
+  "_key": "!items!ofkCPqyy5OkEbNoc",
+  "name": "Cadena de Relámpagos",
+  "type": "spell",
+  "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
+  "system": {
+    "description": "Lanza un relámpago que salta entre objetivos, infligiendo 3d6 de daño eléctrico a hasta 5 objetivos.",
+    "level": 6,
+    "manaCost": 5,
+    "castingDifficulty": 22,
+    "range": {
+      "type": "distance",
+      "maxDistance": 40
+    },
+    "targets": {
+      "type": "multiple",
+      "count": 5,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "8gfulqSN5LEWHFtr",
+        "type": "immediate-damage",
+        "formula": "3d6",
+        "damageType": "lightning",
+        "requiresAttack": false,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "destreza",
+          "difficulty": 22,
+          "halfDamageOnSave": true
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

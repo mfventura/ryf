@@ -1,0 +1,22 @@
+{
+  "_id": "W0qRHmiAQRNACj68",
+  "name": "Actuar",
+  "type": "skill",
+  "img": "icons/equipment/head/mask-comedy-gold-white.webp",
+  "system": {
+    "description": "Habilidad para interpretar personajes, mentir convincentemente y engañar.",
+    "level": 0,
+    "attribute": "carisma",
+    "category": "social",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!W0qRHmiAQRNACj68"
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "tgRS4MAQa2rQ77Cl",
+  "_key": "!items!tgRS4MAQa2rQ77Cl",
+  "name": "Aceite (frasco)",
+  "type": "equipment",
+  "img": "icons/consumables/potions/bottle-round-corked-labeled-brown.webp",
+  "system": {
+    "description": "Frasco de aceite para linterna. También puede usarse como arma incendiaria.",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 2,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "EwoYeKFXPhGyRFSj",
+  "name": "Sigilo",
+  "type": "skill",
+  "img": "icons/magic/perception/shadow-stealth-eyes-purple.webp",
+  "system": {
+    "description": "Habilidad para moverse sin ser visto ni oído.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "subterfuge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!EwoYeKFXPhGyRFSj"
+}
