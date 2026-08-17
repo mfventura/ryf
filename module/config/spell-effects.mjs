@@ -23,6 +23,11 @@ export const SPELL_EFFECT_TYPES = {
     label: 'RYF.Magic.EffectTypes.Condition',
     icon: 'fa-dizzy',
     fields: ['condition', 'duration', 'savingThrow']
+  },
+  'note': {
+    label: 'RYF.Magic.EffectTypes.Note',
+    icon: 'fa-sticky-note',
+    fields: ['text']
   }
 };
 
@@ -50,7 +55,13 @@ export const EFFECT_TARGETS = {
   'max-health': 'RYF.Magic.EffectTargets.MaxHealth',
   'initiative': 'RYF.Magic.EffectTargets.Initiative',
   'absorption': 'RYF.Magic.EffectTargets.Absorption',
-  'hindrance-reduction': 'RYF.Magic.EffectTargets.HindranceReduction'
+  'hindrance-reduction': 'RYF.Magic.EffectTargets.HindranceReduction',
+  'damage-melee': 'RYF.Magic.EffectTargets.DamageMelee',
+  'damage-ranged': 'RYF.Magic.EffectTargets.DamageRanged',
+  'spell-casting': 'RYF.Magic.EffectTargets.SpellCasting',
+  'healing-received': 'RYF.Magic.EffectTargets.HealingReceived',
+  'health-multiplier': 'RYF.Magic.EffectTargets.HealthMultiplier',
+  'mana-multiplier': 'RYF.Magic.EffectTargets.ManaMultiplier'
 };
 
 export const CONDITIONS = {
@@ -98,6 +109,12 @@ export function createDefaultEffect(type) {
       return {
         ...baseEffect,
         formula: '1d6'
+      };
+
+    case 'note':
+      return {
+        ...baseEffect,
+        text: ''
       };
 
     case 'buff':

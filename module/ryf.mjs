@@ -337,20 +337,22 @@ Hooks.on('renderCompendium', (app, html, data) => {
   });
 });
 
-// Reference: RyF 3.0 PDF, página 98 - cada jugador podrá escoger tan sólo una
-// ventaja, siempre que cumpla el requisito de atributo (validación advisory)
+// Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite
+// configurable, 0 = sin límite) y con requisito de atributo. Validación
+// advisory: avisa pero no bloquea.
 Hooks.on('preCreateItem', (item, data, options, userId) => {
   if (item.type !== 'advantage') return;
   const actor = item.parent;
   if (!actor || actor.documentName !== 'Actor' || actor.type !== 'character') return;
 
-  if (actor.items.some(i => i.type === 'advantage')) {
-    ui.notifications.warn(game.i18n.localize('RYF.Warnings.OnlyOneAdvantage'));
+  const maxAdvantages = game.settings.get('ryf3', 'maxAdvantages');
+  const currentCount = actor.items.filter(i => i.type === 'advantage').length;
+  if (maxAdvantages > 0 && currentCount >= maxAdvantages) {
+    ui.notifications.warn(game.i18n.format('RYF.Warnings.MaxAdvantagesReached', { max: maxAdvantages }));
   }
 
-  const advantage = CONFIG.RYF.advantages[item.system?.advantageKey];
-  const requirement = advantage?.requirement;
-  if (requirement) {
+  const requirement = item.system?.requirement;
+  if (requirement?.attribute) {
     const attrValue = actor.system.attributes?.[requirement.attribute]?.value || 0;
     if (attrValue < requirement.value) {
       ui.notifications.warn(game.i18n.format('RYF.Warnings.AdvantageRequirementNotMet', {

@@ -126,6 +126,24 @@ export class RyfActiveEffect extends ActiveEffect {
       case 'absorption-bonus':
         return 'system.activeEffectBonuses.absorption';
 
+      case 'damage-melee-bonus':
+        return 'system.activeEffectBonuses.damageMelee';
+
+      case 'damage-ranged-bonus':
+        return 'system.activeEffectBonuses.damageRanged';
+
+      case 'spell-casting-bonus':
+        return 'system.activeEffectBonuses.spellCasting';
+
+      case 'healing-received-bonus':
+        return 'system.activeEffectBonuses.healingReceived';
+
+      case 'health-multiplier-bonus':
+        return 'system.activeEffectBonuses.healthMultiplier';
+
+      case 'mana-multiplier-bonus':
+        return 'system.activeEffectBonuses.manaMultiplier';
+
       default:
         console.warn(`Unknown effect type: ${effectType}`);
         return 'system.activeEffectBonuses.defense';
@@ -217,7 +235,7 @@ export class RyfActiveEffect extends ActiveEffect {
 
       flags: {
         ryf3: {
-          sourceType: 'item',
+          sourceType: effectData.sourceType || 'item',
           sourceName: effectData.sourceName || item.name,
           sourceId: effectData.sourceId || item.id,
           appliedBy: effectData.appliedBy || game.user.name,

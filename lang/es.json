@@ -11,22 +11,6 @@
     "Advantage": "Ventaja",
     "AdvantageName": "Nombre de la Ventaja",
     "Advantages": "Ventajas",
-    "AdvantagesList": {
-      "arcano": { "name": "Arcano", "effect": "+1 a tiradas de hechizos" },
-      "berseker": { "name": "Berseker", "effect": "+2 a tiradas de combate cuerpo a cuerpo" },
-      "certero": { "name": "Certero", "effect": "+1 al daño en armas a distancia" },
-      "defensor": { "name": "Defensor", "effect": "+1 a defensa" },
-      "despiadado": { "name": "Despiadado", "effect": "Puede repetir tiradas de daño (uso manual)" },
-      "golpeDuro": { "name": "Golpe Duro", "effect": "+1 al daño en cuerpo a cuerpo" },
-      "manaAbundante": { "name": "Maná abundante", "effect": "El maná es Inteligencia x4 en lugar de x3" },
-      "mulaDeCarga": { "name": "Mula de carga", "effect": "Ignora 1 punto de estorbo" },
-      "muro": { "name": "Muro", "effect": "PV = Físico x5 en lugar de x4" },
-      "pielDePiedra": { "name": "Piel de Piedra", "effect": "+1 a absorción" },
-      "punteria": { "name": "Puntería", "effect": "+2 a tiradas de armas a distancia" },
-      "rapido": { "name": "Rápido", "effect": "+2 a iniciativa" },
-      "recuperacion": { "name": "Recuperación", "effect": "Cura 2 PV adicionales en cada curación, natural o mágica" },
-      "suerte": { "name": "Suerte", "effect": "Puede repetir una tirada por escena (uso manual)" }
-    },
     "Actions": "Acciones",
     "Armor": "Armaduras",
     "ArmorName": "Nombre de la Armadura",
@@ -102,6 +86,7 @@
     "Modifier": "Modificador",
     "NextLevelCost": "Coste del Siguiente Nivel",
     "Normal": "Normal",
+    "MinimumValue": "Valor mínimo",
     "NoRequirement": "Sin requisito",
     "OpposedDefenderSkill": "Habilidad del oponente",
     "OpposedManualBonus": "— Bono manual (PNJ sin habilidades) —",
@@ -305,13 +290,19 @@
         "AttackMelee": "Ataque Cuerpo a Cuerpo",
         "AttackRanged": "Ataque a Distancia",
         "Attribute": "Atributo",
+        "DamageMelee": "Daño Cuerpo a Cuerpo",
+        "DamageRanged": "Daño a Distancia",
         "Defense": "Defensa",
         "DefenseMelee": "Defensa Cuerpo a Cuerpo",
         "DefenseRanged": "Defensa a Distancia",
+        "HealingReceived": "Curación Recibida",
+        "HealthMultiplier": "Multiplicador de Vida",
         "HindranceReduction": "Reducción de Estorbo",
         "Initiative": "Iniciativa",
+        "ManaMultiplier": "Multiplicador de Maná",
         "MaxHealth": "Vida Máxima",
         "Skill": "Habilidad",
+        "SpellCasting": "Lanzamiento de Hechizos",
         "WeaponAttack": "Ataque de Arma",
         "WeaponDamage": "Daño de Arma"
       },
@@ -320,8 +311,11 @@
         "Condition": "Condición",
         "Debuff": "Penalización",
         "ImmediateDamage": "Daño Inmediato",
-        "ImmediateHealing": "Curación Inmediata"
+        "ImmediateHealing": "Curación Inmediata",
+        "Note": "Nota (regla manual)"
       },
+      "NoteText": "Texto de la regla",
+      "NoteTextPlaceholder": "Ej: Puede repetir una tirada por escena",
       "RangeTypes": {
         "ranged": "A Distancia",
         "self": "Personal",
@@ -403,6 +397,10 @@
         "Hint": "Multiplicador para calcular Maná máximo (Inteligencia × multiplicador). Solo si magia está activa.",
         "Name": "Multiplicador de Maná"
       },
+      "MaxAdvantages": {
+        "Hint": "Máximo de ventajas por personaje (RyF 3.0, pág. 98: una). 0 = sin límite. El aviso no bloquea la creación.",
+        "Name": "Máximo de Ventajas"
+      },
       "MaxSkillLevel": {
         "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades",
         "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
@@ -467,7 +465,7 @@
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
       "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
-      "OnlyOneAdvantage": "Cada personaje solo puede tener una ventaja (RyF 3.0, pág. 98)",
+      "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
       "AdvantageRequirementNotMet": "No cumples el requisito de la ventaja: {attribute} {value}+ (RyF 3.0, pág. 98)",
       "SkillNotFound": "No se encontró la habilidad {skill}",
       "SkillPyramidMismatch": "Nivel {level}: se esperan {expected} habilidades, pero hay {actual}",

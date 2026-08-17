@@ -51,25 +51,13 @@ export class RyfItemSheet extends ItemSheet {
     }));
   }
 
-  // Reference: RyF 3.0 PDF, página 98 - Ventajas
+  // Reference: RyF 3.0 PDF, página 98 - Ventajas con requisito de atributo
   _prepareAdvantageData(context) {
-    context.advantages = Object.keys(CONFIG.RYF.advantages).map(key => ({
+    const activeAttributes = CONFIG.RYF.getActiveAttributes();
+    context.attributes = Object.entries(activeAttributes).map(([key, value]) => ({
       key: key,
-      label: game.i18n.localize(`RYF.AdvantagesList.${key}.name`),
-      selected: key === context.system.advantageKey
+      label: value
     }));
-
-    const advantage = CONFIG.RYF.advantages[context.system.advantageKey];
-    if (advantage?.requirement) {
-      const attrLabel = game.i18n.localize(CONFIG.RYF.attributes[advantage.requirement.attribute]);
-      context.requirementLabel = `${attrLabel} ${advantage.requirement.value}+`;
-    } else if (context.system.advantageKey) {
-      context.requirementLabel = game.i18n.localize('RYF.NoRequirement');
-    }
-
-    if (context.system.advantageKey) {
-      context.effectLabel = game.i18n.localize(`RYF.AdvantagesList.${context.system.advantageKey}.effect`);
-    }
   }
 
   activateListeners(html) {
@@ -129,7 +117,7 @@ export class RyfItemSheet extends ItemSheet {
 
     let newEffect;
 
-    if (['weapon', 'armor', 'shield', 'equipment'].includes(this.item.type)) {
+    if (['weapon', 'armor', 'shield', 'equipment', 'advantage'].includes(this.item.type)) {
       newEffect = {
         id: foundry.utils.randomID(),
         type: 'buff',

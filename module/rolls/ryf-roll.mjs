@@ -384,10 +384,9 @@ export class RyfRoll {
     // de hechizos aunque la tirada vaya por Inteligencia
     const hindrance = actor.system.combat?.hindrance || 0;
 
-    // Reference: RyF 3.0 PDF, página 98 - ventaja Arcano: +1 a tiradas de hechizos
-    const advantageBonus = (!isNPC && actor.hasAdvantage?.('arcano'))
-      ? CONFIG.RYF.advantages.arcano.spellCastingBonus
-      : 0;
+    // Reference: RyF 3.0 PDF, página 98 - efectos spell-casting (ej. ventaja
+    // Arcano: +1 a tiradas de hechizos)
+    const castingBonus = actor.system.activeEffectBonuses?.spellCasting || 0;
 
     // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
     if (actor.system.states?.wounded) {
@@ -396,7 +395,7 @@ export class RyfRoll {
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = intelligence + spellLevel + advantageBonus + diceRoll.result - hindrance + modifier;
+    const total = intelligence + spellLevel + castingBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
@@ -412,7 +411,7 @@ export class RyfRoll {
       difficulty: difficulty,
       mode: mode,
       hindrance: hindrance,
-      advantageBonus: advantageBonus,
+      castingBonus: castingBonus,
       modifier: modifier,
       diceRoll: diceRoll,
       total: total,

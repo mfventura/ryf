@@ -170,11 +170,11 @@
     },
     "advantage": {
       "description": "",
-      "advantageKey": "",
       "requirement": {
         "attribute": "",
         "value": 0
-      }
+      },
+      "effects": []
     }
   }
 }

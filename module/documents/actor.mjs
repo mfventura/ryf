@@ -17,6 +17,10 @@ export class RyfActor extends Actor {
       attackRanged: 0,
       damageMelee: 0,
       damageRanged: 0,
+      spellCasting: 0,
+      healingReceived: 0,
+      healthMultiplier: 0,
+      manaMultiplier: 0,
       maxHealth: 0,
       initiative: 0,
       hindranceReduction: 0,
@@ -33,32 +37,10 @@ export class RyfActor extends Actor {
     const system = actorData.system;
     const flags = actorData.flags.ryf || {};
 
-    this._applyAdvantageBonuses(system);
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
 
     this._applyActiveEffectBonuses(system);
-  }
-
-  hasAdvantage(key) {
-    return this.items.some(i => i.type === 'advantage' && i.system.advantageKey === key);
-  }
-
-  // Reference: RyF 3.0 PDF, página 98 - las ventajas pasivas suman a los
-  // valores de combate (Berseker, Defensor, Piel de Piedra, Puntería, Rápido,
-  // Golpe Duro, Certero, Mula de carga)
-  _applyAdvantageBonuses(system) {
-    if (this.type !== 'character') return;
-
-    for (const item of this.items) {
-      if (item.type !== 'advantage') continue;
-      const advantage = CONFIG.RYF.advantages[item.system.advantageKey];
-      if (!advantage?.bonuses) continue;
-
-      for (const [key, value] of Object.entries(advantage.bonuses)) {
-        system.activeEffectBonuses[key] = (system.activeEffectBonuses[key] || 0) + value;
-      }
-    }
   }
 
   async _preCreate(data, options, user) {
@@ -92,13 +74,15 @@ export class RyfActor extends Actor {
       delete system.attributes.carisma;
     }
 
-    // Reference: RyF 3.0 PDF, página 98 - ventaja Muro: PV = Físico x5 en lugar de x4
-    const healthMult = CONFIG.RYF.getHealthMultiplier() + (this.hasAdvantage('muro') ? 1 : 0);
+    // Reference: RyF 3.0 PDF, página 98 - efectos health-multiplier (ej. Muro:
+    // PV = Físico x5 en lugar de x4) suman al multiplicador base
+    const healthMult = CONFIG.RYF.getHealthMultiplier() + (system.activeEffectBonuses?.healthMultiplier || 0);
     system.health.max = system.attributes.fisico.value * healthMult;
 
     if (CONFIG.RYF.isMagicEnabled()) {
-      // Reference: RyF 3.0 PDF, página 98 - ventaja Maná abundante: maná INT x4 en lugar de x3
-      const manaMult = CONFIG.RYF.getManaMultiplier() + (this.hasAdvantage('manaAbundante') ? 1 : 0);
+      // Reference: RyF 3.0 PDF, página 98 - efectos mana-multiplier (ej. Maná
+      // abundante: maná INT x4 en lugar de x3)
+      const manaMult = CONFIG.RYF.getManaMultiplier() + (system.activeEffectBonuses?.manaMultiplier || 0);
       system.mana.max = system.attributes.inteligencia.value * manaMult;
     } else {
       system.mana.max = 0;
@@ -458,11 +442,9 @@ export class RyfActor extends Actor {
   }
 
   async heal(amount) {
-    // Reference: RyF 3.0 PDF, página 98 - ventaja Recuperación: cura 2 PV
-    // adicionales en cada curación, natural o mágica
-    if (this.hasAdvantage?.('recuperacion')) {
-      amount += CONFIG.RYF.advantages.recuperacion.healingBonus;
-    }
+    // Reference: RyF 3.0 PDF, página 98 - efectos healing-received (ej.
+    // Recuperación: +2 PV en cada curación, natural o mágica)
+    amount += this.system.activeEffectBonuses?.healingReceived || 0;
 
     const currentHP = this.system.health.value;
     const maxHP = this.system.health.max;
@@ -1712,6 +1694,18 @@ export class RyfActor extends Actor {
         return 'absorption-bonus';
       case 'hindrance-reduction':
         return 'hindrance-reduction';
+      case 'damage-melee':
+        return 'damage-melee-bonus';
+      case 'damage-ranged':
+        return 'damage-ranged-bonus';
+      case 'spell-casting':
+        return 'spell-casting-bonus';
+      case 'healing-received':
+        return 'healing-received-bonus';
+      case 'health-multiplier':
+        return 'health-multiplier-bonus';
+      case 'mana-multiplier':
+        return 'mana-multiplier-bonus';
       default:
         return 'skill-bonus';
     }

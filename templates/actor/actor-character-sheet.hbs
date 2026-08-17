@@ -222,9 +222,7 @@
       {{!-- Reference: RyF 3.0 PDF, página 98 - Ventajas: una sola por personaje --}}
       <div class="skills-header flexrow">
         <h3>{{localize "RYF.Advantages"}}</h3>
-        {{#unless advantages.length}}
         <a class="item-create" data-type="advantage"><i class="fas fa-plus"></i> {{localize "RYF.AddAdvantage"}}</a>
-        {{/unless}}
       </div>
 
       {{#if advantages.length}}
@@ -431,6 +429,8 @@
               {{localize "RYF.Spell"}}
             {{else if (eq effect.sourceType "item")}}
               {{localize "RYF.Item"}}
+            {{else if (eq effect.sourceType "advantage")}}
+              {{localize "RYF.Advantage"}}
             {{else if (eq effect.sourceType "condition")}}
               {{localize "RYF.Condition"}}
             {{else if (eq effect.sourceType "other")}}
@@ -440,7 +440,7 @@
             {{/if}}
           </div>
           <div class="item-name">
-            <div class="item-image"><img src="{{effect.icon}}" title="{{effect.sourceName}}" width="24" height="24"/></div>
+            <div class="item-image"><img src="{{effect.img}}" title="{{effect.sourceName}}" width="24" height="24"/></div>
             <h4>{{effect.sourceName}}</h4>
           </div>
           <div class="effect-target-type">

@@ -108,9 +108,7 @@ export class RyfActorSheet extends ActorSheet {
       } else if (i.type === 'npc-attack') {
         npcAttacks.push(i);
       } else if (i.type === 'advantage') {
-        i.effectLabel = i.system.advantageKey
-          ? game.i18n.localize(`RYF.AdvantagesList.${i.system.advantageKey}.effect`)
-          : '';
+        i.effectLabel = this._summarizeAdvantageEffects(i);
         advantages.push(i);
       }
     }
@@ -177,6 +175,23 @@ export class RyfActorSheet extends ActorSheet {
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
     context.advantages = advantages;
+  }
+
+  // Resumen legible de los efectos de una ventaja para la lista de la ficha
+  _summarizeAdvantageEffects(item) {
+    const rawEffects = item.system.effects || [];
+    const effects = Array.isArray(rawEffects) ? rawEffects : Object.values(rawEffects);
+
+    return effects.map(effect => {
+      if (effect.type === 'note') return effect.text;
+
+      const pascal = (effect.target || '').split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+      let label = game.i18n.localize(`RYF.Magic.EffectTargets.${pascal}`);
+      if (effect.targetName) label += ` (${effect.targetName})`;
+      const modifier = effect.modifier || 0;
+      return `${label} ${modifier > 0 ? '+' : ''}${modifier}`;
+    }).filter(Boolean).join(', ');
   }
 
   activateListeners(html) {
