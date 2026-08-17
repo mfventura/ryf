@@ -313,7 +313,7 @@ export class RyfActor extends Actor {
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       content: message,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
     });
 
   }
@@ -412,7 +412,7 @@ export class RyfActor extends Actor {
 
       const effectConfig = {
         name: statusName,
-        icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+        img: statusEffect?.img || `icons/svg/statuses/${statusId}.svg`,
         disabled: false,
         transfer: false,
         statuses: [statusId],
@@ -757,7 +757,7 @@ export class RyfActor extends Actor {
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
     const chatData = {
-      user: game.user.id,
+      author: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       content: await renderTemplate('systems/ryf3/templates/chat/npc-attack-roll.hbs', {
         actorName: this.name,
@@ -799,7 +799,7 @@ export class RyfActor extends Actor {
         }
 
         const damageChatData = {
-          user: game.user.id,
+          author: game.user.id,
           speaker: ChatMessage.getSpeaker({ actor: this }),
           content: await renderTemplate('systems/ryf3/templates/chat/npc-damage-roll.hbs', {
             actorName: this.name,
@@ -855,7 +855,7 @@ export class RyfActor extends Actor {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       content: html,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
     });
 
     return finalDamage;
@@ -1183,7 +1183,7 @@ export class RyfActor extends Actor {
 
         const effectConfig = {
           name: conditionName,
-          icon: statusEffect?.icon || `icons/svg/statuses/${statusId}.svg`,
+          img: statusEffect?.img || `icons/svg/statuses/${statusId}.svg`,
           origin: spell.uuid,
           disabled: false,
           transfer: false,
@@ -1462,7 +1462,7 @@ export class RyfActor extends Actor {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       content: html,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
     });
 
     return { targets: targets };

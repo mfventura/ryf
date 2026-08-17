@@ -25,22 +25,24 @@ export class RyfActiveEffect extends ActiveEffect {
 
     const effectConfig = {
       name: effectData.name || spell.name,
-      icon: effectData.img || spell.img || 'icons/svg/aura.svg',
+      img: effectData.img || spell.img || 'icons/svg/aura.svg',
       origin: spell.uuid,
       disabled: false,
       transfer: false,
 
       duration: durationConfig,
-      
-      changes: [
-        {
-          key: attributeKey,
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-          value: String(effectData.modifier || 0),
-          priority: 20
-        }
-      ],
-      
+
+      system: {
+        changes: [
+          {
+            key: attributeKey,
+            type: 'add',
+            value: String(effectData.modifier || 0),
+            priority: 20
+          }
+        ]
+      },
+
       flags: {
         ryf3: {
           sourceType: effectData.sourceType || 'spell',
@@ -175,7 +177,7 @@ export class RyfActiveEffect extends ActiveEffect {
     if (!effects || effects.length === 0) return 0;
 
     return effects.reduce((total, effect) => {
-      const change = effect.changes?.[0];
+      const change = effect.system?.changes?.[0];
       if (change) {
         return total + (parseInt(change.value) || 0);
       }
@@ -197,19 +199,21 @@ export class RyfActiveEffect extends ActiveEffect {
 
     const effectConfig = {
       name: effectData.name || item.name,
-      icon: effectData.img || item.img || 'icons/svg/item-bag.svg',
+      img: effectData.img || item.img || 'icons/svg/item-bag.svg',
       origin: item.uuid,
       disabled: false,
       transfer: false,
 
-      changes: [
-        {
-          key: attributeKey,
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-          value: String(effectData.modifier || 0),
-          priority: 20
-        }
-      ],
+      system: {
+        changes: [
+          {
+            key: attributeKey,
+            type: 'add',
+            value: String(effectData.modifier || 0),
+            priority: 20
+          }
+        ]
+      },
 
       flags: {
         ryf3: {

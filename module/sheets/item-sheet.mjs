@@ -32,8 +32,6 @@ export class RyfItemSheet extends ItemSheet {
     console.log('ItemSheet getData - isCarismaEnabled:', context.isCarismaEnabled);
     console.log('ItemSheet getData - isMagicEnabled:', context.isMagicEnabled);
 
-    context.enrichedDescription = TextEditor.enrichHTML(context.system.description, {async: false});
-
     if (this.item.type === 'skill') {
       this._prepareSkillData(context);
     }

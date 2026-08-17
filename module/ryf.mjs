@@ -30,7 +30,7 @@ Hooks.once('init', async function() {
   CONFIG.statusEffects.push({
     id: 'wounded',
     name: 'RYF.States.wounded',
-    icon: 'icons/svg/blood.svg'
+    img: 'icons/svg/blood.svg'
   });
 
   Actors.unregisterSheet("core", ActorSheet);

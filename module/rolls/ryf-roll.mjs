@@ -424,10 +424,9 @@ export class RyfRoll {
     const html = await renderTemplate(template, rollData);
 
     const chatData = {
-      user: game.user.id,
+      author: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: rollData.actor }),
       content: html,
-      type: CONST.CHAT_MESSAGE_TYPES.ROLL,
       sound: CONFIG.sounds.dice
     };
 

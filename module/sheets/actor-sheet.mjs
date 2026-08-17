@@ -140,7 +140,7 @@ export class RyfActorSheet extends ActorSheet {
           effect.effectType = e.flags.ryf3.effectType || 'unknown';
           effect.targetType = e.flags.ryf3.targetType || 'unknown';
           effect.targetName = e.flags.ryf3.targetName || '';
-          effect.modifier = e.changes?.[0]?.value || 0;
+          effect.modifier = e.system?.changes?.[0]?.value || 0;
         } else if (isNativeCondition) {
           effect.sourceName = e.name;
           effect.sourceType = 'condition';
@@ -154,7 +154,7 @@ export class RyfActorSheet extends ActorSheet {
           effect.effectType = 'other';
           effect.targetType = 'other';
           effect.targetName = '';
-          effect.modifier = e.changes?.[0]?.value || 0;
+          effect.modifier = e.system?.changes?.[0]?.value || 0;
         }
 
         return effect;
