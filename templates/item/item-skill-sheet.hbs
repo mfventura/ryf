@@ -27,7 +27,7 @@
         <select name="system.attribute" data-dtype="String">
           {{#each attributes as |attr|}}
           <option value="{{attr.key}}" {{#if (eq attr.key ../system.attribute)}}selected{{/if}}>
-            {{attr.label}}
+            {{localize attr.label}}
           </option>
           {{/each}}
         </select>

@@ -15,7 +15,7 @@
   {{/if}}
 
   <div class="roll-formula">
-    <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
+    <span class="formula-part">{{localize (concat "RYF.Attributes." (capitalize attribute))}}: {{attributeValue}}</span>
     <span class="formula-separator">+</span>
     <span class="formula-part">{{localize "RYF.Level"}}: {{skillLevel}}</span>
     {{#if (gt effectBonus 0)}}

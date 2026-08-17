@@ -2,7 +2,7 @@
   <div class="roll-header">
     <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
     <div class="roll-title">
-      <h3>{{localize (concat "RYF.Attributes." attribute)}}</h3>
+      <h3>{{localize (concat "RYF.Attributes." (capitalize attribute))}}</h3>
       <div class="roll-subtitle">{{actor.name}}</div>
     </div>
   </div>
@@ -18,7 +18,7 @@
     {{#if isNPC}}
     <span class="formula-part">{{localize "RYF.Bonus"}}: {{attributeValue}}</span>
     {{else}}
-    <span class="formula-part">{{localize (concat "RYF.Attributes." attribute)}}: {{attributeValue}}</span>
+    <span class="formula-part">{{localize (concat "RYF.Attributes." (capitalize attribute))}}: {{attributeValue}}</span>
     {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
