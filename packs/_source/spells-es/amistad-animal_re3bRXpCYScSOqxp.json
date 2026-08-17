@@ -1,6 +1,5 @@
 {
   "_id": "re3bRXpCYScSOqxp",
-  "_key": "!items!re3bRXpCYScSOqxp",
   "name": "Amistad Animal",
   "type": "spell",
   "img": "icons/environment/creatures/horse-white.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!re3bRXpCYScSOqxp"
 }

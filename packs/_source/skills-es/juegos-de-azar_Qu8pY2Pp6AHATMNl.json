@@ -1,6 +1,5 @@
 {
   "_id": "Qu8pY2Pp6AHATMNl",
-  "_key": "!items!Qu8pY2Pp6AHATMNl",
   "name": "Juegos de azar",
   "type": "skill",
   "img": "icons/sundries/gaming/dice-runed-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Qu8pY2Pp6AHATMNl"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "zNEqWvGXs0eE68rz",
-  "_key": "!items!zNEqWvGXs0eE68rz",
   "name": "Generador de campo de fuerza",
   "type": "equipment",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!zNEqWvGXs0eE68rz"
 }

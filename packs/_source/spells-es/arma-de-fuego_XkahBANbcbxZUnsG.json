@@ -1,6 +1,5 @@
 {
   "_id": "XkahBANbcbxZUnsG",
-  "_key": "!items!XkahBANbcbxZUnsG",
   "name": "Arma de Fuego",
   "type": "spell",
   "img": "icons/magic/fire/projectile-fireball-smoke-orange.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!XkahBANbcbxZUnsG"
 }

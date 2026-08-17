@@ -1,6 +1,5 @@
 {
   "_id": "E3RkLsZIiphnHH2i",
-  "_key": "!items!E3RkLsZIiphnHH2i",
   "name": "Escáner multiespectral",
   "type": "equipment",
   "img": "icons/sundries/gaming/playing-cards-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!E3RkLsZIiphnHH2i"
 }

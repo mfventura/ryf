@@ -1,6 +1,5 @@
 {
   "_id": "W3LkTrm4XG4GyWtm",
-  "_key": "!items!W3LkTrm4XG4GyWtm",
   "name": "Religión",
   "type": "skill",
   "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!W3LkTrm4XG4GyWtm"
 }

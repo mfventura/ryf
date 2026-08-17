@@ -1,6 +1,5 @@
 {
   "_id": "jHoMUdbczJ9kbTbk",
-  "_key": "!items!jHoMUdbczJ9kbTbk",
   "name": "Armadura de cuero",
   "type": "armor",
   "img": "icons/equipment/chest/breastplate-leather-brown.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!jHoMUdbczJ9kbTbk"
 }

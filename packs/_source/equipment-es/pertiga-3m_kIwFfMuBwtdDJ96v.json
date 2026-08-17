@@ -1,6 +1,5 @@
 {
   "_id": "kIwFfMuBwtdDJ96v",
-  "_key": "!items!kIwFfMuBwtdDJ96v",
   "name": "Pértiga (3m)",
   "type": "equipment",
   "img": "icons/weapons/staves/staff-simple-wood.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!kIwFfMuBwtdDJ96v"
 }

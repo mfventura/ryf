@@ -1,6 +1,5 @@
 {
   "_id": "BXrfx64KhJiqyEvF",
-  "_key": "!items!BXrfx64KhJiqyEvF",
   "name": "Astrofísica",
   "type": "skill",
   "img": "icons/magic/cosmic/orb-planet-ringed-purple.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!BXrfx64KhJiqyEvF"
 }

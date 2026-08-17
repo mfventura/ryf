@@ -1,6 +1,5 @@
 {
   "_id": "xWElTOFARDqOENF5",
-  "_key": "!items!xWElTOFARDqOENF5",
   "name": "Chaleco antibalas",
   "type": "armor",
   "img": "icons/equipment/chest/vest-armored-blue.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!xWElTOFARDqOENF5"
 }

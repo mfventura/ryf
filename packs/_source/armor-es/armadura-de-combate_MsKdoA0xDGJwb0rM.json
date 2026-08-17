@@ -1,6 +1,5 @@
 {
   "_id": "MsKdoA0xDGJwb0rM",
-  "_key": "!items!MsKdoA0xDGJwb0rM",
   "name": "Armadura de combate",
   "type": "armor",
   "img": "icons/equipment/chest/breastplate-armored-steel-blue.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!MsKdoA0xDGJwb0rM"
 }

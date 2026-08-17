@@ -1,6 +1,5 @@
 {
   "_id": "UoEl0Mx8fNNB1om3",
-  "_key": "!items!UoEl0Mx8fNNB1om3",
   "name": "Campo de fuerza portátil",
   "type": "shield",
   "img": "icons/magic/defensive/shield-barrier-glowing-pentagon-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!UoEl0Mx8fNNB1om3"
 }

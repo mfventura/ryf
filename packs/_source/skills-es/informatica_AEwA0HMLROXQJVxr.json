@@ -1,6 +1,5 @@
 {
   "_id": "AEwA0HMLROXQJVxr",
-  "_key": "!items!AEwA0HMLROXQJVxr",
   "name": "Informática",
   "type": "skill",
   "img": "icons/sundries/gaming/playing-cards-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!AEwA0HMLROXQJVxr"
 }

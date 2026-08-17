@@ -1,6 +1,5 @@
 {
   "_id": "436gUg01fSSQ2Ihn",
-  "_key": "!items!436gUg01fSSQ2Ihn",
   "name": "Toque Vampírico",
   "type": "spell",
   "img": "icons/magic/death/hand-dirt-undead-zombie-green.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!436gUg01fSSQ2Ihn"
 }

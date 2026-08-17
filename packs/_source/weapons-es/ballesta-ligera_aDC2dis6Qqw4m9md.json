@@ -1,6 +1,5 @@
 {
   "_id": "aDC2dis6Qqw4m9md",
-  "_key": "!items!aDC2dis6Qqw4m9md",
   "name": "Ballesta ligera",
   "type": "weapon",
   "img": "icons/weapons/crossbows/crossbow-simple-brown.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!aDC2dis6Qqw4m9md"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "krmbzPNyEu1tw8sE",
-  "_key": "!items!krmbzPNyEu1tw8sE",
   "name": "Cadena (3m)",
   "type": "equipment",
   "img": "icons/sundries/survival/chain-steel.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!krmbzPNyEu1tw8sE"
 }

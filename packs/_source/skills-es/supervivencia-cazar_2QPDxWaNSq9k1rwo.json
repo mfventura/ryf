@@ -1,6 +1,5 @@
 {
   "_id": "2QPDxWaNSq9k1rwo",
-  "_key": "!items!2QPDxWaNSq9k1rwo",
   "name": "Supervivencia/Cazar",
   "type": "skill",
   "img": "icons/environment/wilderness/camp-improvised.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!2QPDxWaNSq9k1rwo"
 }

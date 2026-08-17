@@ -1,6 +1,5 @@
 {
   "_id": "xG52cqcZwrpVcd6u",
-  "_key": "!items!xG52cqcZwrpVcd6u",
   "name": "Bola de Fuego",
   "type": "spell",
   "img": "icons/magic/fire/projectile-fireball-smoke-large-orange.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!xG52cqcZwrpVcd6u"
 }

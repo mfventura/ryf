@@ -1,6 +1,5 @@
 {
   "_id": "qcByiNiL9LNZuDu1",
-  "_key": "!items!qcByiNiL9LNZuDu1",
   "name": "Robar bolsillos",
   "type": "skill",
   "img": "icons/containers/bags/coinpouch-gold-red.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!qcByiNiL9LNZuDu1"
 }

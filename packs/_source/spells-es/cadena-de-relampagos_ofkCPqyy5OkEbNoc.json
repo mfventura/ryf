@@ -1,6 +1,5 @@
 {
   "_id": "ofkCPqyy5OkEbNoc",
-  "_key": "!items!ofkCPqyy5OkEbNoc",
   "name": "Cadena de Relámpagos",
   "type": "spell",
   "img": "icons/magic/lightning/bolt-strike-forked-blue.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!ofkCPqyy5OkEbNoc"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "FyOWOBt7TmQYtzFz",
-  "_key": "!items!FyOWOBt7TmQYtzFz",
   "name": "Cuerda (15m)",
   "type": "equipment",
   "img": "icons/sundries/survival/rope-wrapped-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!FyOWOBt7TmQYtzFz"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "lzstLdeOfdZ55DME",
-  "_key": "!items!lzstLdeOfdZ55DME",
   "name": "Detectar Magia",
   "type": "spell",
   "img": "icons/magic/perception/eye-ringed-glow-angry-small-teal.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!lzstLdeOfdZ55DME"
 }

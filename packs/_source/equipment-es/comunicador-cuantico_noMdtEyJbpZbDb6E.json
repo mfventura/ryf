@@ -1,6 +1,5 @@
 {
   "_id": "noMdtEyJbpZbDb6E",
-  "_key": "!items!noMdtEyJbpZbDb6E",
   "name": "Comunicador cuántico",
   "type": "equipment",
   "img": "icons/sundries/gaming/playing-cards-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!noMdtEyJbpZbDb6E"
 }

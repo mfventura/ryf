@@ -1,6 +1,5 @@
 {
   "_id": "92QhOndMBLm2fzIk",
-  "_key": "!items!92QhOndMBLm2fzIk",
   "name": "Kit de herramientas",
   "type": "equipment",
   "img": "icons/tools/hand/hammer-and-nail.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!92QhOndMBLm2fzIk"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "9YKcTy0RjjyfPk9h",
-  "_key": "!items!9YKcTy0RjjyfPk9h",
   "name": "Armas cuerpo a cuerpo",
   "type": "skill",
   "img": "icons/skills/melee/sword-shield-stylized-white.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!9YKcTy0RjjyfPk9h"
 }

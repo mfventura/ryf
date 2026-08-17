@@ -1,6 +1,5 @@
 {
   "_id": "tgRS4MAQa2rQ77Cl",
-  "_key": "!items!tgRS4MAQa2rQ77Cl",
   "name": "Aceite (frasco)",
   "type": "equipment",
   "img": "icons/consumables/potions/bottle-round-corked-labeled-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!tgRS4MAQa2rQ77Cl"
 }

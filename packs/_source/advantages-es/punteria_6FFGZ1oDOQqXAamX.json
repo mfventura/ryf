@@ -1,6 +1,5 @@
 {
   "_id": "6FFGZ1oDOQqXAamX",
-  "_key": "!items!6FFGZ1oDOQqXAamX",
   "name": "Puntería",
   "type": "advantage",
   "img": "icons/skills/ranged/archery-bow-attack-yellow.webp",
@@ -27,5 +26,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!6FFGZ1oDOQqXAamX"
 }

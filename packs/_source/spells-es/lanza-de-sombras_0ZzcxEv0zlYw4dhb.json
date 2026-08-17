@@ -1,6 +1,5 @@
 {
   "_id": "0ZzcxEv0zlYw4dhb",
-  "_key": "!items!0ZzcxEv0zlYw4dhb",
   "name": "Lanza de Sombras",
   "type": "spell",
   "img": "icons/magic/death/projectile-shadow-bolt-purple.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!0ZzcxEv0zlYw4dhb"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "GhJvhJHRIS5Bemt6",
-  "_key": "!items!GhJvhJHRIS5Bemt6",
   "name": "Saco de dormir",
   "type": "equipment",
   "img": "icons/sundries/survival/bedroll-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!GhJvhJHRIS5Bemt6"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "J3YEFf9TeuSbCL6H",
-  "_key": "!items!J3YEFf9TeuSbCL6H",
   "name": "Escudo torre",
   "type": "shield",
   "img": "icons/equipment/shield/tower-steel-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!J3YEFf9TeuSbCL6H"
 }

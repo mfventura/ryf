@@ -1,6 +1,5 @@
 {
   "_id": "zBKPsasCdXbFDT5P",
-  "_key": "!items!zBKPsasCdXbFDT5P",
   "name": "Odre de agua",
   "type": "equipment",
   "img": "icons/consumables/drinks/waterskin-leather-brown-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!zBKPsasCdXbFDT5P"
 }

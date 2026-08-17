@@ -1,6 +1,5 @@
 {
   "_id": "tDWoTKwZGwN2z7KY",
-  "_key": "!items!tDWoTKwZGwN2z7KY",
   "name": "Prismáticos",
   "type": "equipment",
   "img": "icons/tools/navigation/spyglass-brass.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!tDWoTKwZGwN2z7KY"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "0q66Nw34owAKXbBB",
-  "_key": "!items!0q66Nw34owAKXbBB",
   "name": "Rifle láser",
   "type": "weapon",
   "img": "icons/weapons/guns/gun-laser-orange.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!0q66Nw34owAKXbBB"
 }

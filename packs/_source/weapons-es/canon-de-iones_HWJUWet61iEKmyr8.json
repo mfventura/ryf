@@ -1,6 +1,5 @@
 {
   "_id": "HWJUWet61iEKmyr8",
-  "_key": "!items!HWJUWet61iEKmyr8",
   "name": "Cañón de iones",
   "type": "weapon",
   "img": "icons/weapons/guns/gun-cannon-energy-blue.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!HWJUWet61iEKmyr8"
 }

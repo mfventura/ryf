@@ -1,6 +1,5 @@
 {
   "_id": "Gxy5BKxz3NDhczEk",
-  "_key": "!items!Gxy5BKxz3NDhczEk",
   "name": "Hacha de mano",
   "type": "weapon",
   "img": "icons/weapons/axes/axe-broad-worn.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Gxy5BKxz3NDhczEk"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "F1WokHDLlu1tCqvI",
-  "_key": "!items!F1WokHDLlu1tCqvI",
   "name": "Pies de Araña",
   "type": "spell",
   "img": "icons/creatures/invertebrates/spider-large-black.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!F1WokHDLlu1tCqvI"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "KVeuCVHmNacxVqa5",
-  "_key": "!items!KVeuCVHmNacxVqa5",
   "name": "Atar Demonio",
   "type": "spell",
   "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!KVeuCVHmNacxVqa5"
 }

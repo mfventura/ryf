@@ -1,6 +1,5 @@
 {
   "_id": "xCLkxhOa3OPkJjAX",
-  "_key": "!items!xCLkxhOa3OPkJjAX",
   "name": "Armas a distancia",
   "type": "skill",
   "img": "icons/skills/ranged/arrow-flying-white-blue.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!xCLkxhOa3OPkJjAX"
 }

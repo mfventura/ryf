@@ -1,6 +1,5 @@
 {
   "_id": "g5MT7ZmR6sXLjcIp",
-  "_key": "!items!g5MT7ZmR6sXLjcIp",
   "name": "Kit de nanotecnología",
   "type": "equipment",
   "img": "icons/tools/laboratory/beaker-fluid-blue.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!g5MT7ZmR6sXLjcIp"
 }

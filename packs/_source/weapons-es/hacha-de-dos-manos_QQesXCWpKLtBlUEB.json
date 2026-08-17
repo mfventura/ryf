@@ -1,6 +1,5 @@
 {
   "_id": "QQesXCWpKLtBlUEB",
-  "_key": "!items!QQesXCWpKLtBlUEB",
   "name": "Hacha de dos manos",
   "type": "weapon",
   "img": "icons/weapons/axes/axe-double-black.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!QQesXCWpKLtBlUEB"
 }

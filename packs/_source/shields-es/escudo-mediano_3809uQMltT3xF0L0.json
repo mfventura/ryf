@@ -1,6 +1,5 @@
 {
   "_id": "3809uQMltT3xF0L0",
-  "_key": "!items!3809uQMltT3xF0L0",
   "name": "Escudo mediano",
   "type": "shield",
   "img": "icons/equipment/shield/heater-steel-worn-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!3809uQMltT3xF0L0"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "8ntQIDorCNExKWht",
-  "_key": "!items!8ntQIDorCNExKWht",
   "name": "Aura de Poder",
   "type": "spell",
   "img": "icons/magic/fire/barrier-wall-flame-ring-yellow.webp",
@@ -49,5 +48,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!8ntQIDorCNExKWht"
 }

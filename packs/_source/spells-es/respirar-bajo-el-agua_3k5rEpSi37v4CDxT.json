@@ -1,6 +1,5 @@
 {
   "_id": "3k5rEpSi37v4CDxT",
-  "_key": "!items!3k5rEpSi37v4CDxT",
   "name": "Respirar Bajo el Agua",
   "type": "spell",
   "img": "icons/magic/water/wave-water-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!3k5rEpSi37v4CDxT"
 }

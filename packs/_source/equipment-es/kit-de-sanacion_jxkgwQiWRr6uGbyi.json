@@ -1,6 +1,5 @@
 {
   "_id": "jxkgwQiWRr6uGbyi",
-  "_key": "!items!jxkgwQiWRr6uGbyi",
   "name": "Kit de sanación",
   "type": "equipment",
   "img": "icons/sundries/survival/bandage-wound-brown-red.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!jxkgwQiWRr6uGbyi"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "Phl8YAhNSlCDKfsB",
-  "_key": "!items!Phl8YAhNSlCDKfsB",
   "name": "Escudo balístico",
   "type": "shield",
   "img": "icons/equipment/shield/heater-steel-reinforced-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Phl8YAhNSlCDKfsB"
 }

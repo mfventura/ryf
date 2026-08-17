@@ -1,6 +1,5 @@
 {
   "_id": "yIvvFrtj4jSXrVVe",
-  "_key": "!items!yIvvFrtj4jSXrVVe",
   "name": "Ojos de Lince",
   "type": "spell",
   "img": "icons/magic/perception/eye-ringed-glow-angry-large-red.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!yIvvFrtj4jSXrVVe"
 }

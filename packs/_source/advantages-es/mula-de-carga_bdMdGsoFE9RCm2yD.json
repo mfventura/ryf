@@ -1,6 +1,5 @@
 {
   "_id": "bdMdGsoFE9RCm2yD",
-  "_key": "!items!bdMdGsoFE9RCm2yD",
   "name": "Mula de carga",
   "type": "advantage",
   "img": "icons/containers/bags/pack-leather-brown.webp",
@@ -27,5 +26,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!bdMdGsoFE9RCm2yD"
 }

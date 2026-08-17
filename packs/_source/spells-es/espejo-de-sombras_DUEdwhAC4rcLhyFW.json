@@ -1,6 +1,5 @@
 {
   "_id": "DUEdwhAC4rcLhyFW",
-  "_key": "!items!DUEdwhAC4rcLhyFW",
   "name": "Espejo de Sombras",
   "type": "spell",
   "img": "icons/magic/control/silhouette-hold-change-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!DUEdwhAC4rcLhyFW"
 }

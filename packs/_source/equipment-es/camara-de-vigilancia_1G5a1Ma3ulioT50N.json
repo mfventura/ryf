@@ -1,6 +1,5 @@
 {
   "_id": "1G5a1Ma3ulioT50N",
-  "_key": "!items!1G5a1Ma3ulioT50N",
   "name": "Cámara de vigilancia",
   "type": "equipment",
   "img": "icons/sundries/gaming/playing-cards-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!1G5a1Ma3ulioT50N"
 }

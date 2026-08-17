@@ -1,6 +1,5 @@
 {
   "_id": "tkDUniGBKYzVGgED",
-  "_key": "!items!tkDUniGBKYzVGgED",
   "name": "Anticipación",
   "type": "spell",
   "img": "icons/magic/time/clock-stopwatch-white-blue.webp",
@@ -49,5 +48,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!tkDUniGBKYzVGgED"
 }

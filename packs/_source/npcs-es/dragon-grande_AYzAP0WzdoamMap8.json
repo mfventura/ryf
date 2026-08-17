@@ -1,6 +1,5 @@
 {
   "_id": "AYzAP0WzdoamMap8",
-  "_key": "!actors!AYzAP0WzdoamMap8",
   "name": "Dragón grande",
   "type": "npc",
   "img": "icons/creatures/reptiles/dragon-horned-blue.webp",
@@ -21,7 +20,6 @@
   "items": [
     {
       "_id": "ZtpxaO3FgLlGK5cA",
-      "_key": "!actors.items!AYzAP0WzdoamMap8.ZtpxaO3FgLlGK5cA",
       "name": "Garra/Mordisco",
       "type": "npc-attack",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
@@ -39,7 +37,8 @@
       "ownership": {
         "default": 0
       },
-      "flags": {}
+      "flags": {},
+      "_key": "!actors.items!AYzAP0WzdoamMap8.ZtpxaO3FgLlGK5cA"
     }
   ],
   "effects": [],
@@ -48,5 +47,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!actors!AYzAP0WzdoamMap8"
 }

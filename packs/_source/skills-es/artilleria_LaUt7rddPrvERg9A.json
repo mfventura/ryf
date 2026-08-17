@@ -1,6 +1,5 @@
 {
   "_id": "LaUt7rddPrvERg9A",
-  "_key": "!items!LaUt7rddPrvERg9A",
   "name": "Artillería",
   "type": "skill",
   "img": "icons/weapons/artillery/cannon-ball-fire-orange.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!LaUt7rddPrvERg9A"
 }

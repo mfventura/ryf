@@ -1,6 +1,5 @@
 {
   "_id": "E70t0B7pwXfnKfBE",
-  "_key": "!items!E70t0B7pwXfnKfBE",
   "name": "Piel de Piedra",
   "type": "advantage",
   "img": "icons/magic/earth/strike-fist-stone-gray.webp",
@@ -27,5 +26,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!E70t0B7pwXfnKfBE"
 }

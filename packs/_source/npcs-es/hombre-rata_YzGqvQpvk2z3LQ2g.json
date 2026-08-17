@@ -1,6 +1,5 @@
 {
   "_id": "YzGqvQpvk2z3LQ2g",
-  "_key": "!actors!YzGqvQpvk2z3LQ2g",
   "name": "Hombre-rata",
   "type": "npc",
   "img": "icons/creatures/mammals/rodent-rat-diseased-gray.webp",
@@ -21,7 +20,6 @@
   "items": [
     {
       "_id": "BLIN4wrYkguDlPxE",
-      "_key": "!actors.items!YzGqvQpvk2z3LQ2g.BLIN4wrYkguDlPxE",
       "name": "Daga sucia",
       "type": "npc-attack",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
@@ -39,7 +37,8 @@
       "ownership": {
         "default": 0
       },
-      "flags": {}
+      "flags": {},
+      "_key": "!actors.items!YzGqvQpvk2z3LQ2g.BLIN4wrYkguDlPxE"
     }
   ],
   "effects": [],
@@ -48,5 +47,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!actors!YzGqvQpvk2z3LQ2g"
 }

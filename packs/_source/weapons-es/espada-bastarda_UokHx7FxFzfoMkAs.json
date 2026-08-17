@@ -1,6 +1,5 @@
 {
   "_id": "UokHx7FxFzfoMkAs",
-  "_key": "!items!UokHx7FxFzfoMkAs",
   "name": "Espada bastarda",
   "type": "weapon",
   "img": "icons/weapons/swords/sword-broad-worn-blue.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!UokHx7FxFzfoMkAs"
 }

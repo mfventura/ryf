@@ -1,6 +1,5 @@
 {
   "_id": "qWWcqHu83hFv03Sj",
-  "_key": "!items!qWWcqHu83hFv03Sj",
   "name": "Escudo pesado",
   "type": "shield",
   "img": "icons/equipment/shield/kite-steel-grey.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!qWWcqHu83hFv03Sj"
 }

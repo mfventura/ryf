@@ -1,6 +1,5 @@
 {
   "_id": "XEm8vG5nCTOBwKJx",
-  "_key": "!items!XEm8vG5nCTOBwKJx",
   "name": "Infundir Terror",
   "type": "spell",
   "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!XEm8vG5nCTOBwKJx"
 }

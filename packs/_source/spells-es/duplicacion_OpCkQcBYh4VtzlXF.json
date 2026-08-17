@@ -1,6 +1,5 @@
 {
   "_id": "OpCkQcBYh4VtzlXF",
-  "_key": "!items!OpCkQcBYh4VtzlXF",
   "name": "Duplicación",
   "type": "spell",
   "img": "icons/magic/control/silhouette-hold-change-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!OpCkQcBYh4VtzlXF"
 }

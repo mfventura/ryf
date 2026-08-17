@@ -1,6 +1,5 @@
 {
   "_id": "JARtjmm0U1BWObqm",
-  "_key": "!items!JARtjmm0U1BWObqm",
   "name": "Símbolo sagrado",
   "type": "equipment",
   "img": "icons/magic/holy/chalice-glowing-gold-water.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!JARtjmm0U1BWObqm"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "8KTvWzEdlYFtLHkE",
-  "_key": "!actors!8KTvWzEdlYFtLHkE",
   "name": "Lord liche",
   "type": "npc",
   "img": "icons/magic/death/undead-lich-humanoid-crown-blue.webp",
@@ -21,7 +20,6 @@
   "items": [
     {
       "_id": "PFBJKePwvDVLWOtF",
-      "_key": "!actors.items!8KTvWzEdlYFtLHkE.PFBJKePwvDVLWOtF",
       "name": "Toque de muerte",
       "type": "npc-attack",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
@@ -39,7 +37,8 @@
       "ownership": {
         "default": 0
       },
-      "flags": {}
+      "flags": {},
+      "_key": "!actors.items!8KTvWzEdlYFtLHkE.PFBJKePwvDVLWOtF"
     }
   ],
   "effects": [],
@@ -48,5 +47,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!actors!8KTvWzEdlYFtLHkE"
 }

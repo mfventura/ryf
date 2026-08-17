@@ -1,6 +1,5 @@
 {
   "_id": "J5DMVYfEbJOIROZy",
-  "_key": "!items!J5DMVYfEbJOIROZy",
   "name": "Espejo de mano",
   "type": "equipment",
   "img": "icons/sundries/misc/mirror-hand-steel.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!J5DMVYfEbJOIROZy"
 }

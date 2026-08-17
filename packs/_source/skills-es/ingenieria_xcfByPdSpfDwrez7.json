@@ -1,6 +1,5 @@
 {
   "_id": "xcfByPdSpfDwrez7",
-  "_key": "!items!xcfByPdSpfDwrez7",
   "name": "Ingeniería",
   "type": "skill",
   "img": "icons/tools/smithing/anvil-steel-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!xcfByPdSpfDwrez7"
 }

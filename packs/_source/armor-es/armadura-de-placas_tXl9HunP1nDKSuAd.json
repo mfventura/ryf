@@ -1,6 +1,5 @@
 {
   "_id": "tXl9HunP1nDKSuAd",
-  "_key": "!items!tXl9HunP1nDKSuAd",
   "name": "Armadura de placas",
   "type": "armor",
   "img": "icons/equipment/chest/breastplate-layered-steel-grey.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!tXl9HunP1nDKSuAd"
 }

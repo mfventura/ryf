@@ -1,6 +1,5 @@
 {
   "_id": "r972nqmi1tgYYkIH",
-  "_key": "!items!r972nqmi1tgYYkIH",
   "name": "Comunicación a distancia",
   "type": "spell",
   "img": "icons/magic/perception/eye-ringed-glow-angry-large-red.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!r972nqmi1tgYYkIH"
 }

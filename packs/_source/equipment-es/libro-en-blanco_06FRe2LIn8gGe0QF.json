@@ -1,6 +1,5 @@
 {
   "_id": "06FRe2LIn8gGe0QF",
-  "_key": "!items!06FRe2LIn8gGe0QF",
   "name": "Libro en blanco",
   "type": "equipment",
   "img": "icons/sundries/books/book-worn-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!06FRe2LIn8gGe0QF"
 }

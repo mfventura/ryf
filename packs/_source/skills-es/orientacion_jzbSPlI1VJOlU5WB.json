@@ -1,6 +1,5 @@
 {
   "_id": "jzbSPlI1VJOlU5WB",
-  "_key": "!items!jzbSPlI1VJOlU5WB",
   "name": "Orientación",
   "type": "skill",
   "img": "icons/tools/navigation/compass-brass-blue-red.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!jzbSPlI1VJOlU5WB"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "qFQm5WG9AVAfBFYf",
-  "_key": "!items!qFQm5WG9AVAfBFYf",
   "name": "Arco largo",
   "type": "weapon",
   "img": "icons/weapons/bows/longbow-leather-brown.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!qFQm5WG9AVAfBFYf"
 }

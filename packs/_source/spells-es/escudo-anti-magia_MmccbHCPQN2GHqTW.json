@@ -1,6 +1,5 @@
 {
   "_id": "MmccbHCPQN2GHqTW",
-  "_key": "!items!MmccbHCPQN2GHqTW",
   "name": "Escudo Anti-magia",
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-magenta.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!MmccbHCPQN2GHqTW"
 }

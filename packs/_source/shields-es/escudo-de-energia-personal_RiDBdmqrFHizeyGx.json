@@ -1,6 +1,5 @@
 {
   "_id": "RiDBdmqrFHizeyGx",
-  "_key": "!items!RiDBdmqrFHizeyGx",
   "name": "Escudo de energía personal",
   "type": "shield",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!RiDBdmqrFHizeyGx"
 }

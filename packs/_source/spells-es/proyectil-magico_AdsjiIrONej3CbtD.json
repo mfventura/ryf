@@ -1,6 +1,5 @@
 {
   "_id": "AdsjiIrONej3CbtD",
-  "_key": "!items!AdsjiIrONej3CbtD",
   "name": "Proyectil Mágico",
   "type": "spell",
   "img": "icons/magic/light/projectile-beams-salvo-blue.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!AdsjiIrONej3CbtD"
 }

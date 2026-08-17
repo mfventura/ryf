@@ -1,6 +1,5 @@
 {
   "_id": "FCg4JFCOvveVAiw2",
-  "_key": "!items!FCg4JFCOvveVAiw2",
   "name": "Escudo antidisturbios",
   "type": "shield",
   "img": "icons/equipment/shield/riot-steel-reinforced.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!FCg4JFCOvveVAiw2"
 }

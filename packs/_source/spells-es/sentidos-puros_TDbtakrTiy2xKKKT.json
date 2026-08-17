@@ -1,6 +1,5 @@
 {
   "_id": "TDbtakrTiy2xKKKT",
-  "_key": "!items!TDbtakrTiy2xKKKT",
   "name": "Sentidos Puros",
   "type": "spell",
   "img": "icons/magic/perception/eye-ringed-glow-angry-large-blue.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!TDbtakrTiy2xKKKT"
 }

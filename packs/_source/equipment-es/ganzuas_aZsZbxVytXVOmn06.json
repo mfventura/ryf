@@ -1,6 +1,5 @@
 {
   "_id": "aZsZbxVytXVOmn06",
-  "_key": "!items!aZsZbxVytXVOmn06",
   "name": "Ganzúas",
   "type": "equipment",
   "img": "icons/sundries/misc/lockpicks-steel.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!aZsZbxVytXVOmn06"
 }

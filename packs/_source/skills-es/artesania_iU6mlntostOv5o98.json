@@ -1,6 +1,5 @@
 {
   "_id": "iU6mlntostOv5o98",
-  "_key": "!items!iU6mlntostOv5o98",
   "name": "Artesanía",
   "type": "skill",
   "img": "icons/tools/smithing/hammer-sledge-steel-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!iU6mlntostOv5o98"
 }

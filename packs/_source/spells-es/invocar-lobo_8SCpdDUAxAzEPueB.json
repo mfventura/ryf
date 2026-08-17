@@ -1,6 +1,5 @@
 {
   "_id": "8SCpdDUAxAzEPueB",
-  "_key": "!items!8SCpdDUAxAzEPueB",
   "name": "Invocar Lobo",
   "type": "spell",
   "img": "icons/environment/creatures/wolf-shadow-black.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!8SCpdDUAxAzEPueB"
 }

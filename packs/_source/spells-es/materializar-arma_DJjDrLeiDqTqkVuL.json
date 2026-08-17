@@ -1,6 +1,5 @@
 {
   "_id": "DJjDrLeiDqTqkVuL",
-  "_key": "!items!DJjDrLeiDqTqkVuL",
   "name": "Materializar Arma",
   "type": "spell",
   "img": "icons/weapons/swords/sword-guard-steel-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!DJjDrLeiDqTqkVuL"
 }

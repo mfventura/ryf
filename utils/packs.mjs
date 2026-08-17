@@ -40,6 +40,18 @@ function hasFiles(dir, extension = null) {
   return extension ? files.some(f => f.endsWith(extension)) : files.length > 0;
 }
 
+// Nombre de fichero estable por documento: <slug-del-nombre>_<id>.json.
+// Debe coincidir con el convenio de las fuentes existentes para que
+// `unpack` sobreescriba en vez de duplicar.
+function slugify(name) {
+  return name.normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function transformName(doc) {
+  return `${slugify(doc.name)}_${doc._id}.json`;
+}
+
 if (command === 'pack') {
   for (const pack of selected) {
     if (!hasFiles(pack.sourceDir, '.json')) {
@@ -55,7 +67,7 @@ if (command === 'pack') {
       if (names.length) console.warn(`— ${pack.name}: sin datos en ${path.relative(ROOT, pack.packDir)}, saltado`);
       continue;
     }
-    await extractPack(pack.packDir, pack.sourceDir, { log: true });
+    await extractPack(pack.packDir, pack.sourceDir, { log: true, transformName });
     console.log(`✓ ${pack.name} extraído a ${path.relative(ROOT, pack.sourceDir)}`);
   }
 } else {

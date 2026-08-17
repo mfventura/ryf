@@ -1,6 +1,5 @@
 {
   "_id": "AqP1kOtwWHz9hRfJ",
-  "_key": "!items!AqP1kOtwWHz9hRfJ",
   "name": "Rayo Solar",
   "type": "spell",
   "img": "icons/magic/light/beam-rays-yellow-large.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!AqP1kOtwWHz9hRfJ"
 }

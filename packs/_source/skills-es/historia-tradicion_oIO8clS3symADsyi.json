@@ -1,6 +1,5 @@
 {
   "_id": "oIO8clS3symADsyi",
-  "_key": "!items!oIO8clS3symADsyi",
   "name": "Historia/Tradición",
   "type": "skill",
   "img": "icons/sundries/books/book-embossed-gold-red.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!oIO8clS3symADsyi"
 }

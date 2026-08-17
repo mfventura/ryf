@@ -1,6 +1,5 @@
 {
   "_id": "vpkte0e7IBapP71f",
-  "_key": "!items!vpkte0e7IBapP71f",
   "name": "Seducción",
   "type": "skill",
   "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!vpkte0e7IBapP71f"
 }

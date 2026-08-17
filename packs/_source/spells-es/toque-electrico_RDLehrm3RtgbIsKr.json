@@ -1,6 +1,5 @@
 {
   "_id": "RDLehrm3RtgbIsKr",
-  "_key": "!items!RDLehrm3RtgbIsKr",
   "name": "Toque Eléctrico",
   "type": "spell",
   "img": "icons/magic/lightning/bolt-strike-blue.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!RDLehrm3RtgbIsKr"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "WXCLlRixySJK9CSg",
-  "_key": "!items!WXCLlRixySJK9CSg",
   "name": "Disipar Magia",
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-deflect-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!WXCLlRixySJK9CSg"
 }

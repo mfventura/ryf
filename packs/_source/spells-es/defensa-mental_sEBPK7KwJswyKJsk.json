@@ -1,6 +1,5 @@
 {
   "_id": "sEBPK7KwJswyKJsk",
-  "_key": "!items!sEBPK7KwJswyKJsk",
   "name": "Defensa Mental",
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!sEBPK7KwJswyKJsk"
 }

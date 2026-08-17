@@ -1,6 +1,5 @@
 {
   "_id": "VjVBdbMFHLYddUv5",
-  "_key": "!items!VjVBdbMFHLYddUv5",
   "name": "Trampas/Cerraduras",
   "type": "skill",
   "img": "icons/sundries/misc/lock-steel-reinforced.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!VjVBdbMFHLYddUv5"
 }

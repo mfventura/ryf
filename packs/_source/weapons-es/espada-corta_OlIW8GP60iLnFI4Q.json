@@ -1,6 +1,5 @@
 {
   "_id": "OlIW8GP60iLnFI4Q",
-  "_key": "!items!OlIW8GP60iLnFI4Q",
   "name": "Espada corta",
   "type": "weapon",
   "img": "icons/weapons/swords/shortsword-steel.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!OlIW8GP60iLnFI4Q"
 }

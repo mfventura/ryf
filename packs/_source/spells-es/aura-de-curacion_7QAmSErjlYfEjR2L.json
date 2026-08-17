@@ -1,6 +1,5 @@
 {
   "_id": "7QAmSErjlYfEjR2L",
-  "_key": "!items!7QAmSErjlYfEjR2L",
   "name": "Aura de Curación",
   "type": "spell",
   "img": "icons/magic/life/heart-area-circle-green-yellow.webp",
@@ -32,5 +31,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!7QAmSErjlYfEjR2L"
 }

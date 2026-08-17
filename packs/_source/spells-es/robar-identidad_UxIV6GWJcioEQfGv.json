@@ -1,6 +1,5 @@
 {
   "_id": "UxIV6GWJcioEQfGv",
-  "_key": "!items!UxIV6GWJcioEQfGv",
   "name": "Robar Identidad",
   "type": "spell",
   "img": "icons/magic/control/silhouette-hold-change-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!UxIV6GWJcioEQfGv"
 }

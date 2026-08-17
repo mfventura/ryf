@@ -1,6 +1,5 @@
 {
   "_id": "ZxDqwhbQfDgtjXJH",
-  "_key": "!items!ZxDqwhbQfDgtjXJH",
   "name": "Ballesta pesada",
   "type": "weapon",
   "img": "icons/weapons/crossbows/crossbow-heavy-worn.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!ZxDqwhbQfDgtjXJH"
 }

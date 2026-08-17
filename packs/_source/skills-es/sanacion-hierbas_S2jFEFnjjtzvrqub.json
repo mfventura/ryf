@@ -1,6 +1,5 @@
 {
   "_id": "S2jFEFnjjtzvrqub",
-  "_key": "!items!S2jFEFnjjtzvrqub",
   "name": "Sanación/Hierbas",
   "type": "skill",
   "img": "icons/consumables/plants/leaf-herb-green.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!S2jFEFnjjtzvrqub"
 }

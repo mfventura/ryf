@@ -1,6 +1,5 @@
 {
   "_id": "ZZqBRTUe7xUnEor6",
-  "_key": "!items!ZZqBRTUe7xUnEor6",
   "name": "Persuasión",
   "type": "skill",
   "img": "icons/skills/social/diplomacy-handshake.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!ZZqBRTUe7xUnEor6"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "YkveOFXGG1PdK0iL",
-  "_key": "!items!YkveOFXGG1PdK0iL",
   "name": "Fuerza Sobrehumana",
   "type": "spell",
   "img": "icons/magic/fire/flame-burning-fist-strike.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!YkveOFXGG1PdK0iL"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "TiDMTVh6Y3HAp76Q",
-  "_key": "!items!TiDMTVh6Y3HAp76Q",
   "name": "Maná abundante",
   "type": "advantage",
   "img": "icons/magic/water/orb-water-bubbles.webp",
@@ -27,5 +26,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!TiDMTVh6Y3HAp76Q"
 }

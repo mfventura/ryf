@@ -1,6 +1,5 @@
 {
   "_id": "VHBo5aSL3yBekmTG",
-  "_key": "!items!VHBo5aSL3yBekmTG",
   "name": "Empatía",
   "type": "skill",
   "img": "icons/magic/life/heart-cross-strong-flame-green-yellow.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!VHBo5aSL3yBekmTG"
 }

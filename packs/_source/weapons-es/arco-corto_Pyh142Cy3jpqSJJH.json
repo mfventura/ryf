@@ -1,6 +1,5 @@
 {
   "_id": "Pyh142Cy3jpqSJJH",
-  "_key": "!items!Pyh142Cy3jpqSJJH",
   "name": "Arco corto",
   "type": "weapon",
   "img": "icons/weapons/bows/shortbow-recurve-leather.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Pyh142Cy3jpqSJJH"
 }

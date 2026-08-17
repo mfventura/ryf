@@ -1,6 +1,5 @@
 {
   "_id": "CZiQZgU2b0uQQ3Un",
-  "_key": "!items!CZiQZgU2b0uQQ3Un",
   "name": "Tentáculos Negros",
   "type": "spell",
   "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!CZiQZgU2b0uQQ3Un"
 }

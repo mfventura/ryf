@@ -1,6 +1,5 @@
 {
   "_id": "F1szUI284jtWYW6C",
-  "_key": "!items!F1szUI284jtWYW6C",
   "name": "Raciones (1 día)",
   "type": "equipment",
   "img": "icons/consumables/meat/haunch-cooked-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!F1szUI284jtWYW6C"
 }

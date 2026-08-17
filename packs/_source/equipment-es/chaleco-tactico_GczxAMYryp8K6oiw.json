@@ -1,6 +1,5 @@
 {
   "_id": "GczxAMYryp8K6oiw",
-  "_key": "!items!GczxAMYryp8K6oiw",
   "name": "Chaleco táctico",
   "type": "equipment",
   "img": "icons/equipment/chest/vest-armored-blue.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!GczxAMYryp8K6oiw"
 }

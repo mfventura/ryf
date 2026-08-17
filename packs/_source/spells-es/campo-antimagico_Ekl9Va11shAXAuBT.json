@@ -1,6 +1,5 @@
 {
   "_id": "Ekl9Va11shAXAuBT",
-  "_key": "!items!Ekl9Va11shAXAuBT",
   "name": "Campo Antimágico",
   "type": "spell",
   "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Ekl9Va11shAXAuBT"
 }

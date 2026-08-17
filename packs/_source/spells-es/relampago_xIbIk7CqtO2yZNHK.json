@@ -1,6 +1,5 @@
 {
   "_id": "xIbIk7CqtO2yZNHK",
-  "_key": "!items!xIbIk7CqtO2yZNHK",
   "name": "Relámpago",
   "type": "spell",
   "img": "icons/magic/lightning/bolt-strike-blue.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!xIbIk7CqtO2yZNHK"
 }

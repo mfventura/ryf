@@ -1,6 +1,5 @@
 {
   "_id": "BeaISboiGdQZDxdA",
-  "_key": "!actors!BeaISboiGdQZDxdA",
   "name": "Dragón pequeño",
   "type": "npc",
   "img": "icons/creatures/reptiles/dragon-horned-green.webp",
@@ -21,7 +20,6 @@
   "items": [
     {
       "_id": "g4mKlsSIwVZkikKw",
-      "_key": "!actors.items!BeaISboiGdQZDxdA.g4mKlsSIwVZkikKw",
       "name": "Garra/Mordisco",
       "type": "npc-attack",
       "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
@@ -39,7 +37,8 @@
       "ownership": {
         "default": 0
       },
-      "flags": {}
+      "flags": {},
+      "_key": "!actors.items!BeaISboiGdQZDxdA.g4mKlsSIwVZkikKw"
     }
   ],
   "effects": [],
@@ -48,5 +47,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!actors!BeaISboiGdQZDxdA"
 }

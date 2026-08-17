@@ -1,6 +1,5 @@
 {
   "_id": "FCPgBN1Va6kScCJV",
-  "_key": "!items!FCPgBN1Va6kScCJV",
   "name": "Posesión Mental",
   "type": "spell",
   "img": "icons/magic/control/hypnosis-mesmerism-eye-tan.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!FCPgBN1Va6kScCJV"
 }

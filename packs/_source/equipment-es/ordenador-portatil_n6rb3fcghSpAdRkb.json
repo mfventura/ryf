@@ -1,6 +1,5 @@
 {
   "_id": "n6rb3fcghSpAdRkb",
-  "_key": "!items!n6rb3fcghSpAdRkb",
   "name": "Ordenador portátil",
   "type": "equipment",
   "img": "icons/sundries/gaming/playing-cards-grey.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!n6rb3fcghSpAdRkb"
 }

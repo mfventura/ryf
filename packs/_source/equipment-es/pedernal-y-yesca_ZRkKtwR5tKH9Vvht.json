@@ -1,6 +1,5 @@
 {
   "_id": "ZRkKtwR5tKH9Vvht",
-  "_key": "!items!ZRkKtwR5tKH9Vvht",
   "name": "Pedernal y yesca",
   "type": "equipment",
   "img": "icons/sundries/survival/flint-steel-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!ZRkKtwR5tKH9Vvht"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "SI9zCTGAq35LlNa5",
-  "_key": "!items!SI9zCTGAq35LlNa5",
   "name": "Música",
   "type": "skill",
   "img": "icons/tools/instruments/lute-gold-brown.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!SI9zCTGAq35LlNa5"
 }

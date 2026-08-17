@@ -1,6 +1,5 @@
 {
   "_id": "SnmESJBsRFoPN2gW",
-  "_key": "!items!SnmESJBsRFoPN2gW",
   "name": "Investigación",
   "type": "skill",
   "img": "icons/tools/scribal/magnifying-glass.webp",
@@ -18,5 +17,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!SnmESJBsRFoPN2gW"
 }

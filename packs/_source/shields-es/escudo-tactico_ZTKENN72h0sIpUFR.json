@@ -1,6 +1,5 @@
 {
   "_id": "ZTKENN72h0sIpUFR",
-  "_key": "!items!ZTKENN72h0sIpUFR",
   "name": "Escudo táctico",
   "type": "shield",
   "img": "icons/equipment/shield/riot-steel-blue.webp",
@@ -23,5 +22,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!ZTKENN72h0sIpUFR"
 }

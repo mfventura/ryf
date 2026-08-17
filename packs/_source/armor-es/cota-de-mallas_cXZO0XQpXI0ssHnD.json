@@ -1,6 +1,5 @@
 {
   "_id": "cXZO0XQpXI0ssHnD",
-  "_key": "!items!cXZO0XQpXI0ssHnD",
   "name": "Cota de mallas",
   "type": "armor",
   "img": "icons/equipment/chest/breastplate-chainmail-steel.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!cXZO0XQpXI0ssHnD"
 }

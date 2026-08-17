@@ -1,6 +1,5 @@
 {
   "_id": "XezUjFKVsJdHwlmY",
-  "_key": "!items!XezUjFKVsJdHwlmY",
   "name": "Recuperación",
   "type": "advantage",
   "img": "icons/magic/life/heart-glowing-red.webp",
@@ -27,5 +26,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!XezUjFKVsJdHwlmY"
 }

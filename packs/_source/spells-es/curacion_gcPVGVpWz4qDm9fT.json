@@ -1,6 +1,5 @@
 {
   "_id": "gcPVGVpWz4qDm9fT",
-  "_key": "!items!gcPVGVpWz4qDm9fT",
   "name": "Curación",
   "type": "spell",
   "img": "icons/magic/life/heart-cross-strong-flame-green-yellow.webp",
@@ -32,5 +31,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!gcPVGVpWz4qDm9fT"
 }

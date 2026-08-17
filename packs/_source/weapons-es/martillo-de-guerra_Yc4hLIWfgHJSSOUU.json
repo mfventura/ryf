@@ -1,6 +1,5 @@
 {
   "_id": "Yc4hLIWfgHJSSOUU",
-  "_key": "!items!Yc4hLIWfgHJSSOUU",
   "name": "Martillo de guerra",
   "type": "weapon",
   "img": "icons/weapons/hammers/hammer-war-spiked-steel.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!Yc4hLIWfgHJSSOUU"
 }

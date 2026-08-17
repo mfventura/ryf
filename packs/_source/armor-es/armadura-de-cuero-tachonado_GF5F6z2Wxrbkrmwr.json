@@ -1,6 +1,5 @@
 {
   "_id": "GF5F6z2Wxrbkrmwr",
-  "_key": "!items!GF5F6z2Wxrbkrmwr",
   "name": "Armadura de cuero tachonado",
   "type": "armor",
   "img": "icons/equipment/chest/breastplate-leather-studded-brown.webp",
@@ -20,5 +19,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!GF5F6z2Wxrbkrmwr"
 }

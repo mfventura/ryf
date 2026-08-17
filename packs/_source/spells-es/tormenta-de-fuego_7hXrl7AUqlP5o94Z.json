@@ -1,6 +1,5 @@
 {
   "_id": "7hXrl7AUqlP5o94Z",
-  "_key": "!items!7hXrl7AUqlP5o94Z",
   "name": "Tormenta de Fuego",
   "type": "spell",
   "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
@@ -41,5 +40,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!7hXrl7AUqlP5o94Z"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "edrmmiJO05J2Pl51",
-  "_key": "!items!edrmmiJO05J2Pl51",
   "name": "Caminar entre Sueños",
   "type": "spell",
   "img": "icons/magic/perception/eye-ringed-glow-angry-small-purple.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!edrmmiJO05J2Pl51"
 }

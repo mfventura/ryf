@@ -1,6 +1,5 @@
 {
   "_id": "jpd43rjuR7hiWjKH",
-  "_key": "!items!jpd43rjuR7hiWjKH",
   "name": "Baile de Viento",
   "type": "spell",
   "img": "icons/magic/air/wind-tornado-wall-blue.webp",
@@ -38,5 +37,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!jpd43rjuR7hiWjKH"
 }

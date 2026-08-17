@@ -1,6 +1,5 @@
 {
   "_id": "RbTX7WHfgzkEVNTo",
-  "_key": "!items!RbTX7WHfgzkEVNTo",
   "name": "Alzar Muerto Viviente",
   "type": "spell",
   "img": "icons/magic/death/skull-horned-worn-fire-green.webp",
@@ -26,5 +25,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!RbTX7WHfgzkEVNTo"
 }

@@ -1,6 +1,5 @@
 {
   "_id": "5ehkUWEzSPfTlbvA",
-  "_key": "!items!5ehkUWEzSPfTlbvA",
   "name": "Guadaña",
   "type": "weapon",
   "img": "icons/weapons/polearms/scythe-worn-steel.webp",
@@ -31,5 +30,6 @@
   "ownership": {
     "default": 0
   },
-  "flags": {}
+  "flags": {},
+  "_key": "!items!5ehkUWEzSPfTlbvA"
 }
