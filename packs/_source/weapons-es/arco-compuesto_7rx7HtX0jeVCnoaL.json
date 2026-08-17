@@ -1,0 +1,35 @@
+{
+  "_id": "7rx7HtX0jeVCnoaL",
+  "name": "Arco compuesto",
+  "type": "weapon",
+  "img": "icons/weapons/bows/shortbow-recurve-blue.webp",
+  "system": {
+    "description": "Arco reforzado con mayor potencia de penetración.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 200,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "2d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 15,
+      "medium": 50,
+      "long": 80
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!7rx7HtX0jeVCnoaL"
+}

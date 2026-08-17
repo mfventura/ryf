@@ -1,0 +1,52 @@
+{
+  "_id": "E41AEX0IZDPcgt08",
+  "name": "Troll",
+  "type": "npc",
+  "img": "icons/creatures/humanoids/troll-green.webp",
+  "system": {
+    "biography": "Criatura grande con regeneración. Muy difícil de matar permanentemente.",
+    "health": {
+      "value": 50,
+      "max": 50
+    },
+    "initiative": 12,
+    "defense": 12,
+    "absorption": 1,
+    "willpower": 10,
+    "attacks": [],
+    "cr": 4,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "qJYulBzkWH9qQHzY",
+      "name": "Garras",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "3d6",
+          "bonus": 0
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!E41AEX0IZDPcgt08.qJYulBzkWH9qQHzY"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!E41AEX0IZDPcgt08"
+}

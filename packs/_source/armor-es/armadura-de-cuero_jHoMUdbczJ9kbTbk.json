@@ -1,0 +1,24 @@
+{
+  "_id": "jHoMUdbczJ9kbTbk",
+  "name": "Armadura de cuero",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-leather-brown.webp",
+  "system": {
+    "description": "Armadura ligera hecha de cuero endurecido. Proporciona protección básica sin limitar mucho el movimiento.",
+    "quantity": 1,
+    "weight": 5,
+    "price": 50,
+    "equipped": false,
+    "identified": true,
+    "protection": 1,
+    "hindrance": 0
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!jHoMUdbczJ9kbTbk"
+}

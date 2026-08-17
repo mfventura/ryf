@@ -1,0 +1,45 @@
+{
+  "_id": "CZiQZgU2b0uQQ3Un",
+  "name": "Tentáculos Negros",
+  "type": "spell",
+  "img": "icons/magic/death/hand-dirt-undead-zombie.webp",
+  "system": {
+    "description": "Invoca tentáculos oscuros del suelo que agarran a todos en un área de 5 metros. Los afectados quedan inmovilizados. Dura 1 minuto.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "distance",
+      "maxDistance": 20
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 5
+    },
+    "effects": [
+      {
+        "id": "HqkL7FwHYHm4IrNp",
+        "type": "condition",
+        "condition": "paralyzed",
+        "duration": {
+          "type": "fixed",
+          "value": 10
+        },
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "fisico",
+          "difficulty": 18
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!CZiQZgU2b0uQQ3Un"
+}

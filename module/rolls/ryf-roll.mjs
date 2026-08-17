@@ -1,4 +1,4 @@
-import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess } from '../helpers/dice.mjs';
+import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, degradeMode } from '../helpers/dice.mjs';
 
 export class RyfRoll {
   
@@ -18,12 +18,18 @@ export class RyfRoll {
 
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
+    // Reference: RyF 3.0 PDF, páginas 18 y 20 - habilidad sin puntos o estar
+    // malherido baja un rango el dado objetivo (no acumulable)
+    if (skillLevel === 0 || actor.system.states?.wounded) {
+      mode = degradeMode(mode);
+    }
+
     const diceRoll = await roll1o3d10(mode);
 
     const total = attributeValue + skillLevel + effectBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -97,12 +103,18 @@ export class RyfRoll {
 
     const weaponAttackBonus = (actor.system.activeEffectBonuses?.weaponsAttack?.[weapon.name]) || 0;
 
+    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado
+    // objetivo (no acumulable con el rango ya bajado por falta de habilidad)
+    if (actor.system.states?.wounded) {
+      mode = degradeMode(mode);
+    }
+
     const diceRoll = await roll1o3d10(mode);
 
     const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + diceRoll.result + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, targetDefense, fumble);
+    const success = isSuccess(total, targetDefense, fumble, diceRoll.chosen);
     const margin = total - targetDefense;
     const criticalDice = success ? calculateCriticalDice(total, targetDefense) : 0;
 
@@ -144,6 +156,13 @@ export class RyfRoll {
       if (actor.system.activeEffectBonuses?.weaponsDamage) {
         effectBonus = actor.system.activeEffectBonuses.weaponsDamage[weapon.name] || 0;
       }
+
+      // Reference: RyF 3.0 PDF, página 98 - ventajas Golpe Duro (+1 daño CC)
+      // y Certero (+1 daño a distancia)
+      const category = weapon.system.category || 'melee';
+      effectBonus += category === 'melee'
+        ? (actor.system.activeEffectBonuses?.damageMelee || 0)
+        : (actor.system.activeEffectBonuses?.damageRanged || 0);
     }
 
     const baseRoll = await rollEffect(baseDamage);
@@ -174,9 +193,124 @@ export class RyfRoll {
     return rollData;
   }
 
-  static async rollSpellDamage(spell, criticalDice = 0) {
-    const damageFormula = spell.system.damage?.formula || '1d6';
-    const damageType = spell.system.damage?.type || 'magical';
+  // Reference: RyF 3.0 PDF, página 103 (detalle en el doc "RyF 3.0 Medieval") -
+  // luchando con dos armas ligeras el daño causado es el mayor de las armas usadas
+  static async rollDualDamage(weaponA, weaponB, criticalDice = 0, actor = null) {
+    const rollWeaponDamage = async (weapon) => {
+      const baseRoll = await rollEffect(weapon.system.damage?.base || '1d6');
+      let total = baseRoll.total + (weapon.system.damage?.bonus || 0);
+      if (actor) {
+        total += actor.system.activeEffectBonuses?.weaponsDamage?.[weapon.name] || 0;
+        total += actor.system.activeEffectBonuses?.damageMelee || 0;
+      }
+      return { weapon: weapon, baseRoll: baseRoll, total: total };
+    };
+
+    const resultA = await rollWeaponDamage(weaponA);
+    const resultB = await rollWeaponDamage(weaponB);
+    const kept = resultA.total >= resultB.total ? resultA : resultB;
+
+    let criticalRoll = null;
+    let total = kept.total;
+    if (criticalDice > 0) {
+      criticalRoll = await rollEffect(`${criticalDice}d6`);
+      total += criticalRoll.total;
+    }
+
+    const rollData = {
+      type: 'dual-damage',
+      actor: actor,
+      resultA: resultA,
+      resultB: resultB,
+      keptA: kept === resultA,
+      criticalDice: criticalDice,
+      criticalRoll: criticalRoll,
+      total: total
+    };
+
+    await this.toMessage(rollData);
+
+    return rollData;
+  }
+
+  // Reference: RyF 3.0 PDF, página 18 - tiradas enfrentadas: gana quien saque
+  // el resultado más alto; el empate queda a discreción del máster
+  static async rollOpposed(actor, skillName, targetActor, { defenderSkillName = null, defenderBonus = 0 } = {}) {
+    const attackerSide = await this._rollOpposedSide(actor, skillName, 0);
+    if (!attackerSide) return null;
+
+    const defenderSide = defenderSkillName
+      ? await this._rollOpposedSide(targetActor, defenderSkillName, 0)
+      : await this._rollOpposedSide(targetActor, null, defenderBonus);
+    if (!defenderSide) return null;
+
+    let winner = null;
+    if (attackerSide.total > defenderSide.total) winner = 'attacker';
+    else if (defenderSide.total > attackerSide.total) winner = 'defender';
+
+    const rollData = {
+      type: 'opposed',
+      actor: actor,
+      attacker: attackerSide,
+      defender: defenderSide,
+      winner: winner,
+      tie: winner === null
+    };
+
+    await this.toMessage(rollData);
+
+    return rollData;
+  }
+
+  static async _rollOpposedSide(actor, skillName, flatBonus = 0) {
+    let attributeValue = 0;
+    let skillLevel = 0;
+    let label = game.i18n.localize('RYF.Attribute');
+    let mode = 'normal';
+    let hindrance = 0;
+
+    if (skillName) {
+      const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
+      if (!skill) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.SkillNotFound', { skill: skillName }));
+        return null;
+      }
+      attributeValue = actor.system.attributes?.[skill.system.attribute]?.value || 0;
+      skillLevel = skill.system.level || 0;
+      skillLevel += actor.system.activeEffectBonuses?.skills?.[skill.name] || 0;
+      hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
+      label = skill.name;
+
+      // Reference: RyF 3.0 PDF, páginas 18 y 20 - sin puntos de habilidad o
+      // malherido se guarda el dado menor
+      if (skill.system.level === 0 || actor.system.states?.wounded) {
+        mode = degradeMode(mode);
+      }
+    } else {
+      attributeValue = flatBonus;
+      label = game.i18n.localize('RYF.Modifier');
+      if (actor.system.states?.wounded) {
+        mode = degradeMode(mode);
+      }
+    }
+
+    const diceRoll = await roll1o3d10(mode);
+
+    return {
+      actor: actor,
+      label: label,
+      attributeValue: attributeValue,
+      skillLevel: skillLevel,
+      hindrance: hindrance,
+      mode: mode,
+      diceRoll: diceRoll,
+      total: attributeValue + skillLevel + diceRoll.result - hindrance
+    };
+  }
+
+  static async rollSpellDamage(spell, criticalDice = 0, formula = null, type = null) {
+    const damageFormula = formula || spell.system.damage?.formula || '1d6';
+    const damageType = type || spell.system.damage?.type || 'magical';
 
     const baseRoll = await rollEffect(damageFormula);
     let total = baseRoll.total;
@@ -246,12 +380,25 @@ export class RyfRoll {
     const intelligence = isNPC ? 0 : actor.system.attributes.inteligencia.value;
     const spellLevel = spell.system.level;
 
+    // Reference: RyF 3.0 PDF, página 21 - el estorbo se aplica al lanzamiento
+    // de hechizos aunque la tirada vaya por Inteligencia
+    const hindrance = actor.system.combat?.hindrance || 0;
+
+    // Reference: RyF 3.0 PDF, página 98 - efectos spell-casting (ej. ventaja
+    // Arcano: +1 a tiradas de hechizos)
+    const castingBonus = actor.system.activeEffectBonuses?.spellCasting || 0;
+
+    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
+    if (actor.system.states?.wounded) {
+      mode = degradeMode(mode);
+    }
+
     const diceRoll = await roll1o3d10(mode);
 
-    const total = intelligence + spellLevel + diceRoll.result + modifier;
+    const total = intelligence + spellLevel + castingBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -263,6 +410,8 @@ export class RyfRoll {
       spellLevel: spellLevel,
       difficulty: difficulty,
       mode: mode,
+      hindrance: hindrance,
+      castingBonus: castingBonus,
       modifier: modifier,
       diceRoll: diceRoll,
       total: total,
@@ -278,8 +427,8 @@ export class RyfRoll {
     return rollData;
   }
 
-  static async rollHealing(spell, targetActor, criticalDice = 0) {
-    const healingFormula = spell.system.healing?.formula || '1d6';
+  static async rollHealing(spell, targetActor, criticalDice = 0, formula = null) {
+    const healingFormula = formula || spell.system.healing?.formula || '1d6';
 
     const baseRoll = await rollEffect(healingFormula);
     let total = baseRoll.total;
@@ -322,6 +471,11 @@ export class RyfRoll {
       }
 
       attributeValue = attribute.value;
+    }
+
+    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
+    if (actor.system.states?.wounded) {
+      mode = degradeMode(mode);
     }
 
     const diceRoll = await roll1o3d10(mode);
@@ -411,7 +565,9 @@ export class RyfRoll {
       'attribute': 'systems/ryf3/templates/chat/attribute-roll.hbs',
       'spell-casting': 'systems/ryf3/templates/chat/spell-casting-roll.hbs',
       'spell-damage': 'systems/ryf3/templates/chat/spell-damage.hbs',
-      'healing': 'systems/ryf3/templates/chat/healing-roll.hbs'
+      'healing': 'systems/ryf3/templates/chat/healing-roll.hbs',
+      'dual-damage': 'systems/ryf3/templates/chat/dual-damage-roll.hbs',
+      'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs'
     };
 
     const template = templateMap[rollData.type];
@@ -424,10 +580,9 @@ export class RyfRoll {
     const html = await renderTemplate(template, rollData);
 
     const chatData = {
-      user: game.user.id,
+      author: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: rollData.actor }),
       content: html,
-      type: CONST.CHAT_MESSAGE_TYPES.ROLL,
       sound: CONFIG.sounds.dice
     };
 

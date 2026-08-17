@@ -1,0 +1,29 @@
+{
+  "_id": "SwJPcS9IwvPZyTcE",
+  "name": "Suerte",
+  "type": "advantage",
+  "img": "icons/sundries/gaming/dice-pair-white-green.webp",
+  "system": {
+    "description": "Puede repetir una tirada por escena. Sin requisito.",
+    "requirement": {
+      "attribute": "",
+      "value": 0
+    },
+    "effects": [
+      {
+        "id": "y116XYof9CjhF6FL",
+        "type": "note",
+        "text": "Puede repetir una tirada por escena",
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!SwJPcS9IwvPZyTcE"
+}

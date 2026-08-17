@@ -1,0 +1,35 @@
+{
+  "_id": "qFQm5WG9AVAfBFYf",
+  "name": "Arco largo",
+  "type": "weapon",
+  "img": "icons/weapons/bows/longbow-leather-brown.webp",
+  "system": {
+    "description": "Arco grande y potente con largo alcance.",
+    "quantity": 1,
+    "weight": 2,
+    "price": 100,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "2d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 20,
+      "medium": 60,
+      "long": 100
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!qFQm5WG9AVAfBFYf"
+}

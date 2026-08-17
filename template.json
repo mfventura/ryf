@@ -86,7 +86,7 @@
     }
   },
   "Item": {
-    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack"],
+    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage"],
     "templates": {
       "base": {
         "description": "",
@@ -167,6 +167,14 @@
         "base": "1d6",
         "bonus": 0
       }
+    },
+    "advantage": {
+      "description": "",
+      "requirement": {
+        "attribute": "",
+        "value": 0
+      },
+      "effects": []
     }
   }
 }

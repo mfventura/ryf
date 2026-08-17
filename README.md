@@ -29,9 +29,9 @@ This implementation is based on the rules published under the **Creative Commons
 
 ### 🚀 Current Status
 
-**Version**: 0.2.1 (In Development)
+**Version**: 0.3.0 (In Development)
 
-This project is currently implemented for **Foundry VTT v13** using **Application v1 (appV1)** architecture.
+This project is currently implemented for **Foundry VTT v14** using **Application v1 (appV1)** architecture.
 
 **Future Plans**: Migration to **Application v2** is planned for future iterations.
 
@@ -56,6 +56,24 @@ This project is currently implemented for **Foundry VTT v13** using **Applicatio
 2. Restart Foundry VTT
 
 3. Create a new world selecting "Rápido y Fácil (RyF) 3.0" as the system
+
+4. Compendium packs are built from the JSON sources in `packs/_source/` using the official Foundry CLI. With **Foundry closed**, run:
+   ```bash
+   npm install
+   npm run pack     # compile packs/_source/* into the LevelDB packs Foundry loads
+   npm run unpack   # extract pack contents back to JSON after editing them in Foundry
+   ```
+
+#### Releases
+
+Releases are fully automated with GitHub Actions. To publish a new version:
+
+```bash
+git tag v0.4.0
+git push origin v0.4.0
+```
+
+The workflow compiles the compendium packs, patches `system.json` with the tag version, builds `ryf3.zip` and publishes a GitHub Release. Foundry installations using the manifest URL (`https://github.com/mfventura/ryf/releases/latest/download/system.json`) pick up the update automatically. For playing, install the system through that manifest URL; a linked git clone is only needed for development (run `npm run pack` after pulling to rebuild the compendiums locally).
 
 ### 🤝 Contributing
 
@@ -148,9 +166,9 @@ Esta implementación está basada en las reglas publicadas bajo la licencia **Cr
 
 ### 🚀 Estado Actual
 
-**Versión**: 0.2.1 (En Desarrollo)
+**Versión**: 0.3.0 (En Desarrollo)
 
-Este proyecto está actualmente implementado para **Foundry VTT v13** usando la arquitectura **Application v1 (appV1)**.
+Este proyecto está actualmente implementado para **Foundry VTT v14** usando la arquitectura **Application v1 (appV1)**.
 
 **Planes Futuros**: La migración a **Application v2** está planificada para futuras iteraciones.
 
@@ -175,6 +193,24 @@ Este proyecto está actualmente implementado para **Foundry VTT v13** usando la 
 2. Reinicia Foundry VTT
 
 3. Crea un nuevo mundo seleccionando "Rápido y Fácil (RyF) 3.0" como sistema
+
+4. Los compendios se construyen desde las fuentes JSON de `packs/_source/` con la CLI oficial de Foundry. Con **Foundry cerrado**, ejecuta:
+   ```bash
+   npm install
+   npm run pack     # compila packs/_source/* a los packs LevelDB que carga Foundry
+   npm run unpack   # extrae el contenido de los packs a JSON tras editarlos en Foundry
+   ```
+
+#### Releases
+
+Las releases están automatizadas con GitHub Actions. Para publicar una versión:
+
+```bash
+git tag v0.4.0
+git push origin v0.4.0
+```
+
+El workflow compila los compendios, parchea `system.json` con la versión del tag, construye `ryf3.zip` y publica la release en GitHub. Las instalaciones de Foundry que usan la URL de manifest (`https://github.com/mfventura/ryf/releases/latest/download/system.json`) reciben la actualización automáticamente. Para jugar, instala el sistema con esa URL de manifest; el clon de git vinculado solo hace falta para desarrollar (ejecuta `npm run pack` tras el pull para reconstruir los compendios en local).
 
 ### 🤝 Contribuir
 

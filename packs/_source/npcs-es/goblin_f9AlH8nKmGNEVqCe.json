@@ -1,0 +1,52 @@
+{
+  "_id": "f9AlH8nKmGNEVqCe",
+  "name": "Goblin",
+  "type": "npc",
+  "img": "icons/creatures/humanoids/goblin-masked-green.webp",
+  "system": {
+    "biography": "Criatura pequeña y astuta. Suele atacar en grupo y usar tácticas cobardes.",
+    "health": {
+      "value": 13,
+      "max": 13
+    },
+    "initiative": 15,
+    "defense": 16,
+    "absorption": 0,
+    "willpower": 8,
+    "attacks": [],
+    "cr": 0.5,
+    "isMinion": true
+  },
+  "items": [
+    {
+      "_id": "HvZHam1BEFY7Gl0G",
+      "name": "Daga",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!f9AlH8nKmGNEVqCe.HvZHam1BEFY7Gl0G"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!f9AlH8nKmGNEVqCe"
+}

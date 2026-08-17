@@ -1,0 +1,45 @@
+{
+  "_id": "idhV0Dp1HFZ0dHbU",
+  "name": "Terremoto",
+  "type": "spell",
+  "img": "icons/magic/earth/projectile-boulder-brown.webp",
+  "system": {
+    "description": "Causa un terremoto en un área de 10 metros. Todos deben superar una tirada de Físico o caer al suelo.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "distance",
+      "maxDistance": 30
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 10
+    },
+    "effects": [
+      {
+        "id": "Bx0aqjER71mCOCPS",
+        "type": "condition",
+        "condition": "prone",
+        "duration": {
+          "type": "fixed",
+          "value": 1
+        },
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "fisico",
+          "difficulty": 20
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!idhV0Dp1HFZ0dHbU"
+}

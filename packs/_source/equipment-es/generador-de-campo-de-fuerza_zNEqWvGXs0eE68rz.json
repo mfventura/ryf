@@ -1,0 +1,22 @@
+{
+  "_id": "zNEqWvGXs0eE68rz",
+  "name": "Generador de campo de fuerza",
+  "type": "equipment",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-blue.webp",
+  "system": {
+    "description": "Dispositivo portátil que crea un campo protector temporal. Otorga +2 a Defensa durante 1 minuto. 3 usos por día.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 8000,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!zNEqWvGXs0eE68rz"
+}

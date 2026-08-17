@@ -1,0 +1,22 @@
+{
+  "_id": "EDYZaZ6RYQQ6TQXa",
+  "name": "Escuchar",
+  "type": "skill",
+  "img": "icons/magic/perception/ear-sound-wave-pink.webp",
+  "system": {
+    "description": "Habilidad para detectar sonidos, conversaciones y ruidos sutiles.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "perception",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!EDYZaZ6RYQQ6TQXa"
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "ut7uhi7HtBpluZbM",
+  "name": "Subfusil",
+  "type": "weapon",
+  "img": "icons/weapons/guns/gun-pistol-automatic.webp",
+  "system": {
+    "description": "Arma automática compacta, ideal para combate cercano.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 1500,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "2d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 10,
+      "medium": 25,
+      "long": 40
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!ut7uhi7HtBpluZbM"
+}

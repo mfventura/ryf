@@ -32,16 +32,27 @@ export class RyfItemSheet extends ItemSheet {
     console.log('ItemSheet getData - isCarismaEnabled:', context.isCarismaEnabled);
     console.log('ItemSheet getData - isMagicEnabled:', context.isMagicEnabled);
 
-    context.enrichedDescription = TextEditor.enrichHTML(context.system.description, {async: false});
-
     if (this.item.type === 'skill') {
       this._prepareSkillData(context);
+    }
+
+    if (this.item.type === 'advantage') {
+      this._prepareAdvantageData(context);
     }
 
     return context;
   }
 
   _prepareSkillData(context) {
+    const activeAttributes = CONFIG.RYF.getActiveAttributes();
+    context.attributes = Object.entries(activeAttributes).map(([key, value]) => ({
+      key: key,
+      label: value
+    }));
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - Ventajas con requisito de atributo
+  _prepareAdvantageData(context) {
     const activeAttributes = CONFIG.RYF.getActiveAttributes();
     context.attributes = Object.entries(activeAttributes).map(([key, value]) => ({
       key: key,
@@ -106,7 +117,7 @@ export class RyfItemSheet extends ItemSheet {
 
     let newEffect;
 
-    if (['weapon', 'armor', 'shield', 'equipment'].includes(this.item.type)) {
+    if (['weapon', 'armor', 'shield', 'equipment', 'advantage'].includes(this.item.type)) {
       newEffect = {
         id: foundry.utils.randomID(),
         type: 'buff',

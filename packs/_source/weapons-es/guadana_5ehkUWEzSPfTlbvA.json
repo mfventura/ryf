@@ -1,0 +1,35 @@
+{
+  "_id": "5ehkUWEzSPfTlbvA",
+  "name": "Guadaña",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/scythe-worn-steel.webp",
+  "system": {
+    "description": "Arma de asta curva de dos manos con gran alcance.",
+    "quantity": 1,
+    "weight": 5,
+    "price": 80,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "2d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!5ehkUWEzSPfTlbvA"
+}

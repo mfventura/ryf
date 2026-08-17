@@ -1,0 +1,30 @@
+{
+  "_id": "yQ5ZSg43FO36BQFG",
+  "name": "Teleportarse",
+  "type": "spell",
+  "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+  "system": {
+    "description": "Permite al mago teleportarse instantáneamente a cualquier lugar que conozca, sin importar la distancia.",
+    "level": 7,
+    "manaCost": 6,
+    "castingDifficulty": 24,
+    "range": {
+      "type": "personal",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!yQ5ZSg43FO36BQFG"
+}

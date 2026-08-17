@@ -1,0 +1,22 @@
+{
+  "_id": "yKd6nAlKmCBjN5Ro",
+  "name": "Tienda de campaña",
+  "type": "equipment",
+  "img": "icons/environment/settlement/tent-leather-brown.webp",
+  "system": {
+    "description": "Tienda pequeña para 2 personas. Protege de la intemperie.",
+    "quantity": 1,
+    "weight": 5,
+    "price": 25,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!yKd6nAlKmCBjN5Ro"
+}

@@ -1,0 +1,52 @@
+{
+  "_id": "DpfGJdd9oI35Rrrz",
+  "name": "Hombre-lagarto",
+  "type": "npc",
+  "img": "icons/creatures/reptiles/lizardman-green.webp",
+  "system": {
+    "biography": "Humanoide reptiliano que habita en pantanos y junglas. Guerrero tribal hábil.",
+    "health": {
+      "value": 30,
+      "max": 30
+    },
+    "initiative": 18,
+    "defense": 14,
+    "absorption": 0,
+    "willpower": 10,
+    "attacks": [],
+    "cr": 2,
+    "isMinion": false
+  },
+  "items": [
+    {
+      "_id": "Jypg7FO8D5FIEqpf",
+      "name": "Lanza",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 14,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!DpfGJdd9oI35Rrrz.Jypg7FO8D5FIEqpf"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!DpfGJdd9oI35Rrrz"
+}

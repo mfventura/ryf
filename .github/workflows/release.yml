@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile compendium packs
+        run: npm run pack
+
+      - name: Patch system.json with tag version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Version: $VERSION"
+          jq --arg version "$VERSION" \
+             --arg download "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/ryf3.zip" \
+             '.version = $version | .download = $download' \
+             system.json > system.json.tmp
+          mv system.json.tmp system.json
+          jq '{version, manifest, download}' system.json
+
+      - name: Build system zip
+        run: |
+          zip -r ryf3.zip \
+            system.json \
+            template.json \
+            README.md \
+            LICENSE \
+            lang \
+            module \
+            styles \
+            templates \
+            assets \
+            packs \
+            -x "packs/_source/*" -x "packs/**/LOCK" -x "packs/**/LOG" -x "packs/**/LOG.old"
+          unzip -l ryf3.zip | tail -5
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            ryf3.zip
+            system.json

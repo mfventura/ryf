@@ -88,6 +88,7 @@ export class RyfActorSheet extends ActorSheet {
     const equipment = [];
     const spells = [];
     const npcAttacks = [];
+    const advantages = [];
 
     for (let i of context.items) {
       i.img = i.img || Item.DEFAULT_ICON;
@@ -106,6 +107,9 @@ export class RyfActorSheet extends ActorSheet {
         spells.push(i);
       } else if (i.type === 'npc-attack') {
         npcAttacks.push(i);
+      } else if (i.type === 'advantage') {
+        i.effectLabel = this._summarizeAdvantageEffects(i);
+        advantages.push(i);
       }
     }
 
@@ -140,7 +144,7 @@ export class RyfActorSheet extends ActorSheet {
           effect.effectType = e.flags.ryf3.effectType || 'unknown';
           effect.targetType = e.flags.ryf3.targetType || 'unknown';
           effect.targetName = e.flags.ryf3.targetName || '';
-          effect.modifier = e.changes?.[0]?.value || 0;
+          effect.modifier = e.system?.changes?.[0]?.value || 0;
         } else if (isNativeCondition) {
           effect.sourceName = e.name;
           effect.sourceType = 'condition';
@@ -154,7 +158,7 @@ export class RyfActorSheet extends ActorSheet {
           effect.effectType = 'other';
           effect.targetType = 'other';
           effect.targetName = '';
-          effect.modifier = e.changes?.[0]?.value || 0;
+          effect.modifier = e.system?.changes?.[0]?.value || 0;
         }
 
         return effect;
@@ -170,6 +174,24 @@ export class RyfActorSheet extends ActorSheet {
     context.hasSpells = spells.length > 0;
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
+    context.advantages = advantages;
+  }
+
+  // Resumen legible de los efectos de una ventaja para la lista de la ficha
+  _summarizeAdvantageEffects(item) {
+    const rawEffects = item.system.effects || [];
+    const effects = Array.isArray(rawEffects) ? rawEffects : Object.values(rawEffects);
+
+    return effects.map(effect => {
+      if (effect.type === 'note') return effect.text;
+
+      const pascal = (effect.target || '').split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+      let label = game.i18n.localize(`RYF.Magic.EffectTargets.${pascal}`);
+      if (effect.targetName) label += ` (${effect.targetName})`;
+      const modifier = effect.modifier || 0;
+      return `${label} ${modifier > 0 ? '+' : ''}${modifier}`;
+    }).filter(Boolean).join(', ');
   }
 
   activateListeners(html) {
@@ -183,6 +205,8 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.item-toggle').click(this._onItemToggle.bind(this));
 
     html.find('.item-attack').click(this._onWeaponAttack.bind(this));
+
+    html.find('.skill-opposed').click(this._onSkillOpposed.bind(this));
 
     html.find('.skill-roll').click(this._onSkillRoll.bind(this));
     html.find('.skill-increase').click(this._onSkillIncrease.bind(this));
@@ -270,7 +294,15 @@ export class RyfActorSheet extends ActorSheet {
     }
 
     const isRanged = weapon.system.category !== 'melee';
-    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null);
+
+    // Reference: RyF 3.0 PDF, página 103 - dos armas ligeras (de una mano): +3 al ataque
+    const offhandWeapons = !isRanged
+      ? this.actor.items.filter(i =>
+          i.type === 'weapon' && i.system.equipped && i.system.category === 'melee' &&
+          !i.system.twoHanded && !weapon.system.twoHanded && i.id !== weapon.id)
+      : [];
+
+    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null, offhandWeapons.length > 0);
     if (!rollParams) return;
 
     const mode = rollParams.mode;
@@ -280,11 +312,13 @@ export class RyfActorSheet extends ActorSheet {
       await this.actor.rollRangedAttack(weapon, rollParams.range, mode, targetDefenseRanged, modifier);
     } else {
       const defense = targetDefense || rollParams.defense;
-      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier);
+      const offhand = rollParams.dualWield ? offhandWeapons[0] : null;
+      const dualBonus = offhand ? 3 : 0;
+      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand);
     }
   }
 
-  async _promptAttackDialog(weaponName, isRanged, hasTarget) {
+  async _promptAttackDialog(weaponName, isRanged, hasTarget, dualWieldAvailable = false) {
     const isWounded = this.actor.system.states?.wounded || false;
     const defaultMode = isWounded ? 'disadvantage' : 'normal';
 
@@ -324,6 +358,12 @@ export class RyfActorSheet extends ActorSheet {
             <label>${game.i18n.localize('RYF.Modifier')}</label>
             <input type="number" name="modifier" value="0" step="1"/>
           </div>
+          ${dualWieldAvailable ? `
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.DualWield')} (+3)</label>
+            <input type="checkbox" name="dualWield"/>
+          </div>
+          ` : ''}
         </form>
       `;
 
@@ -339,7 +379,8 @@ export class RyfActorSheet extends ActorSheet {
               const defense = hasTarget || isRanged ? null : parseInt(html.find('[name="defense"]').val());
               const range = isRanged ? html.find('[name="range"]').val() : null;
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              resolve({ mode, defense, range, modifier });
+              const dualWield = dualWieldAvailable ? html.find('[name="dualWield"]').is(':checked') : false;
+              resolve({ mode, defense, range, modifier, dualWield });
             }
           },
           cancel: {
@@ -352,6 +393,68 @@ export class RyfActorSheet extends ActorSheet {
         close: () => resolve(null)
       }).render(true);
     });
+  }
+
+  // Reference: RyF 3.0 PDF, página 18 - tiradas enfrentadas
+  async _onSkillOpposed(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const skill = this.actor.items.get(li.data("itemId"));
+    if (!skill || skill.type !== 'skill') return;
+
+    const targets = Array.from(game.user.targets);
+    if (targets.length !== 1 || !targets[0].actor) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoTargetSelected'));
+      return;
+    }
+
+    const targetActor = targets[0].actor;
+    const targetSkills = targetActor.items.filter(i => i.type === 'skill');
+
+    const params = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.OpposedRoll')}: ${skill.name} vs ${targetActor.name}`,
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.OpposedDefenderSkill')}</label>
+              <select name="defenderSkill" autofocus>
+                ${targetSkills.map(s => `<option value="${s.name}">${s.name} (${s.system.level})</option>`).join('')}
+                <option value="">${game.i18n.localize('RYF.OpposedManualBonus')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="defenderBonus" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => {
+              resolve({
+                defenderSkillName: html.find('[name="defenderSkill"]').val() || null,
+                defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0
+              });
+            }
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!params) return;
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+    await RyfRoll.rollOpposed(this.actor, skill.name, targetActor, params);
   }
 
   async _onSkillRoll(event) {
@@ -403,14 +506,15 @@ export class RyfActorSheet extends ActorSheet {
             ` : ''}
             <div class="form-group">
               <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+              <!-- Reference: RyF 3.0 PDF, página 18 - dificultades de habilidad -->
               <select name="difficulty" autofocus>
-                <option value="10" ${difficulty === 10 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryEasy')} (10)</option>
-                <option value="15" ${difficulty === 15 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Easy')} (15)</option>
-                <option value="20" ${difficulty === 20 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Average')} (20)</option>
-                <option value="25" ${difficulty === 25 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Hard')} (25)</option>
-                <option value="30" ${difficulty === 30 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryHard')} (30)</option>
-                <option value="35" ${difficulty === 35 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.NearlyImpossible')} (35)</option>
-                ${targetWillpower && ![10, 15, 20, 25, 30, 35].includes(targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
+                <option value="10" ${difficulty === 10 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Easy')} (10)</option>
+                <option value="15" ${difficulty === 15 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Average')} (15)</option>
+                <option value="18" ${difficulty === 18 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Moderate')} (18)</option>
+                <option value="20" ${difficulty === 20 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Hard')} (20)</option>
+                <option value="25" ${difficulty === 25 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryHard')} (25)</option>
+                <option value="30" ${difficulty === 30 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.NearlyImpossible')} (30)</option>
+                ${targetWillpower && ![10, 15, 18, 20, 25, 30].includes(targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
               </select>
             </div>
             <div class="form-group">
@@ -673,6 +777,11 @@ export class RyfActorSheet extends ActorSheet {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.MinAttributeValue'));
       input.value = currentValue;
       return;
+    }
+
+    // Reference: RyF 3.0 PDF, página 13 - los atributos van de 4 (mínimo) a 10 (máximo)
+    if (!hasExperience && (value < 4 || value > 10)) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.AttributeOutOfRange'));
     }
 
     await this.actor.update({

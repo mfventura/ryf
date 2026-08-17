@@ -1,0 +1,22 @@
+{
+  "_id": "vpkte0e7IBapP71f",
+  "name": "Seducción",
+  "type": "skill",
+  "img": "icons/magic/control/hypnosis-mesmerism-eye.webp",
+  "system": {
+    "description": "Habilidad para atraer, coquetear y manipular mediante el encanto personal.",
+    "level": 0,
+    "attribute": "carisma",
+    "category": "social",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!vpkte0e7IBapP71f"
+}

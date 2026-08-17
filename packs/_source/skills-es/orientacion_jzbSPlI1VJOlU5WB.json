@@ -1,0 +1,22 @@
+{
+  "_id": "jzbSPlI1VJOlU5WB",
+  "name": "Orientación",
+  "type": "skill",
+  "img": "icons/tools/navigation/compass-brass-blue-red.webp",
+  "system": {
+    "description": "Habilidad para no perderse, leer mapas y encontrar direcciones.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "perception",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!jzbSPlI1VJOlU5WB"
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "JyJdpJe5tc2n5AAp",
+  "name": "Idiomas",
+  "type": "skill",
+  "img": "icons/sundries/scrolls/scroll-worn-tan-red.webp",
+  "system": {
+    "description": "Conocimiento de idiomas adicionales. Cada nivel representa un idioma.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!JyJdpJe5tc2n5AAp"
+}

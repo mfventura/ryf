@@ -1,0 +1,45 @@
+{
+  "_id": "7hXrl7AUqlP5o94Z",
+  "name": "Tormenta de Fuego",
+  "type": "spell",
+  "img": "icons/magic/fire/explosion-fireball-large-orange.webp",
+  "system": {
+    "description": "Crea una tormenta de fuego devastadora en un área de 10 metros que inflige 6d6 de daño de fuego.",
+    "level": 7,
+    "manaCost": 6,
+    "castingDifficulty": 24,
+    "range": {
+      "type": "distance",
+      "maxDistance": 50
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 10
+    },
+    "effects": [
+      {
+        "id": "6rMoZT35nKBTV6i7",
+        "type": "immediate-damage",
+        "formula": "6d6",
+        "damageType": "fire",
+        "requiresAttack": false,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "destreza",
+          "difficulty": 24,
+          "halfDamageOnSave": true
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!7hXrl7AUqlP5o94Z"
+}

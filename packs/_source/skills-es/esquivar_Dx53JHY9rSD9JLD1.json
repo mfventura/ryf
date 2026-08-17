@@ -1,0 +1,22 @@
+{
+  "_id": "Dx53JHY9rSD9JLD1",
+  "name": "Esquivar",
+  "type": "skill",
+  "img": "icons/skills/movement/feet-winged-boots-brown.webp",
+  "system": {
+    "description": "Habilidad para evitar ataques mediante movimientos evasivos.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "defense",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!Dx53JHY9rSD9JLD1"
+}

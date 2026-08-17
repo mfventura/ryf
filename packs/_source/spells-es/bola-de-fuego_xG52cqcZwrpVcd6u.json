@@ -1,0 +1,45 @@
+{
+  "_id": "xG52cqcZwrpVcd6u",
+  "name": "Bola de Fuego",
+  "type": "spell",
+  "img": "icons/magic/fire/projectile-fireball-smoke-large-orange.webp",
+  "system": {
+    "description": "Lanza una bola de fuego explosiva que inflige 4d6 de daño de fuego en un área de 5 metros.",
+    "level": 5,
+    "manaCost": 4,
+    "castingDifficulty": 20,
+    "range": {
+      "type": "distance",
+      "maxDistance": 40
+    },
+    "targets": {
+      "type": "area",
+      "count": 1,
+      "areaRadius": 5
+    },
+    "effects": [
+      {
+        "id": "LjYpBJjDwFOTiC1c",
+        "type": "immediate-damage",
+        "formula": "4d6",
+        "damageType": "fire",
+        "requiresAttack": false,
+        "attackType": "ranged",
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "destreza",
+          "difficulty": 20,
+          "halfDamageOnSave": true
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!xG52cqcZwrpVcd6u"
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "SnmESJBsRFoPN2gW",
+  "name": "Investigación",
+  "type": "skill",
+  "img": "icons/tools/scribal/magnifying-glass.webp",
+  "system": {
+    "description": "Conocimiento profesional para realizar investigaciones, análisis forense y recopilación de información.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "knowledge",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!SnmESJBsRFoPN2gW"
+}

@@ -153,6 +153,46 @@ export class RyfItem extends Item {
       } else {
         await this._removeItemEffects();
       }
+      return;
+    }
+
+    // Re-sincronizar los efectos al editarlos en una ventaja (siempre activa)
+    // o en un item equipado
+    if (changed.system?.effects !== undefined && this._effectsAreActive()) {
+      await this._removeItemEffects();
+      await this._applyItemEffects();
+    }
+  }
+
+  // Las ventajas aplican sus efectos mientras están en el actor; los
+  // equipables, solo mientras están equipados
+  _effectsAreActive() {
+    if (this.type === 'advantage') return true;
+    return ['weapon', 'armor', 'shield', 'equipment'].includes(this.type) && this.system.equipped;
+  }
+
+  _onCreate(data, options, userId) {
+    super._onCreate(data, options, userId);
+
+    if (userId !== game.user.id || !this.actor) return;
+
+    // Reference: RyF 3.0 PDF, página 98 - los efectos de una ventaja se
+    // aplican al añadirla al personaje (también cubre equipo que llega ya equipado)
+    if (this._effectsAreActive()) {
+      this._applyItemEffects();
+    }
+  }
+
+  _onDelete(options, userId) {
+    super._onDelete(options, userId);
+
+    if (userId !== game.user.id || !this.actor) return;
+
+    // Retirar los ActiveEffects creados por este item (ventajas y equipo
+    // equipado) para no dejar efectos huérfanos
+    const orphanEffects = this.actor.effects.filter(e => e.flags?.ryf3?.sourceId === this.id);
+    if (orphanEffects.length > 0) {
+      this.actor.deleteEmbeddedDocuments('ActiveEffect', orphanEffects.map(e => e.id));
     }
   }
 
@@ -169,12 +209,15 @@ export class RyfItem extends Item {
     const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
 
     for (const effect of effects) {
+      // Los efectos de tipo nota son reglas manuales sin mecánica
+      if (effect.type === 'note') continue;
+
       const effectType = this.actor._getEffectTypeFromTarget(effect.target);
 
       const effectData = {
         name: `${this.name} (${game.i18n.localize('RYF.Effect')})`,
         img: this.img,
-        sourceType: 'item',
+        sourceType: this.type === 'advantage' ? 'advantage' : 'item',
         sourceName: this.name,
         sourceId: this.id,
         effectType: effectType,
@@ -192,7 +235,7 @@ export class RyfItem extends Item {
     if (!this.actor) return;
 
     const itemEffects = this.actor.effects.filter(e =>
-      e.flags?.ryf3?.sourceType === 'item' &&
+      ['item', 'advantage'].includes(e.flags?.ryf3?.sourceType) &&
       e.flags?.ryf3?.sourceId === this.id
     );
 

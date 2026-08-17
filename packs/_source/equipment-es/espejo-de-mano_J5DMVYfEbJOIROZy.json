@@ -1,0 +1,22 @@
+{
+  "_id": "J5DMVYfEbJOIROZy",
+  "name": "Espejo de mano",
+  "type": "equipment",
+  "img": "icons/sundries/misc/mirror-hand-steel.webp",
+  "system": {
+    "description": "Pequeño espejo de metal pulido. Útil para ver alrededor de esquinas.",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 10,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!J5DMVYfEbJOIROZy"
+}

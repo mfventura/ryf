@@ -1,0 +1,35 @@
+{
+  "_id": "yAJMB1PSvSKdEMbt",
+  "name": "Rifle de asalto",
+  "type": "weapon",
+  "img": "icons/weapons/guns/rifle-automatic-black.webp",
+  "system": {
+    "description": "Arma de fuego automática versátil y potente.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 2000,
+    "equipped": false,
+    "identified": true,
+    "category": "ranged",
+    "damage": {
+      "base": "3d6",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 20,
+      "medium": 50,
+      "long": 80
+    },
+    "twoHanded": true,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!yAJMB1PSvSKdEMbt"
+}

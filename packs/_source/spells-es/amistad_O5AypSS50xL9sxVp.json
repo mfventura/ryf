@@ -1,0 +1,45 @@
+{
+  "_id": "O5AypSS50xL9sxVp",
+  "name": "Amistad",
+  "type": "spell",
+  "img": "icons/skills/social/diplomacy-handshake.webp",
+  "system": {
+    "description": "Hace que el objetivo se vuelva amistoso hacia el mago. El objetivo puede resistirse con una tirada de Voluntad. Dura 1 hora.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "distance",
+      "maxDistance": 10
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "eZ4J64fIDCPZpCxb",
+        "type": "condition",
+        "condition": "charmed",
+        "duration": {
+          "type": "fixed",
+          "value": 60
+        },
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "carisma",
+          "difficulty": 16
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!O5AypSS50xL9sxVp"
+}

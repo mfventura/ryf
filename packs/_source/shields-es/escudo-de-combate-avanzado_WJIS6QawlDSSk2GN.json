@@ -1,0 +1,27 @@
+{
+  "_id": "WJIS6QawlDSSk2GN",
+  "name": "Escudo de combate avanzado",
+  "type": "shield",
+  "img": "icons/magic/defensive/shield-barrier-glowing-triangle-magenta.webp",
+  "system": {
+    "description": "Escudo militar futurista con tecnología de absorción de impactos. Máxima protección tecnológica.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 12000,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 4,
+      "ranged": 8
+    },
+    "hindrance": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!WJIS6QawlDSSk2GN"
+}

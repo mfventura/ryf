@@ -1,0 +1,22 @@
+{
+  "_id": "Jvc6qWVWcye3BsKY",
+  "name": "Magia",
+  "type": "skill",
+  "img": "icons/magic/symbols/runes-star-pentagon-blue.webp",
+  "system": {
+    "description": "Habilidad para lanzar hechizos y canalizar energía mágica.",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "magic",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!Jvc6qWVWcye3BsKY"
+}

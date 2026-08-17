@@ -1,0 +1,22 @@
+{
+  "_id": "OFQzDdyxCJbOsQTS",
+  "name": "Pilotar",
+  "type": "skill",
+  "img": "icons/tools/navigation/compass-brass-blue-red.webp",
+  "system": {
+    "description": "Habilidad profesional para pilotar aeronaves, naves espaciales u otros vehículos complejos.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "movement",
+    "isProfessional": true,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!OFQzDdyxCJbOsQTS"
+}

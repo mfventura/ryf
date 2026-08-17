@@ -1,0 +1,35 @@
+{
+  "_id": "Js3D04zv6aYjDCoc",
+  "name": "Lanza",
+  "type": "weapon",
+  "img": "icons/weapons/polearms/spear-flared-steel.webp",
+  "system": {
+    "description": "Arma de asta con buen alcance, puede usarse a una o dos manos.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 20,
+    "equipped": false,
+    "identified": true,
+    "category": "melee",
+    "damage": {
+      "base": "1d6+2",
+      "bonus": 0,
+      "type": "physical"
+    },
+    "range": {
+      "short": 0,
+      "medium": 0,
+      "long": 0
+    },
+    "twoHanded": false,
+    "properties": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!Js3D04zv6aYjDCoc"
+}

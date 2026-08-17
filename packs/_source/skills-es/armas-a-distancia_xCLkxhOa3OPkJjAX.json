@@ -1,0 +1,22 @@
+{
+  "_id": "xCLkxhOa3OPkJjAX",
+  "name": "Armas a distancia",
+  "type": "skill",
+  "img": "icons/skills/ranged/arrow-flying-white-blue.webp",
+  "system": {
+    "description": "Habilidad para usar armas de proyectiles como arcos, ballestas, pistolas, rifles, etc.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "ranged",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!xCLkxhOa3OPkJjAX"
+}

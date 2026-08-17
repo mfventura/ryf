@@ -1,0 +1,22 @@
+{
+  "_id": "RLkKomacicv6Bh6s",
+  "name": "Cocinar",
+  "type": "skill",
+  "img": "icons/tools/cooking/cauldron-soup-stew-brown.webp",
+  "system": {
+    "description": "Habilidad para preparar comidas y bebidas.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "craft",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!RLkKomacicv6Bh6s"
+}

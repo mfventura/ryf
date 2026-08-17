@@ -1,0 +1,24 @@
+{
+  "_id": "xWElTOFARDqOENF5",
+  "name": "Chaleco antibalas",
+  "type": "armor",
+  "img": "icons/equipment/chest/vest-armored-blue.webp",
+  "system": {
+    "description": "Armadura moderna hecha de materiales balísticos. Protege contra proyectiles de armas de fuego con poco estorbo.",
+    "quantity": 1,
+    "weight": 3,
+    "price": 500,
+    "equipped": false,
+    "identified": true,
+    "protection": 3,
+    "hindrance": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!xWElTOFARDqOENF5"
+}

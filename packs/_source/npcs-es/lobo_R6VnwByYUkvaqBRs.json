@@ -1,0 +1,52 @@
+{
+  "_id": "R6VnwByYUkvaqBRs",
+  "name": "Lobo",
+  "type": "npc",
+  "img": "icons/environment/creatures/wolf-shadow-black.webp",
+  "system": {
+    "biography": "Depredador salvaje que caza en manada. Rápido y letal.",
+    "health": {
+      "value": 20,
+      "max": 20
+    },
+    "initiative": 15,
+    "defense": 16,
+    "absorption": 0,
+    "willpower": 8,
+    "attacks": [],
+    "cr": 1,
+    "isMinion": true
+  },
+  "items": [
+    {
+      "_id": "PQ7ZLDXyl1wf1H0L",
+      "name": "Mordisco",
+      "type": "npc-attack",
+      "img": "icons/skills/melee/strike-sword-steel-yellow.webp",
+      "system": {
+        "description": "",
+        "attackType": "melee",
+        "attackBonus": 11,
+        "damage": {
+          "base": "1d6",
+          "bonus": 2
+        }
+      },
+      "effects": [],
+      "sort": 0,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {},
+      "_key": "!actors.items!R6VnwByYUkvaqBRs.PQ7ZLDXyl1wf1H0L"
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!R6VnwByYUkvaqBRs"
+}

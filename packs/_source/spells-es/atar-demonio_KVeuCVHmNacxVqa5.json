@@ -1,0 +1,30 @@
+{
+  "_id": "KVeuCVHmNacxVqa5",
+  "name": "Atar Demonio",
+  "type": "spell",
+  "img": "icons/magic/symbols/runes-star-pentagon-orange.webp",
+  "system": {
+    "description": "Ata a un demonio o criatura extraplanar, obligándola a obedecer una orden. El objetivo puede resistirse con Voluntad.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "distance",
+      "maxDistance": 10
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!KVeuCVHmNacxVqa5"
+}

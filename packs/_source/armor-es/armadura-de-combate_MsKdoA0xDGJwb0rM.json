@@ -1,0 +1,24 @@
+{
+  "_id": "MsKdoA0xDGJwb0rM",
+  "name": "Armadura de combate",
+  "type": "armor",
+  "img": "icons/equipment/chest/breastplate-armored-steel-blue.webp",
+  "system": {
+    "description": "Armadura táctica avanzada con placas balísticas y protección completa. Máxima protección moderna con movilidad razonable.",
+    "quantity": 1,
+    "weight": 10,
+    "price": 2000,
+    "equipped": false,
+    "identified": true,
+    "protection": 4,
+    "hindrance": 2
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!MsKdoA0xDGJwb0rM"
+}

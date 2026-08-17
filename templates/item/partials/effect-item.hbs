@@ -3,9 +3,13 @@
   <select name="system.effects.{{index}}.type" data-dtype="String">
     <option value="buff" {{#if (eq effect.type "buff")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Buff"}}</option>
     <option value="debuff" {{#if (eq effect.type "debuff")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Debuff"}}</option>
+    <option value="note" {{#if (eq effect.type "note")}}selected{{/if}}>{{localize "RYF.Magic.EffectTypes.Note"}}</option>
   </select>
 </div>
 
+{{#if (eq effect.type "note")}}
+{{> "systems/ryf3/templates/item/partials/effect-note.hbs" effect=effect index=index}}
+{{else}}
 <div class="form-group">
   <label>{{localize "RYF.Magic.EffectTarget"}}</label>
   <select name="system.effects.{{index}}.target" data-dtype="String" class="effect-target-select">
@@ -23,6 +27,12 @@
     <option value="initiative" {{#if (eq effect.target "initiative")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Initiative"}}</option>
     <option value="absorption" {{#if (eq effect.target "absorption")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.Absorption"}}</option>
     <option value="hindrance-reduction" {{#if (eq effect.target "hindrance-reduction")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.HindranceReduction"}}</option>
+    <option value="damage-melee" {{#if (eq effect.target "damage-melee")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.DamageMelee"}}</option>
+    <option value="damage-ranged" {{#if (eq effect.target "damage-ranged")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.DamageRanged"}}</option>
+    <option value="spell-casting" {{#if (eq effect.target "spell-casting")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.SpellCasting"}}</option>
+    <option value="healing-received" {{#if (eq effect.target "healing-received")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.HealingReceived"}}</option>
+    <option value="health-multiplier" {{#if (eq effect.target "health-multiplier")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.HealthMultiplier"}}</option>
+    <option value="mana-multiplier" {{#if (eq effect.target "mana-multiplier")}}selected{{/if}}>{{localize "RYF.Magic.EffectTargets.ManaMultiplier"}}</option>
   </select>
 </div>
 
@@ -60,4 +70,5 @@
   <label>{{localize "RYF.Modifier"}}</label>
   <input type="number" name="system.effects.{{index}}.modifier" value="{{effect.modifier}}" data-dtype="Number" placeholder="1"/>
 </div>
+{{/if}}
 

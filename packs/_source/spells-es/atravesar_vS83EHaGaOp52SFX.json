@@ -1,0 +1,30 @@
+{
+  "_id": "vS83EHaGaOp52SFX",
+  "name": "Atravesar",
+  "type": "spell",
+  "img": "icons/magic/movement/trail-streak-zigzag-yellow.webp",
+  "system": {
+    "description": "Permite atravesar una pared o barrera sólida de hasta 3 metros de grosor.",
+    "level": 2,
+    "manaCost": 2,
+    "castingDifficulty": 16,
+    "range": {
+      "type": "touch",
+      "maxDistance": 0
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!vS83EHaGaOp52SFX"
+}

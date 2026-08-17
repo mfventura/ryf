@@ -1,0 +1,31 @@
+{
+  "_id": "bdMdGsoFE9RCm2yD",
+  "name": "Mula de carga",
+  "type": "advantage",
+  "img": "icons/containers/bags/pack-leather-brown.webp",
+  "system": {
+    "description": "Ignora 1 punto de estorbo.",
+    "requirement": {
+      "attribute": "fisico",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "NkOaZtfzavOdaod8",
+        "type": "buff",
+        "target": "hindrance-reduction",
+        "targetName": "",
+        "modifier": 1,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!bdMdGsoFE9RCm2yD"
+}

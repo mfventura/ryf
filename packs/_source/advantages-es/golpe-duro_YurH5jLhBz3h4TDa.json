@@ -1,0 +1,31 @@
+{
+  "_id": "YurH5jLhBz3h4TDa",
+  "name": "Golpe Duro",
+  "type": "advantage",
+  "img": "icons/skills/melee/unarmed-punch-fist.webp",
+  "system": {
+    "description": "+1 al daño en cuerpo a cuerpo.",
+    "requirement": {
+      "attribute": "fisico",
+      "value": 8
+    },
+    "effects": [
+      {
+        "id": "t4n8Q9NKLy0epHkJ",
+        "type": "buff",
+        "target": "damage-melee",
+        "targetName": "",
+        "modifier": 1,
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!YurH5jLhBz3h4TDa"
+}

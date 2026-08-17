@@ -1,0 +1,22 @@
+{
+  "_id": "8DBAZw1NmVIOhSX5",
+  "name": "Antorcha",
+  "type": "equipment",
+  "img": "icons/sundries/lights/torch-brown-lit.webp",
+  "system": {
+    "description": "Antorcha de madera que proporciona luz durante 1 hora.",
+    "quantity": 1,
+    "weight": 0.5,
+    "price": 1,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!8DBAZw1NmVIOhSX5"
+}

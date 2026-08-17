@@ -107,5 +107,16 @@ export function registerSystemSettings() {
     type: Number,
     default: 30
   });
+
+  // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje;
+  // configurable porque RyF es genérico (0 = sin límite)
+  game.settings.register('ryf3', 'maxAdvantages', {
+    name: 'RYF.Settings.MaxAdvantages.Name',
+    hint: 'RYF.Settings.MaxAdvantages.Hint',
+    scope: 'world',
+    config: true,
+    type: Number,
+    default: 1
+  });
 }
 

@@ -1,0 +1,27 @@
+{
+  "_id": "ZTKENN72h0sIpUFR",
+  "name": "Escudo táctico",
+  "type": "shield",
+  "img": "icons/equipment/shield/riot-steel-blue.webp",
+  "system": {
+    "description": "Escudo moderno de materiales compuestos. Ligero y resistente, ideal para fuerzas de seguridad.",
+    "quantity": 1,
+    "weight": 4,
+    "price": 500,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 2,
+      "ranged": 4
+    },
+    "hindrance": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!ZTKENN72h0sIpUFR"
+}

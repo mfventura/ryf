@@ -1,0 +1,22 @@
+{
+  "_id": "eMXPQialFcik4kXx",
+  "name": "Escalar",
+  "type": "skill",
+  "img": "icons/skills/movement/figure-climbing-mountain-blue.webp",
+  "system": {
+    "description": "Habilidad para trepar superficies verticales, muros, montañas, etc.",
+    "level": 0,
+    "attribute": "fisico",
+    "category": "movement",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!eMXPQialFcik4kXx"
+}

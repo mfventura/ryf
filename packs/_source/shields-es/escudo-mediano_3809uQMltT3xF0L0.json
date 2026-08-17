@@ -1,0 +1,27 @@
+{
+  "_id": "3809uQMltT3xF0L0",
+  "name": "Escudo mediano",
+  "type": "shield",
+  "img": "icons/equipment/shield/heater-steel-worn-blue.webp",
+  "system": {
+    "description": "Escudo de tamaño medio. Ofrece buena protección con estorbo mínimo.",
+    "quantity": 1,
+    "weight": 5,
+    "price": 100,
+    "equipped": false,
+    "identified": true,
+    "defense": {
+      "melee": 2,
+      "ranged": 4
+    },
+    "hindrance": 1
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!3809uQMltT3xF0L0"
+}

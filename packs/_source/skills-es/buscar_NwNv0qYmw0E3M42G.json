@@ -1,0 +1,22 @@
+{
+  "_id": "NwNv0qYmw0E3M42G",
+  "name": "Buscar",
+  "type": "skill",
+  "img": "icons/tools/scribal/magnifying-glass.webp",
+  "system": {
+    "description": "Habilidad para encontrar objetos ocultos, pistas y detalles en el entorno.",
+    "level": 0,
+    "attribute": "percepcion",
+    "category": "perception",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!NwNv0qYmw0E3M42G"
+}

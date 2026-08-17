@@ -1,0 +1,22 @@
+{
+  "_id": "KczPO4CM42xGYqlY",
+  "name": "Liderazgo",
+  "type": "skill",
+  "img": "icons/environment/people/charge.webp",
+  "system": {
+    "description": "Habilidad para dirigir, inspirar y coordinar grupos de personas.",
+    "level": 0,
+    "attribute": "carisma",
+    "category": "social",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!KczPO4CM42xGYqlY"
+}

@@ -1,0 +1,22 @@
+{
+  "_id": "GYQBHrmPMlqBmWHi",
+  "name": "Catalejo",
+  "type": "equipment",
+  "img": "icons/tools/navigation/spyglass-brass.webp",
+  "system": {
+    "description": "Telescopio portátil. Otorga +2 a Vigilar a larga distancia.",
+    "quantity": 1,
+    "weight": 1,
+    "price": 100,
+    "equipped": false,
+    "identified": true
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!GYQBHrmPMlqBmWHi"
+}

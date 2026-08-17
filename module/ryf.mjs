@@ -4,6 +4,7 @@ import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { RyfActor } from './documents/actor.mjs';
 import { RyfItem } from './documents/item.mjs';
 import { RyfActiveEffect } from './documents/ryf-active-effect.mjs';
+import { RyfCombat } from './documents/combat.mjs';
 import { RyfActorSheet } from './sheets/actor-sheet.mjs';
 import { RyfItemSheet } from './sheets/item-sheet.mjs';
 
@@ -21,16 +22,20 @@ Hooks.once('init', async function() {
   CONFIG.Actor.documentClass = RyfActor;
   CONFIG.Item.documentClass = RyfItem;
   CONFIG.ActiveEffect.documentClass = RyfActiveEffect;
+  CONFIG.Combat.documentClass = RyfCombat;
 
+  // Fallback para tiradas fuera de RyfCombat.rollInitiative: 3d10 quedándose
+  // el dado medio (sin explosión, que la fórmula no puede expresar)
+  // Reference: RyF 3.0 PDF, página 20 - Iniciativa = Percepción + Reflejos + 1o3d10
   CONFIG.Combat.initiative = {
-    formula: '3d10 + @initiative.base - @combat.hindrance',
-    decimals: 2
+    formula: '3d10dl1dh1 + @initiative.base - @combat.hindrance',
+    decimals: 0
   };
 
   CONFIG.statusEffects.push({
     id: 'wounded',
     name: 'RYF.States.wounded',
-    icon: 'icons/svg/blood.svg'
+    img: 'icons/svg/blood.svg'
   });
 
   Actors.unregisterSheet("core", ActorSheet);
@@ -42,7 +47,7 @@ Hooks.once('init', async function() {
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
@@ -167,68 +172,6 @@ Hooks.once('ready', async function() {
   
 });
 
-Hooks.on('createChatMessage', async (message) => {
-  if (!message.rolls || message.rolls.length === 0) return;
-
-  const flavor = message.flavor || '';
-  const isInitiative = flavor.toLowerCase().includes('initiative') || flavor.toLowerCase().includes('iniciativa');
-
-  if (!isInitiative) return;
-
-  const actor = ChatMessage.getSpeakerActor(message.speaker);
-  if (!actor) return;
-
-  const roll = message.rolls[0];
-  const initiativeBase = actor.system?.initiative?.base || 0;
-  const hindrance = actor.system?.combat?.hindrance || 0;
-  const wounded = actor.system?.states?.wounded || false;
-
-  const diceTerm = roll.terms.find(t => t.faces === 10);
-  let dice = [];
-  let explosions = [];
-  let exploded = false;
-
-  if (diceTerm && diceTerm.results) {
-    dice = diceTerm.results.map(r => r.result);
-
-    for (const result of diceTerm.results) {
-      if (result.exploded) {
-        exploded = true;
-      }
-    }
-  }
-
-  const sorted = [...dice].sort((a, b) => a - b);
-  const chosenIndex = 1;
-  const chosen = sorted[chosenIndex] || dice[0] || 0;
-
-  const diceRoll = {
-    dice: dice,
-    sorted: sorted,
-    chosen: chosen,
-    chosenIndex: chosenIndex,
-    exploded: exploded,
-    explosions: explosions,
-    result: roll.total - initiativeBase + hindrance
-  };
-
-  const total = roll.total;
-
-  const rollData = {
-    actor: actor,
-    initiativeBase: initiativeBase,
-    hindrance: hindrance,
-    diceRoll: diceRoll,
-    total: total,
-    wounded: wounded
-  };
-
-  const template = 'systems/ryf3/templates/chat/initiative-roll.hbs';
-  const html = await renderTemplate(template, rollData);
-
-  await message.update({ content: html });
-});
-
 Hooks.on('renderChatMessage', (message, html) => {
   html.find('.roll-damage').click(async (event) => {
     event.preventDefault();
@@ -274,6 +217,29 @@ Hooks.on('renderChatMessage', (message, html) => {
       }
     }
   });
+});
+
+// Reference: RyF 3.0 PDF, página 20 - mostrar las acciones múltiples por
+// iniciativa (20+ → 2, 30+ → 3...) junto a cada combatiente en el tracker.
+// DOM nativo: el CombatTracker es ApplicationV2 y no recibe jQuery.
+Hooks.on('renderCombatTracker', (app, html) => {
+  const root = html instanceof HTMLElement ? html : html[0];
+  const combat = app.viewed;
+  if (!combat || !root) return;
+
+  for (const li of root.querySelectorAll('.combatant[data-combatant-id]')) {
+    const combatant = combat.combatants.get(li.dataset.combatantId);
+    const actions = combatant?.flags?.ryf3?.actions;
+    if (!actions || actions <= 1) continue;
+    if (li.querySelector('.ryf-actions-badge')) continue;
+
+    const name = li.querySelector('.token-name') || li;
+    const badge = document.createElement('span');
+    badge.classList.add('ryf-actions-badge');
+    badge.title = game.i18n.localize('RYF.Actions');
+    badge.innerHTML = `<i class="fas fa-bolt"></i>${actions}`;
+    name.appendChild(badge);
+  }
 });
 
 Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
@@ -369,6 +335,32 @@ Hooks.on('renderCompendium', (app, html, data) => {
       $(this).find('.document-name').text(translatedName);
     }
   });
+});
+
+// Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite
+// configurable, 0 = sin límite) y con requisito de atributo. Validación
+// advisory: avisa pero no bloquea.
+Hooks.on('preCreateItem', (item, data, options, userId) => {
+  if (item.type !== 'advantage') return;
+  const actor = item.parent;
+  if (!actor || actor.documentName !== 'Actor' || actor.type !== 'character') return;
+
+  const maxAdvantages = game.settings.get('ryf3', 'maxAdvantages');
+  const currentCount = actor.items.filter(i => i.type === 'advantage').length;
+  if (maxAdvantages > 0 && currentCount >= maxAdvantages) {
+    ui.notifications.warn(game.i18n.format('RYF.Warnings.MaxAdvantagesReached', { max: maxAdvantages }));
+  }
+
+  const requirement = item.system?.requirement;
+  if (requirement?.attribute) {
+    const attrValue = actor.system.attributes?.[requirement.attribute]?.value || 0;
+    if (attrValue < requirement.value) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.AdvantageRequirementNotMet', {
+        attribute: game.i18n.localize(CONFIG.RYF.attributes[requirement.attribute]),
+        value: requirement.value
+      }));
+    }
+  }
 });
 
 Hooks.on('preCreateItem', async (item, data, options, userId) => {

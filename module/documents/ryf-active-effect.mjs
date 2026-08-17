@@ -25,22 +25,24 @@ export class RyfActiveEffect extends ActiveEffect {
 
     const effectConfig = {
       name: effectData.name || spell.name,
-      icon: effectData.img || spell.img || 'icons/svg/aura.svg',
+      img: effectData.img || spell.img || 'icons/svg/aura.svg',
       origin: spell.uuid,
       disabled: false,
       transfer: false,
 
       duration: durationConfig,
-      
-      changes: [
-        {
-          key: attributeKey,
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-          value: String(effectData.modifier || 0),
-          priority: 20
-        }
-      ],
-      
+
+      system: {
+        changes: [
+          {
+            key: attributeKey,
+            type: 'add',
+            value: String(effectData.modifier || 0),
+            priority: 20
+          }
+        ]
+      },
+
       flags: {
         ryf3: {
           sourceType: effectData.sourceType || 'spell',
@@ -124,6 +126,24 @@ export class RyfActiveEffect extends ActiveEffect {
       case 'absorption-bonus':
         return 'system.activeEffectBonuses.absorption';
 
+      case 'damage-melee-bonus':
+        return 'system.activeEffectBonuses.damageMelee';
+
+      case 'damage-ranged-bonus':
+        return 'system.activeEffectBonuses.damageRanged';
+
+      case 'spell-casting-bonus':
+        return 'system.activeEffectBonuses.spellCasting';
+
+      case 'healing-received-bonus':
+        return 'system.activeEffectBonuses.healingReceived';
+
+      case 'health-multiplier-bonus':
+        return 'system.activeEffectBonuses.healthMultiplier';
+
+      case 'mana-multiplier-bonus':
+        return 'system.activeEffectBonuses.manaMultiplier';
+
       default:
         console.warn(`Unknown effect type: ${effectType}`);
         return 'system.activeEffectBonuses.defense';
@@ -175,7 +195,7 @@ export class RyfActiveEffect extends ActiveEffect {
     if (!effects || effects.length === 0) return 0;
 
     return effects.reduce((total, effect) => {
-      const change = effect.changes?.[0];
+      const change = effect.system?.changes?.[0];
       if (change) {
         return total + (parseInt(change.value) || 0);
       }
@@ -197,23 +217,25 @@ export class RyfActiveEffect extends ActiveEffect {
 
     const effectConfig = {
       name: effectData.name || item.name,
-      icon: effectData.img || item.img || 'icons/svg/item-bag.svg',
+      img: effectData.img || item.img || 'icons/svg/item-bag.svg',
       origin: item.uuid,
       disabled: false,
       transfer: false,
 
-      changes: [
-        {
-          key: attributeKey,
-          mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-          value: String(effectData.modifier || 0),
-          priority: 20
-        }
-      ],
+      system: {
+        changes: [
+          {
+            key: attributeKey,
+            type: 'add',
+            value: String(effectData.modifier || 0),
+            priority: 20
+          }
+        ]
+      },
 
       flags: {
         ryf3: {
-          sourceType: 'item',
+          sourceType: effectData.sourceType || 'item',
           sourceName: effectData.sourceName || item.name,
           sourceId: effectData.sourceId || item.id,
           appliedBy: effectData.appliedBy || game.user.name,

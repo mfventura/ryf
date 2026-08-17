@@ -1,0 +1,45 @@
+{
+  "_id": "XEm8vG5nCTOBwKJx",
+  "name": "Infundir Terror",
+  "type": "spell",
+  "img": "icons/magic/death/skull-horned-worn-fire-blue.webp",
+  "system": {
+    "description": "Causa terror sobrenatural en el objetivo. El objetivo debe superar una tirada de Voluntad o huir aterrorizado. Dura 1 minuto.",
+    "level": 4,
+    "manaCost": 3,
+    "castingDifficulty": 18,
+    "range": {
+      "type": "distance",
+      "maxDistance": 20
+    },
+    "targets": {
+      "type": "single",
+      "count": 1,
+      "areaRadius": 0
+    },
+    "effects": [
+      {
+        "id": "G4BqQfzm7YzhvTIK",
+        "type": "condition",
+        "condition": "frightened",
+        "duration": {
+          "type": "fixed",
+          "value": 10
+        },
+        "savingThrow": {
+          "enabled": true,
+          "attribute": "carisma",
+          "difficulty": 18
+        }
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!XEm8vG5nCTOBwKJx"
+}

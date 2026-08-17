@@ -5,9 +5,13 @@
     "AddExperience": "Añadir Experiencia",
     "AddShield": "Añadir Escudo",
     "AddSkill": "Añadir Habilidad",
+    "AddAdvantage": "Añadir Ventaja",
     "AddSpell": "Añadir Hechizo",
     "AddWeapon": "Añadir Arma",
     "Advantage": "Ventaja",
+    "AdvantageName": "Nombre de la Ventaja",
+    "Advantages": "Ventajas",
+    "Actions": "Acciones",
     "Armor": "Armaduras",
     "ArmorName": "Nombre de la Armadura",
     "Attack": "Ataque",
@@ -47,6 +51,9 @@
     "Disadvantage": "Desventaja",
     "Duration": "Duración",
     "Edit": "Editar",
+    "DamageKept": "Se queda",
+    "DualWeaponDamage": "Daño con Dos Armas",
+    "DualWield": "Dos armas ligeras",
     "Effect": "Efecto",
     "EffectBonus": "Bono de Efecto",
     "Equipment": "Equipamiento",
@@ -79,6 +86,13 @@
     "Modifier": "Modificador",
     "NextLevelCost": "Coste del Siguiente Nivel",
     "Normal": "Normal",
+    "MinimumValue": "Valor mínimo",
+    "NoRequirement": "Sin requisito",
+    "OpposedDefenderSkill": "Habilidad del oponente",
+    "OpposedManualBonus": "— Bono manual (PNJ sin habilidades) —",
+    "OpposedRoll": "Tirada Enfrentada",
+    "OpposedTie": "Empate: queda a discreción del máster (RyF 3.0, pág. 18)",
+    "OpposedWinner": "Ganador",
     "NoSpells": "No hay hechizos",
     "NPCName": "Nombre del PNJ",
     "Permanent": "Permanente",
@@ -94,6 +108,7 @@
     "ReasonPlaceholder": "Ej: Completar misión, derrotar enemigos",
     "Remaining": "Restantes",
     "Remove": "Eliminar",
+    "Requirement": "Requisito",
     "Roll": "Tirar",
     "RollDamage": "Tirar Daño",
     "RollMode": "Modo de Tirada",
@@ -188,6 +203,7 @@
       "Average": "Normal",
       "Easy": "Fácil",
       "Hard": "Difícil",
+      "Moderate": "Moderada",
       "NearlyImpossible": "Casi Imposible",
       "VeryEasy": "Muy Fácil",
       "VeryHard": "Muy Difícil"
@@ -274,13 +290,19 @@
         "AttackMelee": "Ataque Cuerpo a Cuerpo",
         "AttackRanged": "Ataque a Distancia",
         "Attribute": "Atributo",
+        "DamageMelee": "Daño Cuerpo a Cuerpo",
+        "DamageRanged": "Daño a Distancia",
         "Defense": "Defensa",
         "DefenseMelee": "Defensa Cuerpo a Cuerpo",
         "DefenseRanged": "Defensa a Distancia",
+        "HealingReceived": "Curación Recibida",
+        "HealthMultiplier": "Multiplicador de Vida",
         "HindranceReduction": "Reducción de Estorbo",
         "Initiative": "Iniciativa",
+        "ManaMultiplier": "Multiplicador de Maná",
         "MaxHealth": "Vida Máxima",
         "Skill": "Habilidad",
+        "SpellCasting": "Lanzamiento de Hechizos",
         "WeaponAttack": "Ataque de Arma",
         "WeaponDamage": "Daño de Arma"
       },
@@ -289,8 +311,11 @@
         "Condition": "Condición",
         "Debuff": "Penalización",
         "ImmediateDamage": "Daño Inmediato",
-        "ImmediateHealing": "Curación Inmediata"
+        "ImmediateHealing": "Curación Inmediata",
+        "Note": "Nota (regla manual)"
       },
+      "NoteText": "Texto de la regla",
+      "NoteTextPlaceholder": "Ej: Puede repetir una tirada por escena",
       "RangeTypes": {
         "ranged": "A Distancia",
         "self": "Personal",
@@ -372,6 +397,10 @@
         "Hint": "Multiplicador para calcular Maná máximo (Inteligencia × multiplicador). Solo si magia está activa.",
         "Name": "Multiplicador de Maná"
       },
+      "MaxAdvantages": {
+        "Hint": "Máximo de ventajas por personaje (RyF 3.0, pág. 98: una). 0 = sin límite. El aviso no bloquea la creación.",
+        "Name": "Máximo de Ventajas"
+      },
       "MaxSkillLevel": {
         "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades",
         "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
@@ -417,6 +446,7 @@
     },
     "Warnings": {
       "AttributeNotFound": "No se encontró el atributo {attribute}",
+      "AttributeOutOfRange": "Los atributos deben estar entre 4 y 10 durante la creación (RyF 3.0, pág. 13)",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
       "CannotEquip": "Este tipo de item no se puede equipar",
       "CarismaDisabled": "El Carisma no está habilitado en este mundo. Actívalo en la configuración del sistema.",
@@ -424,7 +454,7 @@
       "InvalidSpell": "Hechizo inválido",
       "MagicDisabled": "La magia no está habilitada en este mundo. Actívala en la configuración del sistema.",
       "MaxSkillLevel": "La habilidad ya está al nivel máximo (10)",
-      "MinAttributeValue": "No se pudo determinar el valor del atributo principal",
+      "MinAttributeValue": "El atributo no puede ser menor que 1",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoActor": "Este item no está asociado a ningún actor",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
@@ -435,12 +465,30 @@
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
       "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
+      "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
+      "AdvantageRequirementNotMet": "No cumples el requisito de la ventaja: {attribute} {value}+ (RyF 3.0, pág. 98)",
       "SkillNotFound": "No se encontró la habilidad {skill}",
       "SkillPyramidMismatch": "Nivel {level}: se esperan {expected} habilidades, pero hay {actual}",
       "SkillsAbovePyramid": "Nivel {level}: hay {actual} habilidades por encima del máximo de la pirámide",
       "SpellCastingFailed": "Fallo al lanzar {name}",
       "SpellHasNoEffects": "El hechizo no tiene efectos configurados",
       "WeaponNotFound": "No se encontró el arma"
+    }
+  },
+  "TYPES": {
+    "Item": {
+      "advantage": "Ventaja",
+      "armor": "Armadura",
+      "equipment": "Equipamiento",
+      "npc-attack": "Ataque de PNJ",
+      "shield": "Escudo",
+      "skill": "Habilidad",
+      "spell": "Hechizo",
+      "weapon": "Arma"
+    },
+    "Actor": {
+      "character": "Personaje",
+      "npc": "PNJ"
     }
   }
 }

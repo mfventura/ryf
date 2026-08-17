@@ -1,0 +1,22 @@
+{
+  "_id": "VjVBdbMFHLYddUv5",
+  "name": "Trampas/Cerraduras",
+  "type": "skill",
+  "img": "icons/sundries/misc/lock-steel-reinforced.webp",
+  "system": {
+    "description": "Habilidad para desactivar trampas y abrir cerraduras.",
+    "level": 0,
+    "attribute": "destreza",
+    "category": "subterfuge",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!VjVBdbMFHLYddUv5"
+}
