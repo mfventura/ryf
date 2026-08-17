@@ -1,0 +1,65 @@
+{{!-- Reference: RyF 3.0 PDF, página 18 - tiradas enfrentadas: gana el resultado más alto --}}
+<div class="ryf-roll opposed-roll">
+  <div class="roll-header">
+    <div class="roll-title">
+      <h3>{{localize "RYF.OpposedRoll"}}</h3>
+      <div class="roll-subtitle">{{attacker.actor.name}} vs {{defender.actor.name}}</div>
+    </div>
+  </div>
+
+  <div class="dice-results">
+    <div class="opposed-side {{#if (eq winner 'attacker')}}winner{{/if}}">
+      <strong>{{attacker.actor.name}}</strong> — {{attacker.label}}
+      ({{attacker.attributeValue}}{{#if attacker.skillLevel}} + {{attacker.skillLevel}}{{/if}}{{#if (gt attacker.hindrance 0)}} - {{attacker.hindrance}}{{/if}})
+      <div class="dice-pool">
+        {{#each attacker.diceRoll.sorted as |die index|}}
+          <div class="die d10 {{#if (eq index ../attacker.diceRoll.chosenIndex)}}chosen{{/if}}">
+            <i class="fas fa-dice-d10"></i>
+            <span class="die-value">{{die}}</span>
+          </div>
+        {{/each}}
+        {{#if attacker.diceRoll.exploded}}
+          <i class="fas fa-burst"></i>
+          {{#each attacker.diceRoll.explosions as |explosion|}}
+            <span class="explosion-value">+{{explosion}}</span>
+          {{/each}}
+        {{/if}}
+      </div>
+      <span class="opposed-total">{{localize "RYF.Total"}}: {{attacker.total}}</span>
+    </div>
+
+    <div class="opposed-side {{#if (eq winner 'defender')}}winner{{/if}}">
+      <strong>{{defender.actor.name}}</strong> — {{defender.label}}
+      ({{defender.attributeValue}}{{#if defender.skillLevel}} + {{defender.skillLevel}}{{/if}}{{#if (gt defender.hindrance 0)}} - {{defender.hindrance}}{{/if}})
+      <div class="dice-pool">
+        {{#each defender.diceRoll.sorted as |die index|}}
+          <div class="die d10 {{#if (eq index ../defender.diceRoll.chosenIndex)}}chosen{{/if}}">
+            <i class="fas fa-dice-d10"></i>
+            <span class="die-value">{{die}}</span>
+          </div>
+        {{/each}}
+        {{#if defender.diceRoll.exploded}}
+          <i class="fas fa-burst"></i>
+          {{#each defender.diceRoll.explosions as |explosion|}}
+            <span class="explosion-value">+{{explosion}}</span>
+          {{/each}}
+        {{/if}}
+      </div>
+      <span class="opposed-total">{{localize "RYF.Total"}}: {{defender.total}}</span>
+    </div>
+  </div>
+
+  <div class="roll-outcome">
+    {{#if tie}}
+      <div class="outcome">
+        <i class="fas fa-balance-scale"></i>
+        <strong>{{localize "RYF.OpposedTie"}}</strong>
+      </div>
+    {{else}}
+      <div class="outcome success">
+        <i class="fas fa-trophy"></i>
+        <strong>{{localize "RYF.OpposedWinner"}}: {{#if (eq winner 'attacker')}}{{attacker.actor.name}}{{else}}{{defender.actor.name}}{{/if}}</strong>
+      </div>
+    {{/if}}
+  </div>
+</div>

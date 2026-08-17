@@ -21,6 +21,14 @@
     {{/unless}}
     <span class="formula-part">{{localize "RYF.Level"}}: {{spellLevel}}</span>
     <span class="formula-separator">+</span>
+    {{#if (gt hindrance 0)}}
+    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: -{{hindrance}}</span>
+    <span class="formula-separator">+</span>
+    {{/if}}
+    {{#if (gt advantageBonus 0)}}
+    <span class="formula-part modifier-bonus">{{localize "RYF.Advantage"}}: +{{advantageBonus}}</span>
+    <span class="formula-separator">+</span>
+    {{/if}}
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
         <i class="fas fa-arrow-up"></i> {{diceRoll.chosen}}

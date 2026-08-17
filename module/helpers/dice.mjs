@@ -25,22 +25,21 @@ export async function roll1o3d10(mode = 'normal') {
   let result = chosenValue;
   let exploded = false;
   let explosions = [];
-  
-  if (chosenValue === 10) {
+
+  // Reference: RyF 3.0 PDF, página 19 - la explosión se re-tira con 1o3d10
+  // completo y se suma el nuevo dado objetivo (mismo rango), repitiendo
+  // mientras salga el máximo. Ej. del manual: 10 (3,10,10) + 4 (3,4,7) = 14.
+  let explosionValue = chosenValue;
+  while (explosionValue === 10) {
     exploded = true;
-    let explosionRoll = await new Roll('1d10').evaluate();
-    let explosionValue = explosionRoll.total;
+    const explosionRoll = await new Roll('3d10').evaluate();
+    const explosionDice = explosionRoll.terms[0].results.map(r => r.result);
+    const explosionSorted = [...explosionDice].sort((a, b) => a - b);
+    explosionValue = explosionSorted[chosenIndex];
     explosions.push(explosionValue);
     result += explosionValue;
-    
-    while (explosionValue === 10) {
-      explosionRoll = await new Roll('1d10').evaluate();
-      explosionValue = explosionRoll.total;
-      explosions.push(explosionValue);
-      result += explosionValue;
-    }
   }
-  
+
   return {
     result: result,
     dice: dice,
@@ -138,8 +137,19 @@ export function getSuccessMargin(result, difficulty) {
   return result - difficulty;
 }
 
-export function isSuccess(result, difficulty, fumble = false) {
+export function isSuccess(result, difficulty, fumble = false, chosenDie = null) {
   if (fumble) return false;
+  // Reference: RyF 3.0 PDF, página 18 - un 1 natural en el dado objetivo
+  // siempre es fallo en tiradas de habilidad, aunque el total supere la dificultad
+  if (chosenDie === 1) return false;
   return result >= difficulty;
+}
+
+// Reference: RyF 3.0 PDF, páginas 18 y 20 - un factor negativo (malherido,
+// habilidad sin puntos) baja un rango el dado objetivo; no se acumula si ya
+// se guarda el dado menor
+export function degradeMode(mode) {
+  if (mode === 'advantage') return 'normal';
+  return 'disadvantage';
 }
 

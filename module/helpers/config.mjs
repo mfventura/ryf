@@ -41,6 +41,68 @@ RYF.skillPyramids = {
   ]
 };
 
+// Reference: RyF 3.0 PDF, página 98 - Ventajas: cada jugador podrá escoger en
+// la creación tan sólo una, siempre que cumpla el requisito entre paréntesis.
+// `bonuses` alimenta system.activeEffectBonuses; el resto son ganchos específicos.
+RYF.advantages = {
+  arcano: {
+    requirement: { attribute: 'inteligencia', value: 8 },
+    spellCastingBonus: 1
+  },
+  berseker: {
+    requirement: { attribute: 'fisico', value: 8 },
+    bonuses: { attackMelee: 2 }
+  },
+  certero: {
+    requirement: { attribute: 'percepcion', value: 8 },
+    bonuses: { damageRanged: 1 }
+  },
+  defensor: {
+    requirement: { attribute: 'destreza', value: 8 },
+    bonuses: { defense: 1 }
+  },
+  despiadado: {
+    requirement: { attribute: 'fisico', value: 8 },
+    manual: true
+  },
+  golpeDuro: {
+    requirement: { attribute: 'fisico', value: 8 },
+    bonuses: { damageMelee: 1 }
+  },
+  manaAbundante: {
+    requirement: { attribute: 'inteligencia', value: 8 },
+    manaMultiplierBonus: 1
+  },
+  mulaDeCarga: {
+    requirement: { attribute: 'fisico', value: 8 },
+    bonuses: { hindranceReduction: 1 }
+  },
+  muro: {
+    requirement: { attribute: 'fisico', value: 8 },
+    healthMultiplierBonus: 1
+  },
+  pielDePiedra: {
+    requirement: { attribute: 'fisico', value: 8 },
+    bonuses: { absorption: 1 }
+  },
+  punteria: {
+    requirement: { attribute: 'destreza', value: 8 },
+    bonuses: { attackRanged: 2 }
+  },
+  rapido: {
+    requirement: { attribute: 'percepcion', value: 8 },
+    bonuses: { initiative: 2 }
+  },
+  recuperacion: {
+    requirement: { attribute: 'fisico', value: 8 },
+    healingBonus: 2
+  },
+  suerte: {
+    requirement: null,
+    manual: true
+  }
+};
+
 RYF.isCarismaEnabled = function() {
   return game.settings.get('ryf3', 'enableCarisma');
 };

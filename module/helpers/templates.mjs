@@ -8,6 +8,7 @@ export async function preloadHandlebarsTemplates() {
     'systems/ryf3/templates/item/item-shield-sheet.hbs',
     'systems/ryf3/templates/item/item-equipment-sheet.hbs',
     'systems/ryf3/templates/item/item-spell-sheet.hbs',
+    'systems/ryf3/templates/item/item-advantage-sheet.hbs',
     'systems/ryf3/templates/item/partials/effect-immediate-damage.hbs',
     'systems/ryf3/templates/item/partials/effect-immediate-healing.hbs',
     'systems/ryf3/templates/item/partials/effect-buff.hbs',

@@ -15,6 +15,8 @@ export class RyfActor extends Actor {
       defenseRanged: 0,
       attackMelee: 0,
       attackRanged: 0,
+      damageMelee: 0,
+      damageRanged: 0,
       maxHealth: 0,
       initiative: 0,
       hindranceReduction: 0,
@@ -31,10 +33,32 @@ export class RyfActor extends Actor {
     const system = actorData.system;
     const flags = actorData.flags.ryf || {};
 
+    this._applyAdvantageBonuses(system);
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
 
     this._applyActiveEffectBonuses(system);
+  }
+
+  hasAdvantage(key) {
+    return this.items.some(i => i.type === 'advantage' && i.system.advantageKey === key);
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - las ventajas pasivas suman a los
+  // valores de combate (Berseker, Defensor, Piel de Piedra, Puntería, Rápido,
+  // Golpe Duro, Certero, Mula de carga)
+  _applyAdvantageBonuses(system) {
+    if (this.type !== 'character') return;
+
+    for (const item of this.items) {
+      if (item.type !== 'advantage') continue;
+      const advantage = CONFIG.RYF.advantages[item.system.advantageKey];
+      if (!advantage?.bonuses) continue;
+
+      for (const [key, value] of Object.entries(advantage.bonuses)) {
+        system.activeEffectBonuses[key] = (system.activeEffectBonuses[key] || 0) + value;
+      }
+    }
   }
 
   async _preCreate(data, options, user) {
@@ -68,11 +92,13 @@ export class RyfActor extends Actor {
       delete system.attributes.carisma;
     }
 
-    const healthMult = CONFIG.RYF.getHealthMultiplier();
+    // Reference: RyF 3.0 PDF, página 98 - ventaja Muro: PV = Físico x5 en lugar de x4
+    const healthMult = CONFIG.RYF.getHealthMultiplier() + (this.hasAdvantage('muro') ? 1 : 0);
     system.health.max = system.attributes.fisico.value * healthMult;
 
     if (CONFIG.RYF.isMagicEnabled()) {
-      const manaMult = CONFIG.RYF.getManaMultiplier();
+      // Reference: RyF 3.0 PDF, página 98 - ventaja Maná abundante: maná INT x4 en lugar de x3
+      const manaMult = CONFIG.RYF.getManaMultiplier() + (this.hasAdvantage('manaAbundante') ? 1 : 0);
       system.mana.max = system.attributes.inteligencia.value * manaMult;
     } else {
       system.mana.max = 0;
@@ -432,6 +458,12 @@ export class RyfActor extends Actor {
   }
 
   async heal(amount) {
+    // Reference: RyF 3.0 PDF, página 98 - ventaja Recuperación: cura 2 PV
+    // adicionales en cada curación, natural o mágica
+    if (this.hasAdvantage?.('recuperacion')) {
+      amount += CONFIG.RYF.advantages.recuperacion.healingBonus;
+    }
+
     const currentHP = this.system.health.value;
     const maxHP = this.system.health.max;
     const newHP = Math.min(currentHP + amount, maxHP);
@@ -515,7 +547,7 @@ export class RyfActor extends Actor {
     return 'normal';
   }
 
-  async rollMeleeAttack(weapon, targetDefense = null, modeOverride = null, modifier = 0) {
+  async rollMeleeAttack(weapon, targetDefense = null, modeOverride = null, modifier = 0, offhandWeapon = null) {
     const autoMode = this.getRollMode();
     if (!autoMode) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.CannotActInCurrentState'));
@@ -570,7 +602,13 @@ export class RyfActor extends Actor {
       });
 
       if (rollDamage) {
-        await RyfRoll.rollDamage(weapon, attackRoll.criticalDice, 0, this);
+        if (offhandWeapon) {
+          // Reference: RyF 3.0 PDF, página 103 (detalle en RyF 3.0 Medieval) -
+          // con dos armas ligeras el daño causado es el mayor de las dos
+          await RyfRoll.rollDualDamage(weapon, offhandWeapon, attackRoll.criticalDice, this);
+        } else {
+          await RyfRoll.rollDamage(weapon, attackRoll.criticalDice, 0, this);
+        }
       }
     }
 
@@ -929,14 +967,14 @@ export class RyfActor extends Actor {
 
       switch (effect.type) {
         case 'immediate-damage':
-          effectResult = await this._applyImmediateDamage(effect, targets, spell);
+          effectResult = await this._applyImmediateDamage(effect, targets, spell, castingRoll.criticalDice);
           break;
         case 'immediate-healing':
-          effectResult = await this._applyImmediateHealing(effect, targets, spell);
+          effectResult = await this._applyImmediateHealing(effect, targets, spell, castingRoll.criticalDice);
           break;
         case 'buff':
         case 'debuff':
-          effectResult = await this._applyTemporalEffect(effect, targets, spell);
+          effectResult = await this._applyTemporalEffect(effect, targets, spell, castingRoll.criticalDice);
           break;
         case 'condition':
           effectResult = await this._applyCondition(effect, targets, spell);
@@ -953,7 +991,7 @@ export class RyfActor extends Actor {
     return results;
   }
 
-  async _applyImmediateDamage(effect, targets, spell) {
+  async _applyImmediateDamage(effect, targets, spell, castingCriticalDice = 0) {
     const results = [];
 
     let range = null;
@@ -1002,18 +1040,16 @@ export class RyfActor extends Actor {
       }
 
       if (damageMultiplier > 0) {
-        const criticalDice = attackRoll?.criticalDice || 0;
+        // El crítico viene de la tirada de ataque si el efecto la requiere,
+        // o de la tirada de lanzamiento en caso contrario
+        const criticalDice = effect.requiresAttack ? (attackRoll?.criticalDice || 0) : castingCriticalDice;
 
-        const roll = new Roll(effect.formula);
-        await roll.evaluate();
+        // Reference: RyF 3.0 PDF, página 19 - los dados de efecto explotan y
+        // cada 10 de margen añade 1d6 al daño
+        const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+        const damageRoll = await RyfRoll.rollSpellDamage(spell, criticalDice, effect.formula, effect.damageType);
 
-        if (criticalDice > 0) {
-          const critRoll = new Roll(`${criticalDice}d10`);
-          await critRoll.evaluate();
-          roll._total += critRoll.total;
-        }
-
-        const damageAmount = Math.floor(roll.total * damageMultiplier);
+        const damageAmount = Math.floor(damageRoll.total * damageMultiplier);
 
         const targetActor = target.actor || target;
         await targetActor.applyDamage(damageAmount, effect.damageType, this);
@@ -1022,7 +1058,7 @@ export class RyfActor extends Actor {
           target: target,
           hit: true,
           damage: damageAmount,
-          damageRoll: roll,
+          damageRoll: damageRoll,
           saved: damageMultiplier < 1
         });
       } else {
@@ -1038,7 +1074,7 @@ export class RyfActor extends Actor {
     return results;
   }
 
-  async _applyImmediateHealing(effect, targets, spell) {
+  async _applyImmediateHealing(effect, targets, spell, castingCriticalDice = 0) {
     const results = [];
 
     if (targets.length === 0) {
@@ -1046,35 +1082,41 @@ export class RyfActor extends Actor {
       return results;
     }
 
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+
     for (const target of targets) {
       const targetActor = target.actor || target;
 
-      const roll = new Roll(effect.formula);
-      await roll.evaluate();
+      // Reference: RyF 3.0 PDF, página 19 - los dados de efecto explotan y el
+      // crítico también añade 1d6 por cada 10 de margen a la curación
+      const healingRoll = await RyfRoll.rollHealing(spell, targetActor, castingCriticalDice, effect.formula);
+      const healingAmount = healingRoll.total;
 
-      const healingAmount = roll.total;
-
-      const currentHP = targetActor.system.health.value;
-      const maxHP = targetActor.system.health.max;
-      const newHP = Math.min(maxHP, currentHP + healingAmount);
-
-      await targetActor.update({
-        'system.health.value': newHP
-      });
+      // heal() aplica también la ventaja Recuperación del objetivo (pág. 98)
+      await targetActor.heal(healingAmount);
 
       results.push({
         target: targetActor,
         healing: healingAmount,
-        healingRoll: roll
+        healingRoll: healingRoll
       });
     }
 
     return results;
   }
 
-  async _applyTemporalEffect(effect, targets, spell) {
+  async _applyTemporalEffect(effect, targets, spell, castingCriticalDice = 0) {
     const results = [];
     const { RyfActiveEffect } = await import('./ryf-active-effect.mjs');
+
+    // Reference: RyF 3.0 PDF, página 19 - el crítico también se aplica a los
+    // turnos: cada 10 de margen añade 1d6 (explosivo) de duración extra
+    let criticalTurns = 0;
+    if (castingCriticalDice > 0) {
+      const { rollEffect } = await import('../helpers/dice.mjs');
+      const criticalRoll = await rollEffect(`${castingCriticalDice}d6`);
+      criticalTurns = criticalRoll.total;
+    }
 
     if (targets.length === 0) {
       ui.notifications.info(game.i18n.localize('RYF.Info.NoTargetsForBuff'));
@@ -1097,6 +1139,8 @@ export class RyfActor extends Actor {
         if (effect.duration.type === 'perLevel') {
           duration = duration * spell.system.level;
         }
+
+        duration += criticalTurns;
 
         const effectType = effect.type === 'buff' ? 'RYF.Magic.EffectTypes.Buff' : 'RYF.Magic.EffectTypes.Debuff';
 

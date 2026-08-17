@@ -36,6 +36,10 @@ export class RyfItemSheet extends ItemSheet {
       this._prepareSkillData(context);
     }
 
+    if (this.item.type === 'advantage') {
+      this._prepareAdvantageData(context);
+    }
+
     return context;
   }
 
@@ -45,6 +49,27 @@ export class RyfItemSheet extends ItemSheet {
       key: key,
       label: value
     }));
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - Ventajas
+  _prepareAdvantageData(context) {
+    context.advantages = Object.keys(CONFIG.RYF.advantages).map(key => ({
+      key: key,
+      label: game.i18n.localize(`RYF.AdvantagesList.${key}.name`),
+      selected: key === context.system.advantageKey
+    }));
+
+    const advantage = CONFIG.RYF.advantages[context.system.advantageKey];
+    if (advantage?.requirement) {
+      const attrLabel = game.i18n.localize(CONFIG.RYF.attributes[advantage.requirement.attribute]);
+      context.requirementLabel = `${attrLabel} ${advantage.requirement.value}+`;
+    } else if (context.system.advantageKey) {
+      context.requirementLabel = game.i18n.localize('RYF.NoRequirement');
+    }
+
+    if (context.system.advantageKey) {
+      context.effectLabel = game.i18n.localize(`RYF.AdvantagesList.${context.system.advantageKey}.effect`);
+    }
   }
 
   activateListeners(html) {

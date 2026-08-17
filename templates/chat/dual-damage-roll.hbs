@@ -1,0 +1,70 @@
+{{!-- Reference: RyF 3.0 PDF, página 103 - dos armas ligeras: el daño causado es el mayor de las dos --}}
+<div class="ryf-roll damage-roll dual-damage-roll">
+  <div class="roll-header">
+    {{#if actor}}
+    <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
+    {{/if}}
+    <div class="roll-title">
+      <h3>{{localize "RYF.DualWeaponDamage"}}</h3>
+      <div class="roll-subtitle">{{resultA.weapon.name}} + {{resultB.weapon.name}}</div>
+    </div>
+  </div>
+
+  <div class="dice-results">
+    <div class="dual-weapon {{#if keptA}}kept{{/if}}">
+      <strong>{{resultA.weapon.name}}</strong> ({{resultA.baseRoll.formula}}):
+      {{#each resultA.baseRoll.rolls as |roll|}}
+        <span class="die-value"><i class="fas fa-dice-d6"></i> {{roll}}</span>
+      {{/each}}
+      {{#if resultA.baseRoll.explosions.length}}
+        <i class="fas fa-burst"></i>
+        {{#each resultA.baseRoll.explosions as |explosion|}}
+          <span class="explosion-value">+{{explosion}}</span>
+        {{/each}}
+      {{/if}}
+      = {{resultA.total}}
+      {{#if keptA}}<i class="fas fa-check-circle"></i> {{localize "RYF.DamageKept"}}{{/if}}
+    </div>
+
+    <div class="dual-weapon {{#unless keptA}}kept{{/unless}}">
+      <strong>{{resultB.weapon.name}}</strong> ({{resultB.baseRoll.formula}}):
+      {{#each resultB.baseRoll.rolls as |roll|}}
+        <span class="die-value"><i class="fas fa-dice-d6"></i> {{roll}}</span>
+      {{/each}}
+      {{#if resultB.baseRoll.explosions.length}}
+        <i class="fas fa-burst"></i>
+        {{#each resultB.baseRoll.explosions as |explosion|}}
+          <span class="explosion-value">+{{explosion}}</span>
+        {{/each}}
+      {{/if}}
+      = {{resultB.total}}
+      {{#unless keptA}}<i class="fas fa-check-circle"></i> {{localize "RYF.DamageKept"}}{{/unless}}
+    </div>
+
+    {{#if criticalRoll}}
+    <div class="critical-damage">
+      <i class="fas fa-star"></i> {{localize "RYF.CriticalHit"}} (+{{criticalDice}}d6):
+      {{#each criticalRoll.rolls as |roll|}}
+        <span class="die-value">{{roll}}</span>
+      {{/each}}
+      {{#if criticalRoll.explosions.length}}
+        {{#each criticalRoll.explosions as |explosion|}}
+          <span class="explosion-value">+{{explosion}}</span>
+        {{/each}}
+      {{/if}}
+      = {{criticalRoll.total}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="roll-total">
+    <div class="total-label">{{localize "RYF.TotalDamage"}}</div>
+    <div class="total-value">{{total}}</div>
+  </div>
+
+  <div class="damage-actions">
+    <button type="button" class="apply-damage-button" data-damage="{{total}}" data-damage-type="physical">
+      <i class="fas fa-crosshairs"></i> {{localize "RYF.Combat.ApplyDamage"}}
+    </button>
+  </div>
+</div>

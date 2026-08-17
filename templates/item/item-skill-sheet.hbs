@@ -67,7 +67,8 @@
         <label>{{localize "RYF.UpgradeCost"}}</label>
         <div class="upgrade-info">
           <p>{{localize "RYF.CurrentLevel"}}: {{system.level}}</p>
-          <p>{{localize "RYF.NextLevelCost"}}: {{multiply 10 (add system.level 1)}} {{localize "RYF.XP"}}</p>
+          {{!-- Reference: RyF 3.0 PDF, página 14 - el coste de subir una habilidad es el nuevo nivel --}}
+          <p>{{localize "RYF.NextLevelCost"}}: {{add system.level 1}} {{localize "RYF.XP"}}</p>
         </div>
       </div>
       {{/if}}

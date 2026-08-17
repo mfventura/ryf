@@ -50,5 +50,13 @@
     <div class="total-label">{{localize "RYF.Total"}}</div>
     <div class="total-value">{{total}}</div>
   </div>
+
+  {{!-- Reference: RyF 3.0 PDF, página 20 - 20+ → 2 acciones, 30+ → 3... --}}
+  {{#if (gt actions 1)}}
+  <div class="critical-success">
+    <i class="fas fa-bolt"></i>
+    <strong>{{localize "RYF.Actions"}}: {{actions}}</strong>
+  </div>
+  {{/if}}
 </div>
 
