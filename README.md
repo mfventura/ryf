@@ -64,6 +64,17 @@ This project is currently implemented for **Foundry VTT v14** using **Applicatio
    npm run unpack   # extract pack contents back to JSON after editing them in Foundry
    ```
 
+#### Releases
+
+Releases are fully automated with GitHub Actions. To publish a new version:
+
+```bash
+git tag v0.4.0
+git push origin v0.4.0
+```
+
+The workflow compiles the compendium packs, patches `system.json` with the tag version, builds `ryf3.zip` and publishes a GitHub Release. Foundry installations using the manifest URL (`https://github.com/mfventura/ryf/releases/latest/download/system.json`) pick up the update automatically. For playing, install the system through that manifest URL; a linked git clone is only needed for development (run `npm run pack` after pulling to rebuild the compendiums locally).
+
 ### 🤝 Contributing
 
 We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or translating content, your help is appreciated.
@@ -189,6 +200,17 @@ Este proyecto está actualmente implementado para **Foundry VTT v14** usando la 
    npm run pack     # compila packs/_source/* a los packs LevelDB que carga Foundry
    npm run unpack   # extrae el contenido de los packs a JSON tras editarlos en Foundry
    ```
+
+#### Releases
+
+Las releases están automatizadas con GitHub Actions. Para publicar una versión:
+
+```bash
+git tag v0.4.0
+git push origin v0.4.0
+```
+
+El workflow compila los compendios, parchea `system.json` con la versión del tag, construye `ryf3.zip` y publica la release en GitHub. Las instalaciones de Foundry que usan la URL de manifest (`https://github.com/mfventura/ryf/releases/latest/download/system.json`) reciben la actualización automáticamente. Para jugar, instala el sistema con esa URL de manifest; el clon de git vinculado solo hace falta para desarrollar (ejecuta `npm run pack` tras el pull para reconstruir los compendios en local).
 
 ### 🤝 Contribuir
 

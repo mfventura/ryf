@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Check JavaScript syntax
+        run: |
+          find module utils -name "*.mjs" -print0 | xargs -0 -n1 node --check
+          echo "Sintaxis JS OK"
+
+      - name: Validate JSON files
+        run: |
+          python3 - << 'EOF'
+          import json, glob
+          files = ['system.json', 'template.json', 'lang/es.json'] + glob.glob('packs/_source/**/*.json', recursive=True)
+          for f in files:
+              with open(f, encoding='utf-8') as fh:
+                  json.load(fh)
+          print(f'{len(files)} ficheros JSON válidos')
+          EOF
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile compendium packs (smoke test)
+        run: npm run pack
