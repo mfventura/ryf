@@ -1,3 +1,7 @@
-packs/*
-!packs/_source
 node_modules
+
+# Ficheros de runtime de LevelDB (los crea/gestiona Foundry al abrir la base;
+# los datos compilados CURRENT/MANIFEST/*.ldb/*.log SÍ se versionan)
+packs/**/LOCK
+packs/**/LOG
+packs/**/LOG.old
