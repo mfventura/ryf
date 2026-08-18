@@ -1,4 +1,5 @@
 import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, resolveMode } from '../helpers/dice.mjs';
+import { HIT_LOCATIONS, getHitLocation } from '../config/hit-locations.mjs';
 
 export class RyfRoll {
 
@@ -131,6 +132,39 @@ export class RyfRoll {
     return { cover, movement, flanking, total };
   }
 
+  // Reference: RyF 3.0 PDF, página 95 - tiro apuntado: elegir zona concreta
+  // sube la defensa del objetivo. Campo compartido por los diálogos de ataque.
+  static calledShotField() {
+    if (!game.settings.get('ryf3', 'enableHitLocation')) return '';
+
+    const options = Object.entries(HIT_LOCATIONS).map(([key, location]) =>
+      `<option value="${key}">${game.i18n.localize(location.label)} (+${location.defenseModifier})</option>`
+    ).join('');
+
+    return `
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.CalledShot')}</label>
+        <select name="calledShot">
+          <option value="" selected>${game.i18n.localize('RYF.CalledShotRandom')}</option>
+          ${options}
+        </select>
+      </div>`;
+  }
+
+  // Reference: RyF 3.0 PDF, página 95 - localización de daño (módulo opcional):
+  // 1d10 aleatorio al impactar, o la zona elegida si fue un tiro apuntado
+  static async _resolveHitLocation(success, calledShot = null) {
+    if (!game.settings.get('ryf3', 'enableHitLocation') || !success) return null;
+
+    if (calledShot && HIT_LOCATIONS[calledShot]) {
+      return { key: calledShot, label: HIT_LOCATIONS[calledShot].label, called: true };
+    }
+
+    const roll = await new Roll('1d10').evaluate();
+    const key = getHitLocation(roll.total);
+    return { key: key, label: HIT_LOCATIONS[key].label, roll: roll.total, called: false };
+  }
+
   // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
   // malherido, pifia y fallo automático con 1 natural (RyF 3.0 PDF, págs. 18-20)
   static async _resolveRoll(base, difficulty, mode, modifier, wounded) {
@@ -152,6 +186,12 @@ export class RyfRoll {
     // ataque en lugar de atributo + habilidad, pero comparten el resto de
     // reglas de la tirada (malherido, pifia, 1 natural, crítico)
     if (weapon.type === 'npc-attack') {
+      // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
+      // del objetivo según la zona elegida
+      if (options.calledShot && HIT_LOCATIONS[options.calledShot]) {
+        targetDefense += HIT_LOCATIONS[options.calledShot].defenseModifier;
+      }
+
       const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
       const attackBonus = weapon.system.attackBonus || 0;
       const resolved = await this._resolveRoll(attackBonus, targetDefense, mode, modifier, wounded);
@@ -167,12 +207,22 @@ export class RyfRoll {
         difficulty: targetDefense,
         modifier: modifier,
         rangedModifiers: options.rangedModifiers || null,
+        hitLocation: await this._resolveHitLocation(resolved.success, options.calledShot),
+        // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe y cada
+        // +5 de margen derriba un esbirro adicional
+        minionNote: (resolved.success && options.targetIsMinion) ? { extra: Math.floor(resolved.margin / 5) } : null,
         ...resolved
       };
 
       await this.toMessage(rollData);
 
       return rollData;
+    }
+
+    // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
+    // del objetivo según la zona elegida
+    if (options.calledShot && HIT_LOCATIONS[options.calledShot]) {
+      targetDefense += HIT_LOCATIONS[options.calledShot].defenseModifier;
     }
 
     const weaponCategory = this._getWeaponSkillCategory(weapon);
@@ -256,6 +306,10 @@ export class RyfRoll {
       precision: precision,
       range: options.range || null,
       rangedModifiers: options.rangedModifiers || null,
+      hitLocation: await this._resolveHitLocation(success, options.calledShot),
+      // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe y cada
+      // +5 de margen derriba un esbirro adicional
+      minionNote: (success && options.targetIsMinion) ? { extra: Math.floor(margin / 5) } : null,
       diceRoll: diceRoll,
       total: total,
       success: success,

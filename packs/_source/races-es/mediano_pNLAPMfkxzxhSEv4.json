@@ -1,0 +1,26 @@
+{
+  "_id": "pNLAPMfkxzxhSEv4",
+  "name": "Mediano",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Físico máximo 7. Ventaja gratuita: Suerte (RyF 3.0, pág. 98).</p>",
+    "attributeCap": {
+      "attribute": "fisico",
+      "max": 7
+    },
+    "xpSessionModifier": 0,
+    "pyramidRestriction": "",
+    "grantedAdvantage": "Suerte",
+    "armorForbidden": false,
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!pNLAPMfkxzxhSEv4"
+}

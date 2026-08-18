@@ -154,6 +154,30 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
+/* Minion toggle on the NPC sheet (PDF p. 87) */
+.ryf .minion-toggle {
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+
+.ryf .minion-toggle .hint {
+  margin-left: 8px;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  font-size: 0.85em;
+}
+
+/* Hit location and minion notes on attack chat cards (PDF pp. 87, 95) */
+.ryf-roll .hit-location,
+.ryf-roll .minion-note {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: var(--ryf-light, #ecf0f1);
+  border-left: 3px solid var(--ryf-secondary, #95a5a6);
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
 /* Money section on the equipment tab (PDF p. 26) */
 .ryf .money-section {
   margin-bottom: 1rem;

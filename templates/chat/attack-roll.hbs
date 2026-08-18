@@ -126,7 +126,23 @@
         <span class="critical-dice">+{{criticalDice}}d6 {{localize "RYF.ExtraDamage"}}</span>
       </div>
       {{/if}}
-      
+
+      {{!-- Reference: RyF 3.0 PDF, página 95 - localización de daño (módulo opcional) --}}
+      {{#if hitLocation}}
+      <div class="hit-location">
+        <i class="fas fa-bullseye"></i>
+        {{localize "RYF.HitLocation"}}: <strong>{{localize hitLocation.label}}</strong>{{#if hitLocation.roll}} (1d10: {{hitLocation.roll}}){{/if}}{{#if hitLocation.called}} ({{localize "RYF.CalledShot"}}){{/if}}
+      </div>
+      {{/if}}
+
+      {{!-- Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe --}}
+      {{#if minionNote}}
+      <div class="minion-note">
+        <i class="fas fa-skull"></i>
+        {{localize "RYF.Minion.FallsOnHit"}}{{#if (gt minionNote.extra 0)}} {{localize "RYF.Minion.ExtraDown" count=minionNote.extra}}{{/if}}
+      </div>
+      {{/if}}
+
       <div class="damage-button">
         <button type="button" class="roll-damage" data-weapon-id="{{weapon._id}}" data-critical-dice="{{criticalDice}}" data-range="{{range}}">
           <i class="fas fa-dice-d6"></i> {{localize "RYF.RollDamage"}}

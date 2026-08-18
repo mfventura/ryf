@@ -27,7 +27,8 @@ const FIELD_GROUPS = [
       { key: 'deathMultiplier', step: 1 },
       { key: 'healSkillDifficulty', step: 1 },
       { key: 'healSkillDice', type: 'text' },
-      { key: 'breatherDice', type: 'text' }
+      { key: 'breatherDice', type: 'text' },
+      { key: 'sanityMultiplier', step: 1 }
     ]
   },
   {

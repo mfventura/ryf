@@ -29,6 +29,9 @@ export const DEFAULT_RULES = {
   // Reference: RyF 3.0 PDF, páginas 14 y 38 - subir una habilidad cuesta el
   // nuevo nivel en PX; multiplicador opcional (x1.5 / x2) para campañas largas
   xpCostMultiplier: 1,
+  // Reference: RyF 3.0 PDF, página 43 - Cordura = Inteligencia x N (módulo
+  // opcional enableSanity)
+  sanityMultiplier: 4,
   // Reference: RyF 3.0 PDF, páginas 11-12 y 45 - curación por habilidad
   // (Medicina, Sanación/Hierbas): dificultad 15, cura 1d6 (realista) / 2d6
   // (heroico) + 1d6 por cada 10 de margen; una vez al día por paciente

@@ -70,6 +70,12 @@ export class RyfItem extends Item {
       return null;
     }
 
+    // Reference: RyF 3.0 PDF, página 98 - Razas (módulo opcional)
+    if (data.type === 'race' && !game.settings.get('ryf3', 'enableRaces')) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.RacesDisabled'));
+      return null;
+    }
+
     if (data.type === 'skill' && data.system?.attribute === 'carisma') {
       if (!CONFIG.RYF.isCarismaEnabled()) {
         ui.notifications.warn(game.i18n.localize('RYF.Warnings.CarismaDisabled'));
@@ -117,6 +123,15 @@ export class RyfItem extends Item {
     }
 
     const currentlyEquipped = this.system.equipped;
+
+    // Reference: RyF 3.0 PDF, página 98 - los Artificiales no pueden llevar
+    // armadura (aviso no bloqueante, coherente con el resto de validaciones)
+    if (!currentlyEquipped && this.type === 'armor') {
+      const race = this.actor.items.find(i => i.type === 'race' && i.system.armorForbidden);
+      if (race) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.RaceArmorForbidden', { race: race.name }));
+      }
+    }
 
     if (!currentlyEquipped && (this.type === 'armor' || this.type === 'shield')) {
       const equippedItems = this.actor.items.filter(i =>
@@ -167,10 +182,10 @@ export class RyfItem extends Item {
     }
   }
 
-  // Las ventajas aplican sus efectos mientras están en el actor; los
-  // equipables, solo mientras están equipados
+  // Las ventajas y razas aplican sus efectos mientras están en el actor;
+  // los equipables, solo mientras están equipados
   _effectsAreActive() {
-    if (this.type === 'advantage') return true;
+    if (this.type === 'advantage' || this.type === 'race') return true;
     return ['weapon', 'armor', 'shield', 'equipment'].includes(this.type) && this.system.equipped;
   }
 

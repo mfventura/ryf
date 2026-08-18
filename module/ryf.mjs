@@ -355,6 +355,25 @@ Hooks.on('renderCompendium', (app, html, data) => {
 // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite
 // configurable, 0 = sin límite) y con requisito de atributo. Validación
 // advisory: avisa pero no bloquea.
+// Reference: RyF 3.0 PDF, página 98 - Razas (módulo opcional): cada personaje
+// tiene una sola raza; sin el módulo activo no se pueden crear
+Hooks.on('preCreateItem', (item, data, options, userId) => {
+  if (item.type !== 'race') return;
+
+  if (!game.settings.get('ryf3', 'enableRaces')) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.RacesDisabled'));
+    return false;
+  }
+
+  const actor = item.parent;
+  if (!actor || actor.documentName !== 'Actor' || actor.type !== 'character') return;
+
+  const existing = actor.items.filter(i => i.type === 'race').length;
+  if (existing >= 1) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.OneRaceOnly'));
+  }
+});
+
 Hooks.on('preCreateItem', (item, data, options, userId) => {
   if (item.type !== 'advantage') return;
   const actor = item.parent;

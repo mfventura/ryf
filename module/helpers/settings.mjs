@@ -59,6 +59,39 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
+  // Reference: RyF 3.0 PDF, página 98 - módulo opcional de Razas
+  game.settings.register('ryf3', 'enableRaces', {
+    name: 'RYF.Settings.EnableRaces.Name',
+    hint: 'RYF.Settings.EnableRaces.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
+  // Reference: RyF 3.0 PDF, página 43 - Cordura como ejemplo de subsistema
+  // opcional (Cordura = Inteligencia x4, pérdidas en dados d6)
+  game.settings.register('ryf3', 'enableSanity', {
+    name: 'RYF.Settings.EnableSanity.Name',
+    hint: 'RYF.Settings.EnableSanity.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
+  // Reference: RyF 3.0 PDF, página 95 - módulo opcional de localización de daño
+  game.settings.register('ryf3', 'enableHitLocation', {
+    name: 'RYF.Settings.EnableHitLocation.Name',
+    hint: 'RYF.Settings.EnableHitLocation.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register('ryf3', 'healthMultiplier', {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',

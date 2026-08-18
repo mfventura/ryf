@@ -40,6 +40,11 @@ export class RyfItemSheet extends ItemSheet {
       this._prepareAdvantageData(context);
     }
 
+    // Reference: RyF 3.0 PDF, página 98 - Razas con tope de atributo
+    if (this.item.type === 'race') {
+      this._prepareAdvantageData(context);
+    }
+
     return context;
   }
 

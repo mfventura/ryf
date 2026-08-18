@@ -48,6 +48,16 @@
         </div>
       </div>
       {{/if}}
+
+      {{!-- Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe; cada
+            +5 de margen del ataque derriba un esbirro adicional --}}
+      <div class="minion-toggle">
+        <label>
+          <input type="checkbox" name="system.isMinion" {{checked system.isMinion}}/>
+          {{localize "RYF.Minion.Label"}}
+        </label>
+        <span class="hint">{{localize "RYF.Minion.Hint"}}</span>
+      </div>
     </div>
   </header>
 

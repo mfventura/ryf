@@ -91,6 +91,16 @@ export class RyfActor extends Actor {
       system.mana.value = 0;
     }
 
+    // Reference: RyF 3.0 PDF, página 43 - Cordura = Inteligencia x N
+    // (módulo opcional enableSanity)
+    if (game.settings.get('ryf3', 'enableSanity')) {
+      system.sanity = system.sanity || { value: 0, max: 0 };
+      system.sanity.max = system.attributes.inteligencia.value * getRule('sanityMultiplier');
+      if (system.sanity.value > system.sanity.max) {
+        system.sanity.value = system.sanity.max;
+      }
+    }
+
     const defenseSkills = this.items.filter(i => i.type === 'skill' && i.system.category === 'defense');
     const defenseBonus = defenseSkills.reduce((sum, skill) => sum + skill.system.level, 0);
 
@@ -303,6 +313,24 @@ export class RyfActor extends Actor {
       }
     }
 
+    // Reference: RyF 3.0 PDF, página 98 - los Artificiales solo pueden usar
+    // la pirámide especialista (aviso no bloqueante)
+    const race = this.items.find(i => i.type === 'race' && i.system.pyramidRestriction);
+    if (race) {
+      const activeType = game.settings.get('ryf3', 'defaultCharacterType');
+      if (!activeType.toLowerCase().includes(race.system.pyramidRestriction.toLowerCase())) {
+        errors.push({
+          level: 0,
+          expected: 0,
+          actual: 0,
+          message: game.i18n.format('RYF.Warnings.RacePyramidRestriction', {
+            race: race.name,
+            restriction: game.i18n.localize(`RYF.Race.PyramidRestrictions.${race.system.pyramidRestriction}`)
+          })
+        });
+      }
+    }
+
     // Reference: RyF 3.0 PDF, página 39 - límites de creación: máximo 6 puntos
     // por habilidad y atributo + habilidad no superior a 16 al empezar
     const creationMaxSkill = getRule('creationMaxSkill');
@@ -358,11 +386,22 @@ export class RyfActor extends Actor {
       'system.experience.total': newTotal
     });
 
-    const message = game.i18n.format('RYF.Notifications.ExperienceGained', {
+    let message = game.i18n.format('RYF.Notifications.ExperienceGained', {
       amount: amount,
       reason: reason,
       total: newTotal
     });
+
+    // Reference: RyF 3.0 PDF, página 98 - algunas razas ganan +1/-1 px por
+    // sesión (Humano +1, Artificial -1). Nota informativa para el máster.
+    const race = this.items.find(i => i.type === 'race');
+    const xpModifier = race?.system.xpSessionModifier || 0;
+    if (xpModifier !== 0) {
+      message += `<br><em>${game.i18n.format('RYF.Notifications.RaceXpNote', {
+        race: race.name,
+        modifier: xpModifier > 0 ? `+${xpModifier}` : `${xpModifier}`
+      })}</em>`;
+    }
 
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -588,6 +627,32 @@ export class RyfActor extends Actor {
         amount: healAmount
       }));
     }
+  }
+
+  // Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en dados d6 según
+  // la gravedad (presenciar un asesinato 1d6, un genocidio 3d6...)
+  async loseSanity(formula = '1d6') {
+    if (!game.settings.get('ryf3', 'enableSanity') || this.type !== 'character') return;
+
+    const { rollEffect } = await import('../helpers/dice.mjs');
+    const roll = await rollEffect(formula);
+    const newValue = Math.max(0, (this.system.sanity?.value || 0) - roll.total);
+
+    await this.update({ 'system.sanity.value': newValue });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: game.i18n.format('RYF.Notifications.SanityLost', {
+        name: this.name,
+        amount: roll.total,
+        formula: formula,
+        current: newValue,
+        max: this.system.sanity?.max || 0
+      }),
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
+    });
+
+    return roll.total;
   }
 
   // Reference: RyF 3.0 PDF, página 94 - Coger aire: 5-15 minutos de relajación
@@ -854,6 +919,7 @@ export class RyfActor extends Actor {
     }
 
     const attackType = attack.system.attackType;
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
 
     const attackParams = await new Promise((resolve) => {
       new Dialog({
@@ -872,6 +938,7 @@ export class RyfActor extends Actor {
               <label>${game.i18n.localize('RYF.Modifier')}</label>
               <input type="number" name="modifier" value="0"/>
             </div>
+            ${RyfRoll.calledShotField()}
           </form>
         `,
         buttons: {
@@ -882,7 +949,8 @@ export class RyfActor extends Actor {
               const form = html[0].querySelector('form');
               resolve({
                 mode: form.mode.value,
-                modifier: parseInt(form.modifier.value) || 0
+                modifier: parseInt(form.modifier.value) || 0,
+                calledShot: form.calledShot?.value || null
               });
             }
           },
@@ -901,6 +969,7 @@ export class RyfActor extends Actor {
 
     const mode = attackParams.mode;
     const modifier = attackParams.modifier;
+    let targetIsMinion = false;
 
     let difficulty = 10;
 
@@ -914,7 +983,8 @@ export class RyfActor extends Actor {
         } else if (targetActor.type === 'npc') {
           difficulty = targetActor.system.defense || 10;
         }
-        console.log(`RyF | Auto-detected target defense: ${difficulty} from ${targetActor.name}`);
+        // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe
+        targetIsMinion = targetActor.type === 'npc' && !!targetActor.system.isMinion;
       } else {
         const defenseInput = await Dialog.prompt({
           title: game.i18n.localize('RYF.Combat.EnterTargetDefense'),
@@ -937,7 +1007,6 @@ export class RyfActor extends Actor {
       }
     }
 
-    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
     let rangedModifiers = null;
 
     if (attackType !== 'melee') {
@@ -987,7 +1056,11 @@ export class RyfActor extends Actor {
     // El ataque y el daño se resuelven por el mismo camino que los personajes
     // (RyfRoll), de modo que malherido, pifias y el 1 natural aplican también
     // a los PNJ
-    const attackRoll = await RyfRoll.rollAttack(this, attack, difficulty, mode, modifier, { rangedModifiers: rangedModifiers });
+    const attackRoll = await RyfRoll.rollAttack(this, attack, difficulty, mode, modifier, {
+      rangedModifiers: rangedModifiers,
+      calledShot: attackParams.calledShot,
+      targetIsMinion: targetIsMinion
+    });
 
     if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
@@ -1022,7 +1095,14 @@ export class RyfActor extends Actor {
       finalDamage = Math.max(0, damageAmount - absorption);
     }
 
-    await this.takeDamage(finalDamage, damageType);
+    // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe (cualquier
+    // daño efectivo los deja fuera de combate)
+    if (this.type === 'npc' && this.system.isMinion && finalDamage > 0) {
+      await this.update({ 'system.health.value': 0 });
+      ui.notifications.info(game.i18n.format('RYF.Notifications.MinionDown', { name: this.name }));
+    } else {
+      await this.takeDamage(finalDamage, damageType);
+    }
 
     const templateData = {
       actor: this,

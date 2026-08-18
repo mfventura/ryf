@@ -37,6 +37,9 @@ export class RyfActorSheet extends ActorSheet {
     context.enableTokens = game.settings.get('ryf3', 'enableTokens');
     // Reference: RyF 3.0 PDF, páginas 96-98 - módulo opcional de munición
     context.enableAmmo = game.settings.get('ryf3', 'enableAmmo');
+    // Reference: RyF 3.0 PDF, páginas 43 y 98 - módulos opcionales de Cordura y Razas
+    context.enableSanity = game.settings.get('ryf3', 'enableSanity');
+    context.enableRaces = game.settings.get('ryf3', 'enableRaces');
     context.isGM = game.user.isGM;
 
     if (this.actor.type === 'character') {
@@ -96,6 +99,7 @@ export class RyfActorSheet extends ActorSheet {
     const spells = [];
     const npcAttacks = [];
     const advantages = [];
+    const races = [];
 
     for (let i of context.items) {
       i.img = i.img || Item.DEFAULT_ICON;
@@ -117,6 +121,9 @@ export class RyfActorSheet extends ActorSheet {
       } else if (i.type === 'advantage') {
         i.effectLabel = this._summarizeAdvantageEffects(i);
         advantages.push(i);
+      } else if (i.type === 'race') {
+        i.effectLabel = this._summarizeAdvantageEffects(i);
+        races.push(i);
       }
     }
 
@@ -182,6 +189,7 @@ export class RyfActorSheet extends ActorSheet {
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
     context.advantages = advantages;
+    context.races = races;
   }
 
   // Resumen legible de los efectos de una ventaja para la lista de la ficha
@@ -238,6 +246,32 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.attribute-input').change(this._onAttributeChange.bind(this));
 
     html.find('.token-return').click(this._onTokenReturn.bind(this));
+
+    html.find('.sanity-loss').click(this._onSanityLoss.bind(this));
+  }
+
+  // Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en d6 según gravedad
+  async _onSanityLoss(event) {
+    event.preventDefault();
+
+    const formula = await Dialog.prompt({
+      title: game.i18n.localize('RYF.Sanity.Loss'),
+      content: `
+        <form>
+          <p class="hint">${game.i18n.localize('RYF.Sanity.LossHint')}</p>
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.Sanity.LossFormula')}</label>
+            <input type="text" name="formula" value="1d6" autofocus/>
+          </div>
+        </form>
+      `,
+      callback: (html) => html.find('[name="formula"]').val() || '1d6',
+      rejectClose: false
+    });
+
+    if (!formula) return;
+
+    await this.actor.loseSanity(formula);
   }
 
   // Reference: RyF 3.0 PDF, página 92 - el máster devuelve el token forzando
@@ -326,7 +360,7 @@ export class RyfActorSheet extends ActorSheet {
     const header = event.currentTarget;
     const type = header.dataset.type;
     const data = {
-      name: game.i18n.format('RYF.Items.New', { type: game.i18n.localize(`ITEM.Type${type.capitalize()}`) }),
+      name: game.i18n.format('RYF.Items.New', { type: game.i18n.localize(`TYPES.Item.${type}`) }),
       type: type,
       system: {}
     };
@@ -378,6 +412,7 @@ export class RyfActorSheet extends ActorSheet {
 
     let targetDefense = null;
     let targetDefenseRanged = null;
+    let targetIsMinion = false;
     const targets = Array.from(game.user.targets);
 
     if (targets.length === 1) {
@@ -385,6 +420,11 @@ export class RyfActorSheet extends ActorSheet {
       if (targetActor && targetActor.system.defense) {
         targetDefense = targetActor.system.defense.value;
         targetDefenseRanged = targetActor.system.defense.ranged || 0;
+      }
+      if (targetActor && targetActor.type === 'npc') {
+        // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe
+        targetDefense = targetDefense ?? (targetActor.system.defense || null);
+        targetIsMinion = !!targetActor.system.isMinion;
       }
     }
 
@@ -415,7 +455,9 @@ export class RyfActorSheet extends ActorSheet {
     const options = {
       specialization: rollParams.specialization,
       spendToken: rollParams.spendToken,
-      rangedModifiers: rollParams.rangedModifiers || null
+      rangedModifiers: rollParams.rangedModifiers || null,
+      calledShot: rollParams.calledShot || null,
+      targetIsMinion: targetIsMinion
     };
 
     if (isRanged) {
@@ -465,6 +507,7 @@ export class RyfActorSheet extends ActorSheet {
             <label>${game.i18n.localize('RYF.Modifier')}</label>
             <input type="number" name="modifier" value="0" step="1"/>
           </div>
+          ${RyfRoll.calledShotField()}
           ${dualWieldAvailable ? `
           <div class="form-group">
             <label>${game.i18n.localize('RYF.DualWield')} (+${getRule('dualWieldBonus')})</label>
@@ -491,7 +534,8 @@ export class RyfActorSheet extends ActorSheet {
               const specialization = html.find('[name="applySpecialization"]').is(':checked');
               const spendToken = html.find('[name="spendToken"]').is(':checked');
               const rangedModifiers = isRanged ? RyfRoll.readRangedModifiers(html) : null;
-              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken, rangedModifiers });
+              const calledShot = html.find('[name="calledShot"]').val() || null;
+              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken, rangedModifiers, calledShot });
             }
           },
           cancel: {
@@ -1074,6 +1118,19 @@ export class RyfActorSheet extends ActorSheet {
       ui.notifications.warn(game.i18n.format('RYF.Warnings.AttributeOutOfRange', {
         min: attributeMin,
         max: attributeMax
+      }));
+    }
+
+    // Reference: RyF 3.0 PDF, página 98 - topes de atributo por raza
+    // (ej. Mediano: Físico máximo 7). Aviso no bloqueante.
+    const race = this.actor.items.find(i =>
+      i.type === 'race' && i.system.attributeCap?.attribute === attribute && i.system.attributeCap?.max > 0
+    );
+    if (race && value > race.system.attributeCap.max) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.RaceAttributeCap', {
+        race: race.name,
+        attribute: game.i18n.localize(CONFIG.RYF.attributes[attribute]),
+        max: race.system.attributeCap.max
       }));
     }
 
