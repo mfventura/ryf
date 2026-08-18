@@ -184,6 +184,46 @@
   font-style: italic;
 }
 
+/* Weapon item sheet: compact two-column layout for general fields and
+   three-column groups for range / band damage / ammo (PDF pp. 22, 25, 95-98) */
+.ryf.sheet.item .weapon-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+  margin-bottom: 6px;
+}
+
+.ryf.sheet.item .weapon-subsection {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
+}
+
+.ryf.sheet.item .weapon-subsection legend {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.item .weapon-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.ryf.sheet.item .weapon-triple .mini-field label {
+  display: block;
+  font-size: 0.8em;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.ryf.sheet.item .weapon-triple .mini-field input {
+  width: 100%;
+  text-align: center;
+}
+
 /* Weapon row badges: precision, ignores-armor, ammo (PDF pp. 22, 95-98) */
 .ryf .item-damage .weapon-precision,
 .ryf .item-damage .weapon-ignores-armor,
