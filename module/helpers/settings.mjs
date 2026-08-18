@@ -1,8 +1,22 @@
 import { CustomPyramidConfig } from './custom-pyramid-config.mjs';
 import { RulesConfig } from './rules-config.mjs';
 
+// Recalcula los datos derivados de todos los actores y refresca sus fichas
+// abiertas para que los cambios de regla se vean sin recargar
+function refreshActors() {
+  game.actors.forEach(actor => {
+    if (actor.type === 'character' || actor.type === 'npc') {
+      actor.prepareData();
+      actor.sheet?.rendered && actor.sheet.render(false);
+    }
+  });
+}
+
 export function registerSystemSettings() {
-  
+
+  // Toggles de módulo: los únicos settings visibles en la ventana general de
+  // configuración. Los valores numéricos de regla se editan solo desde el
+  // menú RulesConfig para no duplicar puntos de configuración.
   game.settings.register('ryf3', 'enableCarisma', {
     name: 'RYF.Settings.EnableCarisma.Name',
     hint: 'RYF.Settings.EnableCarisma.Hint',
@@ -38,32 +52,20 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 4,
-    onChange: value => {
-      game.actors.forEach(actor => {
-        if (actor.type === 'character' || actor.type === 'npc') {
-          actor.prepareData();
-        }
-      });
-    }
+    onChange: refreshActors
   });
 
   game.settings.register('ryf3', 'manaMultiplier', {
     name: 'RYF.Settings.ManaMultiplier.Name',
     hint: 'RYF.Settings.ManaMultiplier.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 3,
-    onChange: value => {
-      game.actors.forEach(actor => {
-        if (actor.type === 'character' || actor.type === 'npc') {
-          actor.prepareData();
-        }
-      });
-    }
+    onChange: refreshActors
   });
 
   game.settings.register('ryf3', 'defaultCharacterType', {
@@ -96,7 +98,7 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.MaxSkillLevel.Name',
     hint: 'RYF.Settings.MaxSkillLevel.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 10,
     onChange: () => {
@@ -115,9 +117,10 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.AttributePoints.Name',
     hint: 'RYF.Settings.AttributePoints.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
-    default: 30
+    default: 30,
+    onChange: refreshActors
   });
 
   // Valores de regla configurables (bases, umbrales, bandas de distancia...).
@@ -138,13 +141,7 @@ export function registerSystemSettings() {
     config: false,
     type: Object,
     default: {},
-    onChange: () => {
-      game.actors.forEach(actor => {
-        if (actor.type === 'character' || actor.type === 'npc') {
-          actor.prepareData();
-        }
-      });
-    }
+    onChange: refreshActors
   });
 
   // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje;
@@ -153,9 +150,8 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.MaxAdvantages.Name',
     hint: 'RYF.Settings.MaxAdvantages.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 1
   });
 }
-

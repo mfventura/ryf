@@ -6,19 +6,22 @@ const FIELD_GROUPS = [
   {
     key: 'GroupCreation',
     fields: [
-      // Mirrors of standalone visible settings, included here so the presets
-      // can batch-fill them alongside the core rules
+      // Fields with `setting` mirror standalone world settings (hidden from
+      // the general config window to avoid duplicate configuration points);
+      // this menu is their only UI, and the presets can batch-fill them
       { key: 'attributePoints', setting: 'attributePoints', step: 1 },
       { key: 'attributeMin', step: 1 },
       { key: 'attributeMax', step: 1 },
       { key: 'creationMaxSkill', step: 1 },
-      { key: 'creationMaxSum', step: 1 }
+      { key: 'creationMaxSum', step: 1 },
+      { key: 'maxAdvantages', setting: 'maxAdvantages', step: 1 }
     ]
   },
   {
     key: 'GroupHealth',
     fields: [
       { key: 'healthMultiplier', setting: 'healthMultiplier', step: 1 },
+      { key: 'manaMultiplier', setting: 'manaMultiplier', step: 1 },
       { key: 'woundedMultiplier', step: 0.5 },
       { key: 'unconsciousThreshold', step: 1 },
       { key: 'deathMultiplier', step: 1 }
@@ -40,6 +43,7 @@ const FIELD_GROUPS = [
   {
     key: 'GroupProgression',
     fields: [
+      { key: 'maxSkillLevel', setting: 'maxSkillLevel', step: 1 },
       { key: 'xpCostMultiplier', step: 0.1 },
       { key: 'shortRestDivisor', step: 1 },
       { key: 'longRestFull', type: 'checkbox' },
@@ -121,10 +125,11 @@ export class RulesConfig extends FormApplication {
       }
     }
 
-    for (const setting of ['attributePoints', 'healthMultiplier']) {
-      const defaultValue = game.settings.settings.get(`ryf3.${setting}`)?.default;
+    const mirrored = FIELD_GROUPS.flatMap(g => g.fields).filter(f => f.setting);
+    for (const field of mirrored) {
+      const defaultValue = game.settings.settings.get(`ryf3.${field.setting}`)?.default;
       if (defaultValue !== undefined) {
-        this.element.find(`input[name="${setting}"]`).val(defaultValue);
+        this.element.find(`input[name="${field.key}"]`).val(defaultValue);
       }
     }
   }
@@ -138,7 +143,9 @@ export class RulesConfig extends FormApplication {
 
         if (field.setting) {
           const value = Number(raw);
-          if (!Number.isNaN(value)) {
+          // Solo escribir si cambió, para no disparar onChange (avisos de
+          // recarga, re-render de fichas) innecesariamente
+          if (!Number.isNaN(value) && value !== game.settings.get('ryf3', field.setting)) {
             await game.settings.set('ryf3', field.setting, value);
           }
           continue;

@@ -435,6 +435,18 @@
           "Hint": "PV curados por noche cuando el descanso largo no es completo (RyF 3.0, pág. 94: 1 normal, 2 en condiciones cómodas).",
           "Name": "PV por noche de descanso"
         },
+        "manaMultiplier": {
+          "Hint": "Maná máximo = Inteligencia × N (RyF 3.0, pág. 101: 3; la ventaja Maná abundante lo sube a 4). Solo aplica con la magia activada.",
+          "Name": "Multiplicador de maná"
+        },
+        "maxAdvantages": {
+          "Hint": "Máximo de ventajas por personaje (RyF 3.0, pág. 98: una). 0 = sin límite. El aviso no bloquea la creación.",
+          "Name": "Máximo de ventajas"
+        },
+        "maxSkillLevel": {
+          "Hint": "Nivel máximo de las habilidades (estándar: 10). Limita subir de nivel y define los niveles de la pirámide personalizada; cambiar la pirámide requiere recargar.",
+          "Name": "Nivel máximo de habilidades"
+        },
         "rangeLong": {
           "Hint": "Dificultad de los ataques a distancia larga (RyF 3.0, pág. 21: 25).",
           "Name": "Dificultad a distancia larga"
@@ -508,7 +520,7 @@
         "Name": "Máximo de Ventajas"
       },
       "MaxSkillLevel": {
-        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades",
+        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Reglas del Sistema → Nivel máximo de habilidades",
         "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
         "Name": "Nivel Máximo de Habilidades"
       },
