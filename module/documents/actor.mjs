@@ -406,6 +406,13 @@ export class RyfActor extends Actor {
       'system.health.value': newHP
     });
 
+    // Reference: RyF 3.0 PDF, página 94 - Coger aire solo recupera el daño
+    // recibido en el combate actual: se acumula mientras hay un combate activo
+    if (game.combat?.started && newHP < currentHP) {
+      const combatDamage = (this.getFlag('ryf3', 'combatDamage') || 0) + (currentHP - newHP);
+      await this.setFlag('ryf3', 'combatDamage', combatDamage);
+    }
+
     if (newHP <= 0 && currentHP > 0) {
       ui.notifications.warn(game.i18n.format('RYF.Notifications.ActorUnconscious', { name: this.name }));
     }
@@ -557,6 +564,11 @@ export class RyfActor extends Actor {
   async longRest() {
     const maxMana = this.system.mana.max;
 
+    // Dormir una noche resetea el límite diario de curación por habilidad
+    // (pág. 11) y el daño acumulado del último combate (pág. 94)
+    await this.unsetFlag('ryf3', 'healedToday');
+    await this.unsetFlag('ryf3', 'combatDamage');
+
     if (getRule('longRestFull')) {
       await this.update({
         'system.health.value': this.system.health.max,
@@ -576,6 +588,60 @@ export class RyfActor extends Actor {
         amount: healAmount
       }));
     }
+  }
+
+  // Reference: RyF 3.0 PDF, página 94 - Coger aire: 5-15 minutos de relajación
+  // tras un combate recuperan 1d6 (realista) / 2d6 (épica) PV, solo hasta el
+  // daño recibido en ese combate; permite salir de la inconsciencia
+  async breather() {
+    const combatDamage = this.getFlag('ryf3', 'combatDamage') || 0;
+    if (combatDamage <= 0) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoCombatDamage'));
+      return;
+    }
+
+    const { rollEffect } = await import('../helpers/dice.mjs');
+    const roll = await rollEffect(getRule('breatherDice'));
+    const healed = Math.min(roll.total, combatDamage);
+
+    await this.heal(healed);
+    await this.unsetFlag('ryf3', 'combatDamage');
+
+    ui.notifications.info(game.i18n.format('RYF.Notifications.Breather', {
+      name: this.name,
+      amount: healed,
+      rolled: roll.total
+    }));
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 11-12 y 45 - curación por habilidad
+  // (Medicina, Sanación/Hierbas): tirada contra dificultad 15; cura 1d6
+  // (realista) / 2d6 (heroico) más 1d6 por cada 10 de margen; una vez al día
+  // por paciente (aviso no bloqueante)
+  async rollHealingSkill(skill, patient = null, { difficulty = null, mode = 'normal', modifier = 0, specialization = false, spendToken = false } = {}) {
+    patient = patient || this;
+    difficulty = difficulty ?? getRule('healSkillDifficulty');
+
+    if (patient.getFlag('ryf3', 'healedToday')) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.AlreadyHealedToday', { name: patient.name }));
+    }
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+    const skillRoll = await RyfRoll.rollSkill(this, skill.name, difficulty, mode, modifier, {
+      specialization: specialization,
+      spendToken: spendToken
+    });
+    if (!skillRoll || !skillRoll.success) return skillRoll;
+
+    const healingRoll = await RyfRoll.rollHealing(skill, patient, skillRoll.criticalDice, getRule('healSkillDice'));
+    await patient.heal(healingRoll.total);
+
+    // El límite diario se limpia con el descanso largo (nuevo día)
+    if (patient.isOwner) {
+      await patient.setFlag('ryf3', 'healedToday', true);
+    }
+
+    return { skillRoll: skillRoll, healingRoll: healingRoll };
   }
 
   getRollMode() {
@@ -720,6 +786,12 @@ export class RyfActor extends Actor {
       difficulty += targetDefenseRanged;
     }
 
+    // Reference: RyF 3.0 PDF, páginas 93-94 - cobertura y movimiento del
+    // blanco suben la dificultad; el flanqueo del atacante la baja
+    if (options.rangedModifiers) {
+      difficulty += options.rangedModifiers.total;
+    }
+
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
     const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier, options);
 
@@ -831,29 +903,36 @@ export class RyfActor extends Actor {
         if (!defenseInput) return null;
         difficulty = parseInt(defenseInput);
       }
-    } else {
-      const rangeInput = await Dialog.prompt({
+    }
+
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+    let rangedModifiers = null;
+
+    if (attackType !== 'melee') {
+      const rangeParams = await Dialog.prompt({
         title: game.i18n.localize('RYF.Combat.SelectRange'),
         content: `
           <form>
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Range')}</label>
               <select name="range">
-                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')}</option>
-                <option value="short">${game.i18n.localize('RYF.Combat.RangeShort')}</option>
-                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')}</option>
-                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')}</option>
+                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
               </select>
             </div>
+            ${RyfRoll.rangedModifiersFields()}
           </form>
         `,
-        callback: (html) => {
-          return html.find('[name="range"]').val();
-        },
+        callback: (html) => ({
+          range: html.find('[name="range"]').val(),
+          rangedModifiers: RyfRoll.readRangedModifiers(html)
+        }),
         rejectClose: false
       });
 
-      if (!rangeInput) return null;
+      if (!rangeParams) return null;
 
       // Reference: RyF 3.0 PDF, páginas 21 y 93 - dificultad por banda de distancia
       const difficulties = {
@@ -863,14 +942,20 @@ export class RyfActor extends Actor {
         'long': getRule('rangeLong')
       };
 
-      difficulty = difficulties[rangeInput] || getRule('rangeShort');
+      difficulty = difficulties[rangeParams.range] || getRule('rangeShort');
+
+      // Reference: RyF 3.0 PDF, páginas 93-94 - cobertura, movimiento del
+      // blanco y flanqueo modifican la dificultad
+      rangedModifiers = rangeParams.rangedModifiers;
+      if (rangedModifiers) {
+        difficulty += rangedModifiers.total;
+      }
     }
 
     // El ataque y el daño se resuelven por el mismo camino que los personajes
     // (RyfRoll), de modo que malherido, pifias y el 1 natural aplican también
     // a los PNJ
-    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
-    const attackRoll = await RyfRoll.rollAttack(this, attack, difficulty, mode, modifier);
+    const attackRoll = await RyfRoll.rollAttack(this, attack, difficulty, mode, modifier, { rangedModifiers: rangedModifiers });
 
     if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
@@ -934,8 +1019,14 @@ export class RyfActor extends Actor {
       return null;
     }
 
+    // Reference: RyF 3.0 PDF, página 101 - Quemar maná: cada 2 puntos de maná
+    // extra gastados dan +1 a la tirada de lanzamiento (repetible)
+    const extraMana = this.type === 'character' ? Math.max(0, options.extraMana || 0) : 0;
+    options.extraMana = extraMana;
+    options.burnBonus = Math.floor(extraMana / 2);
+
     if (this.type === 'character') {
-      const manaCost = spell.system.manaCost || 0;
+      const manaCost = (spell.system.manaCost || 0) + extraMana;
       const currentMana = this.system.mana?.value || 0;
 
       if (currentMana < manaCost) {

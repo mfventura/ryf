@@ -22,6 +22,7 @@
     "BaseDamage": "Daño Base",
     "BaseHealing": "Curación Base",
     "Bonus": "Bono",
+    "Breather": "Coger Aire",
     "Cancel": "Cancelar",
     "Cast": "Lanzar",
     "CastSpell": "Lanzar Hechizo",
@@ -69,6 +70,7 @@
     "Failure": "Fallo",
     "Fumble": "Pifia",
     "Healing": "Curación",
+    "HealTarget": "Paciente",
     "Health": "Puntos de Vida",
     "Hindrance": "Estorbo",
     "Hit": "Impacto",
@@ -167,6 +169,13 @@
       "AttackSuccess": "Ataque Exitoso",
       "AttackType": "Tipo de Ataque",
       "AutoDisadvantage": "Desventaja Automática",
+      "Cover": "Cobertura",
+      "CoverLarge": "Objeto grande",
+      "CoverNone": "Sin cobertura",
+      "CoverProne": "Cuerpo a tierra",
+      "CoverSmall": "Objeto pequeño",
+      "CoverTotal": "Cobertura total",
+      "CoverWall": "Pared o columna",
       "DamageAmount": "Cantidad de Daño",
       "DamageCold": "Frío",
       "DamageElectric": "Eléctrico",
@@ -179,7 +188,11 @@
       "DamageType": "Tipo de Daño",
       "EnterTargetDefense": "Introducir Defensa del Objetivo",
       "FinalDamage": "Daño Final",
+      "Flanking": "Flanqueo (tiradores extra)",
       "GrossDamage": "Daño Bruto",
+      "MovementNone": "Inmóvil",
+      "MovementRunning": "Corriendo",
+      "MovementVehicle": "Vehículo rápido o caballo",
       "NoAttacks": "No tiene ataques configurados",
       "NoWeaponsEquipped": "No hay armas equipadas",
       "Range": "Alcance",
@@ -192,8 +205,9 @@
       "RollDamageQuestion": "¿Tirar daño?",
       "SelectRange": "Seleccionar Alcance",
       "SelectWeapon": "Seleccionar Arma",
+      "TargetMovement": "Movimiento del blanco",
       "Untrained": "Sin Entrenamiento",
-      "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática"
+      "UntrainedAttack": "Atacando sin habilidad de {category} - el dado objetivo baja un rango"
     },
     "Dialogs": {
       "DeleteItem": "Eliminar Item",
@@ -229,6 +243,8 @@
       "AttackType": "Tipo de Ataque",
       "BasicInfo": "Información Básica",
       "BuffApplied": "Mejora Aplicada",
+      "BurnMana": "Quemar Maná",
+      "BurnManaHint": "+1 a la tirada de lanzamiento por cada 2 puntos de maná extra (RyF 3.0, pág. 101)",
       "Caster": "Lanzador",
       "CastingDifficulty": "Dificultad de Casteo",
       "CastSpell": "Lanzar Hechizo",
@@ -332,6 +348,7 @@
     "Notifications": {
       "ActorDead": "{name} ha muerto",
       "ActorUnconscious": "{name} ha caído inconsciente",
+      "Breather": "{name} coge aire y recupera {amount} PV (tirada: {rolled}, limitada al daño del combate)",
       "ConditionApplied": "Condición {condition} aplicada a {actor} por {duration} turnos",
       "EffectApplied": "Efecto {effect} aplicado a {actor}",
       "EffectRemoved": "Efecto {name} eliminado",
@@ -403,6 +420,10 @@
           "Hint": "Puntos a repartir entre atributos. Heroico: 30, Realista: 22 (RyF 3.0, pág. 6). Cualquier valor intermedio es válido.",
           "Name": "Puntos de atributos"
         },
+        "breatherDice": {
+          "Hint": "PV recuperados al coger aire tras un combate, limitados al daño de ese combate (RyF 3.0, pág. 94: 1d6 realista / 2d6 épica). Fórmula libre.",
+          "Name": "Dados de coger aire"
+        },
         "creationMaxSkill": {
           "Hint": "Máximo de puntos por habilidad durante la creación (RyF 3.0, pág. 39: 6). Aviso no bloqueante.",
           "Name": "Máximo por habilidad en creación"
@@ -422,6 +443,14 @@
         "dualWieldBonus": {
           "Hint": "Bono al ataque por luchar con dos armas ligeras de una mano (RyF 3.0, pág. 103: +3).",
           "Name": "Bono por dos armas"
+        },
+        "healSkillDice": {
+          "Hint": "PV curados por una habilidad de curación con éxito (RyF 3.0, págs. 11-12: 1d6 realista / 2d6 heroico; +1d6 por cada 10 de margen). Fórmula libre.",
+          "Name": "Dados de curación por habilidad"
+        },
+        "healSkillDifficulty": {
+          "Hint": "Dificultad de la tirada de curación por habilidad (RyF 3.0, pág. 11: 15).",
+          "Name": "Dificultad de curación por habilidad"
         },
         "healthMultiplier": {
           "Hint": "PV máximos = Físico × N. Heroico: 4, Realista: 3, más letal: 2 (RyF 3.0, págs. 14, 21 y 93).",
@@ -549,6 +578,7 @@
     "SkillCategories": {
       "defense": "Defensa",
       "firearms": "Armas de Fuego",
+      "healing": "Curación",
       "initiative": "Iniciativa",
       "knowledge": "Conocimiento",
       "magic": "Magia",
@@ -584,6 +614,7 @@
       "Return": "Devolver token (la siguiente tirada baja un rango el dado objetivo)"
     },
     "Warnings": {
+      "AlreadyHealedToday": "{name} ya ha recibido curación por habilidad hoy (RyF 3.0, pág. 11: una vez al día por paciente)",
       "AttributeNotFound": "No se encontró el atributo {attribute}",
       "AttributeOutOfRange": "Los atributos deben estar entre {min} y {max} durante la creación (RyF 3.0, pág. 13)",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
@@ -600,6 +631,7 @@
       "MinAttributeValue": "El atributo no puede ser menor que 1",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoActor": "Este item no está asociado a ningún actor",
+      "NoCombatDamage": "No hay daño de combate acumulado que recuperar (RyF 3.0, pág. 94)",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
       "NoTargetSelected": "No hay objetivos seleccionados",
       "NotASkillOrSpell": "Este item no es una habilidad ni un hechizo",

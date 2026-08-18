@@ -7,7 +7,7 @@
     "description": "Conocimiento de primeros auxilios, hierbas medicinales y remedios naturales.",
     "level": 0,
     "attribute": "inteligencia",
-    "category": "knowledge",
+    "category": "healing",
     "isProfessional": false,
     "specialization": ""
   },

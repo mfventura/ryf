@@ -154,6 +154,22 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
+/* Ranged attack difficulty modifiers on chat cards (PDF pp. 93-94) */
+.ryf-roll .ranged-modifiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.ryf-roll .ranged-modifiers .ranged-mod {
+  background: var(--ryf-light);
+  border: 1px solid var(--ryf-secondary);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+}
+
 .custom-pyramid-config .save-button {
   background: var(--ryf-success);
   color: white;

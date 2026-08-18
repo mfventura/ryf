@@ -146,23 +146,28 @@
         <div class="attribute flexrow">
           <label class="attribute-label">{{localize "RYF.Attributes.Fisico"}}</label>
           <input type="number" class="attribute-input" name="system.attributes.fisico.value" value="{{system.attributes.fisico.value}}" data-attribute="fisico" data-dtype="Number" min="1"/>
+          <a class="attribute-roll" data-attribute="fisico" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d10"></i></a>
         </div>
         <div class="attribute flexrow">
           <label class="attribute-label">{{localize "RYF.Attributes.Destreza"}}</label>
           <input type="number" class="attribute-input" name="system.attributes.destreza.value" value="{{system.attributes.destreza.value}}" data-attribute="destreza" data-dtype="Number" min="1"/>
+          <a class="attribute-roll" data-attribute="destreza" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d10"></i></a>
         </div>
         <div class="attribute flexrow">
           <label class="attribute-label">{{localize "RYF.Attributes.Inteligencia"}}</label>
           <input type="number" class="attribute-input" name="system.attributes.inteligencia.value" value="{{system.attributes.inteligencia.value}}" data-attribute="inteligencia" data-dtype="Number" min="1"/>
+          <a class="attribute-roll" data-attribute="inteligencia" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d10"></i></a>
         </div>
         <div class="attribute flexrow">
           <label class="attribute-label">{{localize "RYF.Attributes.Percepcion"}}</label>
           <input type="number" class="attribute-input" name="system.attributes.percepcion.value" value="{{system.attributes.percepcion.value}}" data-attribute="percepcion" data-dtype="Number" min="1"/>
+          <a class="attribute-roll" data-attribute="percepcion" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d10"></i></a>
         </div>
         {{#if isCarismaEnabled}}
         <div class="attribute flexrow">
           <label class="attribute-label">{{localize "RYF.Attributes.Carisma"}}</label>
           <input type="number" class="attribute-input" name="system.attributes.carisma.value" value="{{system.attributes.carisma.value}}" data-attribute="carisma" data-dtype="Number" min="1"/>
+          <a class="attribute-roll" data-attribute="carisma" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d10"></i></a>
         </div>
         {{/if}}
       </div>
@@ -178,6 +183,8 @@
       <div class="rest-buttons flexrow">
         <button type="button" class="short-rest">{{localize "RYF.ShortRest"}}</button>
         <button type="button" class="long-rest">{{localize "RYF.LongRest"}}</button>
+        {{!-- Reference: RyF 3.0 PDF, página 94 - Coger aire tras un combate --}}
+        <button type="button" class="breather">{{localize "RYF.Breather"}}</button>
       </div>
     </div>
 
@@ -226,6 +233,10 @@
           </div>
           <div class="item-controls">
             <a class="item-control skill-roll" title="{{localize 'RYF.Roll'}}"><i class="fas fa-dice-d20"></i></a>
+            {{!-- Reference: RyF 3.0 PDF, páginas 11-12 - curación por habilidad --}}
+            {{#if (eq item.system.category "healing")}}
+            <a class="item-control skill-heal" title="{{localize 'RYF.Healing'}}"><i class="fas fa-briefcase-medical"></i></a>
+            {{/if}}
             <a class="item-control skill-opposed" title="{{localize 'RYF.OpposedRoll'}}"><i class="fas fa-people-arrows"></i></a>
             <a class="item-control item-edit" title="{{localize 'RYF.Edit'}}"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" title="{{localize 'RYF.Delete'}}"><i class="fas fa-trash"></i></a>

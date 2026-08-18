@@ -29,6 +29,11 @@
     <span class="formula-part modifier-bonus">{{localize "RYF.Advantage"}}: +{{castingBonus}}</span>
     <span class="formula-separator">+</span>
     {{/if}}
+    {{!-- Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 por cada 2 puntos extra --}}
+    {{#if (gt burnBonus 0)}}
+    <span class="formula-part modifier-bonus"><i class="fas fa-fire"></i> {{localize "RYF.Magic.BurnMana"}}: +{{burnBonus}}</span>
+    <span class="formula-separator">+</span>
+    {{/if}}
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
         <i class="fas fa-arrow-up"></i> {{diceRoll.chosen}}

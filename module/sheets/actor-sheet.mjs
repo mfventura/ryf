@@ -1,6 +1,6 @@
 import { RyfRoll } from '../rolls/ryf-roll.mjs';
 import { getRule } from '../helpers/rules.mjs';
-import { resolveMode } from '../helpers/dice.mjs';
+import { resolveMode, SKILL_DIFFICULTIES, ATTRIBUTE_DIFFICULTIES } from '../helpers/dice.mjs';
 
 export class RyfActorSheet extends ActorSheet {
 
@@ -225,6 +225,10 @@ export class RyfActorSheet extends ActorSheet {
 
     html.find('.short-rest').click(this._onShortRest.bind(this));
     html.find('.long-rest').click(this._onLongRest.bind(this));
+    html.find('.breather').click(this._onBreather.bind(this));
+
+    html.find('.attribute-roll').click(this._onAttributeRoll.bind(this));
+    html.find('.skill-heal').click(this._onSkillHeal.bind(this));
 
     html.find('.add-experience').click(this._onAddExperience.bind(this));
 
@@ -407,7 +411,8 @@ export class RyfActorSheet extends ActorSheet {
     const modifier = rollParams.modifier || 0;
     const options = {
       specialization: rollParams.specialization,
-      spendToken: rollParams.spendToken
+      spendToken: rollParams.spendToken,
+      rangedModifiers: rollParams.rangedModifiers || null
     };
 
     if (isRanged) {
@@ -438,6 +443,7 @@ export class RyfActorSheet extends ActorSheet {
               <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
             </select>
           </div>
+          ${RyfRoll.rangedModifiersFields()}
           ` : !hasTarget ? `
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Defense')}</label>
@@ -481,7 +487,8 @@ export class RyfActorSheet extends ActorSheet {
               const dualWield = dualWieldAvailable ? html.find('[name="dualWield"]').is(':checked') : false;
               const specialization = html.find('[name="applySpecialization"]').is(':checked');
               const spendToken = html.find('[name="spendToken"]').is(':checked');
-              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken });
+              const rangedModifiers = isRanged ? RyfRoll.readRangedModifiers(html) : null;
+              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken, rangedModifiers });
             }
           },
           cancel: {
@@ -611,15 +618,10 @@ export class RyfActorSheet extends ActorSheet {
             ` : ''}
             <div class="form-group">
               <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
-              <!-- Reference: RyF 3.0 PDF, página 18 - dificultades de habilidad -->
+              <!-- Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad -->
               <select name="difficulty" autofocus>
-                <option value="10" ${difficulty === 10 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Easy')} (10)</option>
-                <option value="15" ${difficulty === 15 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Average')} (15)</option>
-                <option value="18" ${difficulty === 18 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Moderate')} (18)</option>
-                <option value="20" ${difficulty === 20 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Hard')} (20)</option>
-                <option value="25" ${difficulty === 25 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryHard')} (25)</option>
-                <option value="30" ${difficulty === 30 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.NearlyImpossible')} (30)</option>
-                ${targetWillpower && ![10, 15, 18, 20, 25, 30].includes(targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
+                ${SKILL_DIFFICULTIES.map(d => `<option value="${d.value}" ${difficulty === d.value ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`).join('')}
+                ${targetWillpower && !SKILL_DIFFICULTIES.some(d => d.value === targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
               </select>
             </div>
             <div class="form-group">
@@ -696,7 +698,8 @@ export class RyfActorSheet extends ActorSheet {
     if (targets === null) return;
 
     await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier, {
-      spendToken: castParams.spendToken
+      spendToken: castParams.spendToken,
+      extraMana: castParams.extraMana
     });
   }
 
@@ -737,6 +740,14 @@ export class RyfActorSheet extends ActorSheet {
               <label>${game.i18n.localize('RYF.Modifier')}</label>
               <input type="number" name="modifier" value="0" step="1"/>
             </div>
+            ${!isNPC ? `
+            <!-- Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 por cada 2 puntos extra -->
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Magic.BurnMana')}</label>
+              <input type="number" name="extraMana" value="0" min="0" step="1"/>
+            </div>
+            <p class="hint" style="margin: 0 0 8px 0;">${game.i18n.localize('RYF.Magic.BurnManaHint')}</p>
+            ` : ''}
           </form>
         `,
         render: (html) => this._bindModePreview(html, factors.downs),
@@ -748,7 +759,8 @@ export class RyfActorSheet extends ActorSheet {
               const mode = html.find('[name="mode"]').val();
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
               const spendToken = html.find('[name="spendToken"]').is(':checked');
-              resolve({ mode, modifier, spendToken });
+              const extraMana = parseInt(html.find('[name="extraMana"]').val()) || 0;
+              resolve({ mode, modifier, spendToken, extraMana });
             }
           },
           cancel: {
@@ -829,6 +841,160 @@ export class RyfActorSheet extends ActorSheet {
   async _onLongRest(event) {
     event.preventDefault();
     await this.actor.longRest();
+  }
+
+  // Reference: RyF 3.0 PDF, página 94 - Coger aire tras un combate
+  async _onBreather(event) {
+    event.preventDefault();
+    await this.actor.breather();
+  }
+
+  // Reference: RyF 3.0 PDF, página 18 - tirada de atributo puro con su propia
+  // tabla de dificultades (9/12/15/18/21)
+  async _onAttributeRoll(event) {
+    event.preventDefault();
+    const attribute = event.currentTarget.dataset.attribute;
+    if (!attribute) return;
+
+    const factors = this._rollFactorsSection();
+    const attributeLabel = game.i18n.localize(`RYF.Attributes.${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`);
+
+    const difficultyOptions = ATTRIBUTE_DIFFICULTIES.map(d =>
+      `<option value="${d.value}" ${d.value === 12 ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`
+    ).join('');
+
+    const rollParams = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Roll')}: ${attributeLabel}`,
+        content: `
+          <form>
+            ${factors.html}
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+              <select name="difficulty" autofocus>${difficultyOptions}</select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode">
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        render: (html) => this._bindModePreview(html, factors.downs),
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => resolve({
+              difficulty: parseInt(html.find('[name="difficulty"]').val()),
+              mode: html.find('[name="mode"]').val(),
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
+              spendToken: html.find('[name="spendToken"]').is(':checked')
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!rollParams) return;
+
+    await RyfRoll.rollAttribute(this.actor, attribute, rollParams.difficulty, rollParams.mode, {
+      modifier: rollParams.modifier,
+      spendToken: rollParams.spendToken
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 11-12 y 45 - curación por habilidad sobre
+  // el objetivo seleccionado (o uno mismo si no hay objetivo)
+  async _onSkillHeal(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const skill = this.actor.items.get(li.data("itemId"));
+    if (!skill || skill.type !== 'skill') return;
+
+    const targets = Array.from(game.user.targets);
+    const patient = (targets.length > 0 && targets[0].actor) ? targets[0].actor : this.actor;
+
+    const factors = this._rollFactorsSection({
+      untrained: (skill.system.level || 0) === 0,
+      specialization: skill.system.specialization?.trim() || null
+    });
+
+    const alreadyHealed = patient.getFlag('ryf3', 'healedToday');
+
+    const rollParams = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Healing')}: ${skill.name}`,
+        content: `
+          <form>
+            <div class="heal-target-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
+              <i class="fas fa-user-injured"></i> ${game.i18n.localize('RYF.HealTarget')}: <strong>${patient.name}</strong>
+            </div>
+            ${alreadyHealed ? `
+            <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-exclamation-triangle"></i> ${game.i18n.format('RYF.Warnings.AlreadyHealedToday', { name: patient.name })}
+            </div>
+            ` : ''}
+            ${factors.html}
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+              <input type="number" name="difficulty" value="${getRule('healSkillDifficulty')}" step="1"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode">
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        render: (html) => this._bindModePreview(html, factors.downs),
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-briefcase-medical"></i>',
+            label: game.i18n.localize('RYF.Healing'),
+            callback: (html) => resolve({
+              difficulty: parseInt(html.find('[name="difficulty"]').val()) || getRule('healSkillDifficulty'),
+              mode: html.find('[name="mode"]').val(),
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
+              specialization: html.find('[name="applySpecialization"]').is(':checked'),
+              spendToken: html.find('[name="spendToken"]').is(':checked')
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!rollParams) return;
+
+    await this.actor.rollHealingSkill(skill, patient, rollParams);
   }
 
   async _onAddExperience(event) {

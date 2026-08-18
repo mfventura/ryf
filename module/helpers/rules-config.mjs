@@ -24,7 +24,10 @@ const FIELD_GROUPS = [
       { key: 'manaMultiplier', setting: 'manaMultiplier', step: 1 },
       { key: 'woundedMultiplier', step: 0.5 },
       { key: 'unconsciousThreshold', step: 1 },
-      { key: 'deathMultiplier', step: 1 }
+      { key: 'deathMultiplier', step: 1 },
+      { key: 'healSkillDifficulty', step: 1 },
+      { key: 'healSkillDice', type: 'text' },
+      { key: 'breatherDice', type: 'text' }
     ]
   },
   {
@@ -52,11 +55,12 @@ const FIELD_GROUPS = [
   }
 ];
 
-// Reference: RyF 3.0 PDF, páginas 6, 14 y 21 - modos heroico (30 puntos, PV x4)
-// y realista (22 puntos, PV x3). Solo rellenan campos; todo sigue siendo editable.
+// Reference: RyF 3.0 PDF, páginas 6, 14, 21, 45 y 94 - modos heroico (30
+// puntos, PV x4, curación 2d6) y realista (22 puntos, PV x3, curación 1d6).
+// Solo rellenan campos; todo sigue siendo editable.
 const PRESETS = {
-  heroic: { attributePoints: 30, healthMultiplier: 4 },
-  realistic: { attributePoints: 22, healthMultiplier: 3 }
+  heroic: { attributePoints: 30, healthMultiplier: 4, healSkillDice: '2d6', breatherDice: '2d6' },
+  realistic: { attributePoints: 22, healthMultiplier: 3, healSkillDice: '1d6', breatherDice: '1d6' }
 };
 
 export class RulesConfig extends FormApplication {
@@ -153,6 +157,9 @@ export class RulesConfig extends FormApplication {
 
         if (field.type === 'checkbox') {
           rules[field.key] = raw === true || raw === 'true' || raw === 'on';
+        } else if (field.type === 'text') {
+          const value = String(raw ?? '').trim();
+          rules[field.key] = value || DEFAULT_RULES[field.key];
         } else {
           const value = Number(raw);
           rules[field.key] = Number.isNaN(value) ? DEFAULT_RULES[field.key] : value;

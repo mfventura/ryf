@@ -89,6 +89,48 @@ export class RyfRoll {
     return rollData;
   }
   
+  // Reference: RyF 3.0 PDF, páginas 93-94 - modificadores a la dificultad de
+  // los ataques a distancia: cobertura, movimiento del blanco y flanqueos.
+  // Campos compartidos por el diálogo de ataque de personaje y el de PNJ.
+  static rangedModifiersFields() {
+    return `
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.Cover')}</label>
+        <select name="cover">
+          <option value="0" selected>${game.i18n.localize('RYF.Combat.CoverNone')}</option>
+          <option value="2">${game.i18n.localize('RYF.Combat.CoverProne')} (+2)</option>
+          <option value="3">${game.i18n.localize('RYF.Combat.CoverSmall')} (+3)</option>
+          <option value="4">${game.i18n.localize('RYF.Combat.CoverLarge')} (+4)</option>
+          <option value="5">${game.i18n.localize('RYF.Combat.CoverWall')} (+5)</option>
+          <option value="10">${game.i18n.localize('RYF.Combat.CoverTotal')} (+10)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.TargetMovement')}</label>
+        <select name="targetMovement">
+          <option value="0" selected>${game.i18n.localize('RYF.Combat.MovementNone')}</option>
+          <option value="2">${game.i18n.localize('RYF.Combat.MovementRunning')} (+2)</option>
+          <option value="4">${game.i18n.localize('RYF.Combat.MovementVehicle')} (+4)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.Flanking')}</label>
+        <input type="number" name="flanking" value="0" min="0" step="1"/>
+      </div>`;
+  }
+
+  static readRangedModifiers(html) {
+    const cover = parseInt(html.find('[name="cover"]').val()) || 0;
+    const movement = parseInt(html.find('[name="targetMovement"]').val()) || 0;
+    // El flanqueo lo aprovecha el atacante: se resta de la dificultad
+    // (+1 acumulativo por cada tirador adicional desde otra posición, pág. 93-94)
+    const flanking = parseInt(html.find('[name="flanking"]').val()) || 0;
+    const total = cover + movement - flanking;
+
+    if (cover === 0 && movement === 0 && flanking === 0) return null;
+    return { cover, movement, flanking, total };
+  }
+
   // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
   // malherido, pifia y fallo automático con 1 natural (RyF 3.0 PDF, págs. 18-20)
   static async _resolveRoll(base, difficulty, mode, modifier, wounded) {
@@ -124,6 +166,7 @@ export class RyfRoll {
         attackBonus: attackBonus,
         difficulty: targetDefense,
         modifier: modifier,
+        rangedModifiers: options.rangedModifiers || null,
         ...resolved
       };
 
@@ -206,6 +249,7 @@ export class RyfRoll {
       targetDefense: targetDefense,
       mode: mode,
       modifier: modifier,
+      rangedModifiers: options.rangedModifiers || null,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -470,13 +514,17 @@ export class RyfRoll {
     // Arcano: +1 a tiradas de hechizos)
     const castingBonus = actor.system.activeEffectBonuses?.spellCasting || 0;
 
+    // Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 a la tirada de
+    // lanzamiento por cada 2 puntos de maná extra gastados
+    const burnBonus = options.burnBonus || 0;
+
     // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
     const factors = await this._collectFactors(actor, { spendToken: options.spendToken });
     mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = intelligence + spellLevel + castingBonus + diceRoll.result - hindrance + modifier;
+    const total = intelligence + spellLevel + castingBonus + burnBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
@@ -493,6 +541,8 @@ export class RyfRoll {
       mode: mode,
       hindrance: hindrance,
       castingBonus: castingBonus,
+      burnBonus: burnBonus,
+      extraMana: options.extraMana || 0,
       modifier: modifier,
       diceRoll: diceRoll,
       total: total,
@@ -562,9 +612,11 @@ export class RyfRoll {
     // tiradas de Destreza, también las de atributo puro
     const hindrance = (attributeName === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
+    const modifier = options.modifier || 0;
+
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + diceRoll.result - hindrance;
+    const total = attributeValue + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     // Reference: RyF 3.0 PDF, página 18 - el 1 natural en el dado objetivo
@@ -581,6 +633,7 @@ export class RyfRoll {
       difficulty: difficulty,
       mode: mode,
       hindrance: hindrance,
+      modifier: modifier,
       diceRoll: diceRoll,
       total: total,
       success: success,

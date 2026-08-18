@@ -242,6 +242,18 @@ Hooks.on('renderCombatTracker', (app, html) => {
   }
 });
 
+// Reference: RyF 3.0 PDF, página 94 - Coger aire solo recupera el daño del
+// combate actual: al empezar un combate nuevo se resetea el acumulador
+Hooks.on('combatStart', async (combat) => {
+  if (!game.user.isGM) return;
+
+  for (const combatant of combat.combatants) {
+    if (combatant.actor?.getFlag('ryf3', 'combatDamage')) {
+      await combatant.actor.unsetFlag('ryf3', 'combatDamage');
+    }
+  }
+});
+
 Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
 
   if (!updateData.turn && !updateData.round) {

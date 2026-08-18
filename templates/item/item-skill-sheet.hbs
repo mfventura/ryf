@@ -43,6 +43,8 @@
           <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>{{localize "RYF.SkillCategories.ranged"}}</option>
           <option value="firearms" {{#if (eq system.category "firearms")}}selected{{/if}}>{{localize "RYF.SkillCategories.firearms"}}</option>
           <option value="magic" {{#if (eq system.category "magic")}}selected{{/if}}>{{localize "RYF.SkillCategories.magic"}}</option>
+          {{!-- Reference: RyF 3.0 PDF, páginas 11-12 - Medicina y Sanación/Hierbas curan --}}
+          <option value="healing" {{#if (eq system.category "healing")}}selected{{/if}}>{{localize "RYF.SkillCategories.healing"}}</option>
           <option value="social" {{#if (eq system.category "social")}}selected{{/if}}>{{localize "RYF.SkillCategories.social"}}</option>
           <option value="knowledge" {{#if (eq system.category "knowledge")}}selected{{/if}}>{{localize "RYF.SkillCategories.knowledge"}}</option>
           <option value="physical" {{#if (eq system.category "physical")}}selected{{/if}}>{{localize "RYF.SkillCategories.physical"}}</option>

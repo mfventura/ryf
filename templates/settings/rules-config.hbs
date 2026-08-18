@@ -30,6 +30,8 @@
       <label for="{{field.key}}">{{field.label}}</label>
       {{#if (eq field.type "checkbox")}}
         <input type="checkbox" name="{{field.key}}" {{#if field.value}}checked{{/if}} />
+      {{else if (eq field.type "text")}}
+        <input type="text" name="{{field.key}}" value="{{field.value}}" />
       {{else}}
         <input type="number" name="{{field.key}}" value="{{field.value}}" step="{{field.step}}" />
       {{/if}}

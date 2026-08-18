@@ -124,12 +124,31 @@ export function checkFumble(dice, chosen) {
   return false;
 }
 
-export function getDifficultyLabel(difficulty) {
-  if (difficulty <= 10) return 'RYF.Difficulty.VeryEasy';
-  if (difficulty <= 15) return 'RYF.Difficulty.Easy';
-  if (difficulty <= 20) return 'RYF.Difficulty.Average';
-  if (difficulty <= 25) return 'RYF.Difficulty.Hard';
-  if (difficulty <= 30) return 'RYF.Difficulty.VeryHard';
+// Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad
+export const SKILL_DIFFICULTIES = [
+  { value: 10, label: 'RYF.Difficulty.Easy' },
+  { value: 15, label: 'RYF.Difficulty.Average' },
+  { value: 18, label: 'RYF.Difficulty.Moderate' },
+  { value: 20, label: 'RYF.Difficulty.Hard' },
+  { value: 25, label: 'RYF.Difficulty.VeryHard' },
+  { value: 30, label: 'RYF.Difficulty.NearlyImpossible' }
+];
+
+// Reference: RyF 3.0 PDF, página 18 - las tiradas de atributo puro usan una
+// tabla de dificultades propia, más baja que la de habilidad
+export const ATTRIBUTE_DIFFICULTIES = [
+  { value: 9, label: 'RYF.Difficulty.Easy' },
+  { value: 12, label: 'RYF.Difficulty.Average' },
+  { value: 15, label: 'RYF.Difficulty.Hard' },
+  { value: 18, label: 'RYF.Difficulty.VeryHard' },
+  { value: 21, label: 'RYF.Difficulty.NearlyImpossible' }
+];
+
+export function getDifficultyLabel(difficulty, type = 'skill') {
+  const table = type === 'attribute' ? ATTRIBUTE_DIFFICULTIES : SKILL_DIFFICULTIES;
+  for (const entry of table) {
+    if (difficulty <= entry.value) return entry.label;
+  }
   return 'RYF.Difficulty.NearlyImpossible';
 }
 

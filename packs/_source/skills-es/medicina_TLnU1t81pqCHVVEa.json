@@ -7,7 +7,7 @@
     "description": "Conocimiento médico avanzado, cirugía y tratamiento de enfermedades.",
     "level": 0,
     "attribute": "inteligencia",
-    "category": "knowledge",
+    "category": "healing",
     "isProfessional": false,
     "specialization": ""
   },
