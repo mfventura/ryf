@@ -154,6 +154,46 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
+/* Money section on the equipment tab (PDF p. 26) */
+.ryf .money-section {
+  margin-bottom: 1rem;
+  padding: 8px;
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+}
+
+.ryf .money-section .money-fields {
+  gap: 8px;
+}
+
+.ryf .money-section .money-field {
+  flex: 1;
+  text-align: center;
+}
+
+.ryf .money-section .money-field label {
+  display: block;
+  font-size: 0.85em;
+  margin-bottom: 2px;
+}
+
+.ryf .money-section .hint {
+  margin: 4px 0 0 0;
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+}
+
+/* Weapon row badges: precision, ignores-armor, ammo (PDF pp. 22, 95-98) */
+.ryf .item-damage .weapon-precision,
+.ryf .item-damage .weapon-ignores-armor,
+.ryf .item-damage .weapon-ammo {
+  margin-left: 6px;
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  white-space: nowrap;
+}
+
 /* Ranged attack difficulty modifiers on chat cards (PDF pp. 93-94) */
 .ryf-roll .ranged-modifiers {
   display: flex;

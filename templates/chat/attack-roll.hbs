@@ -36,6 +36,14 @@
     <span class="formula-separator">-</span>
     <span class="formula-part effect-penalty"><i class="fas fa-sword"></i> {{localize "RYF.WeaponAttackBonus"}}: {{weaponAttackBonus}}</span>
     {{/if}}
+    {{!-- Reference: RyF 3.0 PDF, página 95 - precisión del arma --}}
+    {{#if (gt precision 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part effect-bonus"><i class="fas fa-crosshairs"></i> {{localize "RYF.Precision"}}: {{precision}}</span>
+    {{else if (lt precision 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part effect-penalty"><i class="fas fa-crosshairs"></i> {{localize "RYF.Precision"}}: {{precision}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
@@ -120,7 +128,7 @@
       {{/if}}
       
       <div class="damage-button">
-        <button type="button" class="roll-damage" data-weapon-id="{{weapon._id}}" data-critical-dice="{{criticalDice}}">
+        <button type="button" class="roll-damage" data-weapon-id="{{weapon._id}}" data-critical-dice="{{criticalDice}}" data-range="{{range}}">
           <i class="fas fa-dice-d6"></i> {{localize "RYF.RollDamage"}}
         </button>
       </div>

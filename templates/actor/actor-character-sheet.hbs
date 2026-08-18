@@ -291,11 +291,29 @@
               <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
               <h4>{{item.name}}</h4>
             </div>
-            <div class="item-damage">{{item.system.damage.base}}{{#if (gt item.system.damage.bonus 0)}}+{{item.system.damage.bonus}}{{else if (lt item.system.damage.bonus 0)}}{{item.system.damage.bonus}}{{/if}}</div>
+            <div class="item-damage">
+              {{item.system.damage.base}}{{#if (gt item.system.damage.bonus 0)}}+{{item.system.damage.bonus}}{{else if (lt item.system.damage.bonus 0)}}{{item.system.damage.bonus}}{{/if}}
+              {{!-- Reference: RyF 3.0 PDF, página 95 - precisión del arma --}}
+              {{#if item.system.precision}}
+              <span class="weapon-precision" title="{{localize 'RYF.Precision'}}"><i class="fas fa-crosshairs"></i>{{#if (gt item.system.precision 0)}}+{{/if}}{{item.system.precision}}</span>
+              {{/if}}
+              {{#if item.system.ignoresArmor}}
+              <span class="weapon-ignores-armor" title="{{localize 'RYF.IgnoresArmor'}}"><i class="fas fa-shield-halved"></i></span>
+              {{/if}}
+              {{#if (and @root.enableAmmo (gt item.system.ammo.max 0))}}
+              <span class="weapon-ammo" title="{{localize 'RYF.Ammo'}}"><i class="fas fa-circle-dot"></i> {{item.system.ammo.value}}/{{item.system.ammo.max}}</span>
+              {{/if}}
+            </div>
             <div class="item-roll">
               {{#if item.system.equipped}}
               <a class="item-control item-attack" title="{{localize 'RYF.Attack'}}" data-item-id="{{item._id}}">
                 <i class="fas fa-dice-d20"></i>
+              </a>
+              {{/if}}
+              {{!-- Reference: RyF 3.0 PDF, páginas 96-98 - recarga --}}
+              {{#if (and @root.enableAmmo (gt item.system.ammo.max 0))}}
+              <a class="item-control weapon-reload" title="{{localize 'RYF.Reload'}}">
+                <i class="fas fa-rotate"></i>
               </a>
               {{/if}}
             </div>
@@ -521,6 +539,26 @@
     </div>
 
     <div class="tab equipment" data-group="primary" data-tab="equipment">
+      {{!-- Reference: RyF 3.0 PDF, página 26 - dinero: 1 mo = 10 mp = 100 mc --}}
+      <div class="money-section">
+        <h3>{{localize "RYF.Money.Label"}}</h3>
+        <div class="money-fields flexrow">
+          <div class="money-field">
+            <label>{{localize "RYF.Money.Gold"}}</label>
+            <input type="number" name="system.money.gold" value="{{system.money.gold}}" data-dtype="Number" min="0"/>
+          </div>
+          <div class="money-field">
+            <label>{{localize "RYF.Money.Silver"}}</label>
+            <input type="number" name="system.money.silver" value="{{system.money.silver}}" data-dtype="Number" min="0"/>
+          </div>
+          <div class="money-field">
+            <label>{{localize "RYF.Money.Copper"}}</label>
+            <input type="number" name="system.money.copper" value="{{system.money.copper}}" data-dtype="Number" min="0"/>
+          </div>
+        </div>
+        <p class="hint">{{localize "RYF.Money.ConversionHint"}}</p>
+      </div>
+
       <div class="equipment-header flexrow">
         <h3>{{localize "RYF.Equipment"}}</h3>
         <a class="item-create" data-type="equipment"><i class="fas fa-plus"></i> {{localize "RYF.AddEquipment"}}</a>

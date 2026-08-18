@@ -9,6 +9,9 @@
     "AddSpell": "Añadir Hechizo",
     "AddWeapon": "Añadir Arma",
     "Advantage": "Ventaja",
+    "Ammo": "Munición",
+    "AmmoCurrent": "Balas actuales",
+    "AmmoMax": "Balas (cargador)",
     "AdvantageName": "Nombre de la Ventaja",
     "Advantages": "Ventajas",
     "Actions": "Acciones",
@@ -39,6 +42,9 @@
     "Custom": "Personalizado",
     "Damage": "Daño",
     "DamageBonus": "Bonus de Daño",
+    "DamageByRangeLong": "Daño a distancia larga",
+    "DamageByRangeMedium": "Daño a distancia media",
+    "DamageByRangeShort": "Daño a distancia corta",
     "DamageNote": "La armadura absorbe daño según su protección",
     "DecreaseLevel": "Disminuir Nivel",
     "Defense": "Defensa",
@@ -74,6 +80,8 @@
     "Health": "Puntos de Vida",
     "Hindrance": "Estorbo",
     "Hit": "Impacto",
+    "IgnoresArmor": "Ignora armadura",
+    "IgnoresArmorNote": "Este daño ignora la absorción de la armadura (RyF 3.0, pág. 22)",
     "IncreaseLevel": "Aumentar Nivel",
     "Initiative": "Iniciativa",
     "InitiativeBase": "Iniciativa Base",
@@ -92,6 +100,9 @@
     "NoRequirement": "Sin requisito",
     "OpposedDefenderSkill": "Habilidad del oponente",
     "OpposedManualBonus": "— Bono manual (PNJ sin habilidades) —",
+    "Precision": "Precisión",
+    "Reload": "Recargar",
+    "ReloadTurns": "Turnos de recarga",
     "OpposedRoll": "Tirada Enfrentada",
     "OpposedTie": "Empate: queda a discreción del máster (RyF 3.0, pág. 18)",
     "OpposedWinner": "Ganador",
@@ -345,6 +356,13 @@
         "single": "Individual"
       }
     },
+    "Money": {
+      "ConversionHint": "1 mo = 10 mp = 100 mc (RyF 3.0, pág. 26)",
+      "Copper": "Monedas de cobre (mc)",
+      "Gold": "Monedas de oro (mo)",
+      "Label": "Dinero",
+      "Silver": "Monedas de plata (mp)"
+    },
     "Notifications": {
       "ActorDead": "{name} ha muerto",
       "ActorUnconscious": "{name} ha caído inconsciente",
@@ -368,7 +386,8 @@
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
       "SpellDecreased": "{name} reducido a nivel {level}",
       "SpellIncreased": "{name} aumentado a nivel {level}",
-      "TokenReturned": "El máster devuelve el token a {name}: su siguiente tirada baja un rango el dado objetivo"
+      "TokenReturned": "El máster devuelve el token a {name}: su siguiente tirada baja un rango el dado objetivo",
+      "WeaponReloaded": "{name} recarga {weapon} ({turns} turno(s) de recarga)"
     },
     "NPC": {
       "SavingThrowBonus": "Tirada de Salvación - PNJ",
@@ -524,6 +543,10 @@
         "Hint": "Define la pirámide de habilidades que se aplicará a los nuevos personajes.",
         "Name": "Tipo de Personaje por Defecto"
       },
+      "EnableAmmo": {
+        "Hint": "Activa el control de munición (RyF 3.0, págs. 96-98): cada disparo gasta una bala y sin balas hay que recargar. Solo afecta a armas con cargador configurado.",
+        "Name": "Activar Munición"
+      },
       "EnableCarisma": {
         "Hint": "Activa el atributo Carisma y las 6 habilidades sociales. Requiere recargar el mundo.",
         "Name": "Activar Carisma"
@@ -631,6 +654,7 @@
       "MinAttributeValue": "El atributo no puede ser menor que 1",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoActor": "Este item no está asociado a ningún actor",
+      "NoAmmo": "{name} no tiene munición: recarga antes de disparar (RyF 3.0, págs. 96-98)",
       "NoCombatDamage": "No hay daño de combate acumulado que recuperar (RyF 3.0, pág. 94)",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
       "NoTargetSelected": "No hay objetivos seleccionados",

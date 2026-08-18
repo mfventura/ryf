@@ -4,7 +4,7 @@
   "type": "weapon",
   "img": "icons/weapons/guns/rifle-automatic-black.webp",
   "system": {
-    "description": "Arma de fuego automática versátil y potente.",
+    "description": "Arma de fuego automática versátil y potente.<p>Precisión +1 en fuego automático (RyF 3.0, págs. 96-97: doble precisión según modo de fuego).</p>",
     "quantity": 1,
     "weight": 4,
     "price": 2000,
@@ -22,7 +22,13 @@
       "long": 80
     },
     "twoHanded": true,
-    "properties": []
+    "properties": [],
+    "precision": -1,
+    "ammo": {
+      "value": 30,
+      "max": 30
+    },
+    "reloadTurns": 0
   },
   "effects": [],
   "folder": null,

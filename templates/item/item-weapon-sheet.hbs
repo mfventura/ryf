@@ -42,6 +42,18 @@
         </select>
       </div>
 
+      {{!-- Reference: RyF 3.0 PDF, página 95 - la precisión modifica la tirada de ataque --}}
+      <div class="form-group">
+        <label>{{localize "RYF.Precision"}}</label>
+        <input type="number" name="system.precision" value="{{system.precision}}" data-dtype="Number" step="1" placeholder="0"/>
+      </div>
+
+      {{!-- Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción (mazas) --}}
+      <div class="form-group">
+        <label>{{localize "RYF.IgnoresArmor"}}</label>
+        <input type="checkbox" name="system.ignoresArmor" {{checked system.ignoresArmor}}/>
+      </div>
+
       {{#if (or (eq system.category "ranged") (eq system.category "firearms"))}}
       <div class="form-group">
         <label>{{localize "RYF.RangeShort"}}</label>
@@ -56,6 +68,40 @@
       <div class="form-group">
         <label>{{localize "RYF.RangeLong"}}</label>
         <input type="number" name="system.range.long" value="{{system.range.long}}" data-dtype="Number" placeholder="40"/>
+      </div>
+
+      {{!-- Reference: RyF 3.0 PDF, página 25 - daño por banda de distancia
+            (ej. escopeta recortada 4d6/3d6/2d6); vacío = usar el daño base --}}
+      <div class="form-group">
+        <label>{{localize "RYF.DamageByRangeShort"}}</label>
+        <input type="text" name="system.damage.byRange.short" value="{{system.damage.byRange.short}}" placeholder="{{system.damage.base}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DamageByRangeMedium"}}</label>
+        <input type="text" name="system.damage.byRange.medium" value="{{system.damage.byRange.medium}}" placeholder="{{system.damage.base}}"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.DamageByRangeLong"}}</label>
+        <input type="text" name="system.damage.byRange.long" value="{{system.damage.byRange.long}}" placeholder="{{system.damage.base}}"/>
+      </div>
+
+      {{!-- Reference: RyF 3.0 PDF, páginas 96-98 - cargador y recarga
+            (0 balas máx. = sin control de munición) --}}
+      <div class="form-group">
+        <label>{{localize "RYF.AmmoMax"}}</label>
+        <input type="number" name="system.ammo.max" value="{{system.ammo.max}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.AmmoCurrent"}}</label>
+        <input type="number" name="system.ammo.value" value="{{system.ammo.value}}" data-dtype="Number" min="0"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.ReloadTurns"}}</label>
+        <input type="number" name="system.reloadTurns" value="{{system.reloadTurns}}" data-dtype="Number" min="0"/>
       </div>
       {{/if}}
 

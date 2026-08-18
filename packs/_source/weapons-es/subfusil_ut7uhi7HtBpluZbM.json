@@ -4,7 +4,7 @@
   "type": "weapon",
   "img": "icons/weapons/guns/gun-pistol-automatic.webp",
   "system": {
-    "description": "Arma automática compacta, ideal para combate cercano.",
+    "description": "Arma automática compacta, ideal para combate cercano.<p>Precisión 0 en fuego automático (RyF 3.0, págs. 96-97: doble precisión según modo de fuego).</p>",
     "quantity": 1,
     "weight": 3,
     "price": 1500,
@@ -22,7 +22,13 @@
       "long": 40
     },
     "twoHanded": false,
-    "properties": []
+    "properties": [],
+    "precision": -1,
+    "ammo": {
+      "value": 30,
+      "max": 30
+    },
+    "reloadTurns": 0
   },
   "effects": [],
   "folder": null,

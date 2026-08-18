@@ -214,6 +214,10 @@ export class RyfRoll {
 
     const weaponAttackBonus = (actor.system.activeEffectBonuses?.weaponsAttack?.[weapon.name]) || 0;
 
+    // Reference: RyF 3.0 PDF, página 95 - la precisión del arma modifica la
+    // tirada de ataque
+    const precision = weapon.system.precision || 0;
+
     // Reference: RyF 3.0 PDF, páginas 17-18 - sin puntos en la habilidad (o sin
     // habilidad) y malherido bajan un rango el dado objetivo; especialización y
     // token lo suben. El clamp de resolveMode impide acumular más allá del
@@ -227,7 +231,7 @@ export class RyfRoll {
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + diceRoll.result + modifier;
+    const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + precision + diceRoll.result + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, targetDefense, fumble, diceRoll.chosen);
@@ -249,6 +253,8 @@ export class RyfRoll {
       targetDefense: targetDefense,
       mode: mode,
       modifier: modifier,
+      precision: precision,
+      range: options.range || null,
       rangedModifiers: options.rangedModifiers || null,
       diceRoll: diceRoll,
       total: total,
@@ -264,8 +270,15 @@ export class RyfRoll {
     return rollData;
   }
   
-  static async rollDamage(weapon, criticalDice = 0, bonus = 0, actor = null) {
-    const baseDamage = weapon.system.damage?.base || '1d6';
+  static async rollDamage(weapon, criticalDice = 0, bonus = 0, actor = null, range = null) {
+    // Reference: RyF 3.0 PDF, página 25 - algunas armas tienen daño distinto
+    // por banda de distancia (ej. escopeta recortada 4d6/3d6/2d6); a bocajarro
+    // se usa el daño de la banda corta
+    const byRange = weapon.system.damage?.byRange || {};
+    const bandKey = range === 'pointblank' ? 'short' : range;
+    const baseDamage = (bandKey && byRange[bandKey])
+      ? byRange[bandKey]
+      : (weapon.system.damage?.base || '1d6');
     const damageBonus = weapon.system.damage?.bonus || 0;
 
     let effectBonus = 0;
@@ -302,6 +315,8 @@ export class RyfRoll {
       effectBonus: effectBonus,
       criticalDice: criticalDice,
       criticalRoll: criticalRoll,
+      // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción (mazas)
+      ignoresArmor: !!weapon.system.ignoresArmor,
       total: total
     };
 
@@ -342,6 +357,9 @@ export class RyfRoll {
       keptA: kept === resultA,
       criticalDice: criticalDice,
       criticalRoll: criticalRoll,
+      // Reference: RyF 3.0 PDF, página 22 - el daño lo causa el arma que más
+      // sacó; si esa ignora armadura, aplica su propiedad
+      ignoresArmor: !!kept.weapon.system.ignoresArmor,
       total: total
     };
 

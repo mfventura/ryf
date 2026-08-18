@@ -72,6 +72,11 @@
       "tokens": {
         "value": 1,
         "max": 1
+      },
+      "money": {
+        "gold": 0,
+        "silver": 0,
+        "copper": 0
       }
     },
     "npc": {
@@ -116,7 +121,12 @@
       "damage": {
         "base": "1d6",
         "bonus": 0,
-        "type": "physical"
+        "type": "physical",
+        "byRange": {
+          "short": "",
+          "medium": "",
+          "long": ""
+        }
       },
       "range": {
         "short": 0,
@@ -124,6 +134,13 @@
         "long": 0
       },
       "twoHanded": false,
+      "precision": 0,
+      "ignoresArmor": false,
+      "ammo": {
+        "value": 0,
+        "max": 0
+      },
+      "reloadTurns": 0,
       "properties": [],
       "effects": []
     },

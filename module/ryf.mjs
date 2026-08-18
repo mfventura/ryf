@@ -178,6 +178,7 @@ Hooks.on('renderChatMessage', (message, html) => {
     const button = $(event.currentTarget);
     const weaponId = button.data('weapon-id');
     const criticalDice = button.data('critical-dice') || 0;
+    const range = button.data('range') || null;
 
     const speaker = message.speaker;
     const actor = ChatMessage.getSpeakerActor(speaker);
@@ -195,7 +196,7 @@ Hooks.on('renderChatMessage', (message, html) => {
     }
 
     const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor);
+    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor, range);
   });
 
   html.find('.apply-damage-button').click(async (event) => {
@@ -203,6 +204,8 @@ Hooks.on('renderChatMessage', (message, html) => {
     const button = $(event.currentTarget);
     const damage = parseInt(button.data('damage'));
     const damageType = button.data('damage-type') || 'physical';
+    // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción
+    const ignoreAbsorption = button.data('ignores-armor') === true;
 
     const targets = Array.from(game.user.targets);
 
@@ -213,7 +216,7 @@ Hooks.on('renderChatMessage', (message, html) => {
 
     for (const token of targets) {
       if (token.actor) {
-        await token.actor.applyDamage(damage, damageType);
+        await token.actor.applyDamage(damage, damageType, null, { ignoreAbsorption: ignoreAbsorption });
       }
     }
   });

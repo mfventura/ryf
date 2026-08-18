@@ -792,8 +792,22 @@ export class RyfActor extends Actor {
       difficulty += options.rangedModifiers.total;
     }
 
+    // Reference: RyF 3.0 PDF, páginas 96-98 - munición (módulo opcional):
+    // cada disparo gasta una bala; sin balas hay que recargar
+    const trackAmmo = game.settings.get('ryf3', 'enableAmmo') && weapon.id && (weapon.system.ammo?.max || 0) > 0;
+    if (trackAmmo) {
+      if ((weapon.system.ammo.value || 0) <= 0) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.NoAmmo', { name: weapon.name }));
+        return null;
+      }
+      await weapon.update({ 'system.ammo.value': weapon.system.ammo.value - 1 });
+    }
+
+    // La banda elegida viaja hasta la tirada de daño (daño por banda, pág. 25)
+    const attackOptions = { ...options, range: range };
+
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
-    const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier, options);
+    const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier, attackOptions);
 
     if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
@@ -803,11 +817,29 @@ export class RyfActor extends Actor {
       });
 
       if (rollDamage) {
-        await RyfRoll.rollDamage(weapon, attackRoll.criticalDice, 0, this);
+        await RyfRoll.rollDamage(weapon, attackRoll.criticalDice, 0, this, range);
       }
     }
 
     return attackRoll;
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 96-98 - recargar el arma (las escopetas,
+  // por ejemplo, necesitan un turno de recarga)
+  async reloadWeapon(weapon) {
+    if (!weapon || (weapon.system.ammo?.max || 0) <= 0) return;
+
+    await weapon.update({ 'system.ammo.value': weapon.system.ammo.max });
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: game.i18n.format('RYF.Notifications.WeaponReloaded', {
+        name: this.name,
+        weapon: weapon.name,
+        turns: weapon.system.reloadTurns || 0
+      }),
+      style: CONST.CHAT_MESSAGE_STYLES.OTHER
+    });
   }
 
   async rollNpcAttack(attack) {
@@ -972,7 +1004,7 @@ export class RyfActor extends Actor {
     return attackRoll;
   }
 
-  async applyDamage(damageAmount, damageType = 'physical', source = null) {
+  async applyDamage(damageAmount, damageType = 'physical', source = null, { ignoreAbsorption = false } = {}) {
     let finalDamage = damageAmount;
 
     let absorption = 0;
@@ -982,19 +1014,21 @@ export class RyfActor extends Actor {
       absorption = this.system.absorption || 0;
     }
 
-    if (damageType === 'physical' && absorption > 0) {
+    // Reference: RyF 3.0 PDF, página 22 - algunas armas (mazas) son tan
+    // efectivas que la absorción de la armadura no se aplica
+    const absorptionApplies = damageType === 'physical' && absorption > 0 && !ignoreAbsorption;
+
+    if (absorptionApplies) {
       finalDamage = Math.max(0, damageAmount - absorption);
     }
-
-    console.log(`RyF | applyDamage called for ${this.name}`);
-    console.log(`RyF | ${this.name} - Daño: ${damageAmount}, Absorción: ${absorption}, Final: ${finalDamage}`);
 
     await this.takeDamage(finalDamage, damageType);
 
     const templateData = {
       actor: this,
       damageGross: damageAmount,
-      absorption: damageType === 'physical' ? absorption : 0,
+      absorption: absorptionApplies ? absorption : 0,
+      ignoredArmor: ignoreAbsorption && damageType === 'physical' && absorption > 0,
       damageFinal: finalDamage,
       damageType: damageType,
       health: this.system.health,

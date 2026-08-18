@@ -37,6 +37,17 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
+  // Reference: RyF 3.0 PDF, páginas 96-98 - módulo opcional de munición:
+  // las tablas de armas de fuego incluyen cargador (balas) y recarga
+  game.settings.register('ryf3', 'enableAmmo', {
+    name: 'RYF.Settings.EnableAmmo.Name',
+    hint: 'RYF.Settings.EnableAmmo.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
   game.settings.register('ryf3', 'enableTokens', {
     name: 'RYF.Settings.EnableTokens.Name',

@@ -35,6 +35,8 @@ export class RyfActorSheet extends ActorSheet {
     context.isMagicEnabled = CONFIG.RYF.isMagicEnabled();
     // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
     context.enableTokens = game.settings.get('ryf3', 'enableTokens');
+    // Reference: RyF 3.0 PDF, páginas 96-98 - módulo opcional de munición
+    context.enableAmmo = game.settings.get('ryf3', 'enableAmmo');
     context.isGM = game.user.isGM;
 
     if (this.actor.type === 'character') {
@@ -210,6 +212,7 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.item-toggle').click(this._onItemToggle.bind(this));
 
     html.find('.item-attack').click(this._onWeaponAttack.bind(this));
+    html.find('.weapon-reload').click(this._onWeaponReload.bind(this));
 
     html.find('.skill-opposed').click(this._onSkillOpposed.bind(this));
 
@@ -847,6 +850,16 @@ export class RyfActorSheet extends ActorSheet {
   async _onBreather(event) {
     event.preventDefault();
     await this.actor.breather();
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 96-98 - recargar el arma
+  async _onWeaponReload(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const weapon = this.actor.items.get(li.data("itemId"));
+    if (!weapon) return;
+
+    await this.actor.reloadWeapon(weapon);
   }
 
   // Reference: RyF 3.0 PDF, página 18 - tirada de atributo puro con su propia
