@@ -590,14 +590,47 @@ export class RyfActor extends Actor {
     return 'normal';
   }
 
-  async rollMeleeAttack(weapon, targetDefense = null, modeOverride = null, modifier = 0, offhandWeapon = null) {
-    const autoMode = this.getRollMode();
-    if (!autoMode) {
+  // Reference: RyF 3.0 PDF, páginas 91-92 - Tokens de la muerte (módulo
+  // opcional): gastarlo antes de una tirada sube un rango el dado objetivo
+  async spendDeathToken() {
+    if (!game.settings.get('ryf3', 'enableTokens') || this.type !== 'character') return false;
+
+    const tokens = this.system.tokens || { value: 0 };
+    if (tokens.value <= 0) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoTokens'));
+      return false;
+    }
+
+    await this.update({ 'system.tokens.value': tokens.value - 1 });
+    return true;
+  }
+
+  // Reference: RyF 3.0 PDF, página 92 - el máster puede devolver el token en
+  // cualquier momento; la siguiente tirada del personaje baja un rango el dado
+  // objetivo (flag tokenDebt, consumida por la próxima tirada)
+  async returnDeathToken() {
+    if (this.type !== 'character') return;
+
+    const tokens = this.system.tokens || { value: 0, max: 1 };
+    await this.update({ 'system.tokens.value': Math.min(tokens.value + 1, tokens.max || 1) });
+    await this.setFlag('ryf3', 'tokenDebt', true);
+
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: game.i18n.format('RYF.Notifications.TokenReturned', { name: this.name }),
+      whisper: game.users.filter(u => this.testUserPermission(u, 'OWNER')).map(u => u.id)
+    });
+  }
+
+  async rollMeleeAttack(weapon, targetDefense = null, modeOverride = null, modifier = 0, offhandWeapon = null, options = {}) {
+    if (!this.getRollMode()) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.CannotActInCurrentState'));
       return null;
     }
 
-    const mode = modeOverride || autoMode;
+    // Malherido ya no se aplica aquí: es un factor de rango dentro de
+    // RyfRoll.rollAttack (RyF 3.0 PDF, páginas 17-18)
+    const mode = modeOverride || 'normal';
 
     if (!targetDefense) {
       const targets = Array.from(game.user.targets);
@@ -635,7 +668,7 @@ export class RyfActor extends Actor {
     }
 
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
-    const attackRoll = await RyfRoll.rollAttack(this, weapon, targetDefense, mode, modifier);
+    const attackRoll = await RyfRoll.rollAttack(this, weapon, targetDefense, mode, modifier, options);
 
     if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
@@ -658,14 +691,15 @@ export class RyfActor extends Actor {
     return attackRoll;
   }
 
-  async rollRangedAttack(weapon, range = null, modeOverride = null, targetDefenseRanged = null, modifier = 0) {
-    const autoMode = this.getRollMode();
-    if (!autoMode) {
+  async rollRangedAttack(weapon, range = null, modeOverride = null, targetDefenseRanged = null, modifier = 0, options = {}) {
+    if (!this.getRollMode()) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.CannotActInCurrentState'));
       return null;
     }
 
-    const mode = modeOverride || autoMode;
+    // Malherido ya no se aplica aquí: es un factor de rango dentro de
+    // RyfRoll.rollAttack (RyF 3.0 PDF, páginas 17-18)
+    const mode = modeOverride || 'normal';
 
     if (!range) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoRangeSelected'));
@@ -687,7 +721,7 @@ export class RyfActor extends Actor {
     }
 
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
-    const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier);
+    const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier, options);
 
     if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
@@ -894,7 +928,7 @@ export class RyfActor extends Actor {
     return finalDamage;
   }
 
-  async castSpell(spell, targets = null, mode = 'normal', modifier = 0) {
+  async castSpell(spell, targets = null, mode = 'normal', modifier = 0, options = {}) {
     if (!spell || spell.type !== 'spell') {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.InvalidSpell'));
       return null;
@@ -930,7 +964,8 @@ export class RyfActor extends Actor {
       spell,
       castingDifficulty,
       mode,
-      modifier
+      modifier,
+      options
     );
 
     if (!castingRoll.success) {

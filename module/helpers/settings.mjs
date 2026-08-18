@@ -23,6 +23,17 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
+  // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
+  game.settings.register('ryf3', 'enableTokens', {
+    name: 'RYF.Settings.EnableTokens.Name',
+    hint: 'RYF.Settings.EnableTokens.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
   game.settings.register('ryf3', 'healthMultiplier', {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',

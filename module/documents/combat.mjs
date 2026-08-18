@@ -1,4 +1,4 @@
-import { roll1o3d10 } from '../helpers/dice.mjs';
+import { roll1o3d10, resolveMode } from '../helpers/dice.mjs';
 import { getRule } from '../helpers/rules.mjs';
 
 export class RyfCombat extends Combat {
@@ -17,8 +17,8 @@ export class RyfCombat extends Combat {
       if (!combatant?.isOwner || !combatant.actor) continue;
 
       const actor = combatant.actor;
-      const wounded = actor.system.states?.wounded || false;
-      const mode = wounded ? 'disadvantage' : 'normal';
+      const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
+      const mode = resolveMode('normal', { downs: wounded ? ['wounded'] : [] });
       const initiativeBase = actor.system.initiative?.base || 0;
       const hindrance = actor.system.combat?.hindrance || 0;
 

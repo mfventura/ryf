@@ -1,5 +1,6 @@
 import { RyfRoll } from '../rolls/ryf-roll.mjs';
 import { getRule } from '../helpers/rules.mjs';
+import { resolveMode } from '../helpers/dice.mjs';
 
 export class RyfActorSheet extends ActorSheet {
 
@@ -32,6 +33,9 @@ export class RyfActorSheet extends ActorSheet {
 
     context.isCarismaEnabled = CONFIG.RYF.isCarismaEnabled();
     context.isMagicEnabled = CONFIG.RYF.isMagicEnabled();
+    // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
+    context.enableTokens = game.settings.get('ryf3', 'enableTokens');
+    context.isGM = game.user.isGM;
 
     if (this.actor.type === 'character') {
       this._prepareCharacterData(context);
@@ -225,6 +229,89 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.add-experience').click(this._onAddExperience.bind(this));
 
     html.find('.attribute-input').change(this._onAttributeChange.bind(this));
+
+    html.find('.token-return').click(this._onTokenReturn.bind(this));
+  }
+
+  // Reference: RyF 3.0 PDF, página 92 - el máster devuelve el token forzando
+  // bajar un rango el dado objetivo en la siguiente tirada
+  async _onTokenReturn(event) {
+    event.preventDefault();
+    await this.actor.returnDeathToken();
+  }
+
+  // Bloque compartido de los diálogos de tirada: factores automáticos que
+  // bajan el rango, mejoras opcionales (especialización, token) y
+  // previsualización del dado objetivo.
+  // Reference: RyF 3.0 PDF, páginas 17-18 y 91-92
+  _rollFactorsSection({ untrained = false, specialization = null } = {}) {
+    const downs = [];
+    if (this.actor.system.states?.wounded || this.actor.statuses?.has('wounded')) {
+      downs.push({ key: 'wounded', label: game.i18n.localize('RYF.RollFactors.FactorWounded') });
+    }
+    if (untrained) {
+      downs.push({ key: 'untrained', label: game.i18n.localize('RYF.RollFactors.FactorUntrained') });
+    }
+    if (this.actor.getFlag('ryf3', 'tokenDebt')) {
+      downs.push({ key: 'tokenDebt', label: game.i18n.localize('RYF.RollFactors.FactorTokenDebt') });
+    }
+
+    const tokensEnabled = game.settings.get('ryf3', 'enableTokens') && this.actor.type === 'character';
+    const tokenCount = this.actor.system.tokens?.value || 0;
+
+    let html = '';
+
+    if (downs.length > 0) {
+      html += `
+        <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          ${downs.map(d => `<div><i class="fas fa-arrow-down"></i> ${d.label}</div>`).join('')}
+        </div>`;
+    }
+
+    if (specialization) {
+      html += `
+        <div class="form-group">
+          <label>${game.i18n.format('RYF.RollFactors.ApplySpecialization', { name: specialization })}</label>
+          <input type="checkbox" name="applySpecialization"/>
+        </div>`;
+    }
+
+    if (tokensEnabled && tokenCount > 0) {
+      html += `
+        <div class="form-group">
+          <label>${game.i18n.format('RYF.RollFactors.SpendToken', { count: tokenCount })}</label>
+          <input type="checkbox" name="spendToken"/>
+        </div>`;
+    }
+
+    html += `
+      <div class="mode-preview" style="text-align: center; margin-bottom: 8px; padding: 4px; background: var(--ryf-light); border-radius: 4px;">
+        ${game.i18n.localize('RYF.RollFactors.TargetDie')}: <strong class="mode-preview-value"></strong>
+      </div>`;
+
+    return { html, downs: downs.map(d => d.key) };
+  }
+
+  // Actualiza en vivo la previsualización del dado objetivo cuando cambian el
+  // modo base o las mejoras opcionales del diálogo
+  _bindModePreview(html, downs) {
+    const labels = {
+      advantage: 'RYF.RollFactors.DieHigh',
+      normal: 'RYF.RollFactors.DieMiddle',
+      disadvantage: 'RYF.RollFactors.DieLow'
+    };
+
+    const update = () => {
+      const base = html.find('[name="mode"]').val() || 'normal';
+      const ups = [];
+      if (html.find('[name="applySpecialization"]').is(':checked')) ups.push('specialization');
+      if (html.find('[name="spendToken"]').is(':checked')) ups.push('token');
+      const mode = resolveMode(base, { ups: ups, downs: downs });
+      html.find('.mode-preview-value').text(game.i18n.localize(labels[mode]));
+    };
+
+    html.find('[name="mode"], [name="applySpecialization"], [name="spendToken"]').on('change', update);
+    update();
   }
 
   async _onItemCreate(event) {
@@ -303,29 +390,44 @@ export class RyfActorSheet extends ActorSheet {
           !i.system.twoHanded && !weapon.system.twoHanded && i.id !== weapon.id)
       : [];
 
-    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null, offhandWeapons.length > 0);
+    // La especialización de la habilidad de arma sube un rango el dado
+    // objetivo si el jugador la marca (RyF 3.0 PDF, páginas 17-18 y 98)
+    const weaponCategory = weapon.system.category || 'melee';
+    const weaponSkill = this.actor.items.find(i => i.type === 'skill' && i.system.category === weaponCategory);
+    const specialization = weaponSkill?.system.specialization?.trim() || null;
+    const untrained = !weaponSkill || (weaponSkill.system.level || 0) === 0;
+
+    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null, offhandWeapons.length > 0, {
+      specialization: specialization,
+      untrained: untrained
+    });
     if (!rollParams) return;
 
     const mode = rollParams.mode;
     const modifier = rollParams.modifier || 0;
+    const options = {
+      specialization: rollParams.specialization,
+      spendToken: rollParams.spendToken
+    };
 
     if (isRanged) {
-      await this.actor.rollRangedAttack(weapon, rollParams.range, mode, targetDefenseRanged, modifier);
+      await this.actor.rollRangedAttack(weapon, rollParams.range, mode, targetDefenseRanged, modifier, options);
     } else {
       const defense = targetDefense || rollParams.defense;
       const offhand = rollParams.dualWield ? offhandWeapons[0] : null;
       const dualBonus = offhand ? getRule('dualWieldBonus') : 0;
-      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand);
+      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand, options);
     }
   }
 
-  async _promptAttackDialog(weaponName, isRanged, hasTarget, dualWieldAvailable = false) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
+  async _promptAttackDialog(weaponName, isRanged, hasTarget, dualWieldAvailable = false, { specialization = null, untrained = false } = {}) {
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection({ untrained: untrained, specialization: specialization });
 
     return new Promise((resolve) => {
       const content = `
         <form>
+          ${factors.html}
           ${isRanged ? `
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Combat.Range')}</label>
@@ -342,17 +444,12 @@ export class RyfActorSheet extends ActorSheet {
             <input type="number" name="defense" value="10" min="1"/>
           </div>
           ` : ''}
-          ${isWounded ? `
-          <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-          </div>
-          ` : ''}
           <div class="form-group">
             <label>${game.i18n.localize('RYF.RollMode')}</label>
             <select name="mode">
-              <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-              <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-              <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+              <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+              <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+              <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
             </select>
           </div>
           <div class="form-group">
@@ -371,6 +468,7 @@ export class RyfActorSheet extends ActorSheet {
       new Dialog({
         title: `${game.i18n.localize('RYF.Attack')}: ${weaponName}`,
         content: content,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           roll: {
             icon: '<i class="fas fa-dice-d20"></i>',
@@ -381,7 +479,9 @@ export class RyfActorSheet extends ActorSheet {
               const range = isRanged ? html.find('[name="range"]').val() : null;
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
               const dualWield = dualWieldAvailable ? html.find('[name="dualWield"]').is(':checked') : false;
-              resolve({ mode, defense, range, modifier, dualWield });
+              const specialization = html.find('[name="applySpecialization"]').is(':checked');
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken });
             }
           },
           cancel: {
@@ -478,28 +578,32 @@ export class RyfActorSheet extends ActorSheet {
         }
       }
 
-      const rollParams = await this._promptRollDialog(item.name, defaultDifficulty, targetWillpower);
+      const rollParams = await this._promptRollDialog(item, defaultDifficulty, targetWillpower);
       if (!rollParams) return;
 
-      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier);
+      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier, {
+        specialization: rollParams.specialization,
+        spendToken: rollParams.spendToken
+      });
     }
   }
 
-  async _promptRollDialog(skillName, defaultDifficulty = null, targetWillpower = null) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
+  async _promptRollDialog(skill, defaultDifficulty = null, targetWillpower = null) {
+    const skillName = skill.name;
     const difficulty = defaultDifficulty || 15;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection({
+      untrained: (skill.system.level || 0) === 0,
+      specialization: skill.system.specialization?.trim() || null
+    });
 
     return new Promise((resolve) => {
       new Dialog({
         title: `${game.i18n.localize('RYF.Roll')}: ${skillName}`,
         content: `
           <form>
-            ${isWounded ? `
-            <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-            </div>
-            ` : ''}
+            ${factors.html}
             ${targetWillpower ? `
             <div class="target-willpower-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
               <i class="fas fa-brain"></i> <strong>${game.i18n.localize('RYF.TargetWillpower')}: ${targetWillpower}</strong>
@@ -521,9 +625,9 @@ export class RyfActorSheet extends ActorSheet {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.RollMode')}</label>
               <select name="mode">
-                <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
             <div class="form-group">
@@ -532,6 +636,7 @@ export class RyfActorSheet extends ActorSheet {
             </div>
           </form>
         `,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           roll: {
             icon: '<i class="fas fa-dice-d10"></i>',
@@ -540,7 +645,9 @@ export class RyfActorSheet extends ActorSheet {
               const difficulty = parseInt(html.find('[name="difficulty"]').val());
               const mode = html.find('[name="mode"]').val();
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              resolve({ difficulty, mode, modifier });
+              const specialization = html.find('[name="applySpecialization"]').is(':checked');
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              resolve({ difficulty, mode, modifier, specialization, spendToken });
             }
           },
           cancel: {
@@ -588,27 +695,26 @@ export class RyfActorSheet extends ActorSheet {
     const targets = await this._promptSpellDialog(spell);
     if (targets === null) return;
 
-    await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier);
+    await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier, {
+      spendToken: castParams.spendToken
+    });
   }
 
   async _promptSpellCastDialog(spell) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
     const castingDifficulty = spell.system.castingDifficulty || 15;
     const isNPC = this.actor.type === 'npc';
     const manaCost = spell.system.manaCost || 0;
     const currentMana = this.actor.system.mana?.value || 0;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection();
 
     return new Promise((resolve) => {
       new Dialog({
         title: `${game.i18n.localize('RYF.CastSpell')}: ${spell.name}`,
         content: `
           <form>
-            ${isWounded ? `
-            <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-            </div>
-            ` : ''}
+            ${factors.html}
             <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                 <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
@@ -622,9 +728,9 @@ export class RyfActorSheet extends ActorSheet {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.RollMode')}</label>
               <select name="mode" autofocus>
-                <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
             <div class="form-group">
@@ -633,6 +739,7 @@ export class RyfActorSheet extends ActorSheet {
             </div>
           </form>
         `,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           cast: {
             icon: '<i class="fas fa-magic"></i>',
@@ -640,7 +747,8 @@ export class RyfActorSheet extends ActorSheet {
             callback: (html) => {
               const mode = html.find('[name="mode"]').val();
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              resolve({ mode, modifier });
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              resolve({ mode, modifier, spendToken });
             }
           },
           cancel: {

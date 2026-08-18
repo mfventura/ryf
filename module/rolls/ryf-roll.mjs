@@ -1,8 +1,36 @@
-import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, degradeMode } from '../helpers/dice.mjs';
+import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, resolveMode } from '../helpers/dice.mjs';
 
 export class RyfRoll {
-  
-  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0) {
+
+  // Reference: RyF 3.0 PDF, páginas 17-18 y 91-92 - factores que desplazan el
+  // rango del dado objetivo. Consume la deuda de token pendiente y gasta el
+  // token de la muerte si el jugador lo marcó en el diálogo.
+  static async _collectFactors(actor, { untrained = false, specialization = false, spendToken = false } = {}) {
+    const ups = [];
+    const downs = [];
+
+    if (actor.system.states?.wounded || actor.statuses?.has('wounded')) downs.push('wounded');
+    if (untrained) downs.push('untrained');
+
+    // Reference: RyF 3.0 PDF, página 92 - cuando el máster devuelve el token,
+    // la siguiente tirada baja un rango el dado objetivo
+    if (actor.isOwner && actor.getFlag('ryf3', 'tokenDebt')) {
+      downs.push('tokenDebt');
+      await actor.unsetFlag('ryf3', 'tokenDebt');
+    }
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 y 98 - la especialización aplicable
+    // sube un rango el dado objetivo
+    if (specialization) ups.push('specialization');
+
+    // Reference: RyF 3.0 PDF, páginas 91-92 - gastar el token antes de la
+    // tirada sube un rango el dado objetivo
+    if (spendToken && await actor.spendDeathToken?.()) ups.push('token');
+
+    return { ups, downs };
+  }
+
+  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0, options = {}) {
     const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
 
     if (!skill) {
@@ -18,11 +46,13 @@ export class RyfRoll {
 
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
-    // Reference: RyF 3.0 PDF, páginas 18 y 20 - habilidad sin puntos o estar
-    // malherido baja un rango el dado objetivo (no acumulable)
-    if (skillLevel === 0 || actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, {
+      untrained: skillLevel === 0,
+      specialization: options.specialization,
+      spendToken: options.spendToken
+    });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -62,9 +92,7 @@ export class RyfRoll {
   // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
   // malherido, pifia y fallo automático con 1 natural (RyF 3.0 PDF, págs. 18-20)
   static async _resolveRoll(base, difficulty, mode, modifier, wounded) {
-    if (wounded) {
-      mode = degradeMode(mode);
-    }
+    mode = resolveMode(mode, { downs: wounded ? ['wounded'] : [] });
 
     const diceRoll = await roll1o3d10(mode);
     const total = base + diceRoll.result + modifier;
@@ -77,7 +105,7 @@ export class RyfRoll {
     return { mode, diceRoll, total, fumble, success, margin, criticalDice };
   }
 
-  static async rollAttack(actor, weapon, targetDefense, mode = 'normal', modifier = 0) {
+  static async rollAttack(actor, weapon, targetDefense, mode = 'normal', modifier = 0, options = {}) {
     // Reference: RyF 3.0 PDF, páginas 87-88 - los PNJ usan un bono plano de
     // ataque en lugar de atributo + habilidad, pero comparten el resto de
     // reglas de la tirada (malherido, pifia, 1 natural, crítico)
@@ -126,10 +154,6 @@ export class RyfRoll {
       } else if (weaponCategory === 'ranged' || weaponCategory === 'firearms') {
         attributeName = 'destreza';
       }
-
-      if (mode !== 'disadvantage') {
-        mode = 'disadvantage';
-      }
     } else {
       skillLevel = skill.system.level || 0;
       skillName = skill.name;
@@ -147,11 +171,16 @@ export class RyfRoll {
 
     const weaponAttackBonus = (actor.system.activeEffectBonuses?.weaponsAttack?.[weapon.name]) || 0;
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado
-    // objetivo (no acumulable con el rango ya bajado por falta de habilidad)
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - sin puntos en la habilidad (o sin
+    // habilidad) y malherido bajan un rango el dado objetivo; especialización y
+    // token lo suben. El clamp de resolveMode impide acumular más allá del
+    // dado menor/mayor
+    const factors = await this._collectFactors(actor, {
+      untrained: !hasSkill || skillLevel === 0,
+      specialization: options.specialization,
+      spendToken: options.spendToken
+    });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -320,7 +349,7 @@ export class RyfRoll {
     let attributeValue = 0;
     let skillLevel = 0;
     let label = game.i18n.localize('RYF.Attribute');
-    let mode = 'normal';
+    let untrained = false;
     let hindrance = 0;
 
     if (skillName) {
@@ -334,19 +363,16 @@ export class RyfRoll {
       skillLevel += actor.system.activeEffectBonuses?.skills?.[skill.name] || 0;
       hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
       label = skill.name;
-
-      // Reference: RyF 3.0 PDF, páginas 18 y 20 - sin puntos de habilidad o
-      // malherido se guarda el dado menor
-      if (skill.system.level === 0 || actor.system.states?.wounded) {
-        mode = degradeMode(mode);
-      }
+      untrained = skill.system.level === 0;
     } else {
       attributeValue = flatBonus;
       label = game.i18n.localize('RYF.Modifier');
-      if (actor.system.states?.wounded) {
-        mode = degradeMode(mode);
-      }
     }
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - sin puntos de habilidad o
+    // malherido bajan un rango el dado objetivo también en las enfrentadas
+    const factors = await this._collectFactors(actor, { untrained: untrained });
+    const mode = resolveMode('normal', factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -431,7 +457,7 @@ export class RyfRoll {
     return weapon.system.category || 'melee';
   }
 
-  static async rollSpellCasting(actor, spell, difficulty, mode = 'normal', modifier = 0) {
+  static async rollSpellCasting(actor, spell, difficulty, mode = 'normal', modifier = 0, options = {}) {
     const isNPC = actor.type === 'npc';
     const intelligence = isNPC ? 0 : actor.system.attributes.inteligencia.value;
     const spellLevel = spell.system.level;
@@ -444,10 +470,9 @@ export class RyfRoll {
     // Arcano: +1 a tiradas de hechizos)
     const castingBonus = actor.system.activeEffectBonuses?.spellCasting || 0;
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, { spendToken: options.spendToken });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -511,7 +536,7 @@ export class RyfRoll {
     return rollData;
   }
 
-  static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal') {
+  static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal', options = {}) {
     let attributeValue;
 
     if (actor.type === 'npc') {
@@ -529,10 +554,9 @@ export class RyfRoll {
       attributeValue = attribute.value;
     }
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, { spendToken: options.spendToken });
+    mode = resolveMode(mode, factors);
 
     // Reference: RyF 3.0 PDF, página 21 - el estorbo se resta a todas las
     // tiradas de Destreza, también las de atributo puro

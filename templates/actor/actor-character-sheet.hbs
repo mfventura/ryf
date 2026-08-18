@@ -69,6 +69,21 @@
           </div>
         </div>
         {{/if}}
+
+        {{!-- Reference: RyF 3.0 PDF, páginas 91-92 - Tokens de la muerte --}}
+        {{#if enableTokens}}
+        <div class="resource">
+          <label class="resource-label">{{localize "RYF.Tokens.Label"}}</label>
+          <div class="resource-content flexrow">
+            <input type="text" name="system.tokens.value" value="{{system.tokens.value}}" data-dtype="Number"/>
+            <span class="sep"> / </span>
+            <span class="resource-max">{{system.tokens.max}}</span>
+            {{#if isGM}}
+            <a class="token-return" title="{{localize 'RYF.Tokens.Return'}}"><i class="fas fa-undo"></i></a>
+            {{/if}}
+          </div>
+        </div>
+        {{/if}}
       </div>
 
       <div class="combat-modifiers">

@@ -117,6 +117,8 @@
     "Shields": "Escudos",
     "ShortRest": "Descanso Corto",
     "SkillName": "Nombre de la Habilidad",
+    "Specialization": "Especialización",
+    "SpecializationPlaceholder": "Ej: Espadas, cerraduras antiguas",
     "Spell": "Hechizo",
     "SpellCasting": "Lanzamiento de Hechizo",
     "SpellDamage": "Daño de Hechizo",
@@ -348,12 +350,24 @@
       "SkillIncreased": "{name} aumentado a nivel {level}",
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
       "SpellDecreased": "{name} reducido a nivel {level}",
-      "SpellIncreased": "{name} aumentado a nivel {level}"
+      "SpellIncreased": "{name} aumentado a nivel {level}",
+      "TokenReturned": "El máster devuelve el token a {name}: su siguiente tirada baja un rango el dado objetivo"
     },
     "NPC": {
       "SavingThrowBonus": "Tirada de Salvación - PNJ",
       "SavingThrowBonusDescription": "Los PNJs no tienen atributos. Ingresa el bono que se sumará a la tirada de salvación (1o3d10 + bono).",
       "SavingThrowBonusLabel": "Bono de Salvación"
+    },
+    "RollFactors": {
+      "ApplySpecialization": "Aplicar especialización: {name} (+1 rango)",
+      "DieHigh": "Alto (ventaja)",
+      "DieLow": "Bajo (desventaja)",
+      "DieMiddle": "Medio (normal)",
+      "FactorTokenDebt": "Deuda de token: el máster devolvió el token (−1 rango)",
+      "FactorUntrained": "Sin puntos en la habilidad (−1 rango)",
+      "FactorWounded": "Malherido (−1 rango)",
+      "SpendToken": "Gastar token de la muerte (+1 rango, quedan {count})",
+      "TargetDie": "Dado objetivo"
     },
     "Settings": {
       "CustomPyramid": "Pirámide Personalizada",
@@ -477,6 +491,10 @@
         "Hint": "Activa el sistema de magia, puntos de Maná y hechizos. Requiere recargar el mundo.",
         "Name": "Activar Magia"
       },
+      "EnableTokens": {
+        "Hint": "Activa los Tokens de la muerte (RyF 3.0, págs. 91-92): gastar el token sube un rango el dado objetivo; el máster puede devolverlo forzando bajar un rango en la siguiente tirada. Requiere recargar el mundo.",
+        "Name": "Activar Tokens de la Muerte"
+      },
       "HealthMultiplier": {
         "Hint": "Multiplicador para calcular PV máximos (Físico × multiplicador). Realista: 3, Estándar: 4, Heroico: 5+",
         "Name": "Multiplicador de Vida"
@@ -549,6 +567,10 @@
       "Magic": "Magia",
       "Skills": "Habilidades"
     },
+    "Tokens": {
+      "Label": "Tokens",
+      "Return": "Devolver token (la siguiente tirada baja un rango el dado objetivo)"
+    },
     "Warnings": {
       "AttributeNotFound": "No se encontró el atributo {attribute}",
       "AttributeOutOfRange": "Los atributos deben estar entre {min} y {max} durante la creación (RyF 3.0, pág. 13)",
@@ -573,6 +595,7 @@
       "NotEnoughAttributePoints": "No tienes suficientes puntos de atributo disponibles",
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
+      "NoTokens": "No te quedan tokens de la muerte",
       "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
       "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
       "AdvantageRequirementNotMet": "No cumples el requisito de la ventaja: {attribute} {value}+ (RyF 3.0, pág. 98)",
