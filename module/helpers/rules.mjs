@@ -72,7 +72,12 @@ export const DEFAULT_RULES = {
   hitLocHeadRange: '10',
   hitLocHeadDef: 5,
   // Reference: RyF 3.0 PDF, página 103 - PV de la nave = Barreras Defensivas x 10
-  shipHullMultiplier: 10
+  shipHullMultiplier: 10,
+  // Reference: RyF 3.0 PDF, página 103 - el piloto usa Destreza + Pilotar y el
+  // artillero Destreza + Artillería; nombres de habilidad configurables por si
+  // la mesa usa otros
+  shipPilotSkill: 'Pilotar',
+  shipGunnerSkill: 'Artillería'
 };
 
 export function getRule(key) {

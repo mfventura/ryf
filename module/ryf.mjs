@@ -199,6 +199,19 @@ Hooks.on('renderChatMessage', (message, html) => {
     await RyfRoll.rollDamage(weapon, criticalDice, 0, actor, range);
   });
 
+  // Reference: RyF 3.0 PDF, página 103 - daño de las armas de la nave (cañón
+  // láser 1d6, misil 3d6); el GM lo tira si el ataque superó la defensa
+  html.find('.ship-roll-damage').click(async (event) => {
+    event.preventDefault();
+    const button = $(event.currentTarget);
+    const formula = String(button.data('damage-formula') || '1d6');
+    const weaponLabel = button.data('weapon-label') || game.i18n.localize('RYF.Damage');
+
+    const pseudoWeapon = { name: weaponLabel, type: 'weapon', system: { damage: { base: formula } } };
+    const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
+    await RyfRoll.rollDamage(pseudoWeapon, 0, 0, null);
+  });
+
   html.find('.apply-damage-button').click(async (event) => {
     event.preventDefault();
     const button = $(event.currentTarget);

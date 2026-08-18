@@ -1,122 +1,95 @@
-{{!-- Reference: RyF 3.0 PDF, páginas 103-104 - combate y persecución de naves --}}
+{{!-- Reference: RyF 3.0 PDF, páginas 103-104 - combate y persecución de naves:
+      cada nave tira su lado por separado y los totales se comparan en el chat --}}
 <div class="ryf-roll ship-roll">
   <div class="roll-header">
-    <img src="{{attacker.ship.img}}" alt="{{attacker.ship.name}}" class="actor-image"/>
+    <img src="{{ship.img}}" alt="{{ship.name}}" class="actor-image"/>
     <div class="roll-title">
       <h3>
         {{#if (eq contest "attack")}}
-        <i class="fas fa-rocket"></i> {{localize "RYF.Ship.AttackTitle"}}
+        <i class="fas fa-crosshairs"></i> {{localize "RYF.Ship.AttackTitle"}}
+        {{else if (eq contest "defense")}}
+        <i class="fas fa-shield-alt"></i> {{localize "RYF.Ship.DefenseTitle"}}
         {{else}}
         <i class="fas fa-gauge-high"></i> {{localize "RYF.Ship.ChaseTitle"}}
         {{/if}}
       </h3>
-      <div class="roll-subtitle">{{attacker.ship.name}} vs {{defender.ship.name}}</div>
-    </div>
-  </div>
-
-  <div class="ship-sides">
-    <div class="ship-side attacker">
-      <div class="side-name">
-        <strong>{{attacker.ship.name}}</strong>
-        <span class="side-role">
-          {{#if (eq contest "attack")}}{{localize "RYF.Ship.GunnerBonus"}}{{else}}{{localize "RYF.Ship.PilotBonus"}}{{/if}}
-        </span>
-      </div>
-      <div class="roll-formula">
-        <span class="formula-part">{{localize "RYF.Bonus"}}: {{attacker.bonus}}</span>
-        <span class="formula-separator">+</span>
-        <span class="formula-part">
-          {{#if (eq statKey "maneuverability")}}{{localize "RYF.Ship.Maneuverability"}}{{else}}{{localize "RYF.Ship.Speed"}}{{/if}}: {{attacker.shipStat}}
-        </span>
-        <span class="formula-separator">+</span>
-        <span class="formula-part dice-part">{{attacker.diceRoll.chosen}}</span>
-        {{#if attacker.diceRoll.exploded}}
-        <span class="explosions"><i class="fas fa-burst"></i>
-          {{#each attacker.diceRoll.explosions as |explosion|}}<span class="explosion-value">+{{explosion}}</span>{{/each}}
-        </span>
-        {{/if}}
-      </div>
-      <div class="side-total {{#if attacker.fumble}}fumble{{/if}}">
-        {{localize "RYF.Total"}}: <strong>{{attacker.total}}</strong>
-        {{#if attacker.fumble}}<span class="fumble-tag"><i class="fas fa-skull-crossbones"></i> {{localize "RYF.Fumble"}}</span>
-        {{else if attacker.naturalOne}}<span class="fumble-tag">1</span>{{/if}}
-      </div>
-    </div>
-
-    <div class="ship-side defender">
-      <div class="side-name">
-        <strong>{{defender.ship.name}}</strong>
-        <span class="side-role">{{localize "RYF.Ship.PilotBonus"}}</span>
-      </div>
-      <div class="roll-formula">
-        <span class="formula-part">{{localize "RYF.Bonus"}}: {{defender.bonus}}</span>
-        <span class="formula-separator">+</span>
-        <span class="formula-part">
-          {{#if (eq statKey "maneuverability")}}{{localize "RYF.Ship.Maneuverability"}}{{else}}{{localize "RYF.Ship.Speed"}}{{/if}}: {{defender.shipStat}}
-        </span>
-        <span class="formula-separator">+</span>
-        <span class="formula-part dice-part">{{defender.diceRoll.chosen}}</span>
-        {{#if defender.diceRoll.exploded}}
-        <span class="explosions"><i class="fas fa-burst"></i>
-          {{#each defender.diceRoll.explosions as |explosion|}}<span class="explosion-value">+{{explosion}}</span>{{/each}}
-        </span>
-        {{/if}}
-      </div>
-      <div class="side-total {{#if defender.fumble}}fumble{{/if}}">
-        {{localize "RYF.Total"}}: <strong>{{defender.total}}</strong>
-        {{#if defender.fumble}}<span class="fumble-tag"><i class="fas fa-skull-crossbones"></i> {{localize "RYF.Fumble"}}</span>
-        {{else if defender.naturalOne}}<span class="fumble-tag">1</span>{{/if}}
+      <div class="roll-subtitle">
+        {{ship.name}}
+        {{#if bonusSource}} — {{#if (eq contest "attack")}}{{localize "RYF.Ship.Gunner"}}{{else}}{{localize "RYF.Ship.Pilot"}}{{/if}}: {{bonusSource}}{{/if}}
+        {{#if weaponLabel}} — {{weaponLabel}}{{/if}}
       </div>
     </div>
   </div>
 
-  <div class="roll-outcome">
-    {{#if tie}}
-    <div class="outcome tie">
-      <i class="fas fa-balance-scale"></i> <strong>{{localize "RYF.Ship.Tie"}}</strong>
+  <div class="roll-formula">
+    <span class="formula-part">
+      {{#if (eq contest "attack")}}{{localize "RYF.Ship.Gunner"}}{{else}}{{localize "RYF.Ship.Pilot"}}{{/if}}: {{bonus}}
+    </span>
+    <span class="formula-separator">+</span>
+    <span class="formula-part">
+      {{#if (eq statKey "maneuverability")}}{{localize "RYF.Ship.Maneuverability"}}{{else}}{{localize "RYF.Ship.Speed"}}{{/if}}: {{shipStat}}
+    </span>
+    <span class="formula-separator">+</span>
+    <span class="formula-part dice-part">{{diceRoll.chosen}}</span>
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: +{{modifier}}</span>
+    {{else if (lt modifier 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{modifier}}</span>
+    {{/if}}
+  </div>
+
+  <div class="dice-results">
+    <div class="dice-pool">
+      {{#each diceRoll.sorted as |die index|}}
+        <div class="die d10 {{#if (eq index diceRoll.chosenIndex)}}chosen{{/if}}">
+          <i class="fas fa-dice-d10"></i>
+          <span class="die-value">{{die}}</span>
+        </div>
+      {{/each}}
     </div>
-    {{else if (eq winner "attacker")}}
-    <div class="outcome success">
-      <i class="fas fa-bullseye"></i>
-      <strong>
-        {{#if (eq contest "attack")}}{{localize "RYF.Ship.AttackerHits"}}{{else}}{{localize "RYF.Ship.ChaserCloses"}}{{/if}}
-      </strong>
-    </div>
-    {{else}}
-    <div class="outcome failure">
-      <i class="fas fa-shield-alt"></i>
-      <strong>
-        {{#if (eq contest "attack")}}{{localize "RYF.Ship.DefenderEvades"}}{{else}}{{localize "RYF.Ship.ChasedEscapes"}}{{/if}}
-      </strong>
+
+    {{#if diceRoll.exploded}}
+    <div class="explosions">
+      <i class="fas fa-burst"></i> {{localize "RYF.Exploded"}}:
+      {{#each diceRoll.explosions as |explosion|}}
+        <span class="explosion-value">+{{explosion}}</span>
+      {{/each}}
     </div>
     {{/if}}
   </div>
 
-  {{#if damageRoll}}
-  <div class="ship-damage">
-    <div class="section-label">
-      {{localize "RYF.Damage"}}{{#if weaponLabel}} — {{weaponLabel}}{{/if}} ({{damageFormula}})
+  <div class="roll-result">
+    <div class="result-total {{#if fumble}}failure{{else}}success{{/if}}">
+      <span class="result-label">{{localize "RYF.Total"}}</span>
+      <span class="result-value">{{total}}</span>
     </div>
-    <div class="dice-results">
-      {{#each damageRoll.rolls as |roll|}}
-      <div class="die d6"><i class="fas fa-dice-d6"></i><span class="die-value">{{roll}}</span></div>
-      {{/each}}
-      {{#if damageRoll.explosions.length}}
-      <div class="explosions">
-        <i class="fas fa-burst"></i>
-        {{#each damageRoll.explosions as |explosion|}}<span class="explosion-value">+{{explosion}}</span>{{/each}}
-      </div>
-      {{/if}}
+  </div>
+
+  {{#if fumble}}
+  <div class="roll-outcome">
+    <div class="outcome fumble">
+      <i class="fas fa-skull-crossbones"></i> <strong>{{localize "RYF.Fumble"}}</strong>
     </div>
-    <div class="damage-total">
-      <div class="total-label">{{localize "RYF.TotalDamage"}}</div>
-      <div class="total-value">{{damageRoll.total}}</div>
+  </div>
+  {{else if naturalOne}}
+  <div class="roll-outcome">
+    <div class="outcome failure">
+      <i class="fas fa-exclamation-triangle"></i> <strong>{{localize "RYF.Ship.NaturalOne"}}</strong>
     </div>
-    <div class="damage-actions">
-      <button type="button" class="apply-damage-button" data-damage="{{damageRoll.total}}" data-damage-type="physical">
-        <i class="fas fa-heart-broken"></i> {{localize "RYF.Combat.ApplyDamage"}}
-      </button>
-    </div>
+  </div>
+  {{/if}}
+
+  <div class="ship-compare-note">
+    <i class="fas fa-info-circle"></i> {{localize "RYF.Ship.CompareNote"}}
+  </div>
+
+  {{#if damageFormula}}
+  <div class="damage-actions">
+    <button type="button" class="ship-roll-damage" data-damage-formula="{{damageFormula}}" data-weapon-label="{{weaponLabel}}">
+      <i class="fas fa-dice-d6"></i> {{localize "RYF.RollDamage"}} ({{damageFormula}})
+    </button>
   </div>
   {{/if}}
 </div>

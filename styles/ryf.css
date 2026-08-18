@@ -260,30 +260,70 @@
   margin-bottom: 6px;
 }
 
-/* Ship opposed-roll chat card (PDF pp. 103-104) */
-.ryf-roll.ship-roll .ship-sides {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
+/* Ship roll chat card (PDF pp. 103-104) */
+.ryf-roll.ship-roll .ship-compare-note {
   margin: 4px 0;
+  padding: 4px 8px;
+  background: var(--ryf-light, #ecf0f1);
+  border-left: 3px solid var(--ryf-secondary, #95a5a6);
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-style: italic;
 }
 
-.ryf-roll.ship-roll .ship-side {
+/* Ship crew section (PDF p. 103) */
+.ryf.sheet.actor .ship-crew {
   border: 1px solid var(--ryf-border, #bdc3c7);
   border-radius: 4px;
-  padding: 4px 6px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
 }
 
-.ryf-roll.ship-roll .side-role {
-  display: block;
-  font-size: 0.8em;
-  color: var(--ryf-text-secondary, #7f8c8d);
-}
-
-.ryf-roll.ship-roll .side-total .fumble-tag {
-  margin-left: 6px;
-  color: #c0392b;
+.ryf.sheet.actor .ship-crew legend {
   font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.actor .ship-crew .hint {
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  margin: 0 0 4px 0;
+}
+
+.ryf.sheet.actor .ship-crew .crew-slot {
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.ryf.sheet.actor .ship-crew .crew-slot > label {
+  flex: 0 0 80px;
+  font-weight: bold;
+}
+
+.ryf.sheet.actor .ship-crew .crew-empty {
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+}
+
+.ryf.sheet.actor .ship-crew .crew-base {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0;
+  white-space: nowrap;
+}
+
+.ryf.sheet.actor .ship-crew .crew-base input {
+  width: 50px;
+  text-align: center;
+}
+
+.ryf.sheet.actor .ship-crew .crew-clear {
+  flex: 0;
+  padding: 0 4px;
 }
 
 .ryf.sheet.item .weapon-subsection {

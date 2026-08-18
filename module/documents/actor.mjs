@@ -46,6 +46,41 @@ export class RyfActor extends Actor {
     this._applyActiveEffectBonuses(system);
   }
 
+  // Reference: RyF 3.0 PDF, página 103 - el piloto tira Destreza + Pilotar y
+  // el artillero Destreza + Artillería. Si hay un personaje vinculado, el bono
+  // se calcula de su ficha; si no, se usa la base manual de la nave.
+  async getCrewBonus(role) {
+    const link = this.system[role];
+    const skillName = getRule(role === 'pilot' ? 'shipPilotSkill' : 'shipGunnerSkill');
+
+    if (link?.uuid) {
+      const crew = await fromUuid(link.uuid);
+
+      if (crew?.type === 'character') {
+        const dexterity = crew.system.attributes?.destreza?.value || 0;
+        const skill = crew.items.find(i =>
+          i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase()
+        );
+        const skillLevel = skill?.system.level || 0;
+
+        return {
+          value: dexterity + skillLevel,
+          source: crew.name,
+          detail: `${game.i18n.localize('RYF.Attributes.Destreza')} ${dexterity} + ${skillName} ${skillLevel}`,
+          skillFound: !!skill
+        };
+      }
+    }
+
+    const baseKey = role === 'pilot' ? 'pilotBase' : 'gunnerBase';
+    return {
+      value: this.system[baseKey] || 0,
+      source: null,
+      detail: game.i18n.localize('RYF.Ship.BaseBonusSource'),
+      skillFound: true
+    };
+  }
+
   // Reference: RyF 3.0 PDF, página 103 - naves: (V) Velocidad 1-10,
   // (M) Maniobrabilidad 1-10, (BD) Barreras Defensivas 1-50;
   // PV de la nave = BD x 10

@@ -251,41 +251,35 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.sanity-loss').click(this._onSanityLoss.bind(this));
 
     html.find('.ship-attack').click(this._onShipAttack.bind(this));
+    html.find('.ship-defense').click(this._onShipDefense.bind(this));
     html.find('.ship-chase').click(this._onShipChase.bind(this));
+    html.find('.crew-clear').click(this._onCrewClear.bind(this));
   }
 
-  _getTargetShip() {
-    const targets = Array.from(game.user.targets);
-    const target = targets.find(t => t.actor?.type === 'ship');
-    if (!target) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoShipTarget'));
-      return null;
-    }
-    return target.actor;
-  }
-
-  // Reference: RyF 3.0 PDF, página 103 - combate de naves: el artillero y el
-  // piloto son tripulantes, así que sus bonos (Destreza + habilidad) se
-  // introducen a mano, como en las salvaciones de PNJ
+  // Reference: RyF 3.0 PDF, páginas 103-104 - cada nave tira su lado de la
+  // enfrentada por separado, cuando le toca; los totales se comparan en el
+  // chat. El bono del tripulante se calcula de su ficha vinculada (Destreza +
+  // habilidad) o de la base manual de la nave.
   async _onShipAttack(event) {
     event.preventDefault();
-    const defenderShip = this._getTargetShip();
-    if (!defenderShip) return;
-
     const ship = this.actor;
+    const crew = await ship.getCrewBonus('gunner');
 
     const params = await new Promise((resolve) => {
       new Dialog({
-        title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name} vs ${defenderShip.name}`,
+        title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name}`,
         content: `
           <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Ship.GunnerBonus')}</label>
-              <input type="number" name="attackerBonus" value="0" step="1" autofocus/>
+            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-crosshairs"></i>
+              ${crew.source
+                ? `${game.i18n.localize('RYF.Ship.Gunner')}: <strong>${crew.source}</strong> (${crew.detail})`
+                : crew.detail}
+              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipGunnerSkill') })}</em>`}
             </div>
             <div class="form-group">
-              <label>${game.i18n.localize('RYF.Ship.DefenderPilotBonus')}</label>
-              <input type="number" name="defenderBonus" value="0" step="1"/>
+              <label>${game.i18n.localize('RYF.Bonus')}</label>
+              <input type="number" name="bonus" value="${crew.value}" step="1"/>
             </div>
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Ship.Weapon')}</label>
@@ -297,6 +291,10 @@ export class RyfActorSheet extends ActorSheet {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Magic.DamageFormula')}</label>
               <input type="text" name="damageFormula" value="1d6"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
             </div>
           </form>
         `,
@@ -310,10 +308,10 @@ export class RyfActorSheet extends ActorSheet {
             icon: '<i class="fas fa-crosshairs"></i>',
             label: game.i18n.localize('RYF.Ship.Attack'),
             callback: (html) => resolve({
-              attackerBonus: parseInt(html.find('[name="attackerBonus"]').val()) || 0,
-              defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0,
+              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
               weapon: html.find('[name="weapon"]').val(),
-              damageFormula: html.find('[name="damageFormula"]').val() || '1d6'
+              damageFormula: html.find('[name="damageFormula"]').val() || '1d6',
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
             })
           },
           cancel: {
@@ -341,46 +339,62 @@ export class RyfActorSheet extends ActorSheet {
       await ship.update({ 'system.missiles': ship.system.missiles - 1 });
     }
 
-    await RyfRoll.rollShipOpposed(ship, defenderShip, {
+    await RyfRoll.rollShipRoll(ship, {
       contest: 'attack',
-      attackerBonus: params.attackerBonus,
-      defenderBonus: params.defenderBonus,
-      damageFormula: params.damageFormula,
-      weaponLabel: weaponLabel
+      bonus: params.bonus,
+      bonusSource: crew.source,
+      modifier: params.modifier,
+      weaponLabel: weaponLabel,
+      damageFormula: params.damageFormula
     });
   }
 
-  // Reference: RyF 3.0 PDF, páginas 103-104 - persecución: Destreza + Pilotar +
-  // Velocidad enfrentada; quien más saca acorta o abre la distancia
+  async _onShipDefense(event) {
+    event.preventDefault();
+    await this._rollShipPilotSide('defense');
+  }
+
   async _onShipChase(event) {
     event.preventDefault();
-    const defenderShip = this._getTargetShip();
-    if (!defenderShip) return;
+    await this._rollShipPilotSide('chase');
+  }
 
+  // Defensa (Destreza + Pilotar + Maniobrabilidad) y persecución (Destreza +
+  // Pilotar + Velocidad) comparten diálogo: solo cambia el atributo de la nave
+  async _rollShipPilotSide(contest) {
     const ship = this.actor;
+    const crew = await ship.getCrewBonus('pilot');
+    const titleKey = contest === 'defense' ? 'RYF.Ship.DefenseTitle' : 'RYF.Ship.ChaseTitle';
 
     const params = await new Promise((resolve) => {
       new Dialog({
-        title: `${game.i18n.localize('RYF.Ship.ChaseTitle')}: ${ship.name} vs ${defenderShip.name}`,
+        title: `${game.i18n.localize(titleKey)}: ${ship.name}`,
         content: `
           <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Ship.PilotBonus')} (${ship.name})</label>
-              <input type="number" name="attackerBonus" value="0" step="1" autofocus/>
+            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-user-astronaut"></i>
+              ${crew.source
+                ? `${game.i18n.localize('RYF.Ship.Pilot')}: <strong>${crew.source}</strong> (${crew.detail})`
+                : crew.detail}
+              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipPilotSkill') })}</em>`}
             </div>
             <div class="form-group">
-              <label>${game.i18n.localize('RYF.Ship.PilotBonus')} (${defenderShip.name})</label>
-              <input type="number" name="defenderBonus" value="0" step="1"/>
+              <label>${game.i18n.localize('RYF.Bonus')}</label>
+              <input type="number" name="bonus" value="${crew.value}" step="1" autofocus/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
             </div>
           </form>
         `,
         buttons: {
           roll: {
-            icon: '<i class="fas fa-gauge-high"></i>',
-            label: game.i18n.localize('RYF.Ship.Chase'),
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
             callback: (html) => resolve({
-              attackerBonus: parseInt(html.find('[name="attackerBonus"]').val()) || 0,
-              defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0
+              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
             })
           },
           cancel: {
@@ -396,10 +410,60 @@ export class RyfActorSheet extends ActorSheet {
 
     if (!params) return;
 
-    await RyfRoll.rollShipOpposed(ship, defenderShip, {
-      contest: 'chase',
-      attackerBonus: params.attackerBonus,
-      defenderBonus: params.defenderBonus
+    await RyfRoll.rollShipRoll(ship, {
+      contest: contest,
+      bonus: params.bonus,
+      bonusSource: crew.source,
+      modifier: params.modifier
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, página 103 - asignación de piloto y artillero:
+  // se suelta un personaje sobre la ficha de nave y se elige el rol
+  async _onDropCrewMember(data) {
+    const dropped = await fromUuid(data.uuid);
+    if (!dropped || dropped.documentName !== 'Actor' || dropped.type !== 'character') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.OnlyCharactersAsCrew'));
+      return;
+    }
+
+    const role = await new Promise((resolve) => {
+      new Dialog({
+        title: game.i18n.format('RYF.Ship.AssignCrewTitle', { name: dropped.name }),
+        content: `<p>${game.i18n.localize('RYF.Ship.AssignCrewHint')}</p>`,
+        buttons: {
+          pilot: {
+            icon: '<i class="fas fa-user-astronaut"></i>',
+            label: game.i18n.localize('RYF.Ship.Pilot'),
+            callback: () => resolve('pilot')
+          },
+          gunner: {
+            icon: '<i class="fas fa-crosshairs"></i>',
+            label: game.i18n.localize('RYF.Ship.Gunner'),
+            callback: () => resolve('gunner')
+          }
+        },
+        default: 'pilot',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!role) return;
+
+    await this.actor.update({
+      [`system.${role}.uuid`]: dropped.uuid,
+      [`system.${role}.name`]: dropped.name
+    });
+  }
+
+  async _onCrewClear(event) {
+    event.preventDefault();
+    const role = event.currentTarget.dataset.role;
+    if (!['pilot', 'gunner'].includes(role)) return;
+
+    await this.actor.update({
+      [`system.${role}.uuid`]: '',
+      [`system.${role}.name`]: ''
     });
   }
 
@@ -1306,6 +1370,12 @@ export class RyfActorSheet extends ActorSheet {
   async _onDrop(event) {
     const data = TextEditor.getDragEventData(event);
     const actor = this.actor;
+
+    // Reference: RyF 3.0 PDF, página 103 - asignar piloto/artillero soltando
+    // un personaje sobre la ficha de nave
+    if (actor.type === 'ship' && data.type === 'Actor') {
+      return this._onDropCrewMember(data);
+    }
 
     if (data.type === "Item") {
       return this._onDropItem(event, data);

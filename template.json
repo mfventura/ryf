@@ -102,6 +102,16 @@
       "speed": 3,
       "maneuverability": 3,
       "shields": 3,
+      "pilot": {
+        "uuid": "",
+        "name": ""
+      },
+      "gunner": {
+        "uuid": "",
+        "name": ""
+      },
+      "pilotBase": 0,
+      "gunnerBase": 0,
       "health": {
         "value": 30,
         "max": 30

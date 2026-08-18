@@ -77,7 +77,9 @@ const FIELD_GROUPS = [
     // Reference: RyF 3.0 PDF, página 103 - naves espaciales (módulo opcional)
     key: 'GroupShips',
     fields: [
-      { key: 'shipHullMultiplier', step: 1 }
+      { key: 'shipHullMultiplier', step: 1 },
+      { key: 'shipPilotSkill', type: 'text' },
+      { key: 'shipGunnerSkill', type: 'text' }
     ]
   }
 ];
