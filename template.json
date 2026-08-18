@@ -209,7 +209,7 @@
       },
       "xpSessionModifier": 0,
       "pyramidRestriction": "",
-      "grantedAdvantage": "",
+      "grantedAdvantages": [],
       "armorForbidden": false,
       "effects": []
     }

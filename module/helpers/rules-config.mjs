@@ -53,6 +53,25 @@ const FIELD_GROUPS = [
       { key: 'longRestFull', type: 'checkbox' },
       { key: 'longRestHealAmount', step: 1 }
     ]
+  },
+  {
+    // Reference: RyF 3.0 PDF, página 95 - localización de daño (módulo
+    // opcional); tabla reconstruida por errata del manual, por eso editable
+    key: 'GroupHitLocation',
+    fields: [
+      { key: 'hitLocLeftLegRange', type: 'text' },
+      { key: 'hitLocLeftLegDef', step: 1 },
+      { key: 'hitLocRightLegRange', type: 'text' },
+      { key: 'hitLocRightLegDef', step: 1 },
+      { key: 'hitLocTorsoRange', type: 'text' },
+      { key: 'hitLocTorsoDef', step: 1 },
+      { key: 'hitLocLeftArmRange', type: 'text' },
+      { key: 'hitLocLeftArmDef', step: 1 },
+      { key: 'hitLocRightArmRange', type: 'text' },
+      { key: 'hitLocRightArmDef', step: 1 },
+      { key: 'hitLocHeadRange', type: 'text' },
+      { key: 'hitLocHeadDef', step: 1 }
+    ]
   }
 ];
 

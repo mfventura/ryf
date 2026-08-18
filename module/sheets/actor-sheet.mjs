@@ -123,6 +123,7 @@ export class RyfActorSheet extends ActorSheet {
         advantages.push(i);
       } else if (i.type === 'race') {
         i.effectLabel = this._summarizeAdvantageEffects(i);
+        i.grantedLabel = (i.system.grantedAdvantages || []).map(entry => entry.name).join(' / ');
         races.push(i);
       }
     }

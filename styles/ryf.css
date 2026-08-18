@@ -154,6 +154,48 @@
   grid-template-columns: 1fr 1fr 1fr;
 }
 
+/* Granted advantages list on the race sheet (PDF p. 98) */
+.ryf.sheet.item .granted-advantages {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
+}
+
+.ryf.sheet.item .granted-advantages legend {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.item .granted-advantages .hint {
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  margin: 0 0 4px 0;
+}
+
+.ryf.sheet.item .granted-advantages-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ryf.sheet.item .granted-advantages-list li {
+  padding: 2px 0;
+  border-bottom: 1px dashed var(--ryf-border, #bdc3c7);
+  justify-content: space-between;
+}
+
+.ryf.sheet.item .granted-advantages-list li:last-child {
+  border-bottom: none;
+}
+
+.ryf.sheet.item .granted-advantages-list .granted-advantage-delete {
+  flex: 0;
+  padding: 0 4px;
+}
+
 /* Minion toggle on the NPC sheet (PDF p. 87) */
 .ryf .minion-toggle {
   margin-top: 4px;

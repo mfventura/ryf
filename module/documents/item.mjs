@@ -199,6 +199,12 @@ export class RyfItem extends Item {
     if (this._effectsAreActive()) {
       this._applyItemEffects();
     }
+
+    // Reference: RyF 3.0 PDF, página 98 - la ventaja gratuita de la raza se
+    // añade al personaje junto con la raza
+    if (this.type === 'race') {
+      this._grantRaceAdvantages();
+    }
   }
 
   _onDelete(options, userId) {
@@ -211,6 +217,81 @@ export class RyfItem extends Item {
     const orphanEffects = this.actor.effects.filter(e => e.flags?.ryf3?.sourceId === this.id);
     if (orphanEffects.length > 0) {
       this.actor.deleteEmbeddedDocuments('ActiveEffect', orphanEffects.map(e => e.id));
+    }
+
+    // Al quitar la raza se retiran también las ventajas que concedió
+    if (this.type === 'race') {
+      const grantedItems = this.actor.items.filter(i => i.flags?.ryf3?.grantedByRace === this.id);
+      if (grantedItems.length > 0) {
+        this.actor.deleteEmbeddedDocuments('Item', grantedItems.map(i => i.id));
+      }
+    }
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - cada raza concede una ventaja
+  // gratuita; el Elfo del Bosque elige entre Puntería y Certero, de ahí el
+  // diálogo de elección cuando hay más de una enlazada
+  async _grantRaceAdvantages() {
+    const granted = this.system.grantedAdvantages || [];
+    if (granted.length === 0 || !this.actor) return;
+
+    let chosen = granted;
+
+    if (granted.length > 1) {
+      const selected = await new Promise((resolve) => {
+        new Dialog({
+          title: game.i18n.format('RYF.Race.ChooseAdvantageTitle', { race: this.name }),
+          content: `
+            <form>
+              <p class="hint">${game.i18n.localize('RYF.Race.ChooseAdvantageHint')}</p>
+              <div class="form-group">
+                <label>${game.i18n.localize('RYF.Advantage')}</label>
+                <select name="advantage" autofocus>
+                  ${granted.map((entry, index) => `<option value="${index}">${entry.name}</option>`).join('')}
+                </select>
+              </div>
+            </form>
+          `,
+          buttons: {
+            choose: {
+              icon: '<i class="fas fa-check"></i>',
+              label: game.i18n.localize('RYF.Race.ChooseAdvantage'),
+              callback: (html) => resolve(granted[parseInt(html.find('[name="advantage"]').val())] || null)
+            },
+            cancel: {
+              icon: '<i class="fas fa-times"></i>',
+              label: game.i18n.localize('RYF.Cancel'),
+              callback: () => resolve(null)
+            }
+          },
+          default: 'choose',
+          close: () => resolve(null)
+        }).render(true);
+      });
+
+      if (!selected) return;
+      chosen = [selected];
+    }
+
+    for (const entry of chosen) {
+      const source = await fromUuid(entry.uuid);
+      if (!source || source.type !== 'advantage') {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.GrantedAdvantageNotFound', { name: entry.name }));
+        continue;
+      }
+
+      const itemData = source.toObject();
+      delete itemData._id;
+      itemData.flags = foundry.utils.mergeObject(itemData.flags || {}, {
+        ryf3: { grantedByRace: this.id }
+      });
+
+      await this.actor.createEmbeddedDocuments('Item', [itemData]);
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.RaceAdvantageGranted', {
+        advantage: source.name,
+        race: this.name
+      }));
     }
   }
 

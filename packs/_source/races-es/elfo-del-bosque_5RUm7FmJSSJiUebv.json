@@ -11,7 +11,16 @@
     },
     "xpSessionModifier": 0,
     "pyramidRestriction": "",
-    "grantedAdvantage": "Puntería o Certero",
+    "grantedAdvantages": [
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.6FFGZ1oDOQqXAamX",
+        "name": "Puntería"
+      },
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.3C2zB8xAhWWjt6HC",
+        "name": "Certero"
+      }
+    ],
     "armorForbidden": false,
     "effects": [
       {

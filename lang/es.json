@@ -336,6 +336,7 @@
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
       "MinionDown": "{name} cae al golpe (esbirro)",
       "PyramidSaved": "Pirámide personalizada guardada correctamente",
+      "RaceAdvantageGranted": "Ventaja {advantage} concedida por la raza {race}",
       "RaceXpNote": "Raza {race}: {modifier} PX por sesión (RyF 3.0, pág. 98)",
       "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
       "RulesSaved": "Reglas del sistema guardadas correctamente",
@@ -365,10 +366,14 @@
       "ArmorForbidden": "No puede llevar armadura",
       "AttributeCap": "Tope de atributo",
       "AttributeCapMax": "Valor máximo del atributo",
+      "ChooseAdvantage": "Elegir",
+      "ChooseAdvantageHint": "Esta raza permite elegir una ventaja gratuita entre varias (RyF 3.0, pág. 98).",
+      "ChooseAdvantageTitle": "Ventaja gratuita de {race}",
       "GrantedAdvantage": "Ventaja gratuita",
-      "GrantedAdvantagePlaceholder": "Ej: Arcano, Muro, Suerte",
+      "GrantedAdvantagesHint": "Arrastra ventajas aquí para enlazarlas. Al añadir la raza a un personaje se conceden automáticamente; si hay varias, se elige una (RyF 3.0, pág. 98).",
       "Label": "Raza",
       "Name": "Nombre de la Raza",
+      "NoGrantedAdvantages": "Sin ventajas enlazadas. Arrastra una ventaja sobre esta hoja.",
       "PyramidRestriction": "Restricción de pirámide",
       "PyramidRestrictions": {
         "none": "Sin restricción",
@@ -473,6 +478,54 @@
         "healthMultiplier": {
           "Hint": "PV máximos = Físico × N. Heroico: 4, Realista: 3, más letal: 2 (RyF 3.0, págs. 14, 21 y 93).",
           "Name": "Multiplicador de vida"
+        },
+        "hitLocHeadDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Cabeza — defensa (tiro apuntado)"
+        },
+        "hitLocHeadRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Cabeza — rango 1d10"
+        },
+        "hitLocLeftArmDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Brazo izquierdo — defensa (tiro apuntado)"
+        },
+        "hitLocLeftArmRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Brazo izquierdo — rango 1d10"
+        },
+        "hitLocLeftLegDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Pierna izquierda — defensa (tiro apuntado)"
+        },
+        "hitLocLeftLegRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Pierna izquierda — rango 1d10"
+        },
+        "hitLocRightArmDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Brazo derecho — defensa (tiro apuntado)"
+        },
+        "hitLocRightArmRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Brazo derecho — rango 1d10"
+        },
+        "hitLocRightLegDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Pierna derecha — defensa (tiro apuntado)"
+        },
+        "hitLocRightLegRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Pierna derecha — rango 1d10"
+        },
+        "hitLocTorsoDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Torso — defensa (tiro apuntado)"
+        },
+        "hitLocTorsoRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Torso — rango 1d10"
         },
         "longRestFull": {
           "Hint": "Si está activo, el descanso largo recupera toda la salud y el maná (regla de la casa). Si no, cura los PV por noche configurados abajo (RyF 3.0, pág. 94).",
@@ -598,6 +651,7 @@
         "GroupCombat": "Combate",
         "GroupCreation": "Creación de personajes",
         "GroupHealth": "Salud y estados",
+        "GroupHitLocation": "Localización de daño (tabla reconstruida — el manual no la imprimió)",
         "GroupProgression": "Progresión y descanso",
         "Hint": "Configura las bases, umbrales y valores de regla del sistema. Los valores por defecto siguen el manual de RyF 3.0.",
         "Label": "Configurar Reglas",
@@ -700,6 +754,7 @@
       "CreationSkillTooHigh": "{name} supera el máximo de {max} puntos por habilidad en la creación (RyF 3.0, pág. 39)",
       "CreationSumTooHigh": "{name}: atributo + habilidad supera el máximo de {max} en la creación (RyF 3.0, pág. 39)",
       "EmptyPyramid": "La pirámide no puede estar vacía. Define al menos una habilidad.",
+      "GrantedAdvantageNotFound": "No se encontró la ventaja enlazada {name} (¿se borró del compendio?)",
       "InvalidSpell": "Hechizo inválido",
       "MagicDisabled": "La magia no está habilitada en este mundo. Actívala en la configuración del sistema.",
       "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
@@ -719,6 +774,7 @@
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
       "OneRaceOnly": "El personaje ya tiene una raza (RyF 3.0, pág. 98: una por personaje)",
+      "OnlyAdvantagesOnRace": "Solo se pueden enlazar ventajas a una raza",
       "RaceArmorForbidden": "La raza {race} no puede llevar armadura (RyF 3.0, pág. 98)",
       "RaceAttributeCap": "La raza {race} limita {attribute} a un máximo de {max} (RyF 3.0, pág. 98)",
       "RacePyramidRestriction": "La raza {race} solo permite: {restriction} (RyF 3.0, pág. 98)",

@@ -52,7 +52,25 @@ export const DEFAULT_RULES = {
   creationMaxSkill: 6,
   // Reference: RyF 3.0 PDF, página 39 - atributo + habilidad no puede superar 16
   // al empezar a jugar
-  creationMaxSum: 16
+  creationMaxSum: 16,
+  // Reference: RyF 3.0 PDF, página 95 - tabla de localización de daño con 1d10.
+  // La tabla nunca llegó a imprimirse en el manual (errata): estos defaults
+  // respetan el único dato canónico del texto (4 = pierna derecha), con el
+  // torso como zona más probable y la cabeza en el 10. Los modificadores de
+  // defensa del tiro apuntado siguen la escala de cobertura de la pág. 93.
+  // Rango en texto ("1-2" o "10"); modificador de defensa numérico.
+  hitLocLeftLegRange: '1-2',
+  hitLocLeftLegDef: 4,
+  hitLocRightLegRange: '3-4',
+  hitLocRightLegDef: 4,
+  hitLocTorsoRange: '5-7',
+  hitLocTorsoDef: 2,
+  hitLocLeftArmRange: '8',
+  hitLocLeftArmDef: 4,
+  hitLocRightArmRange: '9',
+  hitLocRightArmDef: 4,
+  hitLocHeadRange: '10',
+  hitLocHeadDef: 5
 };
 
 export function getRule(key) {

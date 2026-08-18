@@ -23,11 +23,24 @@
 
     <div class="tab details" data-group="primary" data-tab="details">
 
-      {{!-- Reference: RyF 3.0 PDF, página 98 - Razas: paquete de rasgos --}}
-      <div class="form-group">
-        <label>{{localize "RYF.Race.GrantedAdvantage"}}</label>
-        <input type="text" name="system.grantedAdvantage" value="{{system.grantedAdvantage}}" placeholder="{{localize 'RYF.Race.GrantedAdvantagePlaceholder'}}"/>
-      </div>
+      {{!-- Reference: RyF 3.0 PDF, página 98 - la raza concede una ventaja
+            gratuita; con varias enlazadas se elige una al añadir la raza --}}
+      <fieldset class="granted-advantages">
+        <legend>{{localize "RYF.Race.GrantedAdvantage"}}</legend>
+        <p class="hint">{{localize "RYF.Race.GrantedAdvantagesHint"}}</p>
+        {{#if system.grantedAdvantages.length}}
+        <ol class="granted-advantages-list">
+          {{#each system.grantedAdvantages as |entry index|}}
+          <li class="flexrow">
+            <span class="granted-advantage-name"><i class="fas fa-award"></i> {{entry.name}}</span>
+            <a class="granted-advantage-delete" data-index="{{index}}" title="{{localize 'RYF.Delete'}}"><i class="fas fa-trash"></i></a>
+          </li>
+          {{/each}}
+        </ol>
+        {{else}}
+        <p class="no-effects">{{localize "RYF.Race.NoGrantedAdvantages"}}</p>
+        {{/if}}
+      </fieldset>
 
       <div class="form-group">
         <label>{{localize "RYF.Race.AttributeCap"}}</label>

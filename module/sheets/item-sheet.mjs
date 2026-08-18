@@ -8,8 +8,45 @@ export class RyfItemSheet extends ItemSheet {
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "details" }],
       submitOnChange: true,
       closeOnSubmit: false,
-      scrollY: [".tab", ".scrollable", ".sheet-body"]
+      scrollY: [".tab", ".scrollable", ".sheet-body"],
+      // Permite soltar ventajas sobre la hoja de raza (ventaja gratuita, pág. 98)
+      dragDrop: [{ dragSelector: null, dropSelector: null }]
     });
+  }
+
+  _canDragDrop(selector) {
+    return this.isEditable;
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - las razas conceden una ventaja
+  // gratuita: se enlazan soltando items de ventaja sobre la hoja de la raza
+  async _onDrop(event) {
+    if (this.item.type !== 'race') return;
+
+    const data = TextEditor.getDragEventData(event);
+    if (data?.type !== 'Item' || !data.uuid) return;
+
+    const dropped = await fromUuid(data.uuid);
+    if (!dropped || dropped.type !== 'advantage') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.OnlyAdvantagesOnRace'));
+      return;
+    }
+
+    const granted = [...(this.item.system.grantedAdvantages || [])];
+    if (granted.some(entry => entry.uuid === data.uuid)) return;
+
+    granted.push({ uuid: data.uuid, name: dropped.name });
+    await this.item.update({ 'system.grantedAdvantages': granted });
+  }
+
+  async _onGrantedAdvantageDelete(event) {
+    event.preventDefault();
+    const index = parseInt(event.currentTarget.dataset.index);
+    const granted = [...(this.item.system.grantedAdvantages || [])];
+    if (Number.isNaN(index) || index < 0 || index >= granted.length) return;
+
+    granted.splice(index, 1);
+    await this.item.update({ 'system.grantedAdvantages': granted });
   }
 
   get template() {
@@ -74,6 +111,8 @@ export class RyfItemSheet extends ItemSheet {
     html.find('.skill-decrease').click(this._onSkillDecrease.bind(this));
     html.find('.item-toggle').click(this._onItemToggle.bind(this));
     html.find('.spell-cast').click(this._onSpellCast.bind(this));
+
+    html.find('.granted-advantage-delete').click(this._onGrantedAdvantageDelete.bind(this));
 
     html.find('.effect-add').click(this._onEffectAdd.bind(this));
     html.find('.effect-delete').click(this._onEffectDelete.bind(this));

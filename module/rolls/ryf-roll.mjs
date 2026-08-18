@@ -1,5 +1,5 @@
 import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, resolveMode } from '../helpers/dice.mjs';
-import { HIT_LOCATIONS, getHitLocation } from '../config/hit-locations.mjs';
+import { getHitLocations, getHitLocation } from '../config/hit-locations.mjs';
 
 export class RyfRoll {
 
@@ -137,7 +137,7 @@ export class RyfRoll {
   static calledShotField() {
     if (!game.settings.get('ryf3', 'enableHitLocation')) return '';
 
-    const options = Object.entries(HIT_LOCATIONS).map(([key, location]) =>
+    const options = Object.entries(getHitLocations()).map(([key, location]) =>
       `<option value="${key}">${game.i18n.localize(location.label)} (+${location.defenseModifier})</option>`
     ).join('');
 
@@ -156,13 +156,15 @@ export class RyfRoll {
   static async _resolveHitLocation(success, calledShot = null) {
     if (!game.settings.get('ryf3', 'enableHitLocation') || !success) return null;
 
-    if (calledShot && HIT_LOCATIONS[calledShot]) {
-      return { key: calledShot, label: HIT_LOCATIONS[calledShot].label, called: true };
+    const locations = getHitLocations();
+
+    if (calledShot && locations[calledShot]) {
+      return { key: calledShot, label: locations[calledShot].label, called: true };
     }
 
     const roll = await new Roll('1d10').evaluate();
-    const key = getHitLocation(roll.total);
-    return { key: key, label: HIT_LOCATIONS[key].label, roll: roll.total, called: false };
+    const key = getHitLocation(roll.total, locations);
+    return { key: key, label: locations[key].label, roll: roll.total, called: false };
   }
 
   // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
@@ -188,8 +190,8 @@ export class RyfRoll {
     if (weapon.type === 'npc-attack') {
       // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
       // del objetivo según la zona elegida
-      if (options.calledShot && HIT_LOCATIONS[options.calledShot]) {
-        targetDefense += HIT_LOCATIONS[options.calledShot].defenseModifier;
+      if (options.calledShot) {
+        targetDefense += getHitLocations()[options.calledShot]?.defenseModifier || 0;
       }
 
       const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
@@ -221,8 +223,8 @@ export class RyfRoll {
 
     // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
     // del objetivo según la zona elegida
-    if (options.calledShot && HIT_LOCATIONS[options.calledShot]) {
-      targetDefense += HIT_LOCATIONS[options.calledShot].defenseModifier;
+    if (options.calledShot) {
+      targetDefense += getHitLocations()[options.calledShot]?.defenseModifier || 0;
     }
 
     const weaponCategory = this._getWeaponSkillCategory(weapon);

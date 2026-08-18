@@ -11,7 +11,12 @@
     },
     "xpSessionModifier": 0,
     "pyramidRestriction": "",
-    "grantedAdvantage": "Suerte",
+    "grantedAdvantages": [
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.SwJPcS9IwvPZyTcE",
+        "name": "Suerte"
+      }
+    ],
     "armorForbidden": false,
     "effects": []
   },

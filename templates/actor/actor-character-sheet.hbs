@@ -299,8 +299,8 @@
           </div>
           <div class="item-attribute">
             {{item.effectLabel}}
-            {{#if item.system.grantedAdvantage}}
-              {{#if item.effectLabel}}, {{/if}}{{localize "RYF.Race.GrantedAdvantage"}}: {{item.system.grantedAdvantage}}
+            {{#if item.grantedLabel}}
+              {{#if item.effectLabel}}, {{/if}}{{localize "RYF.Race.GrantedAdvantage"}}: {{item.grantedLabel}}
             {{/if}}
           </div>
           <div class="item-controls">

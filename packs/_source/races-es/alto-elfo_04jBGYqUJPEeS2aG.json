@@ -11,7 +11,12 @@
     },
     "xpSessionModifier": 0,
     "pyramidRestriction": "",
-    "grantedAdvantage": "Arcano",
+    "grantedAdvantages": [
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.IpTHTA0jtOmFIFLV",
+        "name": "Arcano"
+      }
+    ],
     "armorForbidden": false,
     "effects": [
       {
