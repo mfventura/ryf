@@ -252,11 +252,38 @@
 
 /* Weapon item sheet: compact two-column layout for general fields and
    three-column groups for range / band damage / ammo (PDF pp. 22, 25, 95-98) */
-.ryf.sheet.item .weapon-fields {
+.ryf.sheet.item .weapon-fields,
+.ryf.sheet.actor .weapon-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2px 12px;
   margin-bottom: 6px;
+}
+
+/* Ship opposed-roll chat card (PDF pp. 103-104) */
+.ryf-roll.ship-roll .ship-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.ryf-roll.ship-roll .ship-side {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+
+.ryf-roll.ship-roll .side-role {
+  display: block;
+  font-size: 0.8em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+}
+
+.ryf-roll.ship-roll .side-total .fumble-tag {
+  margin-left: 6px;
+  color: #c0392b;
+  font-weight: bold;
 }
 
 .ryf.sheet.item .weapon-subsection {

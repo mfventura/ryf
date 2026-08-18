@@ -1,0 +1,38 @@
+{
+  "_id": "i1p0zKK8K5BY6t54",
+  "name": "Nave típica de combate de la República",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>(1 piloto + 1 artillero) V4 M4 BD4 PV40, Espacio vital 2, 3 cañones láser (3x1d6). Puntos totales: 17 (RyF 3.0, pág. 104).</p>",
+    "speed": 4,
+    "maneuverability": 4,
+    "shields": 4,
+    "health": {
+      "value": 40,
+      "max": 40
+    },
+    "lasers": 3,
+    "missiles": 0,
+    "decoys": 0,
+    "livingSpace": 2,
+    "cargo": 0,
+    "cabins": 0,
+    "hangars": 0,
+    "hyperspace": false,
+    "points": 17
+  },
+  "prototypeToken": {
+    "name": "Nave típica de combate de la República",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!i1p0zKK8K5BY6t54"
+}

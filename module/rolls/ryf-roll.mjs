@@ -508,6 +508,71 @@ export class RyfRoll {
     };
   }
 
+  // Reference: RyF 3.0 PDF, página 103 - combate de naves: Atacante = Destreza +
+  // Artillería + Maniobrabilidad + 1o3d10 vs Defensor = Destreza + Pilotar +
+  // Maniobrabilidad + 1o3d10 (los bonos de tripulación se introducen a mano).
+  // Persecución (págs. 103-104): Destreza + Pilotar + Velocidad + 1o3d10
+  // enfrentada; quien más saca acorta o abre la distancia.
+  static async rollShipOpposed(attackerShip, defenderShip, { contest = 'attack', attackerBonus = 0, defenderBonus = 0, damageFormula = null, weaponLabel = null } = {}) {
+    const statKey = contest === 'attack' ? 'maneuverability' : 'speed';
+
+    const rollSide = async (ship, bonus) => {
+      const diceRoll = await roll1o3d10('normal');
+      const shipStat = ship.system[statKey] || 0;
+      return {
+        ship: ship,
+        bonus: bonus,
+        shipStat: shipStat,
+        diceRoll: diceRoll,
+        fumble: checkFumble(diceRoll.dice, diceRoll.chosen),
+        naturalOne: diceRoll.chosen === 1,
+        total: bonus + shipStat + diceRoll.result
+      };
+    };
+
+    const attacker = await rollSide(attackerShip, attackerBonus);
+    const defender = await rollSide(defenderShip, defenderBonus);
+
+    // Reference: RyF 3.0 PDF, página 18 - el 1 natural y la pifia pierden
+    // también las enfrentadas; si fallan ambos, empate a discreción del máster
+    const attackerFails = attacker.fumble || attacker.naturalOne;
+    const defenderFails = defender.fumble || defender.naturalOne;
+
+    let winner = null;
+    if (attackerFails && !defenderFails) winner = 'defender';
+    else if (defenderFails && !attackerFails) winner = 'attacker';
+    else if (!attackerFails && !defenderFails) {
+      if (attacker.total > defender.total) winner = 'attacker';
+      else if (defender.total > attacker.total) winner = 'defender';
+    }
+
+    // Reference: RyF 3.0 PDF, página 103 - si gana el atacante, impacta y
+    // tira el daño del arma (cañón láser 1d6, misil 3d6); si gana el
+    // defensor, esquiva
+    let damageRoll = null;
+    if (contest === 'attack' && winner === 'attacker' && damageFormula) {
+      damageRoll = await rollEffect(damageFormula);
+    }
+
+    const rollData = {
+      type: 'ship',
+      actor: attackerShip,
+      contest: contest,
+      statKey: statKey,
+      attacker: attacker,
+      defender: defender,
+      winner: winner,
+      tie: winner === null,
+      weaponLabel: weaponLabel,
+      damageFormula: damageFormula,
+      damageRoll: damageRoll
+    };
+
+    await this.toMessage(rollData);
+
+    return rollData;
+  }
+
   static async rollSpellDamage(spell, criticalDice = 0, formula = null, type = null) {
     const damageFormula = formula || spell.system.damage?.formula || '1d6';
     const damageType = type || spell.system.damage?.type || 'magical';
@@ -782,7 +847,8 @@ export class RyfRoll {
       'healing': 'systems/ryf3/templates/chat/healing-roll.hbs',
       'dual-damage': 'systems/ryf3/templates/chat/dual-damage-roll.hbs',
       'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs',
-      'npc-attack': 'systems/ryf3/templates/chat/npc-attack-roll.hbs'
+      'npc-attack': 'systems/ryf3/templates/chat/npc-attack-roll.hbs',
+      'ship': 'systems/ryf3/templates/chat/ship-roll.hbs'
     };
 
     const template = templateMap[rollData.type];

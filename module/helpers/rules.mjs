@@ -70,7 +70,9 @@ export const DEFAULT_RULES = {
   hitLocRightArmRange: '9',
   hitLocRightArmDef: 4,
   hitLocHeadRange: '10',
-  hitLocHeadDef: 5
+  hitLocHeadDef: 5,
+  // Reference: RyF 3.0 PDF, página 103 - PV de la nave = Barreras Defensivas x 10
+  shipHullMultiplier: 10
 };
 
 export function getRule(key) {

@@ -41,8 +41,24 @@ export class RyfActor extends Actor {
 
     this._prepareCharacterData(actorData);
     this._prepareNpcData(actorData);
+    this._prepareShipData(actorData);
 
     this._applyActiveEffectBonuses(system);
+  }
+
+  // Reference: RyF 3.0 PDF, página 103 - naves: (V) Velocidad 1-10,
+  // (M) Maniobrabilidad 1-10, (BD) Barreras Defensivas 1-50;
+  // PV de la nave = BD x 10
+  _prepareShipData(actorData) {
+    if (actorData.type !== 'ship') return;
+
+    const system = actorData.system;
+
+    system.health = system.health || { value: 0, max: 0 };
+    system.health.max = (system.shields || 0) * getRule('shipHullMultiplier');
+    if (system.health.value > system.health.max) {
+      system.health.value = system.health.max;
+    }
   }
 
   async _preCreate(data, options, user) {
@@ -452,7 +468,7 @@ export class RyfActor extends Actor {
       await this.setFlag('ryf3', 'combatDamage', combatDamage);
     }
 
-    if (newHP <= 0 && currentHP > 0) {
+    if (newHP <= 0 && currentHP > 0 && this.type !== 'ship') {
       ui.notifications.warn(game.i18n.format('RYF.Notifications.ActorUnconscious', { name: this.name }));
     }
 
@@ -462,6 +478,9 @@ export class RyfActor extends Actor {
       }
     } else if (this.type === 'npc' && newHP <= 0) {
       ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
+    } else if (this.type === 'ship' && newHP <= 0 && currentHP > 0) {
+      // Reference: RyF 3.0 PDF, página 103 - la nave queda destruida al agotar sus PV
+      ui.notifications.error(game.i18n.format('RYF.Notifications.ShipDestroyed', { name: this.name }));
     }
 
   }

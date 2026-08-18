@@ -1,0 +1,22 @@
+{
+  "_id": "VcoIsVXmpc2asAvY",
+  "name": "Hacking",
+  "type": "skill",
+  "img": "icons/svg/padlock.svg",
+  "system": {
+    "description": "<p>Intrusión en sistemas informáticos (RyF 3.0, págs. 105-107). Cada sistema tiene un Factor de Seguridad (FS) que actúa como dificultad.</p><ul><li><strong>Ronda de Escaneo (RdE):</strong> Hacking enfrentado contra el FS; cada éxito da +1 a la intrusión (crítico +2). Una pifia dispara la alarma sin que el hacker lo sepa; un crítico del sistema lo expulsa. Cada RdE tarda de 1d10 a 5d10 minutos.</li><li><strong>Intrusión:</strong> Hacking (+ bonos acumulados) contra el FS. Robar datos de usuario: fácil; base de datos completa: media; interceptar comunicaciones: difícil; control total: muy difícil. Tarda 5d6 × 1d10 minutos.</li><li><strong>Rastreo:</strong> tiradas enfrentadas de Hacking entre hacker y administrador; cada salto de conexión encadenada se rastrea por separado.</li><li><strong>Contrahacking:</strong> duelo enfrentado — Ataque: Percepción + Hacking; Defensa: Inteligencia + Hacking.</li></ul>",
+    "level": 0,
+    "attribute": "inteligencia",
+    "category": "technical",
+    "isProfessional": false,
+    "specialization": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!VcoIsVXmpc2asAvY"
+}

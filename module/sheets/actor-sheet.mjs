@@ -249,6 +249,158 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.token-return').click(this._onTokenReturn.bind(this));
 
     html.find('.sanity-loss').click(this._onSanityLoss.bind(this));
+
+    html.find('.ship-attack').click(this._onShipAttack.bind(this));
+    html.find('.ship-chase').click(this._onShipChase.bind(this));
+  }
+
+  _getTargetShip() {
+    const targets = Array.from(game.user.targets);
+    const target = targets.find(t => t.actor?.type === 'ship');
+    if (!target) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoShipTarget'));
+      return null;
+    }
+    return target.actor;
+  }
+
+  // Reference: RyF 3.0 PDF, página 103 - combate de naves: el artillero y el
+  // piloto son tripulantes, así que sus bonos (Destreza + habilidad) se
+  // introducen a mano, como en las salvaciones de PNJ
+  async _onShipAttack(event) {
+    event.preventDefault();
+    const defenderShip = this._getTargetShip();
+    if (!defenderShip) return;
+
+    const ship = this.actor;
+
+    const params = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name} vs ${defenderShip.name}`,
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.GunnerBonus')}</label>
+              <input type="number" name="attackerBonus" value="0" step="1" autofocus/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.DefenderPilotBonus')}</label>
+              <input type="number" name="defenderBonus" value="0" step="1"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.Weapon')}</label>
+              <select name="weapon">
+                <option value="1d6" selected>${game.i18n.localize('RYF.Ship.WeaponLaser')} (1d6)</option>
+                <option value="3d6">${game.i18n.localize('RYF.Ship.WeaponMissile')} (3d6)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Magic.DamageFormula')}</label>
+              <input type="text" name="damageFormula" value="1d6"/>
+            </div>
+          </form>
+        `,
+        render: (html) => {
+          html.find('[name="weapon"]').on('change', (ev) => {
+            html.find('[name="damageFormula"]').val(ev.currentTarget.value);
+          });
+        },
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-crosshairs"></i>',
+            label: game.i18n.localize('RYF.Ship.Attack'),
+            callback: (html) => resolve({
+              attackerBonus: parseInt(html.find('[name="attackerBonus"]').val()) || 0,
+              defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0,
+              weapon: html.find('[name="weapon"]').val(),
+              damageFormula: html.find('[name="damageFormula"]').val() || '1d6'
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!params) return;
+
+    // Reference: RyF 3.0 PDF, página 103 - los misiles se consumen al dispararse
+    const isMissile = params.weapon === '3d6';
+    let weaponLabel = game.i18n.localize('RYF.Ship.WeaponLaser');
+    if (isMissile) {
+      weaponLabel = game.i18n.localize('RYF.Ship.WeaponMissile');
+      if ((ship.system.missiles || 0) <= 0) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.NoMissiles', { name: ship.name }));
+        return;
+      }
+      await ship.update({ 'system.missiles': ship.system.missiles - 1 });
+    }
+
+    await RyfRoll.rollShipOpposed(ship, defenderShip, {
+      contest: 'attack',
+      attackerBonus: params.attackerBonus,
+      defenderBonus: params.defenderBonus,
+      damageFormula: params.damageFormula,
+      weaponLabel: weaponLabel
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 103-104 - persecución: Destreza + Pilotar +
+  // Velocidad enfrentada; quien más saca acorta o abre la distancia
+  async _onShipChase(event) {
+    event.preventDefault();
+    const defenderShip = this._getTargetShip();
+    if (!defenderShip) return;
+
+    const ship = this.actor;
+
+    const params = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Ship.ChaseTitle')}: ${ship.name} vs ${defenderShip.name}`,
+        content: `
+          <form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.PilotBonus')} (${ship.name})</label>
+              <input type="number" name="attackerBonus" value="0" step="1" autofocus/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.PilotBonus')} (${defenderShip.name})</label>
+              <input type="number" name="defenderBonus" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-gauge-high"></i>',
+            label: game.i18n.localize('RYF.Ship.Chase'),
+            callback: (html) => resolve({
+              attackerBonus: parseInt(html.find('[name="attackerBonus"]').val()) || 0,
+              defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!params) return;
+
+    await RyfRoll.rollShipOpposed(ship, defenderShip, {
+      contest: 'chase',
+      attackerBonus: params.attackerBonus,
+      defenderBonus: params.defenderBonus
+    });
   }
 
   // Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en d6 según gravedad

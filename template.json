@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": ["character", "npc", "ship"],
     "templates": {
       "base": {
         "biography": "",
@@ -96,6 +96,25 @@
       "attacks": [],
       "cr": 1,
       "isMinion": false
+    },
+    "ship": {
+      "biography": "",
+      "speed": 3,
+      "maneuverability": 3,
+      "shields": 3,
+      "health": {
+        "value": 30,
+        "max": 30
+      },
+      "lasers": 0,
+      "missiles": 0,
+      "decoys": 0,
+      "livingSpace": 0,
+      "cargo": 0,
+      "cabins": 0,
+      "hangars": 0,
+      "hyperspace": false,
+      "points": 0
     }
   },
   "Item": {

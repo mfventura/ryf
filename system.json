@@ -118,6 +118,13 @@
       "system": "ryf3"
     },
     {
+      "name": "ships-es",
+      "label": "Naves (ES)",
+      "path": "packs/es/ships",
+      "type": "Actor",
+      "system": "ryf3"
+    },
+    {
       "name": "skills-en",
       "label": "Skills (EN)",
       "path": "packs/en/skills",
@@ -171,7 +178,7 @@
     {
       "name": "RyF 3.0 - Español",
       "color": "#C41E3A",
-      "packs": ["skills-es", "weapons-es", "armor-es", "shields-es", "equipment-es", "spells-es", "npcs-es", "advantages-es", "races-es"]
+      "packs": ["skills-es", "weapons-es", "armor-es", "shields-es", "equipment-es", "spells-es", "npcs-es", "advantages-es", "races-es", "ships-es"]
     },
     {
       "name": "RyF 3.0 - English",

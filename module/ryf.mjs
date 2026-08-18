@@ -40,7 +40,7 @@ Hooks.once('init', async function() {
 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ryf", RyfActorSheet, {
-    types: ["character", "npc"],
+    types: ["character", "npc", "ship"],
     makeDefault: true,
     label: "RYF.SheetLabels.Actor"
   });
@@ -355,6 +355,16 @@ Hooks.on('renderCompendium', (app, html, data) => {
 // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite
 // configurable, 0 = sin límite) y con requisito de atributo. Validación
 // advisory: avisa pero no bloquea.
+// Reference: RyF 3.0 PDF, páginas 103-104 - naves espaciales (módulo opcional)
+Hooks.on('preCreateActor', (actor, data, options, userId) => {
+  if (actor.type !== 'ship') return;
+
+  if (!game.settings.get('ryf3', 'enableShips')) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.ShipsDisabled'));
+    return false;
+  }
+});
+
 // Reference: RyF 3.0 PDF, página 98 - Razas (módulo opcional): cada personaje
 // tiene una sola raza; sin el módulo activo no se pueden crear
 Hooks.on('preCreateItem', (item, data, options, userId) => {

@@ -1,0 +1,38 @@
+{
+  "_id": "Q8gYxpaFepEEKVjD",
+  "name": "Serenity",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>V3 M3 BD5 PV50, Espacio vital 3 (9 personas), 1 cañón láser, 2 hangares, 3 espacios de carga, 3 camarotes (9 personas), hiperespacio. Puntos totales: 28 (RyF 3.0, pág. 104).</p>",
+    "speed": 3,
+    "maneuverability": 3,
+    "shields": 5,
+    "health": {
+      "value": 50,
+      "max": 50
+    },
+    "lasers": 1,
+    "missiles": 0,
+    "decoys": 0,
+    "livingSpace": 3,
+    "cargo": 3,
+    "cabins": 3,
+    "hangars": 2,
+    "hyperspace": true,
+    "points": 28
+  },
+  "prototypeToken": {
+    "name": "Serenity",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!Q8gYxpaFepEEKVjD"
+}

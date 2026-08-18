@@ -92,6 +92,16 @@ export function registerSystemSettings() {
     default: false
   });
 
+  // Reference: RyF 3.0 PDF, páginas 103-104 - módulo opcional de naves espaciales
+  game.settings.register('ryf3', 'enableShips', {
+    name: 'RYF.Settings.EnableShips.Name',
+    hint: 'RYF.Settings.EnableShips.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register('ryf3', 'healthMultiplier', {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',

@@ -72,6 +72,13 @@ const FIELD_GROUPS = [
       { key: 'hitLocHeadRange', type: 'text' },
       { key: 'hitLocHeadDef', step: 1 }
     ]
+  },
+  {
+    // Reference: RyF 3.0 PDF, página 103 - naves espaciales (módulo opcional)
+    key: 'GroupShips',
+    fields: [
+      { key: 'shipHullMultiplier', step: 1 }
+    ]
   }
 ];
 

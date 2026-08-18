@@ -341,6 +341,7 @@
       "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
       "RulesSaved": "Reglas del sistema guardadas correctamente",
       "SanityLost": "{name} pierde {amount} de Cordura ({formula}). Cordura actual: {current} / {max}",
+      "ShipDestroyed": "¡{name} ha sido destruida!",
       "ShortRest": "{name} ha descansado brevemente y recuperado {amount} PV",
       "SkillDecreased": "{name} reducido a nivel {level}",
       "SkillIncreased": "{name} aumentado a nivel {level}",
@@ -567,6 +568,10 @@
           "Hint": "Cordura máxima = Inteligencia × N (RyF 3.0, pág. 43: 4). Solo aplica con el módulo de Cordura activado.",
           "Name": "Multiplicador de cordura"
         },
+        "shipHullMultiplier": {
+          "Hint": "PV de la nave = Barreras Defensivas × N (RyF 3.0, pág. 103: 10). Solo aplica con el módulo de naves activado.",
+          "Name": "Multiplicador de casco de nave"
+        },
         "shortRestDivisor": {
           "Hint": "El descanso corto cura Físico ÷ N PV (regla de la casa; el manual solo define la curación nocturna, pág. 94).",
           "Name": "Divisor del descanso corto"
@@ -624,6 +629,10 @@
         "Hint": "Activa la Cordura (RyF 3.0, pág. 43): reserva opcional = Inteligencia × multiplicador, con pérdidas en dados d6. Requiere recargar el mundo.",
         "Name": "Activar Cordura"
       },
+      "EnableShips": {
+        "Hint": "Activa las naves espaciales (RyF 3.0, págs. 103-104): actor Nave con Velocidad, Maniobrabilidad y Barreras Defensivas (PV = BD × 10), combate y persecución enfrentados.",
+        "Name": "Activar Naves Espaciales"
+      },
       "EnableTokens": {
         "Hint": "Activa los Tokens de la muerte (RyF 3.0, págs. 91-92): gastar el token sube un rango el dado objetivo; el máster puede devolverlo forzando bajar un rango en la siguiente tirada. Requiere recargar el mundo.",
         "Name": "Activar Tokens de la Muerte"
@@ -653,6 +662,7 @@
         "GroupHealth": "Salud y estados",
         "GroupHitLocation": "Localización de daño (tabla reconstruida — el manual no la imprimió)",
         "GroupProgression": "Progresión y descanso",
+        "GroupShips": "Naves espaciales",
         "Hint": "Configura las bases, umbrales y valores de regla del sistema. Los valores por defecto siguen el manual de RyF 3.0.",
         "Label": "Configurar Reglas",
         "Name": "Reglas del Sistema",
@@ -674,6 +684,38 @@
     },
     "ShieldName": "Nombre del Escudo",
     "Shields": "Escudos",
+    "Ship": {
+      "Attack": "Atacar",
+      "AttackTitle": "Combate de naves",
+      "AttackerHits": "¡Impacto! El atacante supera al piloto",
+      "Cabins": "Camarotes",
+      "Cargo": "Espacios de carga",
+      "Chase": "Persecución",
+      "ChaseTitle": "Persecución de naves",
+      "ChasedEscapes": "El perseguido abre la distancia",
+      "ChaserCloses": "El perseguidor acorta la distancia",
+      "CombatHint": "Combate (pág. 103): artillero (Destreza + Artillería + M) contra piloto (Destreza + Pilotar + M). Persecución (págs. 103-104): pilotos (Destreza + Pilotar + V) enfrentados. Selecciona la nave objetivo y usa los botones de la cabecera; los bonos de la tripulación se introducen a mano.",
+      "Decoys": "Señuelos (consumibles)",
+      "DefenderEvades": "El piloto esquiva el ataque",
+      "DefenderPilotBonus": "Bono del piloto defensor (Destreza + Pilotar)",
+      "GunnerBonus": "Bono del artillero (Destreza + Artillería)",
+      "Hangars": "Hangares",
+      "Hull": "Casco (PV)",
+      "Hyperspace": "Hiperespacio",
+      "Lasers": "Cañones láser (1d6)",
+      "LivingSpace": "Espacio vital",
+      "Maneuverability": "Maniobrabilidad",
+      "Missiles": "Misiles (3d6, consumibles)",
+      "Name": "Nombre de la Nave",
+      "PilotBonus": "Bono del piloto (Destreza + Pilotar)",
+      "Points": "Puntos totales",
+      "Shields": "Barreras Defensivas",
+      "Speed": "Velocidad",
+      "Tie": "Empate: a discreción del máster",
+      "Weapon": "Arma",
+      "WeaponLaser": "Cañón láser",
+      "WeaponMissile": "Misil"
+    },
     "ShortRest": "Descanso Corto",
     "SkillCategories": {
       "defense": "Defensa",
@@ -764,7 +806,9 @@
       "NoActor": "Este item no está asociado a ningún actor",
       "NoAmmo": "{name} no tiene munición: recarga antes de disparar (RyF 3.0, págs. 96-98)",
       "NoCombatDamage": "No hay daño de combate acumulado que recuperar (RyF 3.0, pág. 94)",
+      "NoMissiles": "{name} no tiene misiles: los misiles se consumen al dispararse (RyF 3.0, pág. 103)",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
+      "NoShipTarget": "Selecciona como objetivo un token de nave",
       "NoTargetSelected": "No hay objetivos seleccionados",
       "NoTokens": "No te quedan tokens de la muerte",
       "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
@@ -779,6 +823,7 @@
       "RaceAttributeCap": "La raza {race} limita {attribute} a un máximo de {max} (RyF 3.0, pág. 98)",
       "RacePyramidRestriction": "La raza {race} solo permite: {restriction} (RyF 3.0, pág. 98)",
       "RacesDisabled": "Las razas no están habilitadas en este mundo. Actívalas en la configuración del sistema.",
+      "ShipsDisabled": "Las naves espaciales no están habilitadas en este mundo. Actívalas en la configuración del sistema.",
       "SkillNotFound": "No se encontró la habilidad {skill}",
       "SkillPyramidMismatch": "Nivel {level}: se esperan {expected} habilidades, pero hay {actual}",
       "SkillsAbovePyramid": "Nivel {level}: hay {actual} habilidades por encima del máximo de la pirámide",
@@ -807,7 +852,8 @@
     },
     "Actor": {
       "character": "Personaje",
-      "npc": "PNJ"
+      "npc": "PNJ",
+      "ship": "Nave"
     }
   }
 }
