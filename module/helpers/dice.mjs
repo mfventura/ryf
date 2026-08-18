@@ -54,12 +54,16 @@ export async function roll1o3d10(mode = 'normal') {
 }
 
 export async function rollEffect(formula) {
+  // Los globals sueltos Die/NumericTerm no existen en Foundry v14: hay que
+  // usar el namespace foundry.dice.terms
+  const { Die, NumericTerm } = foundry.dice.terms;
+
   const roll = await new Roll(formula).evaluate();
-  
+
   let total = 0;
   let allRolls = [];
   let explosions = [];
-  
+
   for (const term of roll.terms) {
     if (term instanceof Die) {
       for (const result of term.results) {
