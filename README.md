@@ -29,7 +29,7 @@ This implementation is based on the rules published under the **Creative Commons
 
 ### 🚀 Current Status
 
-**Version**: 0.3.0 (In Development)
+**Version**: 0.4.0 (In Development)
 
 This project is currently implemented for **Foundry VTT v14** using **Application v1 (appV1)** architecture.
 
@@ -166,7 +166,7 @@ Esta implementación está basada en las reglas publicadas bajo la licencia **Cr
 
 ### 🚀 Estado Actual
 
-**Versión**: 0.3.0 (En Desarrollo)
+**Versión**: 0.4.0 (En Desarrollo)
 
 Este proyecto está actualmente implementado para **Foundry VTT v14** usando la arquitectura **Application v1 (appV1)**.
 

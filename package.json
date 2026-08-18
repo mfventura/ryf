@@ -1,6 +1,6 @@
 {
   "name": "ryf3",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Herramientas de desarrollo del sistema Rápido y Fácil 3.0 para Foundry VTT",
   "private": true,
   "type": "module",
