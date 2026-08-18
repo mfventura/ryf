@@ -23,51 +23,109 @@
 
     <div class="tab details" data-group="primary" data-tab="details">
 
-      <div class="form-group">
-        <label>{{localize "RYF.Damage"}}</label>
-        <input type="text" name="system.damage.base" value="{{system.damage.base}}" placeholder="1d6"/>
-      </div>
+      {{!-- Campos generales a dos columnas para compactar la ficha --}}
+      <div class="weapon-fields">
+        <div class="form-group">
+          <label>{{localize "RYF.Damage"}}</label>
+          <input type="text" name="system.damage.base" value="{{system.damage.base}}" placeholder="1d6"/>
+        </div>
 
-      <div class="form-group">
-        <label>{{localize "RYF.DamageBonus"}}</label>
-        <input type="number" name="system.damage.bonus" value="{{system.damage.bonus}}" data-dtype="Number" placeholder="0"/>
-      </div>
+        <div class="form-group">
+          <label>{{localize "RYF.DamageBonus"}}</label>
+          <input type="number" name="system.damage.bonus" value="{{system.damage.bonus}}" data-dtype="Number" placeholder="0"/>
+        </div>
 
-      <div class="form-group">
-        <label>{{localize "RYF.Category"}}</label>
-        <select name="system.category">
-          <option value="melee" {{#if (eq system.category "melee")}}selected{{/if}}>{{localize "RYF.SkillCategories.melee"}}</option>
-          <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>{{localize "RYF.SkillCategories.ranged"}}</option>
-          <option value="firearms" {{#if (eq system.category "firearms")}}selected{{/if}}>{{localize "RYF.SkillCategories.firearms"}}</option>
-        </select>
+        <div class="form-group">
+          <label>{{localize "RYF.Category"}}</label>
+          <select name="system.category">
+            <option value="melee" {{#if (eq system.category "melee")}}selected{{/if}}>{{localize "RYF.SkillCategories.melee"}}</option>
+            <option value="ranged" {{#if (eq system.category "ranged")}}selected{{/if}}>{{localize "RYF.SkillCategories.ranged"}}</option>
+            <option value="firearms" {{#if (eq system.category "firearms")}}selected{{/if}}>{{localize "RYF.SkillCategories.firearms"}}</option>
+          </select>
+        </div>
+
+        {{!-- Reference: RyF 3.0 PDF, página 95 - la precisión modifica la tirada de ataque --}}
+        <div class="form-group">
+          <label>{{localize "RYF.Precision"}}</label>
+          <input type="number" name="system.precision" value="{{system.precision}}" data-dtype="Number" step="1" placeholder="0"/>
+        </div>
+
+        {{!-- Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción (mazas) --}}
+        <div class="form-group">
+          <label>{{localize "RYF.IgnoresArmor"}}</label>
+          <input type="checkbox" name="system.ignoresArmor" {{checked system.ignoresArmor}}/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.TwoHanded"}}</label>
+          <input type="checkbox" name="system.twoHanded" {{checked system.twoHanded}}/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Equipped"}}</label>
+          <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
+        </div>
       </div>
 
       {{#if (or (eq system.category "ranged") (eq system.category "firearms"))}}
-      <div class="form-group">
-        <label>{{localize "RYF.RangeShort"}}</label>
-        <input type="number" name="system.range.short" value="{{system.range.short}}" data-dtype="Number" placeholder="10"/>
-      </div>
+      <fieldset class="weapon-subsection">
+        <legend>{{localize "RYF.Combat.Range"}} (m)</legend>
+        <div class="weapon-triple">
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeShort"}}</label>
+            <input type="number" name="system.range.short" value="{{system.range.short}}" data-dtype="Number" placeholder="10"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeMedium"}}</label>
+            <input type="number" name="system.range.medium" value="{{system.range.medium}}" data-dtype="Number" placeholder="20"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeLong"}}</label>
+            <input type="number" name="system.range.long" value="{{system.range.long}}" data-dtype="Number" placeholder="40"/>
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="form-group">
-        <label>{{localize "RYF.RangeMedium"}}</label>
-        <input type="number" name="system.range.medium" value="{{system.range.medium}}" data-dtype="Number" placeholder="20"/>
-      </div>
+      {{!-- Reference: RyF 3.0 PDF, página 25 - daño por banda de distancia
+            (ej. escopeta recortada 4d6/3d6/2d6); vacío = usar el daño base --}}
+      <fieldset class="weapon-subsection">
+        <legend>{{localize "RYF.DamageByRange"}}</legend>
+        <div class="weapon-triple">
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeShort"}}</label>
+            <input type="text" name="system.damage.byRange.short" value="{{system.damage.byRange.short}}" placeholder="{{system.damage.base}}"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeMedium"}}</label>
+            <input type="text" name="system.damage.byRange.medium" value="{{system.damage.byRange.medium}}" placeholder="{{system.damage.base}}"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.Combat.RangeLong"}}</label>
+            <input type="text" name="system.damage.byRange.long" value="{{system.damage.byRange.long}}" placeholder="{{system.damage.base}}"/>
+          </div>
+        </div>
+      </fieldset>
 
-      <div class="form-group">
-        <label>{{localize "RYF.RangeLong"}}</label>
-        <input type="number" name="system.range.long" value="{{system.range.long}}" data-dtype="Number" placeholder="40"/>
-      </div>
+      {{!-- Reference: RyF 3.0 PDF, páginas 96-98 - cargador y recarga
+            (0 balas máx. = sin control de munición) --}}
+      <fieldset class="weapon-subsection">
+        <legend>{{localize "RYF.Ammo"}}</legend>
+        <div class="weapon-triple">
+          <div class="mini-field">
+            <label>{{localize "RYF.AmmoMax"}}</label>
+            <input type="number" name="system.ammo.max" value="{{system.ammo.max}}" data-dtype="Number" min="0"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.AmmoCurrent"}}</label>
+            <input type="number" name="system.ammo.value" value="{{system.ammo.value}}" data-dtype="Number" min="0"/>
+          </div>
+          <div class="mini-field">
+            <label>{{localize "RYF.ReloadTurns"}}</label>
+            <input type="number" name="system.reloadTurns" value="{{system.reloadTurns}}" data-dtype="Number" min="0"/>
+          </div>
+        </div>
+      </fieldset>
       {{/if}}
-
-      <div class="form-group">
-        <label>{{localize "RYF.TwoHanded"}}</label>
-        <input type="checkbox" name="system.twoHanded" {{checked system.twoHanded}}/>
-      </div>
-
-      <div class="form-group">
-        <label>{{localize "RYF.Equipped"}}</label>
-        <input type="checkbox" name="system.equipped" {{checked system.equipped}}/>
-      </div>
 
     </div>
 

@@ -1,0 +1,26 @@
+{
+  "_id": "4lX4aayzMtpCvk8N",
+  "name": "Humano",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>+1 PX por sesión (RyF 3.0, pág. 98).</p>",
+    "attributeCap": {
+      "attribute": "",
+      "max": 0
+    },
+    "xpSessionModifier": 1,
+    "pyramidRestriction": "",
+    "grantedAdvantages": [],
+    "armorForbidden": false,
+    "effects": []
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!4lX4aayzMtpCvk8N"
+}

@@ -54,12 +54,16 @@ export async function roll1o3d10(mode = 'normal') {
 }
 
 export async function rollEffect(formula) {
+  // Los globals sueltos Die/NumericTerm no existen en Foundry v14: hay que
+  // usar el namespace foundry.dice.terms
+  const { Die, NumericTerm } = foundry.dice.terms;
+
   const roll = await new Roll(formula).evaluate();
-  
+
   let total = 0;
   let allRolls = [];
   let explosions = [];
-  
+
   for (const term of roll.terms) {
     if (term instanceof Die) {
       for (const result of term.results) {
@@ -124,12 +128,31 @@ export function checkFumble(dice, chosen) {
   return false;
 }
 
-export function getDifficultyLabel(difficulty) {
-  if (difficulty <= 10) return 'RYF.Difficulty.VeryEasy';
-  if (difficulty <= 15) return 'RYF.Difficulty.Easy';
-  if (difficulty <= 20) return 'RYF.Difficulty.Average';
-  if (difficulty <= 25) return 'RYF.Difficulty.Hard';
-  if (difficulty <= 30) return 'RYF.Difficulty.VeryHard';
+// Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad
+export const SKILL_DIFFICULTIES = [
+  { value: 10, label: 'RYF.Difficulty.Easy' },
+  { value: 15, label: 'RYF.Difficulty.Average' },
+  { value: 18, label: 'RYF.Difficulty.Moderate' },
+  { value: 20, label: 'RYF.Difficulty.Hard' },
+  { value: 25, label: 'RYF.Difficulty.VeryHard' },
+  { value: 30, label: 'RYF.Difficulty.NearlyImpossible' }
+];
+
+// Reference: RyF 3.0 PDF, página 18 - las tiradas de atributo puro usan una
+// tabla de dificultades propia, más baja que la de habilidad
+export const ATTRIBUTE_DIFFICULTIES = [
+  { value: 9, label: 'RYF.Difficulty.Easy' },
+  { value: 12, label: 'RYF.Difficulty.Average' },
+  { value: 15, label: 'RYF.Difficulty.Hard' },
+  { value: 18, label: 'RYF.Difficulty.VeryHard' },
+  { value: 21, label: 'RYF.Difficulty.NearlyImpossible' }
+];
+
+export function getDifficultyLabel(difficulty, type = 'skill') {
+  const table = type === 'attribute' ? ATTRIBUTE_DIFFICULTIES : SKILL_DIFFICULTIES;
+  for (const entry of table) {
+    if (difficulty <= entry.value) return entry.label;
+  }
   return 'RYF.Difficulty.NearlyImpossible';
 }
 
@@ -145,11 +168,15 @@ export function isSuccess(result, difficulty, fumble = false, chosenDie = null) 
   return result >= difficulty;
 }
 
-// Reference: RyF 3.0 PDF, páginas 18 y 20 - un factor negativo (malherido,
-// habilidad sin puntos) baja un rango el dado objetivo; no se acumula si ya
-// se guarda el dado menor
-export function degradeMode(mode) {
-  if (mode === 'advantage') return 'normal';
-  return 'disadvantage';
+const MODE_RANKS = { disadvantage: -1, normal: 0, advantage: 1 };
+const RANK_MODES = { '-1': 'disadvantage', '0': 'normal', '1': 'advantage' };
+
+// Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado
+// objetivo: los factores favorables (especialización, token) lo suben un rango
+// y los desfavorables (malherido, habilidad sin puntos, deuda de token) lo
+// bajan; el resultado se acota entre el dado menor y el mayor
+export function resolveMode(baseMode = 'normal', { ups = [], downs = [] } = {}) {
+  const rank = (MODE_RANKS[baseMode] ?? 0) + ups.length - downs.length;
+  return RANK_MODES[String(Math.max(-1, Math.min(1, rank)))];
 }
 

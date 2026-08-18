@@ -1,7 +1,22 @@
 import { CustomPyramidConfig } from './custom-pyramid-config.mjs';
+import { RulesConfig } from './rules-config.mjs';
+
+// Recalcula los datos derivados de todos los actores y refresca sus fichas
+// abiertas para que los cambios de regla se vean sin recargar
+function refreshActors() {
+  game.actors.forEach(actor => {
+    if (actor.type === 'character' || actor.type === 'npc') {
+      actor.prepareData();
+      actor.sheet?.rendered && actor.sheet.render(false);
+    }
+  });
+}
 
 export function registerSystemSettings() {
-  
+
+  // Toggles de módulo: los únicos settings visibles en la ventana general de
+  // configuración. Los valores numéricos de regla se editan solo desde el
+  // menú RulesConfig para no duplicar puntos de configuración.
   game.settings.register('ryf3', 'enableCarisma', {
     name: 'RYF.Settings.EnableCarisma.Name',
     hint: 'RYF.Settings.EnableCarisma.Hint',
@@ -22,36 +37,89 @@ export function registerSystemSettings() {
     requiresReload: true
   });
 
+  // Reference: RyF 3.0 PDF, páginas 96-98 - módulo opcional de munición:
+  // las tablas de armas de fuego incluyen cargador (balas) y recarga
+  game.settings.register('ryf3', 'enableAmmo', {
+    name: 'RYF.Settings.EnableAmmo.Name',
+    hint: 'RYF.Settings.EnableAmmo.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
+  game.settings.register('ryf3', 'enableTokens', {
+    name: 'RYF.Settings.EnableTokens.Name',
+    hint: 'RYF.Settings.EnableTokens.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
+  // Reference: RyF 3.0 PDF, página 98 - módulo opcional de Razas
+  game.settings.register('ryf3', 'enableRaces', {
+    name: 'RYF.Settings.EnableRaces.Name',
+    hint: 'RYF.Settings.EnableRaces.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
+  // Reference: RyF 3.0 PDF, página 43 - Cordura como ejemplo de subsistema
+  // opcional (Cordura = Inteligencia x4, pérdidas en dados d6)
+  game.settings.register('ryf3', 'enableSanity', {
+    name: 'RYF.Settings.EnableSanity.Name',
+    hint: 'RYF.Settings.EnableSanity.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: true
+  });
+
+  // Reference: RyF 3.0 PDF, página 95 - módulo opcional de localización de daño
+  game.settings.register('ryf3', 'enableHitLocation', {
+    name: 'RYF.Settings.EnableHitLocation.Name',
+    hint: 'RYF.Settings.EnableHitLocation.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
+  // Reference: RyF 3.0 PDF, páginas 103-104 - módulo opcional de naves espaciales
+  game.settings.register('ryf3', 'enableShips', {
+    name: 'RYF.Settings.EnableShips.Name',
+    hint: 'RYF.Settings.EnableShips.Hint',
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register('ryf3', 'healthMultiplier', {
     name: 'RYF.Settings.HealthMultiplier.Name',
     hint: 'RYF.Settings.HealthMultiplier.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 4,
-    onChange: value => {
-      game.actors.forEach(actor => {
-        if (actor.type === 'character' || actor.type === 'npc') {
-          actor.prepareData();
-        }
-      });
-    }
+    onChange: refreshActors
   });
 
   game.settings.register('ryf3', 'manaMultiplier', {
     name: 'RYF.Settings.ManaMultiplier.Name',
     hint: 'RYF.Settings.ManaMultiplier.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 3,
-    onChange: value => {
-      game.actors.forEach(actor => {
-        if (actor.type === 'character' || actor.type === 'npc') {
-          actor.prepareData();
-        }
-      });
-    }
+    onChange: refreshActors
   });
 
   game.settings.register('ryf3', 'defaultCharacterType', {
@@ -84,7 +152,7 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.MaxSkillLevel.Name',
     hint: 'RYF.Settings.MaxSkillLevel.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 10,
     onChange: () => {
@@ -103,9 +171,31 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.AttributePoints.Name',
     hint: 'RYF.Settings.AttributePoints.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
-    default: 30
+    default: 30,
+    onChange: refreshActors
+  });
+
+  // Valores de regla configurables (bases, umbrales, bandas de distancia...).
+  // Se editan con el menú RulesConfig; el código los lee vía getRule(), que
+  // aplica los defaults de DEFAULT_RULES (module/helpers/rules.mjs) con sus
+  // citas de página del PDF
+  game.settings.registerMenu('ryf3', 'rulesConfigMenu', {
+    name: 'RYF.Settings.RulesConfig.Name',
+    label: 'RYF.Settings.RulesConfig.Label',
+    hint: 'RYF.Settings.RulesConfig.Hint',
+    icon: 'fas fa-sliders-h',
+    type: RulesConfig,
+    restricted: true
+  });
+
+  game.settings.register('ryf3', 'coreRules', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    onChange: refreshActors
   });
 
   // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje;
@@ -114,9 +204,8 @@ export function registerSystemSettings() {
     name: 'RYF.Settings.MaxAdvantages.Name',
     hint: 'RYF.Settings.MaxAdvantages.Hint',
     scope: 'world',
-    config: true,
+    config: false,
     type: Number,
     default: 1
   });
 }
-

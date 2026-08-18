@@ -1,0 +1,38 @@
+{
+  "_id": "Oqa3BGRaHMuGhY4f",
+  "name": "Destructor Koliris",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>V3 M3 BD18 PV180, 6 cañones láser (6x1d6), 3 señuelos, Espacio vital 7 (49 personas), 3 espacios de carga, 5 camarotes (25 personas), hiperespacio. Puntos totales: 53 (RyF 3.0, pág. 104).</p>",
+    "speed": 3,
+    "maneuverability": 3,
+    "shields": 18,
+    "health": {
+      "value": 180,
+      "max": 180
+    },
+    "lasers": 6,
+    "missiles": 0,
+    "decoys": 3,
+    "livingSpace": 7,
+    "cargo": 3,
+    "cabins": 5,
+    "hangars": 0,
+    "hyperspace": true,
+    "points": 53
+  },
+  "prototypeToken": {
+    "name": "Destructor Koliris",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!Oqa3BGRaHMuGhY4f"
+}

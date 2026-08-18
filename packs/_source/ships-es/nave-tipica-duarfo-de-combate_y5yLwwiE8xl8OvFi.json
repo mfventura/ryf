@@ -1,0 +1,38 @@
+{
+  "_id": "y5yLwwiE8xl8OvFi",
+  "name": "Nave típica Duarfo de combate",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>(1 piloto) V4 M4 BD6 PV60, Espacio vital 1, 2 cañones láser (el manual imprime \"2x3d6\", probable errata: los cañones láser son 1d6, pág. 103), 1 señuelo. Puntos totales: 17 (RyF 3.0, pág. 104).</p>",
+    "speed": 4,
+    "maneuverability": 4,
+    "shields": 6,
+    "health": {
+      "value": 60,
+      "max": 60
+    },
+    "lasers": 2,
+    "missiles": 0,
+    "decoys": 1,
+    "livingSpace": 1,
+    "cargo": 0,
+    "cabins": 0,
+    "hangars": 0,
+    "hyperspace": false,
+    "points": 17
+  },
+  "prototypeToken": {
+    "name": "Nave típica Duarfo de combate",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!y5yLwwiE8xl8OvFi"
+}

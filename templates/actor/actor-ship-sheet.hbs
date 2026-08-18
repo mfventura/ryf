@@ -1,0 +1,155 @@
+{{!-- Reference: RyF 3.0 PDF, páginas 103-104 - naves espaciales (módulo opcional) --}}
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'RYF.Ship.Name'}}"/></h1>
+
+      <div class="resources grid grid-4col">
+        <div class="resource">
+          <label class="resource-label">{{localize "RYF.Ship.Hull"}}</label>
+          <div class="resource-content flexrow">
+            <input type="text" name="system.health.value" value="{{system.health.value}}" data-dtype="Number"/>
+            <span class="sep"> / </span>
+            <span class="resource-max">{{system.health.max}}</span>
+          </div>
+        </div>
+
+        <div class="resource">
+          <label class="resource-label">{{localize "RYF.Ship.Speed"}} (V)</label>
+          <div class="resource-content">
+            <input type="text" name="system.speed" value="{{system.speed}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource">
+          <label class="resource-label">{{localize "RYF.Ship.Maneuverability"}} (M)</label>
+          <div class="resource-content">
+            <input type="text" name="system.maneuverability" value="{{system.maneuverability}}" data-dtype="Number"/>
+          </div>
+        </div>
+
+        <div class="resource">
+          <label class="resource-label">{{localize "RYF.Ship.Shields"}} (BD)</label>
+          <div class="resource-content">
+            <input type="text" name="system.shields" value="{{system.shields}}" data-dtype="Number"/>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Reference: RyF 3.0 PDF, páginas 103-104 - cada nave tira su lado
+            de la enfrentada por separado --}}
+      <div class="rest-buttons flexrow">
+        <button type="button" class="ship-attack"><i class="fas fa-crosshairs"></i> {{localize "RYF.Ship.Attack"}}</button>
+        <button type="button" class="ship-defense"><i class="fas fa-shield-alt"></i> {{localize "RYF.Ship.Defense"}}</button>
+        <button type="button" class="ship-chase"><i class="fas fa-gauge-high"></i> {{localize "RYF.Ship.Chase"}}</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab details" data-group="primary" data-tab="details">
+
+      {{!-- Reference: RyF 3.0 PDF, página 103 - tripulación: piloto (Destreza +
+            Pilotar) y artillero (Destreza + Artillería). Arrastra un personaje
+            sobre la ficha para vincularlo; sin vínculo se usa la base manual. --}}
+      <fieldset class="ship-crew">
+        <legend>{{localize "RYF.Ship.Crew"}}</legend>
+        <p class="hint">{{localize "RYF.Ship.CrewHint"}}</p>
+
+        <div class="crew-slot flexrow">
+          <label>{{localize "RYF.Ship.Pilot"}}</label>
+          {{#if system.pilot.uuid}}
+          <span class="crew-name"><i class="fas fa-user-astronaut"></i> {{system.pilot.name}}</span>
+          <a class="crew-clear" data-role="pilot" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
+          {{else}}
+          <span class="crew-empty">{{localize "RYF.Ship.NoCrew"}}</span>
+          <div class="crew-base">
+            <label>{{localize "RYF.Ship.BaseBonus"}}</label>
+            <input type="number" name="system.pilotBase" value="{{system.pilotBase}}" data-dtype="Number" step="1"/>
+          </div>
+          {{/if}}
+        </div>
+
+        <div class="crew-slot flexrow">
+          <label>{{localize "RYF.Ship.Gunner"}}</label>
+          {{#if system.gunner.uuid}}
+          <span class="crew-name"><i class="fas fa-crosshairs"></i> {{system.gunner.name}}</span>
+          <a class="crew-clear" data-role="gunner" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
+          {{else}}
+          <span class="crew-empty">{{localize "RYF.Ship.NoCrew"}}</span>
+          <div class="crew-base">
+            <label>{{localize "RYF.Ship.BaseBonus"}}</label>
+            <input type="number" name="system.gunnerBase" value="{{system.gunnerBase}}" data-dtype="Number" step="1"/>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+
+      {{!-- Reference: RyF 3.0 PDF, página 103 - capacidades especiales de la nave --}}
+      <div class="weapon-fields">
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Lasers"}}</label>
+          <input type="number" name="system.lasers" value="{{system.lasers}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Missiles"}}</label>
+          <input type="number" name="system.missiles" value="{{system.missiles}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Decoys"}}</label>
+          <input type="number" name="system.decoys" value="{{system.decoys}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.LivingSpace"}}</label>
+          <input type="number" name="system.livingSpace" value="{{system.livingSpace}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Cargo"}}</label>
+          <input type="number" name="system.cargo" value="{{system.cargo}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Cabins"}}</label>
+          <input type="number" name="system.cabins" value="{{system.cabins}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Hangars"}}</label>
+          <input type="number" name="system.hangars" value="{{system.hangars}}" data-dtype="Number" min="0"/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Hyperspace"}}</label>
+          <input type="checkbox" name="system.hyperspace" {{checked system.hyperspace}}/>
+        </div>
+
+        <div class="form-group">
+          <label>{{localize "RYF.Ship.Points"}}</label>
+          <input type="number" name="system.points" value="{{system.points}}" data-dtype="Number" min="0"/>
+        </div>
+      </div>
+
+      <p class="hint">{{localize "RYF.Ship.CombatHint"}}</p>
+    </div>
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.biography target="system.biography" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+  </section>
+</form>

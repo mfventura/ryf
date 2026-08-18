@@ -1,0 +1,38 @@
+{
+  "_id": "cWZGPD3MrYNi2dg2",
+  "name": "Nave típica Selfilus de combate",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>(1 piloto) V5 M5 BD3 PV30, Espacio vital 1, 1 cañón láser (1d6), 2 misiles (2x3d6). Puntos totales: 17 (RyF 3.0, pág. 104).</p>",
+    "speed": 5,
+    "maneuverability": 5,
+    "shields": 3,
+    "health": {
+      "value": 30,
+      "max": 30
+    },
+    "lasers": 1,
+    "missiles": 2,
+    "decoys": 0,
+    "livingSpace": 1,
+    "cargo": 0,
+    "cabins": 0,
+    "hangars": 0,
+    "hyperspace": false,
+    "points": 17
+  },
+  "prototypeToken": {
+    "name": "Nave típica Selfilus de combate",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!cWZGPD3MrYNi2dg2"
+}

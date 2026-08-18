@@ -1,0 +1,133 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  <header class="sheet-header spell-header">
+    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
+    <div class="header-fields">
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.Race.Name'}}" class="spell-name-input"/>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
+    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+  </nav>
+
+  <section class="sheet-body">
+
+    <div class="tab description" data-group="primary" data-tab="description">
+      <div class="editor-content">
+        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+      </div>
+    </div>
+
+    <div class="tab details" data-group="primary" data-tab="details">
+
+      {{!-- Reference: RyF 3.0 PDF, página 98 - la raza concede una ventaja
+            gratuita; con varias enlazadas se elige una al añadir la raza --}}
+      <fieldset class="granted-advantages">
+        <legend>{{localize "RYF.Race.GrantedAdvantage"}}</legend>
+        <p class="hint">{{localize "RYF.Race.GrantedAdvantagesHint"}}</p>
+        {{#if system.grantedAdvantages.length}}
+        <ol class="granted-advantages-list">
+          {{#each system.grantedAdvantages as |entry index|}}
+          <li class="flexrow">
+            <span class="granted-advantage-name"><i class="fas fa-award"></i> {{entry.name}}</span>
+            <a class="granted-advantage-delete" data-index="{{index}}" title="{{localize 'RYF.Delete'}}"><i class="fas fa-trash"></i></a>
+          </li>
+          {{/each}}
+        </ol>
+        {{else}}
+        <p class="no-effects">{{localize "RYF.Race.NoGrantedAdvantages"}}</p>
+        {{/if}}
+      </fieldset>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Race.AttributeCap"}}</label>
+        <select name="system.attributeCap.attribute" data-dtype="String">
+          <option value="" {{#if (eq system.attributeCap.attribute "")}}selected{{/if}}>{{localize "RYF.NoRequirement"}}</option>
+          {{#each attributes as |attr|}}
+          <option value="{{attr.key}}" {{#if (eq attr.key ../system.attributeCap.attribute)}}selected{{/if}}>
+            {{localize attr.label}}
+          </option>
+          {{/each}}
+        </select>
+      </div>
+
+      {{#if system.attributeCap.attribute}}
+      <div class="form-group">
+        <label>{{localize "RYF.Race.AttributeCapMax"}}</label>
+        <input type="number" name="system.attributeCap.max" value="{{system.attributeCap.max}}" data-dtype="Number" min="0" max="10"/>
+      </div>
+      {{/if}}
+
+      <div class="form-group">
+        <label>{{localize "RYF.Race.XpSessionModifier"}}</label>
+        <input type="number" name="system.xpSessionModifier" value="{{system.xpSessionModifier}}" data-dtype="Number" step="1"/>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Race.PyramidRestriction"}}</label>
+        <select name="system.pyramidRestriction" data-dtype="String">
+          <option value="" {{#if (eq system.pyramidRestriction "")}}selected{{/if}}>{{localize "RYF.Race.PyramidRestrictions.none"}}</option>
+          <option value="specialist" {{#if (eq system.pyramidRestriction "specialist")}}selected{{/if}}>{{localize "RYF.Race.PyramidRestrictions.specialist"}}</option>
+          <option value="versatile" {{#if (eq system.pyramidRestriction "versatile")}}selected{{/if}}>{{localize "RYF.Race.PyramidRestrictions.versatile"}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>{{localize "RYF.Race.ArmorForbidden"}}</label>
+        <input type="checkbox" name="system.armorForbidden" {{checked system.armorForbidden}}/>
+      </div>
+
+    </div>
+
+    <div class="tab effects" data-group="primary" data-tab="effects">
+      <div class="effects-header">
+        <h3>{{localize "RYF.Magic.ItemEffects"}}</h3>
+        <button type="button" class="effect-add" title="{{localize 'RYF.Magic.AddEffect'}}">
+          <i class="fas fa-plus"></i> {{localize "RYF.Magic.AddEffect"}}
+        </button>
+      </div>
+
+      <div class="effects-list">
+        {{#each system.effects as |effect index|}}
+        <div class="effect-item {{#if effect.collapsed}}collapsed{{/if}}" data-effect-index="{{index}}">
+          <div class="effect-header">
+            <button type="button" class="effect-collapse" data-effect-index="{{index}}">
+              <i class="fas {{#if effect.collapsed}}fa-chevron-right{{else}}fa-chevron-down{{/if}}"></i>
+            </button>
+            <div class="effect-summary">
+              <span class="effect-type {{effect.type}}">{{localize (concat "RYF.Magic.EffectTypes." (capitalize effect.type))}}</span>
+              {{#if (eq effect.type "note")}}
+              <span class="effect-target-summary">{{effect.text}}</span>
+              {{else}}
+              <span class="effect-target-summary">
+                {{localize (concat "RYF.Magic.EffectTargets." (targetToPascalCase effect.target))}}
+                {{#if effect.targetName}}
+                  ({{effect.targetName}})
+                {{/if}}
+              </span>
+              <span class="effect-modifier-summary">
+                {{#if (gt effect.modifier 0)}}+{{/if}}{{effect.modifier}}
+              </span>
+              {{/if}}
+            </div>
+            <button type="button" class="effect-delete" data-effect-index="{{index}}" title="{{localize 'RYF.Delete'}}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <div class="effect-config" {{#if effect.collapsed}}style="display: none;"{{/if}}>
+            {{> "systems/ryf3/templates/item/partials/effect-item.hbs" effect=effect index=index isCarismaEnabled=@root.isCarismaEnabled}}
+          </div>
+        </div>
+        {{/each}}
+
+        {{#unless system.effects.length}}
+        <p class="no-effects">{{localize "RYF.Magic.NoEffects"}}</p>
+        {{/unless}}
+      </div>
+    </div>
+
+  </section>
+</form>

@@ -1,4 +1,5 @@
-import { roll1o3d10 } from '../helpers/dice.mjs';
+import { roll1o3d10, resolveMode } from '../helpers/dice.mjs';
+import { getRule } from '../helpers/rules.mjs';
 
 export class RyfCombat extends Combat {
 
@@ -16,8 +17,8 @@ export class RyfCombat extends Combat {
       if (!combatant?.isOwner || !combatant.actor) continue;
 
       const actor = combatant.actor;
-      const wounded = actor.system.states?.wounded || false;
-      const mode = wounded ? 'disadvantage' : 'normal';
+      const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
+      const mode = resolveMode('normal', { downs: wounded ? ['wounded'] : [] });
       const initiativeBase = actor.system.initiative?.base || 0;
       const hindrance = actor.system.combat?.hindrance || 0;
 
@@ -26,7 +27,8 @@ export class RyfCombat extends Combat {
 
       // Reference: RyF 3.0 PDF, página 20 - una acción por turno, a menos que
       // se saque 20 o más (2 acciones), 30 o más (3), 40 o más (4), etc.
-      const actions = 1 + Math.floor(Math.max(total - 10, 0) / 10);
+      const step = getRule('actionsStep');
+      const actions = 1 + Math.floor(Math.max(total - step, 0) / step);
 
       updates.push({ _id: id, initiative: total, 'flags.ryf3.actions': actions });
 

@@ -1,0 +1,42 @@
+{
+  "_id": "5RUm7FmJSSJiUebv",
+  "name": "Elfo del Bosque",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Ventaja gratuita: Puntería o Certero (a elegir). Infravisión: ve en la oscuridad con -2 a Percepción (RyF 3.0, pág. 98).</p>",
+    "attributeCap": {
+      "attribute": "",
+      "max": 0
+    },
+    "xpSessionModifier": 0,
+    "pyramidRestriction": "",
+    "grantedAdvantages": [
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.6FFGZ1oDOQqXAamX",
+        "name": "Puntería"
+      },
+      {
+        "uuid": "Compendium.ryf3.advantages-es.Item.3C2zB8xAhWWjt6HC",
+        "name": "Certero"
+      }
+    ],
+    "armorForbidden": false,
+    "effects": [
+      {
+        "id": "ScYHU6hmpa8IDuSA",
+        "type": "note",
+        "text": "Infravisión: ve en la oscuridad con -2 a las tiradas de Percepción (RyF 3.0, pág. 98)",
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!5RUm7FmJSSJiUebv"
+}

@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["character", "npc"],
+    "types": ["character", "npc", "ship"],
     "templates": {
       "base": {
         "biography": "",
@@ -68,6 +68,19 @@
         "wounded": false,
         "unconscious": false,
         "dead": false
+      },
+      "tokens": {
+        "value": 1,
+        "max": 1
+      },
+      "money": {
+        "gold": 0,
+        "silver": 0,
+        "copper": 0
+      },
+      "sanity": {
+        "value": 0,
+        "max": 0
       }
     },
     "npc": {
@@ -83,10 +96,39 @@
       "attacks": [],
       "cr": 1,
       "isMinion": false
+    },
+    "ship": {
+      "biography": "",
+      "speed": 3,
+      "maneuverability": 3,
+      "shields": 3,
+      "pilot": {
+        "uuid": "",
+        "name": ""
+      },
+      "gunner": {
+        "uuid": "",
+        "name": ""
+      },
+      "pilotBase": 0,
+      "gunnerBase": 0,
+      "health": {
+        "value": 30,
+        "max": 30
+      },
+      "lasers": 0,
+      "missiles": 0,
+      "decoys": 0,
+      "livingSpace": 0,
+      "cargo": 0,
+      "cabins": 0,
+      "hangars": 0,
+      "hyperspace": false,
+      "points": 0
     }
   },
   "Item": {
-    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage"],
+    "types": ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage", "race"],
     "templates": {
       "base": {
         "description": "",
@@ -112,7 +154,12 @@
       "damage": {
         "base": "1d6",
         "bonus": 0,
-        "type": "physical"
+        "type": "physical",
+        "byRange": {
+          "short": "",
+          "medium": "",
+          "long": ""
+        }
       },
       "range": {
         "short": 0,
@@ -120,6 +167,13 @@
         "long": 0
       },
       "twoHanded": false,
+      "precision": 0,
+      "ignoresArmor": false,
+      "ammo": {
+        "value": 0,
+        "max": 0
+      },
+      "reloadTurns": 0,
       "properties": [],
       "effects": []
     },
@@ -174,6 +228,18 @@
         "attribute": "",
         "value": 0
       },
+      "effects": []
+    },
+    "race": {
+      "description": "",
+      "attributeCap": {
+        "attribute": "",
+        "max": 0
+      },
+      "xpSessionModifier": 0,
+      "pyramidRestriction": "",
+      "grantedAdvantages": [],
+      "armorForbidden": false,
       "effects": []
     }
   }

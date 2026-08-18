@@ -1,8 +1,37 @@
-import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, degradeMode } from '../helpers/dice.mjs';
+import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, resolveMode } from '../helpers/dice.mjs';
+import { getHitLocations, getHitLocation } from '../config/hit-locations.mjs';
 
 export class RyfRoll {
-  
-  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0) {
+
+  // Reference: RyF 3.0 PDF, páginas 17-18 y 91-92 - factores que desplazan el
+  // rango del dado objetivo. Consume la deuda de token pendiente y gasta el
+  // token de la muerte si el jugador lo marcó en el diálogo.
+  static async _collectFactors(actor, { untrained = false, specialization = false, spendToken = false } = {}) {
+    const ups = [];
+    const downs = [];
+
+    if (actor.system.states?.wounded || actor.statuses?.has('wounded')) downs.push('wounded');
+    if (untrained) downs.push('untrained');
+
+    // Reference: RyF 3.0 PDF, página 92 - cuando el máster devuelve el token,
+    // la siguiente tirada baja un rango el dado objetivo
+    if (actor.isOwner && actor.getFlag('ryf3', 'tokenDebt')) {
+      downs.push('tokenDebt');
+      await actor.unsetFlag('ryf3', 'tokenDebt');
+    }
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 y 98 - la especialización aplicable
+    // sube un rango el dado objetivo
+    if (specialization) ups.push('specialization');
+
+    // Reference: RyF 3.0 PDF, páginas 91-92 - gastar el token antes de la
+    // tirada sube un rango el dado objetivo
+    if (spendToken && await actor.spendDeathToken?.()) ups.push('token');
+
+    return { ups, downs };
+  }
+
+  static async rollSkill(actor, skillName, difficulty = 15, mode = 'normal', modifier = 0, options = {}) {
     const skill = actor.items.find(i => i.type === 'skill' && i.name.toLowerCase() === skillName.toLowerCase());
 
     if (!skill) {
@@ -18,11 +47,13 @@ export class RyfRoll {
 
     const hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
 
-    // Reference: RyF 3.0 PDF, páginas 18 y 20 - habilidad sin puntos o estar
-    // malherido baja un rango el dado objetivo (no acumulable)
-    if (skillLevel === 0 || actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, {
+      untrained: skillLevel === 0,
+      specialization: options.specialization,
+      spendToken: options.spendToken
+    });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -59,7 +90,143 @@ export class RyfRoll {
     return rollData;
   }
   
-  static async rollAttack(actor, weapon, targetDefense, mode = 'normal', modifier = 0) {
+  // Reference: RyF 3.0 PDF, páginas 93-94 - modificadores a la dificultad de
+  // los ataques a distancia: cobertura, movimiento del blanco y flanqueos.
+  // Campos compartidos por el diálogo de ataque de personaje y el de PNJ.
+  static rangedModifiersFields() {
+    return `
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.Cover')}</label>
+        <select name="cover">
+          <option value="0" selected>${game.i18n.localize('RYF.Combat.CoverNone')}</option>
+          <option value="2">${game.i18n.localize('RYF.Combat.CoverProne')} (+2)</option>
+          <option value="3">${game.i18n.localize('RYF.Combat.CoverSmall')} (+3)</option>
+          <option value="4">${game.i18n.localize('RYF.Combat.CoverLarge')} (+4)</option>
+          <option value="5">${game.i18n.localize('RYF.Combat.CoverWall')} (+5)</option>
+          <option value="10">${game.i18n.localize('RYF.Combat.CoverTotal')} (+10)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.TargetMovement')}</label>
+        <select name="targetMovement">
+          <option value="0" selected>${game.i18n.localize('RYF.Combat.MovementNone')}</option>
+          <option value="2">${game.i18n.localize('RYF.Combat.MovementRunning')} (+2)</option>
+          <option value="4">${game.i18n.localize('RYF.Combat.MovementVehicle')} (+4)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.Combat.Flanking')}</label>
+        <input type="number" name="flanking" value="0" min="0" step="1"/>
+      </div>`;
+  }
+
+  static readRangedModifiers(html) {
+    const cover = parseInt(html.find('[name="cover"]').val()) || 0;
+    const movement = parseInt(html.find('[name="targetMovement"]').val()) || 0;
+    // El flanqueo lo aprovecha el atacante: se resta de la dificultad
+    // (+1 acumulativo por cada tirador adicional desde otra posición, pág. 93-94)
+    const flanking = parseInt(html.find('[name="flanking"]').val()) || 0;
+    const total = cover + movement - flanking;
+
+    if (cover === 0 && movement === 0 && flanking === 0) return null;
+    return { cover, movement, flanking, total };
+  }
+
+  // Reference: RyF 3.0 PDF, página 95 - tiro apuntado: elegir zona concreta
+  // sube la defensa del objetivo. Campo compartido por los diálogos de ataque.
+  static calledShotField() {
+    if (!game.settings.get('ryf3', 'enableHitLocation')) return '';
+
+    const options = Object.entries(getHitLocations()).map(([key, location]) =>
+      `<option value="${key}">${game.i18n.localize(location.label)} (+${location.defenseModifier})</option>`
+    ).join('');
+
+    return `
+      <div class="form-group">
+        <label>${game.i18n.localize('RYF.CalledShot')}</label>
+        <select name="calledShot">
+          <option value="" selected>${game.i18n.localize('RYF.CalledShotRandom')}</option>
+          ${options}
+        </select>
+      </div>`;
+  }
+
+  // Reference: RyF 3.0 PDF, página 95 - localización de daño (módulo opcional):
+  // 1d10 aleatorio al impactar, o la zona elegida si fue un tiro apuntado
+  static async _resolveHitLocation(success, calledShot = null) {
+    if (!game.settings.get('ryf3', 'enableHitLocation') || !success) return null;
+
+    const locations = getHitLocations();
+
+    if (calledShot && locations[calledShot]) {
+      return { key: calledShot, label: locations[calledShot].label, called: true };
+    }
+
+    const roll = await new Roll('1d10').evaluate();
+    const key = getHitLocation(roll.total, locations);
+    return { key: key, label: locations[key].label, roll: roll.total, called: false };
+  }
+
+  // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
+  // malherido, pifia y fallo automático con 1 natural (RyF 3.0 PDF, págs. 18-20)
+  static async _resolveRoll(base, difficulty, mode, modifier, wounded) {
+    mode = resolveMode(mode, { downs: wounded ? ['wounded'] : [] });
+
+    const diceRoll = await roll1o3d10(mode);
+    const total = base + diceRoll.result + modifier;
+
+    const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
+    const margin = total - difficulty;
+    const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
+
+    return { mode, diceRoll, total, fumble, success, margin, criticalDice };
+  }
+
+  static async rollAttack(actor, weapon, targetDefense, mode = 'normal', modifier = 0, options = {}) {
+    // Reference: RyF 3.0 PDF, páginas 87-88 - los PNJ usan un bono plano de
+    // ataque en lugar de atributo + habilidad, pero comparten el resto de
+    // reglas de la tirada (malherido, pifia, 1 natural, crítico)
+    if (weapon.type === 'npc-attack') {
+      // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
+      // del objetivo según la zona elegida
+      if (options.calledShot) {
+        targetDefense += getHitLocations()[options.calledShot]?.defenseModifier || 0;
+      }
+
+      const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
+      const attackBonus = weapon.system.attackBonus || 0;
+      const resolved = await this._resolveRoll(attackBonus, targetDefense, mode, modifier, wounded);
+
+      const rollData = {
+        type: 'npc-attack',
+        actor: actor,
+        actorName: actor.name,
+        actorImg: actor.img,
+        attackName: weapon.name,
+        attackType: weapon.system.attackType,
+        attackBonus: attackBonus,
+        difficulty: targetDefense,
+        modifier: modifier,
+        rangedModifiers: options.rangedModifiers || null,
+        hitLocation: await this._resolveHitLocation(resolved.success, options.calledShot),
+        // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe y cada
+        // +5 de margen derriba un esbirro adicional
+        minionNote: (resolved.success && options.targetIsMinion) ? { extra: Math.floor(resolved.margin / 5) } : null,
+        ...resolved
+      };
+
+      await this.toMessage(rollData);
+
+      return rollData;
+    }
+
+    // Reference: RyF 3.0 PDF, página 95 - el tiro apuntado sube la defensa
+    // del objetivo según la zona elegida
+    if (options.calledShot) {
+      targetDefense += getHitLocations()[options.calledShot]?.defenseModifier || 0;
+    }
+
     const weaponCategory = this._getWeaponSkillCategory(weapon);
 
     if (!weaponCategory) {
@@ -82,10 +249,6 @@ export class RyfRoll {
       } else if (weaponCategory === 'ranged' || weaponCategory === 'firearms') {
         attributeName = 'destreza';
       }
-
-      if (mode !== 'disadvantage') {
-        mode = 'disadvantage';
-      }
     } else {
       skillLevel = skill.system.level || 0;
       skillName = skill.name;
@@ -103,15 +266,24 @@ export class RyfRoll {
 
     const weaponAttackBonus = (actor.system.activeEffectBonuses?.weaponsAttack?.[weapon.name]) || 0;
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado
-    // objetivo (no acumulable con el rango ya bajado por falta de habilidad)
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, página 95 - la precisión del arma modifica la
+    // tirada de ataque
+    const precision = weapon.system.precision || 0;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - sin puntos en la habilidad (o sin
+    // habilidad) y malherido bajan un rango el dado objetivo; especialización y
+    // token lo suben. El clamp de resolveMode impide acumular más allá del
+    // dado menor/mayor
+    const factors = await this._collectFactors(actor, {
+      untrained: !hasSkill || skillLevel === 0,
+      specialization: options.specialization,
+      spendToken: options.spendToken
+    });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + diceRoll.result + modifier;
+    const total = attributeValue + skillLevel + skillEffectBonus + attackBonus + weaponAttackBonus + precision + diceRoll.result + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, targetDefense, fumble, diceRoll.chosen);
@@ -133,6 +305,13 @@ export class RyfRoll {
       targetDefense: targetDefense,
       mode: mode,
       modifier: modifier,
+      precision: precision,
+      range: options.range || null,
+      rangedModifiers: options.rangedModifiers || null,
+      hitLocation: await this._resolveHitLocation(success, options.calledShot),
+      // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe y cada
+      // +5 de margen derriba un esbirro adicional
+      minionNote: (success && options.targetIsMinion) ? { extra: Math.floor(margin / 5) } : null,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -147,8 +326,15 @@ export class RyfRoll {
     return rollData;
   }
   
-  static async rollDamage(weapon, criticalDice = 0, bonus = 0, actor = null) {
-    const baseDamage = weapon.system.damage?.base || '1d6';
+  static async rollDamage(weapon, criticalDice = 0, bonus = 0, actor = null, range = null) {
+    // Reference: RyF 3.0 PDF, página 25 - algunas armas tienen daño distinto
+    // por banda de distancia (ej. escopeta recortada 4d6/3d6/2d6); a bocajarro
+    // se usa el daño de la banda corta
+    const byRange = weapon.system.damage?.byRange || {};
+    const bandKey = range === 'pointblank' ? 'short' : range;
+    const baseDamage = (bandKey && byRange[bandKey])
+      ? byRange[bandKey]
+      : (weapon.system.damage?.base || '1d6');
     const damageBonus = weapon.system.damage?.bonus || 0;
 
     let effectBonus = 0;
@@ -185,6 +371,8 @@ export class RyfRoll {
       effectBonus: effectBonus,
       criticalDice: criticalDice,
       criticalRoll: criticalRoll,
+      // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción (mazas)
+      ignoresArmor: !!weapon.system.ignoresArmor,
       total: total
     };
 
@@ -225,6 +413,9 @@ export class RyfRoll {
       keptA: kept === resultA,
       criticalDice: criticalDice,
       criticalRoll: criticalRoll,
+      // Reference: RyF 3.0 PDF, página 22 - el daño lo causa el arma que más
+      // sacó; si esa ignora armadura, aplica su propiedad
+      ignoresArmor: !!kept.weapon.system.ignoresArmor,
       total: total
     };
 
@@ -244,9 +435,19 @@ export class RyfRoll {
       : await this._rollOpposedSide(targetActor, null, defenderBonus);
     if (!defenderSide) return null;
 
+    // Reference: RyF 3.0 PDF, página 18 - el 1 natural en el dado objetivo es
+    // fallo automático también en tiradas enfrentadas (y la pifia igualmente);
+    // si fallan ambos lados, el empate queda a discreción del máster
+    const attackerFails = attackerSide.fumble || attackerSide.naturalOne;
+    const defenderFails = defenderSide.fumble || defenderSide.naturalOne;
+
     let winner = null;
-    if (attackerSide.total > defenderSide.total) winner = 'attacker';
-    else if (defenderSide.total > attackerSide.total) winner = 'defender';
+    if (attackerFails && !defenderFails) winner = 'defender';
+    else if (defenderFails && !attackerFails) winner = 'attacker';
+    else if (!attackerFails && !defenderFails) {
+      if (attackerSide.total > defenderSide.total) winner = 'attacker';
+      else if (defenderSide.total > attackerSide.total) winner = 'defender';
+    }
 
     const rollData = {
       type: 'opposed',
@@ -266,7 +467,7 @@ export class RyfRoll {
     let attributeValue = 0;
     let skillLevel = 0;
     let label = game.i18n.localize('RYF.Attribute');
-    let mode = 'normal';
+    let untrained = false;
     let hindrance = 0;
 
     if (skillName) {
@@ -280,19 +481,16 @@ export class RyfRoll {
       skillLevel += actor.system.activeEffectBonuses?.skills?.[skill.name] || 0;
       hindrance = (skill.system.attribute === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
       label = skill.name;
-
-      // Reference: RyF 3.0 PDF, páginas 18 y 20 - sin puntos de habilidad o
-      // malherido se guarda el dado menor
-      if (skill.system.level === 0 || actor.system.states?.wounded) {
-        mode = degradeMode(mode);
-      }
+      untrained = skill.system.level === 0;
     } else {
       attributeValue = flatBonus;
       label = game.i18n.localize('RYF.Modifier');
-      if (actor.system.states?.wounded) {
-        mode = degradeMode(mode);
-      }
     }
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - sin puntos de habilidad o
+    // malherido bajan un rango el dado objetivo también en las enfrentadas
+    const factors = await this._collectFactors(actor, { untrained: untrained });
+    const mode = resolveMode('normal', factors);
 
     const diceRoll = await roll1o3d10(mode);
 
@@ -304,8 +502,48 @@ export class RyfRoll {
       hindrance: hindrance,
       mode: mode,
       diceRoll: diceRoll,
+      fumble: checkFumble(diceRoll.dice, diceRoll.chosen),
+      naturalOne: diceRoll.chosen === 1,
       total: attributeValue + skillLevel + diceRoll.result - hindrance
     };
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 103-104 - combate y persecución de naves.
+  // Cada nave tira su lado de la enfrentada por separado, cuando le toca:
+  // ataque = bono del artillero + Maniobrabilidad + 1o3d10; defensa = bono del
+  // piloto + Maniobrabilidad + 1o3d10; persecución = bono del piloto +
+  // Velocidad + 1o3d10. Los totales se comparan en el chat: el más alto
+  // impacta/esquiva o acorta/abre la distancia.
+  static async rollShipRoll(ship, { contest = 'attack', bonus = 0, bonusSource = null, modifier = 0, weaponLabel = null, damageFormula = null } = {}) {
+    const statKey = contest === 'chase' ? 'speed' : 'maneuverability';
+    const shipStat = ship.system[statKey] || 0;
+
+    const diceRoll = await roll1o3d10('normal');
+    const total = bonus + shipStat + diceRoll.result + modifier;
+
+    const rollData = {
+      type: 'ship',
+      actor: ship,
+      ship: ship,
+      contest: contest,
+      statKey: statKey,
+      bonus: bonus,
+      bonusSource: bonusSource,
+      shipStat: shipStat,
+      modifier: modifier,
+      diceRoll: diceRoll,
+      // Reference: RyF 3.0 PDF, página 18 - pifia y 1 natural pierden también
+      // las enfrentadas: se marcan en la card para la comparación
+      fumble: checkFumble(diceRoll.dice, diceRoll.chosen),
+      naturalOne: diceRoll.chosen === 1,
+      total: total,
+      weaponLabel: weaponLabel,
+      damageFormula: damageFormula
+    };
+
+    await this.toMessage(rollData);
+
+    return rollData;
   }
 
   static async rollSpellDamage(spell, criticalDice = 0, formula = null, type = null) {
@@ -346,7 +584,7 @@ export class RyfRoll {
     const total = attributeValue + spellLevel + diceRoll.result;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -375,7 +613,7 @@ export class RyfRoll {
     return weapon.system.category || 'melee';
   }
 
-  static async rollSpellCasting(actor, spell, difficulty, mode = 'normal', modifier = 0) {
+  static async rollSpellCasting(actor, spell, difficulty, mode = 'normal', modifier = 0, options = {}) {
     const isNPC = actor.type === 'npc';
     const intelligence = isNPC ? 0 : actor.system.attributes.inteligencia.value;
     const spellLevel = spell.system.level;
@@ -388,14 +626,17 @@ export class RyfRoll {
     // Arcano: +1 a tiradas de hechizos)
     const castingBonus = actor.system.activeEffectBonuses?.spellCasting || 0;
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 a la tirada de
+    // lanzamiento por cada 2 puntos de maná extra gastados
+    const burnBonus = options.burnBonus || 0;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, { spendToken: options.spendToken });
+    mode = resolveMode(mode, factors);
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = intelligence + spellLevel + castingBonus + diceRoll.result - hindrance + modifier;
+    const total = intelligence + spellLevel + castingBonus + burnBonus + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
     const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
@@ -412,6 +653,8 @@ export class RyfRoll {
       mode: mode,
       hindrance: hindrance,
       castingBonus: castingBonus,
+      burnBonus: burnBonus,
+      extraMana: options.extraMana || 0,
       modifier: modifier,
       diceRoll: diceRoll,
       total: total,
@@ -455,7 +698,7 @@ export class RyfRoll {
     return rollData;
   }
 
-  static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal') {
+  static async rollAttribute(actor, attributeName, difficulty = 15, mode = 'normal', options = {}) {
     let attributeValue;
 
     if (actor.type === 'npc') {
@@ -473,17 +716,24 @@ export class RyfRoll {
       attributeValue = attribute.value;
     }
 
-    // Reference: RyF 3.0 PDF, página 20 - malherido baja un rango el dado objetivo
-    if (actor.system.states?.wounded) {
-      mode = degradeMode(mode);
-    }
+    // Reference: RyF 3.0 PDF, páginas 17-18 - desplazamiento de rango del dado objetivo
+    const factors = await this._collectFactors(actor, { spendToken: options.spendToken });
+    mode = resolveMode(mode, factors);
+
+    // Reference: RyF 3.0 PDF, página 21 - el estorbo se resta a todas las
+    // tiradas de Destreza, también las de atributo puro
+    const hindrance = (attributeName === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
+
+    const modifier = options.modifier || 0;
 
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + diceRoll.result;
+    const total = attributeValue + diceRoll.result - hindrance + modifier;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    // Reference: RyF 3.0 PDF, página 18 - el 1 natural en el dado objetivo
+    // también es fallo automático en salvaciones y tiradas de atributo
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -494,6 +744,8 @@ export class RyfRoll {
       attributeValue: attributeValue,
       difficulty: difficulty,
       mode: mode,
+      hindrance: hindrance,
+      modifier: modifier,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -567,7 +819,9 @@ export class RyfRoll {
       'spell-damage': 'systems/ryf3/templates/chat/spell-damage.hbs',
       'healing': 'systems/ryf3/templates/chat/healing-roll.hbs',
       'dual-damage': 'systems/ryf3/templates/chat/dual-damage-roll.hbs',
-      'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs'
+      'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs',
+      'npc-attack': 'systems/ryf3/templates/chat/npc-attack-roll.hbs',
+      'ship': 'systems/ryf3/templates/chat/ship-roll.hbs'
     };
 
     const template = templateMap[rollData.type];

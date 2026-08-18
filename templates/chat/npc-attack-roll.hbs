@@ -55,6 +55,15 @@
     {{/if}}
   </div>
 
+  {{!-- Reference: RyF 3.0 PDF, páginas 93-94 - modificadores a distancia --}}
+  {{#if rangedModifiers}}
+  <div class="ranged-modifiers">
+    {{#if rangedModifiers.cover}}<span class="ranged-mod"><i class="fas fa-shield-alt"></i> {{localize "RYF.Combat.Cover"}} +{{rangedModifiers.cover}}</span>{{/if}}
+    {{#if rangedModifiers.movement}}<span class="ranged-mod"><i class="fas fa-person-running"></i> {{localize "RYF.Combat.TargetMovement"}} +{{rangedModifiers.movement}}</span>{{/if}}
+    {{#if rangedModifiers.flanking}}<span class="ranged-mod"><i class="fas fa-people-arrows"></i> {{localize "RYF.Combat.Flanking"}} −{{rangedModifiers.flanking}}</span>{{/if}}
+  </div>
+  {{/if}}
+
   <div class="roll-result">
     <div class="result-total {{#if success}}success{{else}}failure{{/if}}">
       <span class="result-label">{{localize "RYF.AttackRoll"}}</span>
@@ -87,6 +96,22 @@
         <i class="fas fa-star"></i>
         <strong>{{localize "RYF.CriticalHit"}}</strong>
         <span class="critical-dice">+{{criticalDice}}d6 {{localize "RYF.ExtraDamage"}}</span>
+      </div>
+      {{/if}}
+
+      {{!-- Reference: RyF 3.0 PDF, página 95 - localización de daño (módulo opcional) --}}
+      {{#if hitLocation}}
+      <div class="hit-location">
+        <i class="fas fa-bullseye"></i>
+        {{localize "RYF.HitLocation"}}: <strong>{{localize hitLocation.label}}</strong>{{#if hitLocation.roll}} (1d10: {{hitLocation.roll}}){{/if}}{{#if hitLocation.called}} ({{localize "RYF.CalledShot"}}){{/if}}
+      </div>
+      {{/if}}
+
+      {{!-- Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe --}}
+      {{#if minionNote}}
+      <div class="minion-note">
+        <i class="fas fa-skull"></i>
+        {{localize "RYF.Minion.FallsOnHit"}}{{#if (gt minionNote.extra 0)}} {{localize "RYF.Minion.ExtraDown" count=minionNote.extra}}{{/if}}
       </div>
       {{/if}}
     {{else}}

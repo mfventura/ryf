@@ -1,0 +1,47 @@
+{
+  "_id": "u7uSEhNPWkl3L4pe",
+  "name": "Artificial",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "description": "<p>Androide, robot, forjado o gólem. Absorción natural 5, no puede llevar armadura, no necesita dormir, no recibe ventaja, -1 PX por sesión y solo puede usar la pirámide especialista (RyF 3.0, pág. 98).</p>",
+    "attributeCap": {
+      "attribute": "",
+      "max": 0
+    },
+    "xpSessionModifier": -1,
+    "pyramidRestriction": "specialist",
+    "grantedAdvantages": [],
+    "armorForbidden": true,
+    "effects": [
+      {
+        "id": "5FPC010astll1eRt",
+        "type": "buff",
+        "target": "absorption",
+        "targetName": "",
+        "modifier": 5,
+        "collapsed": false
+      },
+      {
+        "id": "4NV5E348SN2XsNhE",
+        "type": "note",
+        "text": "No necesita dormir",
+        "collapsed": false
+      },
+      {
+        "id": "iMv7BHNr9jiMH0kg",
+        "type": "note",
+        "text": "No recibe ventaja en la creación",
+        "collapsed": false
+      }
+    ]
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!items!u7uSEhNPWkl3L4pe"
+}

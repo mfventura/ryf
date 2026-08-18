@@ -1,0 +1,38 @@
+{
+  "_id": "EgDZJFlE4HxUfcnD",
+  "name": "Destructor Imperial Clase Victory Mark II",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>V4 M2 BD40 PV400, Espacio vital 15 (225 personas), 20 cañones láser (20x1d6), 10 misiles (10x3d6), 30 hangares, 12 camarotes (144 personas), 12 espacios de carga, hiperespacio. Puntos totales: 150 (RyF 3.0, pág. 104).</p>",
+    "speed": 4,
+    "maneuverability": 2,
+    "shields": 40,
+    "health": {
+      "value": 400,
+      "max": 400
+    },
+    "lasers": 20,
+    "missiles": 10,
+    "decoys": 0,
+    "livingSpace": 15,
+    "cargo": 12,
+    "cabins": 12,
+    "hangars": 30,
+    "hyperspace": true,
+    "points": 150
+  },
+  "prototypeToken": {
+    "name": "Destructor Imperial Clase Victory Mark II",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!EgDZJFlE4HxUfcnD"
+}

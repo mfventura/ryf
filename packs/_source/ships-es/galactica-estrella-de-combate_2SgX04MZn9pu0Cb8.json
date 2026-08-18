@@ -1,0 +1,38 @@
+{
+  "_id": "2SgX04MZn9pu0Cb8",
+  "name": "Galáctica, Estrella de Combate",
+  "type": "ship",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "biography": "<p>V1 M1 BD40 PV400, 10 cañones láser (10x1d6), Espacio vital 20 (400 personas), 10 hangares, 10 espacios de carga, 18 camarotes (324 personas), hiperespacio. Puntos totales: 115 (RyF 3.0, pág. 104).</p>",
+    "speed": 1,
+    "maneuverability": 1,
+    "shields": 40,
+    "health": {
+      "value": 400,
+      "max": 400
+    },
+    "lasers": 10,
+    "missiles": 0,
+    "decoys": 0,
+    "livingSpace": 20,
+    "cargo": 10,
+    "cabins": 18,
+    "hangars": 10,
+    "hyperspace": true,
+    "points": 115
+  },
+  "prototypeToken": {
+    "name": "Galáctica, Estrella de Combate",
+    "actorLink": true
+  },
+  "items": [],
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!actors!2SgX04MZn9pu0Cb8"
+}

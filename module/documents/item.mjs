@@ -1,3 +1,5 @@
+import { getRule } from '../helpers/rules.mjs';
+
 export class RyfItem extends Item {
 
   prepareData() {
@@ -56,7 +58,8 @@ export class RyfItem extends Item {
     const system = itemData.system;
 
     if (system.level < 1) system.level = 1;
-    if (system.level > 10) system.level = 10;
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel') || 10;
+    if (system.level > maxLevel) system.level = maxLevel;
 
     if (system.manaCost < 0) system.manaCost = 0;
   }
@@ -64,6 +67,12 @@ export class RyfItem extends Item {
   static async create(data, options) {
     if (data.type === 'spell' && !CONFIG.RYF.isMagicEnabled()) {
       ui.notifications.warn(game.i18n.localize('RYF.Warnings.MagicDisabled'));
+      return null;
+    }
+
+    // Reference: RyF 3.0 PDF, página 98 - Razas (módulo opcional)
+    if (data.type === 'race' && !game.settings.get('ryf3', 'enableRaces')) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.RacesDisabled'));
       return null;
     }
 
@@ -115,6 +124,15 @@ export class RyfItem extends Item {
 
     const currentlyEquipped = this.system.equipped;
 
+    // Reference: RyF 3.0 PDF, página 98 - los Artificiales no pueden llevar
+    // armadura (aviso no bloqueante, coherente con el resto de validaciones)
+    if (!currentlyEquipped && this.type === 'armor') {
+      const race = this.actor.items.find(i => i.type === 'race' && i.system.armorForbidden);
+      if (race) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.RaceArmorForbidden', { race: race.name }));
+      }
+    }
+
     if (!currentlyEquipped && (this.type === 'armor' || this.type === 'shield')) {
       const equippedItems = this.actor.items.filter(i =>
         i.type === this.type && i.system.equipped && i.id !== this.id
@@ -164,10 +182,10 @@ export class RyfItem extends Item {
     }
   }
 
-  // Las ventajas aplican sus efectos mientras están en el actor; los
-  // equipables, solo mientras están equipados
+  // Las ventajas y razas aplican sus efectos mientras están en el actor;
+  // los equipables, solo mientras están equipados
   _effectsAreActive() {
-    if (this.type === 'advantage') return true;
+    if (this.type === 'advantage' || this.type === 'race') return true;
     return ['weapon', 'armor', 'shield', 'equipment'].includes(this.type) && this.system.equipped;
   }
 
@@ -181,6 +199,12 @@ export class RyfItem extends Item {
     if (this._effectsAreActive()) {
       this._applyItemEffects();
     }
+
+    // Reference: RyF 3.0 PDF, página 98 - la ventaja gratuita de la raza se
+    // añade al personaje junto con la raza
+    if (this.type === 'race') {
+      this._grantRaceAdvantages();
+    }
   }
 
   _onDelete(options, userId) {
@@ -193,6 +217,81 @@ export class RyfItem extends Item {
     const orphanEffects = this.actor.effects.filter(e => e.flags?.ryf3?.sourceId === this.id);
     if (orphanEffects.length > 0) {
       this.actor.deleteEmbeddedDocuments('ActiveEffect', orphanEffects.map(e => e.id));
+    }
+
+    // Al quitar la raza se retiran también las ventajas que concedió
+    if (this.type === 'race') {
+      const grantedItems = this.actor.items.filter(i => i.flags?.ryf3?.grantedByRace === this.id);
+      if (grantedItems.length > 0) {
+        this.actor.deleteEmbeddedDocuments('Item', grantedItems.map(i => i.id));
+      }
+    }
+  }
+
+  // Reference: RyF 3.0 PDF, página 98 - cada raza concede una ventaja
+  // gratuita; el Elfo del Bosque elige entre Puntería y Certero, de ahí el
+  // diálogo de elección cuando hay más de una enlazada
+  async _grantRaceAdvantages() {
+    const granted = this.system.grantedAdvantages || [];
+    if (granted.length === 0 || !this.actor) return;
+
+    let chosen = granted;
+
+    if (granted.length > 1) {
+      const selected = await new Promise((resolve) => {
+        new Dialog({
+          title: game.i18n.format('RYF.Race.ChooseAdvantageTitle', { race: this.name }),
+          content: `
+            <form>
+              <p class="hint">${game.i18n.localize('RYF.Race.ChooseAdvantageHint')}</p>
+              <div class="form-group">
+                <label>${game.i18n.localize('RYF.Advantage')}</label>
+                <select name="advantage" autofocus>
+                  ${granted.map((entry, index) => `<option value="${index}">${entry.name}</option>`).join('')}
+                </select>
+              </div>
+            </form>
+          `,
+          buttons: {
+            choose: {
+              icon: '<i class="fas fa-check"></i>',
+              label: game.i18n.localize('RYF.Race.ChooseAdvantage'),
+              callback: (html) => resolve(granted[parseInt(html.find('[name="advantage"]').val())] || null)
+            },
+            cancel: {
+              icon: '<i class="fas fa-times"></i>',
+              label: game.i18n.localize('RYF.Cancel'),
+              callback: () => resolve(null)
+            }
+          },
+          default: 'choose',
+          close: () => resolve(null)
+        }).render(true);
+      });
+
+      if (!selected) return;
+      chosen = [selected];
+    }
+
+    for (const entry of chosen) {
+      const source = await fromUuid(entry.uuid);
+      if (!source || source.type !== 'advantage') {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.GrantedAdvantageNotFound', { name: entry.name }));
+        continue;
+      }
+
+      const itemData = source.toObject();
+      delete itemData._id;
+      itemData.flags = foundry.utils.mergeObject(itemData.flags || {}, {
+        ryf3: { grantedByRace: this.id }
+      });
+
+      await this.actor.createEmbeddedDocuments('Item', [itemData]);
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.RaceAdvantageGranted', {
+        advantage: source.name,
+        race: this.name
+      }));
     }
   }
 
@@ -258,8 +357,10 @@ export class RyfItem extends Item {
 
     const currentLevel = this.system.level;
 
-    if (currentLevel >= 10) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.MaxSkillLevel'));
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel') || 10;
+    if (currentLevel >= maxLevel) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.MaxSkillLevel', { max: maxLevel }));
+      return;
     }
 
     const newLevel = currentLevel + 1;
@@ -272,6 +373,21 @@ export class RyfItem extends Item {
         const success = await this.actor.spendExperience(xpCost, `${this.name} ${currentLevel} → ${newLevel}`);
 
         if (!success) return;
+      } else {
+        // Reference: RyF 3.0 PDF, página 39 - límites de creación: máximo 6
+        // puntos por habilidad y atributo + habilidad <= 16. Avisos no
+        // bloqueantes, coherentes con el resto de validaciones de creación
+        const creationMaxSkill = getRule('creationMaxSkill');
+        if (newLevel > creationMaxSkill) {
+          ui.notifications.warn(game.i18n.format('RYF.Warnings.CreationMaxSkill', { max: creationMaxSkill }));
+        }
+
+        const attributeName = this.type === 'spell' ? 'inteligencia' : this.system.attribute;
+        const attributeValue = this.actor.system.attributes?.[attributeName]?.value || 0;
+        const creationMaxSum = getRule('creationMaxSum');
+        if (attributeValue + newLevel > creationMaxSum) {
+          ui.notifications.warn(game.i18n.format('RYF.Warnings.CreationMaxSum', { max: creationMaxSum }));
+        }
       }
     }
 
@@ -308,15 +424,16 @@ export class RyfItem extends Item {
     }));
   }
 
+  // Reference: RyF 3.0 PDF, páginas 14 y 38 - subir una habilidad cuesta el
+  // nuevo nivel en PX; multiplicador opcional (x1.5 / x2) para campañas largas
   calculateSkillUpgradeCost(fromLevel, toLevel) {
-    const baseCost = 1;
     let totalCost = 0;
 
     for (let level = fromLevel + 1; level <= toLevel; level++) {
-      totalCost += baseCost * level;
+      totalCost += level;
     }
 
-    return totalCost;
+    return Math.ceil(totalCost * getRule('xpCostMultiplier'));
   }
 
   async castSpell() {

@@ -20,6 +20,13 @@
       </div>
       {{/if}}
 
+      {{!-- Reference: RyF 3.0 PDF, página 22 - el arma ignora la absorción --}}
+      {{#if ignoredArmor}}
+      <div class="damage-row absorption">
+        <span class="damage-label"><i class="fas fa-shield-halved"></i> {{localize "RYF.IgnoresArmorNote"}}</span>
+      </div>
+      {{/if}}
+
       <div class="damage-row final">
         <span class="damage-label">{{localize "RYF.Combat.FinalDamage"}}:</span>
         <span class="damage-value">{{damageFinal}}</span>

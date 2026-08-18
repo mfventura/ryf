@@ -1,4 +1,6 @@
 import { RyfRoll } from '../rolls/ryf-roll.mjs';
+import { getRule } from '../helpers/rules.mjs';
+import { resolveMode, SKILL_DIFFICULTIES, ATTRIBUTE_DIFFICULTIES } from '../helpers/dice.mjs';
 
 export class RyfActorSheet extends ActorSheet {
 
@@ -31,6 +33,14 @@ export class RyfActorSheet extends ActorSheet {
 
     context.isCarismaEnabled = CONFIG.RYF.isCarismaEnabled();
     context.isMagicEnabled = CONFIG.RYF.isMagicEnabled();
+    // Reference: RyF 3.0 PDF, páginas 91-92 - módulo opcional Tokens de la muerte
+    context.enableTokens = game.settings.get('ryf3', 'enableTokens');
+    // Reference: RyF 3.0 PDF, páginas 96-98 - módulo opcional de munición
+    context.enableAmmo = game.settings.get('ryf3', 'enableAmmo');
+    // Reference: RyF 3.0 PDF, páginas 43 y 98 - módulos opcionales de Cordura y Razas
+    context.enableSanity = game.settings.get('ryf3', 'enableSanity');
+    context.enableRaces = game.settings.get('ryf3', 'enableRaces');
+    context.isGM = game.user.isGM;
 
     if (this.actor.type === 'character') {
       this._prepareCharacterData(context);
@@ -89,6 +99,7 @@ export class RyfActorSheet extends ActorSheet {
     const spells = [];
     const npcAttacks = [];
     const advantages = [];
+    const races = [];
 
     for (let i of context.items) {
       i.img = i.img || Item.DEFAULT_ICON;
@@ -110,6 +121,10 @@ export class RyfActorSheet extends ActorSheet {
       } else if (i.type === 'advantage') {
         i.effectLabel = this._summarizeAdvantageEffects(i);
         advantages.push(i);
+      } else if (i.type === 'race') {
+        i.effectLabel = this._summarizeAdvantageEffects(i);
+        i.grantedLabel = (i.system.grantedAdvantages || []).map(entry => entry.name).join(' / ');
+        races.push(i);
       }
     }
 
@@ -175,6 +190,7 @@ export class RyfActorSheet extends ActorSheet {
     context.activeEffects = activeEffects;
     context.npcAttacks = npcAttacks;
     context.advantages = advantages;
+    context.races = races;
   }
 
   // Resumen legible de los efectos de una ventaja para la lista de la ficha
@@ -205,6 +221,7 @@ export class RyfActorSheet extends ActorSheet {
     html.find('.item-toggle').click(this._onItemToggle.bind(this));
 
     html.find('.item-attack').click(this._onWeaponAttack.bind(this));
+    html.find('.weapon-reload').click(this._onWeaponReload.bind(this));
 
     html.find('.skill-opposed').click(this._onSkillOpposed.bind(this));
 
@@ -220,10 +237,339 @@ export class RyfActorSheet extends ActorSheet {
 
     html.find('.short-rest').click(this._onShortRest.bind(this));
     html.find('.long-rest').click(this._onLongRest.bind(this));
+    html.find('.breather').click(this._onBreather.bind(this));
+
+    html.find('.attribute-roll').click(this._onAttributeRoll.bind(this));
+    html.find('.skill-heal').click(this._onSkillHeal.bind(this));
 
     html.find('.add-experience').click(this._onAddExperience.bind(this));
 
     html.find('.attribute-input').change(this._onAttributeChange.bind(this));
+
+    html.find('.token-return').click(this._onTokenReturn.bind(this));
+
+    html.find('.sanity-loss').click(this._onSanityLoss.bind(this));
+
+    html.find('.ship-attack').click(this._onShipAttack.bind(this));
+    html.find('.ship-defense').click(this._onShipDefense.bind(this));
+    html.find('.ship-chase').click(this._onShipChase.bind(this));
+    html.find('.crew-clear').click(this._onCrewClear.bind(this));
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 103-104 - cada nave tira su lado de la
+  // enfrentada por separado, cuando le toca; los totales se comparan en el
+  // chat. El bono del tripulante se calcula de su ficha vinculada (Destreza +
+  // habilidad) o de la base manual de la nave.
+  async _onShipAttack(event) {
+    event.preventDefault();
+    const ship = this.actor;
+    const crew = await ship.getCrewBonus('gunner');
+
+    const params = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name}`,
+        content: `
+          <form>
+            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-crosshairs"></i>
+              ${crew.source
+                ? `${game.i18n.localize('RYF.Ship.Gunner')}: <strong>${crew.source}</strong> (${crew.detail})`
+                : crew.detail}
+              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipGunnerSkill') })}</em>`}
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Bonus')}</label>
+              <input type="number" name="bonus" value="${crew.value}" step="1"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Ship.Weapon')}</label>
+              <select name="weapon">
+                <option value="1d6" selected>${game.i18n.localize('RYF.Ship.WeaponLaser')} (1d6)</option>
+                <option value="3d6">${game.i18n.localize('RYF.Ship.WeaponMissile')} (3d6)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Magic.DamageFormula')}</label>
+              <input type="text" name="damageFormula" value="1d6"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        render: (html) => {
+          html.find('[name="weapon"]').on('change', (ev) => {
+            html.find('[name="damageFormula"]').val(ev.currentTarget.value);
+          });
+        },
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-crosshairs"></i>',
+            label: game.i18n.localize('RYF.Ship.Attack'),
+            callback: (html) => resolve({
+              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
+              weapon: html.find('[name="weapon"]').val(),
+              damageFormula: html.find('[name="damageFormula"]').val() || '1d6',
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!params) return;
+
+    // Reference: RyF 3.0 PDF, página 103 - los misiles se consumen al dispararse
+    const isMissile = params.weapon === '3d6';
+    let weaponLabel = game.i18n.localize('RYF.Ship.WeaponLaser');
+    if (isMissile) {
+      weaponLabel = game.i18n.localize('RYF.Ship.WeaponMissile');
+      if ((ship.system.missiles || 0) <= 0) {
+        ui.notifications.warn(game.i18n.format('RYF.Warnings.NoMissiles', { name: ship.name }));
+        return;
+      }
+      await ship.update({ 'system.missiles': ship.system.missiles - 1 });
+    }
+
+    await RyfRoll.rollShipRoll(ship, {
+      contest: 'attack',
+      bonus: params.bonus,
+      bonusSource: crew.source,
+      modifier: params.modifier,
+      weaponLabel: weaponLabel,
+      damageFormula: params.damageFormula
+    });
+  }
+
+  async _onShipDefense(event) {
+    event.preventDefault();
+    await this._rollShipPilotSide('defense');
+  }
+
+  async _onShipChase(event) {
+    event.preventDefault();
+    await this._rollShipPilotSide('chase');
+  }
+
+  // Defensa (Destreza + Pilotar + Maniobrabilidad) y persecución (Destreza +
+  // Pilotar + Velocidad) comparten diálogo: solo cambia el atributo de la nave
+  async _rollShipPilotSide(contest) {
+    const ship = this.actor;
+    const crew = await ship.getCrewBonus('pilot');
+    const titleKey = contest === 'defense' ? 'RYF.Ship.DefenseTitle' : 'RYF.Ship.ChaseTitle';
+
+    const params = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize(titleKey)}: ${ship.name}`,
+        content: `
+          <form>
+            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-user-astronaut"></i>
+              ${crew.source
+                ? `${game.i18n.localize('RYF.Ship.Pilot')}: <strong>${crew.source}</strong> (${crew.detail})`
+                : crew.detail}
+              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipPilotSkill') })}</em>`}
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Bonus')}</label>
+              <input type="number" name="bonus" value="${crew.value}" step="1" autofocus/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => resolve({
+              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!params) return;
+
+    await RyfRoll.rollShipRoll(ship, {
+      contest: contest,
+      bonus: params.bonus,
+      bonusSource: crew.source,
+      modifier: params.modifier
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, página 103 - asignación de piloto y artillero:
+  // se suelta un personaje sobre la ficha de nave y se elige el rol
+  async _onDropCrewMember(data) {
+    const dropped = await fromUuid(data.uuid);
+    if (!dropped || dropped.documentName !== 'Actor' || dropped.type !== 'character') {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.OnlyCharactersAsCrew'));
+      return;
+    }
+
+    const role = await new Promise((resolve) => {
+      new Dialog({
+        title: game.i18n.format('RYF.Ship.AssignCrewTitle', { name: dropped.name }),
+        content: `<p>${game.i18n.localize('RYF.Ship.AssignCrewHint')}</p>`,
+        buttons: {
+          pilot: {
+            icon: '<i class="fas fa-user-astronaut"></i>',
+            label: game.i18n.localize('RYF.Ship.Pilot'),
+            callback: () => resolve('pilot')
+          },
+          gunner: {
+            icon: '<i class="fas fa-crosshairs"></i>',
+            label: game.i18n.localize('RYF.Ship.Gunner'),
+            callback: () => resolve('gunner')
+          }
+        },
+        default: 'pilot',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!role) return;
+
+    await this.actor.update({
+      [`system.${role}.uuid`]: dropped.uuid,
+      [`system.${role}.name`]: dropped.name
+    });
+  }
+
+  async _onCrewClear(event) {
+    event.preventDefault();
+    const role = event.currentTarget.dataset.role;
+    if (!['pilot', 'gunner'].includes(role)) return;
+
+    await this.actor.update({
+      [`system.${role}.uuid`]: '',
+      [`system.${role}.name`]: ''
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en d6 según gravedad
+  async _onSanityLoss(event) {
+    event.preventDefault();
+
+    const formula = await Dialog.prompt({
+      title: game.i18n.localize('RYF.Sanity.Loss'),
+      content: `
+        <form>
+          <p class="hint">${game.i18n.localize('RYF.Sanity.LossHint')}</p>
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.Sanity.LossFormula')}</label>
+            <input type="text" name="formula" value="1d6" autofocus/>
+          </div>
+        </form>
+      `,
+      callback: (html) => html.find('[name="formula"]').val() || '1d6',
+      rejectClose: false
+    });
+
+    if (!formula) return;
+
+    await this.actor.loseSanity(formula);
+  }
+
+  // Reference: RyF 3.0 PDF, página 92 - el máster devuelve el token forzando
+  // bajar un rango el dado objetivo en la siguiente tirada
+  async _onTokenReturn(event) {
+    event.preventDefault();
+    await this.actor.returnDeathToken();
+  }
+
+  // Bloque compartido de los diálogos de tirada: factores automáticos que
+  // bajan el rango, mejoras opcionales (especialización, token) y
+  // previsualización del dado objetivo.
+  // Reference: RyF 3.0 PDF, páginas 17-18 y 91-92
+  _rollFactorsSection({ untrained = false, specialization = null } = {}) {
+    const downs = [];
+    if (this.actor.system.states?.wounded || this.actor.statuses?.has('wounded')) {
+      downs.push({ key: 'wounded', label: game.i18n.localize('RYF.RollFactors.FactorWounded') });
+    }
+    if (untrained) {
+      downs.push({ key: 'untrained', label: game.i18n.localize('RYF.RollFactors.FactorUntrained') });
+    }
+    if (this.actor.getFlag('ryf3', 'tokenDebt')) {
+      downs.push({ key: 'tokenDebt', label: game.i18n.localize('RYF.RollFactors.FactorTokenDebt') });
+    }
+
+    const tokensEnabled = game.settings.get('ryf3', 'enableTokens') && this.actor.type === 'character';
+    const tokenCount = this.actor.system.tokens?.value || 0;
+
+    let html = '';
+
+    if (downs.length > 0) {
+      html += `
+        <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          ${downs.map(d => `<div><i class="fas fa-arrow-down"></i> ${d.label}</div>`).join('')}
+        </div>`;
+    }
+
+    if (specialization) {
+      html += `
+        <div class="form-group">
+          <label>${game.i18n.format('RYF.RollFactors.ApplySpecialization', { name: specialization })}</label>
+          <input type="checkbox" name="applySpecialization"/>
+        </div>`;
+    }
+
+    if (tokensEnabled && tokenCount > 0) {
+      html += `
+        <div class="form-group">
+          <label>${game.i18n.format('RYF.RollFactors.SpendToken', { count: tokenCount })}</label>
+          <input type="checkbox" name="spendToken"/>
+        </div>`;
+    }
+
+    html += `
+      <div class="mode-preview" style="text-align: center; margin-bottom: 8px; padding: 4px; background: var(--ryf-light); border-radius: 4px;">
+        ${game.i18n.localize('RYF.RollFactors.TargetDie')}: <strong class="mode-preview-value"></strong>
+      </div>`;
+
+    return { html, downs: downs.map(d => d.key) };
+  }
+
+  // Actualiza en vivo la previsualización del dado objetivo cuando cambian el
+  // modo base o las mejoras opcionales del diálogo
+  _bindModePreview(html, downs) {
+    const labels = {
+      advantage: 'RYF.RollFactors.DieHigh',
+      normal: 'RYF.RollFactors.DieMiddle',
+      disadvantage: 'RYF.RollFactors.DieLow'
+    };
+
+    const update = () => {
+      const base = html.find('[name="mode"]').val() || 'normal';
+      const ups = [];
+      if (html.find('[name="applySpecialization"]').is(':checked')) ups.push('specialization');
+      if (html.find('[name="spendToken"]').is(':checked')) ups.push('token');
+      const mode = resolveMode(base, { ups: ups, downs: downs });
+      html.find('.mode-preview-value').text(game.i18n.localize(labels[mode]));
+    };
+
+    html.find('[name="mode"], [name="applySpecialization"], [name="spendToken"]').on('change', update);
+    update();
   }
 
   async _onItemCreate(event) {
@@ -231,7 +577,7 @@ export class RyfActorSheet extends ActorSheet {
     const header = event.currentTarget;
     const type = header.dataset.type;
     const data = {
-      name: game.i18n.format('RYF.Items.New', { type: game.i18n.localize(`ITEM.Type${type.capitalize()}`) }),
+      name: game.i18n.format('RYF.Items.New', { type: game.i18n.localize(`TYPES.Item.${type}`) }),
       type: type,
       system: {}
     };
@@ -283,6 +629,7 @@ export class RyfActorSheet extends ActorSheet {
 
     let targetDefense = null;
     let targetDefenseRanged = null;
+    let targetIsMinion = false;
     const targets = Array.from(game.user.targets);
 
     if (targets.length === 1) {
@@ -290,6 +637,11 @@ export class RyfActorSheet extends ActorSheet {
       if (targetActor && targetActor.system.defense) {
         targetDefense = targetActor.system.defense.value;
         targetDefenseRanged = targetActor.system.defense.ranged || 0;
+      }
+      if (targetActor && targetActor.type === 'npc') {
+        // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe
+        targetDefense = targetDefense ?? (targetActor.system.defense || null);
+        targetIsMinion = !!targetActor.system.isMinion;
       }
     }
 
@@ -302,65 +654,80 @@ export class RyfActorSheet extends ActorSheet {
           !i.system.twoHanded && !weapon.system.twoHanded && i.id !== weapon.id)
       : [];
 
-    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null, offhandWeapons.length > 0);
+    // La especialización de la habilidad de arma sube un rango el dado
+    // objetivo si el jugador la marca (RyF 3.0 PDF, páginas 17-18 y 98)
+    const weaponCategory = weapon.system.category || 'melee';
+    const weaponSkill = this.actor.items.find(i => i.type === 'skill' && i.system.category === weaponCategory);
+    const specialization = weaponSkill?.system.specialization?.trim() || null;
+    const untrained = !weaponSkill || (weaponSkill.system.level || 0) === 0;
+
+    const rollParams = await this._promptAttackDialog(weapon.name, isRanged, targetDefense !== null, offhandWeapons.length > 0, {
+      specialization: specialization,
+      untrained: untrained
+    });
     if (!rollParams) return;
 
     const mode = rollParams.mode;
     const modifier = rollParams.modifier || 0;
+    const options = {
+      specialization: rollParams.specialization,
+      spendToken: rollParams.spendToken,
+      rangedModifiers: rollParams.rangedModifiers || null,
+      calledShot: rollParams.calledShot || null,
+      targetIsMinion: targetIsMinion
+    };
 
     if (isRanged) {
-      await this.actor.rollRangedAttack(weapon, rollParams.range, mode, targetDefenseRanged, modifier);
+      await this.actor.rollRangedAttack(weapon, rollParams.range, mode, targetDefenseRanged, modifier, options);
     } else {
       const defense = targetDefense || rollParams.defense;
       const offhand = rollParams.dualWield ? offhandWeapons[0] : null;
-      const dualBonus = offhand ? 3 : 0;
-      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand);
+      const dualBonus = offhand ? getRule('dualWieldBonus') : 0;
+      await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand, options);
     }
   }
 
-  async _promptAttackDialog(weaponName, isRanged, hasTarget, dualWieldAvailable = false) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
+  async _promptAttackDialog(weaponName, isRanged, hasTarget, dualWieldAvailable = false, { specialization = null, untrained = false } = {}) {
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection({ untrained: untrained, specialization: specialization });
 
     return new Promise((resolve) => {
       const content = `
         <form>
+          ${factors.html}
           ${isRanged ? `
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Combat.Range')}</label>
             <select name="range" autofocus>
-              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (10)</option>
-              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (15)</option>
-              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (20)</option>
-              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (25)</option>
+              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
             </select>
           </div>
+          ${RyfRoll.rangedModifiersFields()}
           ` : !hasTarget ? `
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Defense')}</label>
             <input type="number" name="defense" value="10" min="1"/>
           </div>
           ` : ''}
-          ${isWounded ? `
-          <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-            <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-          </div>
-          ` : ''}
           <div class="form-group">
             <label>${game.i18n.localize('RYF.RollMode')}</label>
             <select name="mode">
-              <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-              <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-              <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+              <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+              <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+              <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
             </select>
           </div>
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Modifier')}</label>
             <input type="number" name="modifier" value="0" step="1"/>
           </div>
+          ${RyfRoll.calledShotField()}
           ${dualWieldAvailable ? `
           <div class="form-group">
-            <label>${game.i18n.localize('RYF.DualWield')} (+3)</label>
+            <label>${game.i18n.localize('RYF.DualWield')} (+${getRule('dualWieldBonus')})</label>
             <input type="checkbox" name="dualWield"/>
           </div>
           ` : ''}
@@ -370,6 +737,7 @@ export class RyfActorSheet extends ActorSheet {
       new Dialog({
         title: `${game.i18n.localize('RYF.Attack')}: ${weaponName}`,
         content: content,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           roll: {
             icon: '<i class="fas fa-dice-d20"></i>',
@@ -380,7 +748,11 @@ export class RyfActorSheet extends ActorSheet {
               const range = isRanged ? html.find('[name="range"]').val() : null;
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
               const dualWield = dualWieldAvailable ? html.find('[name="dualWield"]').is(':checked') : false;
-              resolve({ mode, defense, range, modifier, dualWield });
+              const specialization = html.find('[name="applySpecialization"]').is(':checked');
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              const rangedModifiers = isRanged ? RyfRoll.readRangedModifiers(html) : null;
+              const calledShot = html.find('[name="calledShot"]').val() || null;
+              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken, rangedModifiers, calledShot });
             }
           },
           cancel: {
@@ -477,28 +849,32 @@ export class RyfActorSheet extends ActorSheet {
         }
       }
 
-      const rollParams = await this._promptRollDialog(item.name, defaultDifficulty, targetWillpower);
+      const rollParams = await this._promptRollDialog(item, defaultDifficulty, targetWillpower);
       if (!rollParams) return;
 
-      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier);
+      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier, {
+        specialization: rollParams.specialization,
+        spendToken: rollParams.spendToken
+      });
     }
   }
 
-  async _promptRollDialog(skillName, defaultDifficulty = null, targetWillpower = null) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
+  async _promptRollDialog(skill, defaultDifficulty = null, targetWillpower = null) {
+    const skillName = skill.name;
     const difficulty = defaultDifficulty || 15;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection({
+      untrained: (skill.system.level || 0) === 0,
+      specialization: skill.system.specialization?.trim() || null
+    });
 
     return new Promise((resolve) => {
       new Dialog({
         title: `${game.i18n.localize('RYF.Roll')}: ${skillName}`,
         content: `
           <form>
-            ${isWounded ? `
-            <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-            </div>
-            ` : ''}
+            ${factors.html}
             ${targetWillpower ? `
             <div class="target-willpower-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
               <i class="fas fa-brain"></i> <strong>${game.i18n.localize('RYF.TargetWillpower')}: ${targetWillpower}</strong>
@@ -506,23 +882,18 @@ export class RyfActorSheet extends ActorSheet {
             ` : ''}
             <div class="form-group">
               <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
-              <!-- Reference: RyF 3.0 PDF, página 18 - dificultades de habilidad -->
+              <!-- Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad -->
               <select name="difficulty" autofocus>
-                <option value="10" ${difficulty === 10 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Easy')} (10)</option>
-                <option value="15" ${difficulty === 15 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Average')} (15)</option>
-                <option value="18" ${difficulty === 18 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Moderate')} (18)</option>
-                <option value="20" ${difficulty === 20 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.Hard')} (20)</option>
-                <option value="25" ${difficulty === 25 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.VeryHard')} (25)</option>
-                <option value="30" ${difficulty === 30 ? 'selected' : ''}>${game.i18n.localize('RYF.Difficulty.NearlyImpossible')} (30)</option>
-                ${targetWillpower && ![10, 15, 18, 20, 25, 30].includes(targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
+                ${SKILL_DIFFICULTIES.map(d => `<option value="${d.value}" ${difficulty === d.value ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`).join('')}
+                ${targetWillpower && !SKILL_DIFFICULTIES.some(d => d.value === targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
               </select>
             </div>
             <div class="form-group">
               <label>${game.i18n.localize('RYF.RollMode')}</label>
               <select name="mode">
-                <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
             <div class="form-group">
@@ -531,6 +902,7 @@ export class RyfActorSheet extends ActorSheet {
             </div>
           </form>
         `,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           roll: {
             icon: '<i class="fas fa-dice-d10"></i>',
@@ -539,7 +911,9 @@ export class RyfActorSheet extends ActorSheet {
               const difficulty = parseInt(html.find('[name="difficulty"]').val());
               const mode = html.find('[name="mode"]').val();
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              resolve({ difficulty, mode, modifier });
+              const specialization = html.find('[name="applySpecialization"]').is(':checked');
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              resolve({ difficulty, mode, modifier, specialization, spendToken });
             }
           },
           cancel: {
@@ -587,27 +961,27 @@ export class RyfActorSheet extends ActorSheet {
     const targets = await this._promptSpellDialog(spell);
     if (targets === null) return;
 
-    await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier);
+    await this.actor.castSpell(spell, targets, castParams.mode, castParams.modifier, {
+      spendToken: castParams.spendToken,
+      extraMana: castParams.extraMana
+    });
   }
 
   async _promptSpellCastDialog(spell) {
-    const isWounded = this.actor.system.states?.wounded || false;
-    const defaultMode = isWounded ? 'disadvantage' : 'normal';
     const castingDifficulty = spell.system.castingDifficulty || 15;
     const isNPC = this.actor.type === 'npc';
     const manaCost = spell.system.manaCost || 0;
     const currentMana = this.actor.system.mana?.value || 0;
+
+    // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
+    const factors = this._rollFactorsSection();
 
     return new Promise((resolve) => {
       new Dialog({
         title: `${game.i18n.localize('RYF.CastSpell')}: ${spell.name}`,
         content: `
           <form>
-            ${isWounded ? `
-            <div class="wounded-warning" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-heart-broken"></i> <strong>${game.i18n.localize('RYF.States.wounded')}</strong> - ${game.i18n.localize('RYF.Combat.AutoDisadvantage')}
-            </div>
-            ` : ''}
+            ${factors.html}
             <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                 <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
@@ -621,17 +995,26 @@ export class RyfActorSheet extends ActorSheet {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.RollMode')}</label>
               <select name="mode" autofocus>
-                <option value="normal" ${defaultMode === 'normal' ? 'selected' : ''}>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage" ${defaultMode === 'advantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage" ${defaultMode === 'disadvantage' ? 'selected' : ''}>${game.i18n.localize('RYF.Disadvantage')}</option>
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
               </select>
             </div>
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Modifier')}</label>
               <input type="number" name="modifier" value="0" step="1"/>
             </div>
+            ${!isNPC ? `
+            <!-- Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 por cada 2 puntos extra -->
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Magic.BurnMana')}</label>
+              <input type="number" name="extraMana" value="0" min="0" step="1"/>
+            </div>
+            <p class="hint" style="margin: 0 0 8px 0;">${game.i18n.localize('RYF.Magic.BurnManaHint')}</p>
+            ` : ''}
           </form>
         `,
+        render: (html) => this._bindModePreview(html, factors.downs),
         buttons: {
           cast: {
             icon: '<i class="fas fa-magic"></i>',
@@ -639,7 +1022,9 @@ export class RyfActorSheet extends ActorSheet {
             callback: (html) => {
               const mode = html.find('[name="mode"]').val();
               const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              resolve({ mode, modifier });
+              const spendToken = html.find('[name="spendToken"]').is(':checked');
+              const extraMana = parseInt(html.find('[name="extraMana"]').val()) || 0;
+              resolve({ mode, modifier, spendToken, extraMana });
             }
           },
           cancel: {
@@ -722,6 +1107,170 @@ export class RyfActorSheet extends ActorSheet {
     await this.actor.longRest();
   }
 
+  // Reference: RyF 3.0 PDF, página 94 - Coger aire tras un combate
+  async _onBreather(event) {
+    event.preventDefault();
+    await this.actor.breather();
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 96-98 - recargar el arma
+  async _onWeaponReload(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const weapon = this.actor.items.get(li.data("itemId"));
+    if (!weapon) return;
+
+    await this.actor.reloadWeapon(weapon);
+  }
+
+  // Reference: RyF 3.0 PDF, página 18 - tirada de atributo puro con su propia
+  // tabla de dificultades (9/12/15/18/21)
+  async _onAttributeRoll(event) {
+    event.preventDefault();
+    const attribute = event.currentTarget.dataset.attribute;
+    if (!attribute) return;
+
+    const factors = this._rollFactorsSection();
+    const attributeLabel = game.i18n.localize(`RYF.Attributes.${attribute.charAt(0).toUpperCase() + attribute.slice(1)}`);
+
+    const difficultyOptions = ATTRIBUTE_DIFFICULTIES.map(d =>
+      `<option value="${d.value}" ${d.value === 12 ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`
+    ).join('');
+
+    const rollParams = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Roll')}: ${attributeLabel}`,
+        content: `
+          <form>
+            ${factors.html}
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+              <select name="difficulty" autofocus>${difficultyOptions}</select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode">
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        render: (html) => this._bindModePreview(html, factors.downs),
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-dice-d10"></i>',
+            label: game.i18n.localize('RYF.Roll'),
+            callback: (html) => resolve({
+              difficulty: parseInt(html.find('[name="difficulty"]').val()),
+              mode: html.find('[name="mode"]').val(),
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
+              spendToken: html.find('[name="spendToken"]').is(':checked')
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!rollParams) return;
+
+    await RyfRoll.rollAttribute(this.actor, attribute, rollParams.difficulty, rollParams.mode, {
+      modifier: rollParams.modifier,
+      spendToken: rollParams.spendToken
+    });
+  }
+
+  // Reference: RyF 3.0 PDF, páginas 11-12 y 45 - curación por habilidad sobre
+  // el objetivo seleccionado (o uno mismo si no hay objetivo)
+  async _onSkillHeal(event) {
+    event.preventDefault();
+    const li = $(event.currentTarget).parents(".item");
+    const skill = this.actor.items.get(li.data("itemId"));
+    if (!skill || skill.type !== 'skill') return;
+
+    const targets = Array.from(game.user.targets);
+    const patient = (targets.length > 0 && targets[0].actor) ? targets[0].actor : this.actor;
+
+    const factors = this._rollFactorsSection({
+      untrained: (skill.system.level || 0) === 0,
+      specialization: skill.system.specialization?.trim() || null
+    });
+
+    const alreadyHealed = patient.getFlag('ryf3', 'healedToday');
+
+    const rollParams = await new Promise((resolve) => {
+      new Dialog({
+        title: `${game.i18n.localize('RYF.Healing')}: ${skill.name}`,
+        content: `
+          <form>
+            <div class="heal-target-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
+              <i class="fas fa-user-injured"></i> ${game.i18n.localize('RYF.HealTarget')}: <strong>${patient.name}</strong>
+            </div>
+            ${alreadyHealed ? `
+            <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+              <i class="fas fa-exclamation-triangle"></i> ${game.i18n.format('RYF.Warnings.AlreadyHealedToday', { name: patient.name })}
+            </div>
+            ` : ''}
+            ${factors.html}
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+              <input type="number" name="difficulty" value="${getRule('healSkillDifficulty')}" step="1"/>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.RollMode')}</label>
+              <select name="mode">
+                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Modifier')}</label>
+              <input type="number" name="modifier" value="0" step="1"/>
+            </div>
+          </form>
+        `,
+        render: (html) => this._bindModePreview(html, factors.downs),
+        buttons: {
+          roll: {
+            icon: '<i class="fas fa-briefcase-medical"></i>',
+            label: game.i18n.localize('RYF.Healing'),
+            callback: (html) => resolve({
+              difficulty: parseInt(html.find('[name="difficulty"]').val()) || getRule('healSkillDifficulty'),
+              mode: html.find('[name="mode"]').val(),
+              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
+              specialization: html.find('[name="applySpecialization"]').is(':checked'),
+              spendToken: html.find('[name="spendToken"]').is(':checked')
+            })
+          },
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize('RYF.Cancel'),
+            callback: () => resolve(null)
+          }
+        },
+        default: 'roll',
+        close: () => resolve(null)
+      }).render(true);
+    });
+
+    if (!rollParams) return;
+
+    await this.actor.rollHealingSkill(skill, patient, rollParams);
+  }
+
   async _onAddExperience(event) {
     event.preventDefault();
 
@@ -780,8 +1329,26 @@ export class RyfActorSheet extends ActorSheet {
     }
 
     // Reference: RyF 3.0 PDF, página 13 - los atributos van de 4 (mínimo) a 10 (máximo)
-    if (!hasExperience && (value < 4 || value > 10)) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.AttributeOutOfRange'));
+    const attributeMin = getRule('attributeMin');
+    const attributeMax = getRule('attributeMax');
+    if (!hasExperience && (value < attributeMin || value > attributeMax)) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.AttributeOutOfRange', {
+        min: attributeMin,
+        max: attributeMax
+      }));
+    }
+
+    // Reference: RyF 3.0 PDF, página 98 - topes de atributo por raza
+    // (ej. Mediano: Físico máximo 7). Aviso no bloqueante.
+    const race = this.actor.items.find(i =>
+      i.type === 'race' && i.system.attributeCap?.attribute === attribute && i.system.attributeCap?.max > 0
+    );
+    if (race && value > race.system.attributeCap.max) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.RaceAttributeCap', {
+        race: race.name,
+        attribute: game.i18n.localize(CONFIG.RYF.attributes[attribute]),
+        max: race.system.attributeCap.max
+      }));
     }
 
     await this.actor.update({
@@ -803,6 +1370,12 @@ export class RyfActorSheet extends ActorSheet {
   async _onDrop(event) {
     const data = TextEditor.getDragEventData(event);
     const actor = this.actor;
+
+    // Reference: RyF 3.0 PDF, página 103 - asignar piloto/artillero soltando
+    // un personaje sobre la ficha de nave
+    if (actor.type === 'ship' && data.type === 'Actor') {
+      return this._onDropCrewMember(data);
+    }
 
     if (data.type === "Item") {
       return this._onDropItem(event, data);

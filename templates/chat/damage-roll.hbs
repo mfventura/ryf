@@ -90,8 +90,16 @@
     <div class="total-value">{{total}}</div>
   </div>
 
+  {{!-- Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción --}}
+  {{#if ignoresArmor}}
+  <div class="damage-note">
+    <i class="fas fa-shield-halved"></i>
+    {{localize "RYF.IgnoresArmorNote"}}
+  </div>
+  {{/if}}
+
   <div class="damage-actions">
-    <button type="button" class="apply-damage-button" data-damage="{{total}}" data-damage-type="physical">
+    <button type="button" class="apply-damage-button" data-damage="{{total}}" data-damage-type="physical" data-ignores-armor="{{ignoresArmor}}">
       <i class="fas fa-heart-broken"></i> {{localize "RYF.Combat.ApplyDamage"}}
     </button>
   </div>

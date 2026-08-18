@@ -22,7 +22,8 @@
       "long": 0
     },
     "twoHanded": false,
-    "properties": []
+    "properties": [],
+    "ignoresArmor": true
   },
   "effects": [],
   "folder": null,

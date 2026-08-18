@@ -20,6 +20,11 @@
     {{else}}
     <span class="formula-part">{{localize (concat "RYF.Attributes." (capitalize attribute))}}: {{attributeValue}}</span>
     {{/if}}
+    {{!-- Reference: RyF 3.0 PDF, página 21 - el estorbo también resta en tiradas de Destreza --}}
+    {{#if (gt hindrance 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part hindrance-penalty">{{localize "RYF.Hindrance"}}: {{hindrance}}</span>
+    {{/if}}
     <span class="formula-separator">+</span>
     <span class="formula-part dice-part">
       {{#if (eq mode "advantage")}}
@@ -30,6 +35,13 @@
         {{diceRoll.chosen}}
       {{/if}}
     </span>
+    {{#if (gt modifier 0)}}
+    <span class="formula-separator">+</span>
+    <span class="formula-part modifier-bonus">{{localize "RYF.Modifier"}}: +{{modifier}}</span>
+    {{else if (lt modifier 0)}}
+    <span class="formula-separator">-</span>
+    <span class="formula-part modifier-penalty">{{localize "RYF.Modifier"}}: {{modifier}}</span>
+    {{/if}}
   </div>
 
   <div class="dice-results">

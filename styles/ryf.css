@@ -138,6 +138,251 @@
   justify-content: flex-end;
 }
 
+/* Rules config menu (shares the pyramid-config base styles) */
+.rules-config .rules-group {
+  margin-bottom: 1.5rem;
+}
+
+.rules-config .rules-group h3 {
+  margin-bottom: 0.75rem;
+  color: var(--ryf-primary);
+  border-bottom: 2px solid var(--ryf-secondary);
+  padding-bottom: 0.5rem;
+}
+
+.rules-config .preset-buttons {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Granted advantages list on the race sheet (PDF p. 98) */
+.ryf.sheet.item .granted-advantages {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
+}
+
+.ryf.sheet.item .granted-advantages legend {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.item .granted-advantages .hint {
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  margin: 0 0 4px 0;
+}
+
+.ryf.sheet.item .granted-advantages-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ryf.sheet.item .granted-advantages-list li {
+  padding: 2px 0;
+  border-bottom: 1px dashed var(--ryf-border, #bdc3c7);
+  justify-content: space-between;
+}
+
+.ryf.sheet.item .granted-advantages-list li:last-child {
+  border-bottom: none;
+}
+
+.ryf.sheet.item .granted-advantages-list .granted-advantage-delete {
+  flex: 0;
+  padding: 0 4px;
+}
+
+/* Minion toggle on the NPC sheet (PDF p. 87) */
+.ryf .minion-toggle {
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+
+.ryf .minion-toggle .hint {
+  margin-left: 8px;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  font-size: 0.85em;
+}
+
+/* Hit location and minion notes on attack chat cards (PDF pp. 87, 95) */
+.ryf-roll .hit-location,
+.ryf-roll .minion-note {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: var(--ryf-light, #ecf0f1);
+  border-left: 3px solid var(--ryf-secondary, #95a5a6);
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Money section on the equipment tab (PDF p. 26) */
+.ryf .money-section {
+  margin-bottom: 1rem;
+  padding: 8px;
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+}
+
+.ryf .money-section .money-fields {
+  gap: 8px;
+}
+
+.ryf .money-section .money-field {
+  flex: 1;
+  text-align: center;
+}
+
+.ryf .money-section .money-field label {
+  display: block;
+  font-size: 0.85em;
+  margin-bottom: 2px;
+}
+
+.ryf .money-section .hint {
+  margin: 4px 0 0 0;
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+}
+
+/* Weapon item sheet: compact two-column layout for general fields and
+   three-column groups for range / band damage / ammo (PDF pp. 22, 25, 95-98) */
+.ryf.sheet.item .weapon-fields,
+.ryf.sheet.actor .weapon-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+  margin-bottom: 6px;
+}
+
+/* Ship roll chat card (PDF pp. 103-104) */
+.ryf-roll.ship-roll .ship-compare-note {
+  margin: 4px 0;
+  padding: 4px 8px;
+  background: var(--ryf-light, #ecf0f1);
+  border-left: 3px solid var(--ryf-secondary, #95a5a6);
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+/* Ship crew section (PDF p. 103) */
+.ryf.sheet.actor .ship-crew {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
+}
+
+.ryf.sheet.actor .ship-crew legend {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.actor .ship-crew .hint {
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+  margin: 0 0 4px 0;
+}
+
+.ryf.sheet.actor .ship-crew .crew-slot {
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.ryf.sheet.actor .ship-crew .crew-slot > label {
+  flex: 0 0 80px;
+  font-weight: bold;
+}
+
+.ryf.sheet.actor .ship-crew .crew-empty {
+  color: var(--ryf-text-secondary, #7f8c8d);
+  font-style: italic;
+}
+
+.ryf.sheet.actor .ship-crew .crew-base {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0;
+  white-space: nowrap;
+}
+
+.ryf.sheet.actor .ship-crew .crew-base input {
+  width: 50px;
+  text-align: center;
+}
+
+.ryf.sheet.actor .ship-crew .crew-clear {
+  flex: 0;
+  padding: 0 4px;
+}
+
+.ryf.sheet.item .weapon-subsection {
+  border: 1px solid var(--ryf-border, #bdc3c7);
+  border-radius: 4px;
+  margin: 0 0 6px 0;
+  padding: 2px 8px 6px 8px;
+}
+
+.ryf.sheet.item .weapon-subsection legend {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 4px;
+}
+
+.ryf.sheet.item .weapon-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.ryf.sheet.item .weapon-triple .mini-field label {
+  display: block;
+  font-size: 0.8em;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.ryf.sheet.item .weapon-triple .mini-field input {
+  width: 100%;
+  text-align: center;
+}
+
+/* Weapon row badges: precision, ignores-armor, ammo (PDF pp. 22, 95-98) */
+.ryf .item-damage .weapon-precision,
+.ryf .item-damage .weapon-ignores-armor,
+.ryf .item-damage .weapon-ammo {
+  margin-left: 6px;
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+  white-space: nowrap;
+}
+
+/* Ranged attack difficulty modifiers on chat cards (PDF pp. 93-94) */
+.ryf-roll .ranged-modifiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.ryf-roll .ranged-modifiers .ranged-mod {
+  background: var(--ryf-light);
+  border: 1px solid var(--ryf-secondary);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.85rem;
+}
+
 .custom-pyramid-config .save-button {
   background: var(--ryf-success);
   color: white;

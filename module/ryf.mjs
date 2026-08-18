@@ -40,14 +40,14 @@ Hooks.once('init', async function() {
 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ryf", RyfActorSheet, {
-    types: ["character", "npc"],
+    types: ["character", "npc", "ship"],
     makeDefault: true,
     label: "RYF.SheetLabels.Actor"
   });
 
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage"],
+    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage", "race"],
     makeDefault: true,
     label: "RYF.SheetLabels.Item"
   });
@@ -178,6 +178,7 @@ Hooks.on('renderChatMessage', (message, html) => {
     const button = $(event.currentTarget);
     const weaponId = button.data('weapon-id');
     const criticalDice = button.data('critical-dice') || 0;
+    const range = button.data('range') || null;
 
     const speaker = message.speaker;
     const actor = ChatMessage.getSpeakerActor(speaker);
@@ -195,7 +196,20 @@ Hooks.on('renderChatMessage', (message, html) => {
     }
 
     const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor);
+    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor, range);
+  });
+
+  // Reference: RyF 3.0 PDF, página 103 - daño de las armas de la nave (cañón
+  // láser 1d6, misil 3d6); el GM lo tira si el ataque superó la defensa
+  html.find('.ship-roll-damage').click(async (event) => {
+    event.preventDefault();
+    const button = $(event.currentTarget);
+    const formula = String(button.data('damage-formula') || '1d6');
+    const weaponLabel = button.data('weapon-label') || game.i18n.localize('RYF.Damage');
+
+    const pseudoWeapon = { name: weaponLabel, type: 'weapon', system: { damage: { base: formula } } };
+    const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
+    await RyfRoll.rollDamage(pseudoWeapon, 0, 0, null);
   });
 
   html.find('.apply-damage-button').click(async (event) => {
@@ -203,6 +217,8 @@ Hooks.on('renderChatMessage', (message, html) => {
     const button = $(event.currentTarget);
     const damage = parseInt(button.data('damage'));
     const damageType = button.data('damage-type') || 'physical';
+    // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción
+    const ignoreAbsorption = button.data('ignores-armor') === true;
 
     const targets = Array.from(game.user.targets);
 
@@ -213,7 +229,7 @@ Hooks.on('renderChatMessage', (message, html) => {
 
     for (const token of targets) {
       if (token.actor) {
-        await token.actor.applyDamage(damage, damageType);
+        await token.actor.applyDamage(damage, damageType, null, { ignoreAbsorption: ignoreAbsorption });
       }
     }
   });
@@ -239,6 +255,18 @@ Hooks.on('renderCombatTracker', (app, html) => {
     badge.title = game.i18n.localize('RYF.Actions');
     badge.innerHTML = `<i class="fas fa-bolt"></i>${actions}`;
     name.appendChild(badge);
+  }
+});
+
+// Reference: RyF 3.0 PDF, página 94 - Coger aire solo recupera el daño del
+// combate actual: al empezar un combate nuevo se resetea el acumulador
+Hooks.on('combatStart', async (combat) => {
+  if (!game.user.isGM) return;
+
+  for (const combatant of combat.combatants) {
+    if (combatant.actor?.getFlag('ryf3', 'combatDamage')) {
+      await combatant.actor.unsetFlag('ryf3', 'combatDamage');
+    }
   }
 });
 
@@ -340,6 +368,35 @@ Hooks.on('renderCompendium', (app, html, data) => {
 // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite
 // configurable, 0 = sin límite) y con requisito de atributo. Validación
 // advisory: avisa pero no bloquea.
+// Reference: RyF 3.0 PDF, páginas 103-104 - naves espaciales (módulo opcional)
+Hooks.on('preCreateActor', (actor, data, options, userId) => {
+  if (actor.type !== 'ship') return;
+
+  if (!game.settings.get('ryf3', 'enableShips')) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.ShipsDisabled'));
+    return false;
+  }
+});
+
+// Reference: RyF 3.0 PDF, página 98 - Razas (módulo opcional): cada personaje
+// tiene una sola raza; sin el módulo activo no se pueden crear
+Hooks.on('preCreateItem', (item, data, options, userId) => {
+  if (item.type !== 'race') return;
+
+  if (!game.settings.get('ryf3', 'enableRaces')) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.RacesDisabled'));
+    return false;
+  }
+
+  const actor = item.parent;
+  if (!actor || actor.documentName !== 'Actor' || actor.type !== 'character') return;
+
+  const existing = actor.items.filter(i => i.type === 'race').length;
+  if (existing >= 1) {
+    ui.notifications.warn(game.i18n.localize('RYF.Warnings.OneRaceOnly'));
+  }
+});
+
 Hooks.on('preCreateItem', (item, data, options, userId) => {
   if (item.type !== 'advantage') return;
   const actor = item.parent;

@@ -1,17 +1,20 @@
 {
   "RYF": {
+    "Actions": "Acciones",
+    "AddAdvantage": "Añadir Ventaja",
     "AddArmor": "Añadir Armadura",
     "AddEquipment": "Añadir Equipamiento",
     "AddExperience": "Añadir Experiencia",
     "AddShield": "Añadir Escudo",
     "AddSkill": "Añadir Habilidad",
-    "AddAdvantage": "Añadir Ventaja",
     "AddSpell": "Añadir Hechizo",
     "AddWeapon": "Añadir Arma",
     "Advantage": "Ventaja",
     "AdvantageName": "Nombre de la Ventaja",
     "Advantages": "Ventajas",
-    "Actions": "Acciones",
+    "Ammo": "Munición",
+    "AmmoCurrent": "Balas actuales",
+    "AmmoMax": "Balas (cargador)",
     "Armor": "Armaduras",
     "ArmorName": "Nombre de la Armadura",
     "Attack": "Ataque",
@@ -19,135 +22,6 @@
     "AttackRoll": "Tirada de Ataque",
     "Attribute": "Atributo",
     "AttributePoints": "Puntos de Atributos",
-    "BaseDamage": "Daño Base",
-    "BaseHealing": "Curación Base",
-    "Bonus": "Bono",
-    "Cancel": "Cancelar",
-    "Cast": "Lanzar",
-    "CastSpell": "Lanzar Hechizo",
-    "Category": "Categoría",
-    "CharacterName": "Nombre del Personaje",
-    "Condition": "Condición",
-    "Controls": "Controles",
-    "CriticalDamage": "Daño Crítico",
-    "CriticalHealing": "Curación Crítica",
-    "CriticalHit": "Impacto Crítico",
-    "CriticalSuccess": "Éxito Crítico",
-    "CurrentLevel": "Nivel Actual",
-    "CurrentMana": "Maná Actual",
-    "Custom": "Personalizado",
-    "Damage": "Daño",
-    "DamageBonus": "Bonus de Daño",
-    "DamageNote": "La armadura absorbe daño según su protección",
-    "DecreaseLevel": "Disminuir Nivel",
-    "Defense": "Defensa",
-    "DefenseMelee": "Defensa Cuerpo a Cuerpo",
-    "DefenseMeleeShort": "Def. CC",
-    "DefenseRanged": "Defensa a Distancia (Cobertura)",
-    "DefenseRangedShort": "Def. Distancia",
-    "Delete": "Eliminar",
-    "DerivedStats": "Estadísticas Derivadas",
-    "DifficultyLabel": "Dificultad",
-    "Disadvantage": "Desventaja",
-    "Duration": "Duración",
-    "Edit": "Editar",
-    "DamageKept": "Se queda",
-    "DualWeaponDamage": "Daño con Dos Armas",
-    "DualWield": "Dos armas ligeras",
-    "Effect": "Efecto",
-    "EffectBonus": "Bono de Efecto",
-    "Equipment": "Equipamiento",
-    "EquipmentName": "Nombre del Equipamiento",
-    "Equipped": "Equipado",
-    "Experience": "Experiencia",
-    "ExperienceAmount": "Cantidad de Experiencia",
-    "Exploded": "Explosión",
-    "ExtraBonus": "Bonus Extra",
-    "ExtraDamage": "daño extra",
-    "ExtraDice": "dados extra",
-    "ExtraEffect": "efecto extra",
-    "Failure": "Fallo",
-    "Fumble": "Pifia",
-    "Healing": "Curación",
-    "Health": "Puntos de Vida",
-    "Hindrance": "Estorbo",
-    "Hit": "Impacto",
-    "IncreaseLevel": "Aumentar Nivel",
-    "Initiative": "Iniciativa",
-    "InitiativeBase": "Iniciativa Base",
-    "Item": "Item",
-    "Level": "Nivel",
-    "LongRest": "Descanso Largo",
-    "Mana": "Maná",
-    "ManaCost": "Coste de Maná",
-    "Margin": "Margen",
-    "Melee": "Cuerpo a cuerpo",
-    "Miss": "Fallo",
-    "Modifier": "Modificador",
-    "NextLevelCost": "Coste del Siguiente Nivel",
-    "Normal": "Normal",
-    "MinimumValue": "Valor mínimo",
-    "NoRequirement": "Sin requisito",
-    "OpposedDefenderSkill": "Habilidad del oponente",
-    "OpposedManualBonus": "— Bono manual (PNJ sin habilidades) —",
-    "OpposedRoll": "Tirada Enfrentada",
-    "OpposedTie": "Empate: queda a discreción del máster (RyF 3.0, pág. 18)",
-    "OpposedWinner": "Ganador",
-    "NoSpells": "No hay hechizos",
-    "NPCName": "Nombre del PNJ",
-    "Permanent": "Permanente",
-    "Protection": "Protección",
-    "PyramidInvalid": "La pirámide de habilidades no es válida",
-    "PyramidValid": "La pirámide de habilidades es válida",
-    "Quantity": "Cantidad",
-    "Range": "Alcance",
-    "RangeLong": "Alcance Largo",
-    "RangeMedium": "Alcance Medio",
-    "RangeShort": "Alcance Corto",
-    "Reason": "Razón",
-    "ReasonPlaceholder": "Ej: Completar misión, derrotar enemigos",
-    "Remaining": "Restantes",
-    "Remove": "Eliminar",
-    "Requirement": "Requisito",
-    "Roll": "Tirar",
-    "RollDamage": "Tirar Daño",
-    "RollMode": "Modo de Tirada",
-    "SavingThrow": "Tirada de Salvación",
-    "ShieldName": "Nombre del Escudo",
-    "Shields": "Escudos",
-    "ShortRest": "Descanso Corto",
-    "SkillName": "Nombre de la Habilidad",
-    "Spell": "Hechizo",
-    "SpellCasting": "Lanzamiento de Hechizo",
-    "SpellDamage": "Daño de Hechizo",
-    "SpellDamageNote": "El daño mágico puede ser absorbido por armadura según el tipo",
-    "SpellFailure": "Hechizo Fallido",
-    "SpellFumble": "El hechizo falla catastróficamente",
-    "SpellName": "Nombre del Hechizo",
-    "Spells": "Hechizos",
-    "SpellSuccess": "Hechizo Exitoso",
-    "State": "Estado",
-    "StatusEffect": "Efecto de Estado",
-    "Subtotal": "Subtotal",
-    "Success": "Éxito",
-    "SystemName": "Rápido y Fácil 3.0",
-    "Target": "Objetivo",
-    "TargetDefense": "Defensa Objetivo",
-    "TargetValue": "Valor del Objetivo",
-    "TargetWillpower": "Voluntad del Objetivo",
-    "Toggle": "Alternar",
-    "Total": "Total",
-    "TotalDamage": "Daño Total",
-    "TotalHealing": "Curación Total",
-    "TwoHanded": "Dos Manos",
-    "Unknown": "Desconocido",
-    "UpgradeCost": "Coste de Mejora",
-    "WeaponAttackBonus": "Bono de Ataque de Arma",
-    "WeaponName": "Nombre del Arma",
-    "Weapons": "Armas",
-    "Weight": "Peso",
-    "Willpower": "Voluntad",
-    "XP": "PX",
     "Attributes": {
       "Carisma": "Carisma",
       "Destreza": "Destreza",
@@ -155,6 +29,17 @@
       "Inteligencia": "Inteligencia",
       "Percepcion": "Percepción"
     },
+    "BaseDamage": "Daño Base",
+    "BaseHealing": "Curación Base",
+    "Bonus": "Bono",
+    "Breather": "Coger Aire",
+    "CalledShot": "Tiro apuntado",
+    "CalledShotRandom": "Zona aleatoria",
+    "Cancel": "Cancelar",
+    "Cast": "Lanzar",
+    "CastSpell": "Lanzar Hechizo",
+    "Category": "Categoría",
+    "CharacterName": "Nombre del Personaje",
     "Combat": {
       "Absorption": "Absorción",
       "AddAttack": "Añadir Ataque",
@@ -165,6 +50,13 @@
       "AttackSuccess": "Ataque Exitoso",
       "AttackType": "Tipo de Ataque",
       "AutoDisadvantage": "Desventaja Automática",
+      "Cover": "Cobertura",
+      "CoverLarge": "Objeto grande",
+      "CoverNone": "Sin cobertura",
+      "CoverProne": "Cuerpo a tierra",
+      "CoverSmall": "Objeto pequeño",
+      "CoverTotal": "Cobertura total",
+      "CoverWall": "Pared o columna",
       "DamageAmount": "Cantidad de Daño",
       "DamageCold": "Frío",
       "DamageElectric": "Eléctrico",
@@ -177,7 +69,11 @@
       "DamageType": "Tipo de Daño",
       "EnterTargetDefense": "Introducir Defensa del Objetivo",
       "FinalDamage": "Daño Final",
+      "Flanking": "Flanqueo (tiradores extra)",
       "GrossDamage": "Daño Bruto",
+      "MovementNone": "Inmóvil",
+      "MovementRunning": "Corriendo",
+      "MovementVehicle": "Vehículo rápido o caballo",
       "NoAttacks": "No tiene ataques configurados",
       "NoWeaponsEquipped": "No hay armas equipadas",
       "Range": "Alcance",
@@ -190,9 +86,32 @@
       "RollDamageQuestion": "¿Tirar daño?",
       "SelectRange": "Seleccionar Alcance",
       "SelectWeapon": "Seleccionar Arma",
+      "TargetMovement": "Movimiento del blanco",
       "Untrained": "Sin Entrenamiento",
-      "UntrainedAttack": "Atacando sin habilidad de {category} - Desventaja automática"
+      "UntrainedAttack": "Atacando sin habilidad de {category} - el dado objetivo baja un rango"
     },
+    "Condition": "Condición",
+    "Controls": "Controles",
+    "CriticalDamage": "Daño Crítico",
+    "CriticalHealing": "Curación Crítica",
+    "CriticalHit": "Impacto Crítico",
+    "CriticalSuccess": "Éxito Crítico",
+    "CurrentLevel": "Nivel Actual",
+    "CurrentMana": "Maná Actual",
+    "Custom": "Personalizado",
+    "Damage": "Daño",
+    "DamageBonus": "Bonus de Daño",
+    "DamageByRange": "Daño por banda de distancia (vacío = daño base)",
+    "DamageKept": "Se queda",
+    "DamageNote": "La armadura absorbe daño según su protección",
+    "DecreaseLevel": "Disminuir Nivel",
+    "Defense": "Defensa",
+    "DefenseMelee": "Defensa Cuerpo a Cuerpo",
+    "DefenseMeleeShort": "Def. CC",
+    "DefenseRanged": "Defensa a Distancia (Cobertura)",
+    "DefenseRangedShort": "Def. Distancia",
+    "Delete": "Eliminar",
+    "DerivedStats": "Estadísticas Derivadas",
     "Dialogs": {
       "DeleteItem": "Eliminar Item",
       "DeleteItemConfirm": "¿Estás seguro de que quieres eliminar {name}?",
@@ -208,6 +127,43 @@
       "VeryEasy": "Muy Fácil",
       "VeryHard": "Muy Difícil"
     },
+    "DifficultyLabel": "Dificultad",
+    "Disadvantage": "Desventaja",
+    "DualWeaponDamage": "Daño con Dos Armas",
+    "DualWield": "Dos armas ligeras",
+    "Duration": "Duración",
+    "Edit": "Editar",
+    "Effect": "Efecto",
+    "EffectBonus": "Bono de Efecto",
+    "Equipment": "Equipamiento",
+    "EquipmentName": "Nombre del Equipamiento",
+    "Equipped": "Equipado",
+    "Experience": "Experiencia",
+    "ExperienceAmount": "Cantidad de Experiencia",
+    "Exploded": "Explosión",
+    "ExtraBonus": "Bonus Extra",
+    "ExtraDamage": "daño extra",
+    "ExtraDice": "dados extra",
+    "ExtraEffect": "efecto extra",
+    "Failure": "Fallo",
+    "Fumble": "Pifia",
+    "HealTarget": "Paciente",
+    "Healing": "Curación",
+    "Health": "Puntos de Vida",
+    "Hindrance": "Estorbo",
+    "Hit": "Impacto",
+    "HitLocation": "Localización",
+    "HitLocations": {
+      "Head": "Cabeza",
+      "LeftArm": "Brazo izquierdo",
+      "LeftLeg": "Pierna izquierda",
+      "RightArm": "Brazo derecho",
+      "RightLeg": "Pierna derecha",
+      "Torso": "Torso"
+    },
+    "IgnoresArmor": "Ignora armadura",
+    "IgnoresArmorNote": "Este daño ignora la absorción de la armadura (RyF 3.0, pág. 22)",
+    "IncreaseLevel": "Aumentar Nivel",
     "Info": {
       "AreaSpell": "Hechizo de área con radio {radius}. Selecciona objetivos manualmente o se aplicará automáticamente.",
       "NoTargetsForBuff": "No hay objetivos seleccionados para aplicar el buff.",
@@ -216,9 +172,14 @@
       "NoTargetsForMultiple": "No hay objetivos seleccionados. El hechizo requiere {count} objetivos.",
       "NoTargetsSelected": "No hay objetivos seleccionados. Se lanzará el hechizo sin aplicar efectos."
     },
+    "Initiative": "Iniciativa",
+    "InitiativeBase": "Iniciativa Base",
+    "Item": "Item",
     "Items": {
       "New": "Nuevo {type}"
     },
+    "Level": "Nivel",
+    "LongRest": "Descanso Largo",
     "Magic": {
       "ActiveEffects": "Efectos Activos",
       "AddEffect": "Agregar Efecto",
@@ -227,6 +188,8 @@
       "AttackType": "Tipo de Ataque",
       "BasicInfo": "Información Básica",
       "BuffApplied": "Mejora Aplicada",
+      "BurnMana": "Quemar Maná",
+      "BurnManaHint": "+1 a la tirada de lanzamiento por cada 2 puntos de maná extra (RyF 3.0, pág. 101)",
       "Caster": "Lanzador",
       "CastingDifficulty": "Dificultad de Casteo",
       "CastSpell": "Lanzar Hechizo",
@@ -327,9 +290,40 @@
         "single": "Individual"
       }
     },
+    "Mana": "Maná",
+    "ManaCost": "Coste de Maná",
+    "Margin": "Margen",
+    "Melee": "Cuerpo a cuerpo",
+    "MinimumValue": "Valor mínimo",
+    "Minion": {
+      "ExtraDown": "El margen derriba {count} esbirro(s) adicional(es) (+5 por cada uno).",
+      "FallsOnHit": "Esbirro: cae al golpe (RyF 3.0, pág. 87).",
+      "Hint": "Los esbirros caen con cualquier golpe; cada +5 de margen del ataque derriba uno más (RyF 3.0, pág. 87)",
+      "Label": "Esbirro (cae al golpe)"
+    },
+    "Miss": "Fallo",
+    "Modifier": "Modificador",
+    "Money": {
+      "ConversionHint": "1 mo = 10 mp = 100 mc (RyF 3.0, pág. 26)",
+      "Copper": "Monedas de cobre (mc)",
+      "Gold": "Monedas de oro (mo)",
+      "Label": "Dinero",
+      "Silver": "Monedas de plata (mp)"
+    },
+    "NPC": {
+      "SavingThrowBonus": "Tirada de Salvación - PNJ",
+      "SavingThrowBonusDescription": "Los PNJs no tienen atributos. Ingresa el bono que se sumará a la tirada de salvación (1o3d10 + bono).",
+      "SavingThrowBonusLabel": "Bono de Salvación"
+    },
+    "NPCName": "Nombre del PNJ",
+    "NextLevelCost": "Coste del Siguiente Nivel",
+    "NoRequirement": "Sin requisito",
+    "NoSpells": "No hay hechizos",
+    "Normal": "Normal",
     "Notifications": {
       "ActorDead": "{name} ha muerto",
       "ActorUnconscious": "{name} ha caído inconsciente",
+      "Breather": "{name} coge aire y recupera {amount} PV (tirada: {rolled}, limitada al daño del combate)",
       "ConditionApplied": "Condición {condition} aplicada a {actor} por {duration} turnos",
       "EffectApplied": "Efecto {effect} aplicado a {actor}",
       "EffectRemoved": "Efecto {name} eliminado",
@@ -338,27 +332,90 @@
       "ItemEquipped": "{name} equipado",
       "ItemUnequipped": "{name} desequipado",
       "LongRest": "{name} ha descansado completamente y recuperado toda su salud y maná",
+      "LongRestPartial": "{name} ha dormido una noche y recuperado {amount} PV y todo su maná",
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
+      "MinionDown": "{name} cae al golpe (esbirro)",
       "PyramidSaved": "Pirámide personalizada guardada correctamente",
+      "RaceAdvantageGranted": "Ventaja {advantage} concedida por la raza {race}",
+      "RaceXpNote": "Raza {race}: {modifier} PX por sesión (RyF 3.0, pág. 98)",
       "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
+      "RulesSaved": "Reglas del sistema guardadas correctamente",
+      "SanityLost": "{name} pierde {amount} de Cordura ({formula}). Cordura actual: {current} / {max}",
+      "ShipDestroyed": "¡{name} ha sido destruida!",
       "ShortRest": "{name} ha descansado brevemente y recuperado {amount} PV",
       "SkillDecreased": "{name} reducido a nivel {level}",
       "SkillIncreased": "{name} aumentado a nivel {level}",
       "SpellCast": "Has lanzado {name} (Coste: {cost} maná)",
       "SpellDecreased": "{name} reducido a nivel {level}",
-      "SpellIncreased": "{name} aumentado a nivel {level}"
+      "SpellIncreased": "{name} aumentado a nivel {level}",
+      "TokenReturned": "El máster devuelve el token a {name}: su siguiente tirada baja un rango el dado objetivo",
+      "WeaponReloaded": "{name} recarga {weapon} ({turns} turno(s) de recarga)"
     },
-    "NPC": {
-      "SavingThrowBonus": "Tirada de Salvación - PNJ",
-      "SavingThrowBonusDescription": "Los PNJs no tienen atributos. Ingresa el bono que se sumará a la tirada de salvación (1o3d10 + bono).",
-      "SavingThrowBonusLabel": "Bono de Salvación"
+    "OpposedDefenderSkill": "Habilidad del oponente",
+    "OpposedManualBonus": "— Bono manual (PNJ sin habilidades) —",
+    "OpposedRoll": "Tirada Enfrentada",
+    "OpposedTie": "Empate: queda a discreción del máster (RyF 3.0, pág. 18)",
+    "OpposedWinner": "Ganador",
+    "Permanent": "Permanente",
+    "Precision": "Precisión",
+    "Protection": "Protección",
+    "PyramidInvalid": "La pirámide de habilidades no es válida",
+    "PyramidValid": "La pirámide de habilidades es válida",
+    "Quantity": "Cantidad",
+    "Race": {
+      "Add": "Añadir Raza",
+      "ArmorForbidden": "No puede llevar armadura",
+      "AttributeCap": "Tope de atributo",
+      "AttributeCapMax": "Valor máximo del atributo",
+      "ChooseAdvantage": "Elegir",
+      "ChooseAdvantageHint": "Esta raza permite elegir una ventaja gratuita entre varias (RyF 3.0, pág. 98).",
+      "ChooseAdvantageTitle": "Ventaja gratuita de {race}",
+      "GrantedAdvantage": "Ventaja gratuita",
+      "GrantedAdvantagesHint": "Arrastra ventajas aquí para enlazarlas. Al añadir la raza a un personaje se conceden automáticamente; si hay varias, se elige una (RyF 3.0, pág. 98).",
+      "Label": "Raza",
+      "Name": "Nombre de la Raza",
+      "NoGrantedAdvantages": "Sin ventajas enlazadas. Arrastra una ventaja sobre esta hoja.",
+      "PyramidRestriction": "Restricción de pirámide",
+      "PyramidRestrictions": {
+        "none": "Sin restricción",
+        "specialist": "Solo pirámides especialistas",
+        "versatile": "Solo pirámides versátiles"
+      },
+      "XpSessionModifier": "Modificador de PX por sesión"
     },
+    "Range": "Alcance",
+    "RangeLong": "Alcance Largo",
+    "RangeMedium": "Alcance Medio",
+    "RangeShort": "Alcance Corto",
+    "Reason": "Razón",
+    "ReasonPlaceholder": "Ej: Completar misión, derrotar enemigos",
+    "Reload": "Recargar",
+    "ReloadTurns": "Turnos de recarga",
+    "Remaining": "Restantes",
+    "Remove": "Eliminar",
+    "Requirement": "Requisito",
+    "Roll": "Tirar",
+    "RollDamage": "Tirar Daño",
+    "RollFactors": {
+      "ApplySpecialization": "Aplicar especialización: {name} (+1 rango)",
+      "DieHigh": "Alto (ventaja)",
+      "DieLow": "Bajo (desventaja)",
+      "DieMiddle": "Medio (normal)",
+      "FactorTokenDebt": "Deuda de token: el máster devolvió el token (−1 rango)",
+      "FactorUntrained": "Sin puntos en la habilidad (−1 rango)",
+      "FactorWounded": "Malherido (−1 rango)",
+      "SpendToken": "Gastar token de la muerte (+1 rango, quedan {count})",
+      "TargetDie": "Dado objetivo"
+    },
+    "RollMode": "Modo de Tirada",
+    "Sanity": {
+      "Label": "Cordura",
+      "Loss": "Pérdida de Cordura",
+      "LossFormula": "Dados de pérdida",
+      "LossHint": "Según la gravedad: presenciar un asesinato 1d6, un genocidio 3d6 (RyF 3.0, pág. 43). Los dados explotan."
+    },
+    "SavingThrow": "Tirada de Salvación",
     "Settings": {
-      "CustomPyramid": "Pirámide Personalizada",
-      "Presets": "Presets Predefinidos",
-      "Save": "Guardar",
-      "SkillLevel": "Habilidades Nivel",
-      "TotalSkills": "Total de Habilidades",
       "AttributePoints": {
         "Hint": "Cantidad de puntos disponibles para distribuir en atributos. Realista: 22, Heroico: 30, Épico: 35+",
         "Name": "Puntos de Atributos"
@@ -370,6 +427,181 @@
         "VersatileHeroic": "Versátil Heroico (1×6, 2×5, 3×4, 4×3, 5×2, 6×1)",
         "VersatileRealistic": "Versátil Realista (1×5, 2×4, 3×3, 4×2, 5×1)"
       },
+      "CoreRules": {
+        "actionsStep": {
+          "Hint": "Cada N puntos de iniciativa por encima de N dan una acción extra: con paso 10, dos acciones a 20+, tres a 30+ (RyF 3.0, pág. 20).",
+          "Name": "Paso de acciones por iniciativa"
+        },
+        "attributeMax": {
+          "Hint": "Valor máximo de un atributo durante la creación (RyF 3.0, pág. 6: 10). Aviso no bloqueante.",
+          "Name": "Atributo máximo en creación"
+        },
+        "attributeMin": {
+          "Hint": "Valor mínimo de un atributo durante la creación (RyF 3.0, pág. 6: 4). Aviso no bloqueante.",
+          "Name": "Atributo mínimo en creación"
+        },
+        "attributePoints": {
+          "Hint": "Puntos a repartir entre atributos. Heroico: 30, Realista: 22 (RyF 3.0, pág. 6). Cualquier valor intermedio es válido.",
+          "Name": "Puntos de atributos"
+        },
+        "breatherDice": {
+          "Hint": "PV recuperados al coger aire tras un combate, limitados al daño de ese combate (RyF 3.0, pág. 94: 1d6 realista / 2d6 épica). Fórmula libre.",
+          "Name": "Dados de coger aire"
+        },
+        "creationMaxSkill": {
+          "Hint": "Máximo de puntos por habilidad durante la creación (RyF 3.0, pág. 39: 6). Aviso no bloqueante.",
+          "Name": "Máximo por habilidad en creación"
+        },
+        "creationMaxSum": {
+          "Hint": "Suma máxima de atributo + habilidad al empezar a jugar (RyF 3.0, pág. 39: 16). Aviso no bloqueante.",
+          "Name": "Máximo atributo + habilidad en creación"
+        },
+        "deathMultiplier": {
+          "Hint": "La muerte llega al acumular Físico × N de daño, es decir, a PV negativos de -Físico × N (RyF 3.0, pág. 21: 6).",
+          "Name": "Multiplicador de muerte"
+        },
+        "defenseBase": {
+          "Hint": "Base fija de la Defensa: Destreza + habilidades de defensa + base (RyF 3.0, pág. 21: 5).",
+          "Name": "Base de Defensa"
+        },
+        "dualWieldBonus": {
+          "Hint": "Bono al ataque por luchar con dos armas ligeras de una mano (RyF 3.0, pág. 103: +3).",
+          "Name": "Bono por dos armas"
+        },
+        "healSkillDice": {
+          "Hint": "PV curados por una habilidad de curación con éxito (RyF 3.0, págs. 11-12: 1d6 realista / 2d6 heroico; +1d6 por cada 10 de margen). Fórmula libre.",
+          "Name": "Dados de curación por habilidad"
+        },
+        "healSkillDifficulty": {
+          "Hint": "Dificultad de la tirada de curación por habilidad (RyF 3.0, pág. 11: 15).",
+          "Name": "Dificultad de curación por habilidad"
+        },
+        "healthMultiplier": {
+          "Hint": "PV máximos = Físico × N. Heroico: 4, Realista: 3, más letal: 2 (RyF 3.0, págs. 14, 21 y 93).",
+          "Name": "Multiplicador de vida"
+        },
+        "hitLocHeadDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Cabeza — defensa (tiro apuntado)"
+        },
+        "hitLocHeadRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Cabeza — rango 1d10"
+        },
+        "hitLocLeftArmDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Brazo izquierdo — defensa (tiro apuntado)"
+        },
+        "hitLocLeftArmRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Brazo izquierdo — rango 1d10"
+        },
+        "hitLocLeftLegDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Pierna izquierda — defensa (tiro apuntado)"
+        },
+        "hitLocLeftLegRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Pierna izquierda — rango 1d10"
+        },
+        "hitLocRightArmDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Brazo derecho — defensa (tiro apuntado)"
+        },
+        "hitLocRightArmRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Brazo derecho — rango 1d10"
+        },
+        "hitLocRightLegDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Pierna derecha — defensa (tiro apuntado)"
+        },
+        "hitLocRightLegRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Pierna derecha — rango 1d10"
+        },
+        "hitLocTorsoDef": {
+          "Hint": "Modificador a la defensa del objetivo al apuntar a esta zona (RyF 3.0, pág. 95).",
+          "Name": "Torso — defensa (tiro apuntado)"
+        },
+        "hitLocTorsoRange": {
+          "Hint": "Valores del 1d10 que impactan en esta zona. Formato: \"5-7\" o \"10\".",
+          "Name": "Torso — rango 1d10"
+        },
+        "longRestFull": {
+          "Hint": "Si está activo, el descanso largo recupera toda la salud y el maná (regla de la casa). Si no, cura los PV por noche configurados abajo (RyF 3.0, pág. 94).",
+          "Name": "Descanso largo completo"
+        },
+        "longRestHealAmount": {
+          "Hint": "PV curados por noche cuando el descanso largo no es completo (RyF 3.0, pág. 94: 1 normal, 2 en condiciones cómodas).",
+          "Name": "PV por noche de descanso"
+        },
+        "manaMultiplier": {
+          "Hint": "Maná máximo = Inteligencia × N (RyF 3.0, pág. 101: 3; la ventaja Maná abundante lo sube a 4). Solo aplica con la magia activada.",
+          "Name": "Multiplicador de maná"
+        },
+        "maxAdvantages": {
+          "Hint": "Máximo de ventajas por personaje (RyF 3.0, pág. 98: una). 0 = sin límite. El aviso no bloquea la creación.",
+          "Name": "Máximo de ventajas"
+        },
+        "maxSkillLevel": {
+          "Hint": "Nivel máximo de las habilidades (estándar: 10). Limita subir de nivel y define los niveles de la pirámide personalizada; cambiar la pirámide requiere recargar.",
+          "Name": "Nivel máximo de habilidades"
+        },
+        "rangeLong": {
+          "Hint": "Dificultad de los ataques a distancia larga (RyF 3.0, pág. 21: 25).",
+          "Name": "Dificultad a distancia larga"
+        },
+        "rangeMedium": {
+          "Hint": "Dificultad de los ataques a distancia media (RyF 3.0, pág. 21: 20).",
+          "Name": "Dificultad a distancia media"
+        },
+        "rangePointBlank": {
+          "Hint": "Dificultad de los ataques a bocajarro (RyF 3.0, pág. 21: 10).",
+          "Name": "Dificultad a bocajarro"
+        },
+        "rangeShort": {
+          "Hint": "Dificultad de los ataques a distancia corta (RyF 3.0, pág. 21: 15).",
+          "Name": "Dificultad a distancia corta"
+        },
+        "sanityMultiplier": {
+          "Hint": "Cordura máxima = Inteligencia × N (RyF 3.0, pág. 43: 4). Solo aplica con el módulo de Cordura activado.",
+          "Name": "Multiplicador de cordura"
+        },
+        "shipGunnerSkill": {
+          "Hint": "Nombre de la habilidad que usa el artillero vinculado junto a su Destreza (RyF 3.0, pág. 103: Artillería).",
+          "Name": "Habilidad del artillero"
+        },
+        "shipHullMultiplier": {
+          "Hint": "PV de la nave = Barreras Defensivas × N (RyF 3.0, pág. 103: 10). Solo aplica con el módulo de naves activado.",
+          "Name": "Multiplicador de casco de nave"
+        },
+        "shipPilotSkill": {
+          "Hint": "Nombre de la habilidad que usa el piloto vinculado junto a su Destreza (RyF 3.0, pág. 103: Pilotar).",
+          "Name": "Habilidad del piloto"
+        },
+        "shortRestDivisor": {
+          "Hint": "El descanso corto cura Físico ÷ N PV (regla de la casa; el manual solo define la curación nocturna, pág. 94).",
+          "Name": "Divisor del descanso corto"
+        },
+        "unconsciousThreshold": {
+          "Hint": "PV a los que el personaje cae inconsciente (RyF 3.0, pág. 21: 0).",
+          "Name": "Umbral de inconsciencia"
+        },
+        "willpowerBase": {
+          "Hint": "Base fija de la Voluntad: Carisma + Inteligencia + base (RyF 3.0, pág. 94: 5).",
+          "Name": "Base de Voluntad"
+        },
+        "woundedMultiplier": {
+          "Hint": "Malherido cuando los PV bajan a Físico × N o menos (RyF 3.0, pág. 20: 1).",
+          "Name": "Multiplicador de malherido"
+        },
+        "xpCostMultiplier": {
+          "Hint": "Multiplicador del coste en PX para subir habilidades (RyF 3.0, pág. 38 sugiere ×1.5 o ×2 para campañas largas; cualquier valor es válido). Se redondea hacia arriba.",
+          "Name": "Multiplicador de coste de PX"
+        }
+      },
+      "CustomPyramid": "Pirámide Personalizada",
       "CustomPyramidMenu": {
         "Description": "Define cuántas habilidades de cada nivel tendrán los personajes. Puedes usar los presets o crear tu propia distribución.",
         "Hint": "Abre un formulario para definir una pirámide de habilidades personalizada.",
@@ -381,13 +613,37 @@
         "Hint": "Define la pirámide de habilidades que se aplicará a los nuevos personajes.",
         "Name": "Tipo de Personaje por Defecto"
       },
+      "EnableAmmo": {
+        "Hint": "Activa el control de munición (RyF 3.0, págs. 96-98): cada disparo gasta una bala y sin balas hay que recargar. Solo afecta a armas con cargador configurado.",
+        "Name": "Activar Munición"
+      },
       "EnableCarisma": {
         "Hint": "Activa el atributo Carisma y las 6 habilidades sociales. Requiere recargar el mundo.",
         "Name": "Activar Carisma"
       },
+      "EnableHitLocation": {
+        "Hint": "Activa la localización de daño (RyF 3.0, pág. 95): 1d10 de zona al impactar y tiros apuntados que suben la defensa del objetivo.",
+        "Name": "Activar Localización de Daño"
+      },
       "EnableMagia": {
         "Hint": "Activa el sistema de magia, puntos de Maná y hechizos. Requiere recargar el mundo.",
         "Name": "Activar Magia"
+      },
+      "EnableRaces": {
+        "Hint": "Activa las Razas (RyF 3.0, pág. 98): paquetes de rasgos raciales como items. Una raza por personaje. Requiere recargar el mundo.",
+        "Name": "Activar Razas"
+      },
+      "EnableSanity": {
+        "Hint": "Activa la Cordura (RyF 3.0, pág. 43): reserva opcional = Inteligencia × multiplicador, con pérdidas en dados d6. Requiere recargar el mundo.",
+        "Name": "Activar Cordura"
+      },
+      "EnableShips": {
+        "Hint": "Activa las naves espaciales (RyF 3.0, págs. 103-104): actor Nave con Velocidad, Maniobrabilidad y Barreras Defensivas (PV = BD × 10), combate y persecución enfrentados.",
+        "Name": "Activar Naves Espaciales"
+      },
+      "EnableTokens": {
+        "Hint": "Activa los Tokens de la muerte (RyF 3.0, págs. 91-92): gastar el token sube un rango el dado objetivo; el máster puede devolverlo forzando bajar un rango en la siguiente tirada. Requiere recargar el mundo.",
+        "Name": "Activar Tokens de la Muerte"
       },
       "HealthMultiplier": {
         "Hint": "Multiplicador para calcular PV máximos (Físico × multiplicador). Realista: 3, Estándar: 4, Heroico: 5+",
@@ -402,18 +658,83 @@
         "Name": "Máximo de Ventajas"
       },
       "MaxSkillLevel": {
-        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades",
+        "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Reglas del Sistema → Nivel máximo de habilidades",
         "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
         "Name": "Nivel Máximo de Habilidades"
-      }
+      },
+      "Presets": "Presets Predefinidos",
+      "RulesConfig": {
+        "Description": "Todos los valores de regla que afectan a la ficha. Los presets solo rellenan campos: puedes editar cualquier valor libremente después (por ejemplo, un modo intermedio con 26 puntos de atributos).",
+        "GroupCombat": "Combate",
+        "GroupCreation": "Creación de personajes",
+        "GroupHealth": "Salud y estados",
+        "GroupHitLocation": "Localización de daño (tabla reconstruida — el manual no la imprimió)",
+        "GroupProgression": "Progresión y descanso",
+        "GroupShips": "Naves espaciales",
+        "Hint": "Configura las bases, umbrales y valores de regla del sistema. Los valores por defecto siguen el manual de RyF 3.0.",
+        "Label": "Configurar Reglas",
+        "Name": "Reglas del Sistema",
+        "PresetHeroic": "Heroico",
+        "PresetHeroicDescription": "30 puntos de atributos, PV = Físico × 4 (pág. 6 y 21)",
+        "PresetRealistic": "Realista",
+        "PresetRealisticDescription": "22 puntos de atributos, PV = Físico × 3 (pág. 6 y 14)",
+        "ResetDefaults": "Valores por defecto",
+        "ResetDefaultsDescription": "Restaura todos los campos a los valores del manual",
+        "Title": "Configuración de Reglas del Sistema"
+      },
+      "Save": "Guardar",
+      "SkillLevel": "Habilidades Nivel",
+      "TotalSkills": "Total de Habilidades"
     },
     "SheetLabels": {
       "Actor": "Ficha de Actor",
       "Item": "Ficha de Item"
     },
+    "ShieldName": "Nombre del Escudo",
+    "Shields": "Escudos",
+    "Ship": {
+      "AssignCrewHint": "¿Qué puesto ocupa en la nave? (RyF 3.0, pág. 103)",
+      "AssignCrewTitle": "Asignar a {name}",
+      "Attack": "Atacar",
+      "AttackTitle": "Combate de naves",
+      "BaseBonus": "Base de tirada",
+      "BaseBonusSource": "Base manual de la nave (sin tripulante vinculado)",
+      "Cabins": "Camarotes",
+      "Cargo": "Espacios de carga",
+      "Chase": "Persecución",
+      "ChaseTitle": "Persecución de naves",
+      "CombatHint": "Combate (pág. 103): el ataque usa artillero + Maniobrabilidad, la defensa piloto + Maniobrabilidad y la persecución piloto + Velocidad. Cada nave tira su lado con los botones de la cabecera y los totales se comparan en el chat.",
+      "CompareNote": "Compara con la tirada de la otra nave: el total más alto impacta/esquiva o acorta/abre distancia (pifia o 1 natural pierden).",
+      "Crew": "Tripulación",
+      "CrewHint": "Arrastra un personaje sobre la ficha para vincularlo como piloto o artillero: sus bonos (Destreza + habilidad) se calcularán solos. Sin vínculo (o con PNJ), se usa la base manual.",
+      "Decoys": "Señuelos (consumibles)",
+      "Defense": "Defender",
+      "DefenseTitle": "Defensa de nave",
+      "Gunner": "Artillero",
+      "Hangars": "Hangares",
+      "Hull": "Casco (PV)",
+      "Hyperspace": "Hiperespacio",
+      "Lasers": "Cañones láser (1d6)",
+      "LivingSpace": "Espacio vital",
+      "Maneuverability": "Maniobrabilidad",
+      "Missiles": "Misiles (3d6, consumibles)",
+      "Name": "Nombre de la Nave",
+      "NaturalOne": "1 natural en el dado objetivo: pierde la enfrentada",
+      "NoCrew": "Sin tripulante vinculado",
+      "Pilot": "Piloto",
+      "Points": "Puntos totales",
+      "Shields": "Barreras Defensivas",
+      "SkillMissing": "El tripulante no tiene la habilidad {skill}: solo cuenta su Destreza",
+      "Speed": "Velocidad",
+      "Weapon": "Arma",
+      "WeaponLaser": "Cañón láser",
+      "WeaponMissile": "Misil"
+    },
+    "ShortRest": "Descanso Corto",
     "SkillCategories": {
       "defense": "Defensa",
       "firearms": "Armas de Fuego",
+      "healing": "Curación",
       "initiative": "Iniciativa",
       "knowledge": "Conocimiento",
       "magic": "Magia",
@@ -427,12 +748,29 @@
       "survival": "Supervivencia",
       "technical": "Técnico"
     },
+    "SkillName": "Nombre de la Habilidad",
+    "Specialization": "Especialización",
+    "SpecializationPlaceholder": "Ej: Espadas, cerraduras antiguas",
+    "Spell": "Hechizo",
+    "SpellCasting": "Lanzamiento de Hechizo",
+    "SpellDamage": "Daño de Hechizo",
+    "SpellDamageNote": "El daño mágico puede ser absorbido por armadura según el tipo",
+    "SpellFailure": "Hechizo Fallido",
+    "SpellFumble": "El hechizo falla catastróficamente",
+    "SpellName": "Nombre del Hechizo",
+    "SpellSuccess": "Hechizo Exitoso",
+    "Spells": "Hechizos",
+    "State": "Estado",
     "States": {
       "dead": "Muerto",
       "healthy": "Sano",
       "unconscious": "Inconsciente",
       "wounded": "Herido"
     },
+    "StatusEffect": "Efecto de Estado",
+    "Subtotal": "Subtotal",
+    "Success": "Éxito",
+    "SystemName": "Rápido y Fácil 3.0",
     "Tabs": {
       "Attributes": "Atributos",
       "Biography": "Biografía",
@@ -444,36 +782,75 @@
       "Magic": "Magia",
       "Skills": "Habilidades"
     },
+    "Target": "Objetivo",
+    "TargetDefense": "Defensa Objetivo",
+    "TargetValue": "Valor del Objetivo",
+    "TargetWillpower": "Voluntad del Objetivo",
+    "Toggle": "Alternar",
+    "Tokens": {
+      "Label": "Tokens",
+      "Return": "Devolver token (la siguiente tirada baja un rango el dado objetivo)"
+    },
+    "Total": "Total",
+    "TotalDamage": "Daño Total",
+    "TotalHealing": "Curación Total",
+    "TwoHanded": "Dos Manos",
+    "Unknown": "Desconocido",
+    "UpgradeCost": "Coste de Mejora",
     "Warnings": {
+      "AdvantageRequirementNotMet": "No cumples el requisito de la ventaja: {attribute} {value}+ (RyF 3.0, pág. 98)",
+      "AlreadyHealedToday": "{name} ya ha recibido curación por habilidad hoy (RyF 3.0, pág. 11: una vez al día por paciente)",
       "AttributeNotFound": "No se encontró el atributo {attribute}",
-      "AttributeOutOfRange": "Los atributos deben estar entre 4 y 10 durante la creación (RyF 3.0, pág. 13)",
+      "AttributeOutOfRange": "Los atributos deben estar entre {min} y {max} durante la creación (RyF 3.0, pág. 13)",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
       "CannotEquip": "Este tipo de item no se puede equipar",
       "CarismaDisabled": "El Carisma no está habilitado en este mundo. Actívalo en la configuración del sistema.",
+      "CreationMaxSkill": "En la creación no se pueden superar los {max} puntos por habilidad (RyF 3.0, pág. 39)",
+      "CreationMaxSum": "En la creación, atributo + habilidad no puede superar {max} (RyF 3.0, pág. 39)",
+      "CreationSkillTooHigh": "{name} supera el máximo de {max} puntos por habilidad en la creación (RyF 3.0, pág. 39)",
+      "CreationSumTooHigh": "{name}: atributo + habilidad supera el máximo de {max} en la creación (RyF 3.0, pág. 39)",
       "EmptyPyramid": "La pirámide no puede estar vacía. Define al menos una habilidad.",
+      "GrantedAdvantageNotFound": "No se encontró la ventaja enlazada {name} (¿se borró del compendio?)",
       "InvalidSpell": "Hechizo inválido",
       "MagicDisabled": "La magia no está habilitada en este mundo. Actívala en la configuración del sistema.",
-      "MaxSkillLevel": "La habilidad ya está al nivel máximo (10)",
+      "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
+      "MaxSkillLevel": "La habilidad ya está al nivel máximo ({max})",
       "MinAttributeValue": "El atributo no puede ser menor que 1",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoActor": "Este item no está asociado a ningún actor",
+      "NoAmmo": "{name} no tiene munición: recarga antes de disparar (RyF 3.0, págs. 96-98)",
+      "NoCombatDamage": "No hay daño de combate acumulado que recuperar (RyF 3.0, pág. 94)",
+      "NoMissiles": "{name} no tiene misiles: los misiles se consumen al dispararse (RyF 3.0, pág. 103)",
       "NoRangeSelected": "No se seleccionó alcance para el ataque a distancia",
       "NoTargetSelected": "No hay objetivos seleccionados",
+      "NoTokens": "No te quedan tokens de la muerte",
+      "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
       "NotASkillOrSpell": "Este item no es una habilidad ni un hechizo",
       "NotASpell": "Este item no es un hechizo",
       "NotEnoughAttributePoints": "No tienes suficientes puntos de atributo disponibles",
       "NotEnoughExperience": "No tienes suficiente experiencia para realizar esta acción",
       "NotEnoughMana": "No tienes suficiente maná para lanzar este hechizo",
-      "NoWeaponSkill": "No se pudo determinar la habilidad apropiada para esta arma",
-      "MaxAdvantagesReached": "Este personaje ya tiene el máximo de ventajas permitido ({max})",
-      "AdvantageRequirementNotMet": "No cumples el requisito de la ventaja: {attribute} {value}+ (RyF 3.0, pág. 98)",
+      "OneRaceOnly": "El personaje ya tiene una raza (RyF 3.0, pág. 98: una por personaje)",
+      "OnlyAdvantagesOnRace": "Solo se pueden enlazar ventajas a una raza",
+      "OnlyCharactersAsCrew": "Solo se pueden vincular personajes como tripulación de la nave",
+      "RaceArmorForbidden": "La raza {race} no puede llevar armadura (RyF 3.0, pág. 98)",
+      "RaceAttributeCap": "La raza {race} limita {attribute} a un máximo de {max} (RyF 3.0, pág. 98)",
+      "RacePyramidRestriction": "La raza {race} solo permite: {restriction} (RyF 3.0, pág. 98)",
+      "RacesDisabled": "Las razas no están habilitadas en este mundo. Actívalas en la configuración del sistema.",
+      "ShipsDisabled": "Las naves espaciales no están habilitadas en este mundo. Actívalas en la configuración del sistema.",
       "SkillNotFound": "No se encontró la habilidad {skill}",
       "SkillPyramidMismatch": "Nivel {level}: se esperan {expected} habilidades, pero hay {actual}",
       "SkillsAbovePyramid": "Nivel {level}: hay {actual} habilidades por encima del máximo de la pirámide",
       "SpellCastingFailed": "Fallo al lanzar {name}",
       "SpellHasNoEffects": "El hechizo no tiene efectos configurados",
       "WeaponNotFound": "No se encontró el arma"
-    }
+    },
+    "WeaponAttackBonus": "Bono de Ataque de Arma",
+    "WeaponName": "Nombre del Arma",
+    "Weapons": "Armas",
+    "Weight": "Peso",
+    "Willpower": "Voluntad",
+    "XP": "PX"
   },
   "TYPES": {
     "Item": {
@@ -481,6 +858,7 @@
       "armor": "Armadura",
       "equipment": "Equipamiento",
       "npc-attack": "Ataque de PNJ",
+      "race": "Raza",
       "shield": "Escudo",
       "skill": "Habilidad",
       "spell": "Hechizo",
@@ -488,7 +866,8 @@
     },
     "Actor": {
       "character": "Personaje",
-      "npc": "PNJ"
+      "npc": "PNJ",
+      "ship": "Nave"
     }
   }
 }

@@ -22,7 +22,13 @@
       "long": 150
     },
     "twoHanded": true,
-    "properties": []
+    "properties": [],
+    "precision": 1,
+    "ammo": {
+      "value": 20,
+      "max": 20
+    },
+    "reloadTurns": 0
   },
   "effects": [],
   "folder": null,
