@@ -1,4 +1,5 @@
 import { RyfRoll } from '../rolls/ryf-roll.mjs';
+import { getRule } from '../helpers/rules.mjs';
 
 export class RyfActorSheet extends ActorSheet {
 
@@ -313,7 +314,7 @@ export class RyfActorSheet extends ActorSheet {
     } else {
       const defense = targetDefense || rollParams.defense;
       const offhand = rollParams.dualWield ? offhandWeapons[0] : null;
-      const dualBonus = offhand ? 3 : 0;
+      const dualBonus = offhand ? getRule('dualWieldBonus') : 0;
       await this.actor.rollMeleeAttack(weapon, defense, mode, modifier + dualBonus, offhand);
     }
   }
@@ -329,10 +330,10 @@ export class RyfActorSheet extends ActorSheet {
           <div class="form-group">
             <label>${game.i18n.localize('RYF.Combat.Range')}</label>
             <select name="range" autofocus>
-              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (10)</option>
-              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (15)</option>
-              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (20)</option>
-              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (25)</option>
+              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
             </select>
           </div>
           ` : !hasTarget ? `
@@ -360,7 +361,7 @@ export class RyfActorSheet extends ActorSheet {
           </div>
           ${dualWieldAvailable ? `
           <div class="form-group">
-            <label>${game.i18n.localize('RYF.DualWield')} (+3)</label>
+            <label>${game.i18n.localize('RYF.DualWield')} (+${getRule('dualWieldBonus')})</label>
             <input type="checkbox" name="dualWield"/>
           </div>
           ` : ''}
@@ -780,8 +781,13 @@ export class RyfActorSheet extends ActorSheet {
     }
 
     // Reference: RyF 3.0 PDF, página 13 - los atributos van de 4 (mínimo) a 10 (máximo)
-    if (!hasExperience && (value < 4 || value > 10)) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.AttributeOutOfRange'));
+    const attributeMin = getRule('attributeMin');
+    const attributeMax = getRule('attributeMax');
+    if (!hasExperience && (value < attributeMin || value > attributeMax)) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.AttributeOutOfRange', {
+        min: attributeMin,
+        max: attributeMax
+      }));
     }
 
     await this.actor.update({

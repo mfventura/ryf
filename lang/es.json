@@ -338,9 +338,11 @@
       "ItemEquipped": "{name} equipado",
       "ItemUnequipped": "{name} desequipado",
       "LongRest": "{name} ha descansado completamente y recuperado toda su salud y maná",
+      "LongRestPartial": "{name} ha dormido una noche y recuperado {amount} PV y todo su maná",
       "ManaSpent": "Gastado {cost} maná para lanzar {name}",
       "PyramidSaved": "Pirámide personalizada guardada correctamente",
       "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
+      "RulesSaved": "Reglas del sistema guardadas correctamente",
       "ShortRest": "{name} ha descansado brevemente y recuperado {amount} PV",
       "SkillDecreased": "{name} reducido a nivel {level}",
       "SkillIncreased": "{name} aumentado a nivel {level}",
@@ -369,6 +371,92 @@
         "SpecialistRealistic": "Especialista Realista (2×5, 2×4, 2×3, 2×2, 2×1)",
         "VersatileHeroic": "Versátil Heroico (1×6, 2×5, 3×4, 4×3, 5×2, 6×1)",
         "VersatileRealistic": "Versátil Realista (1×5, 2×4, 3×3, 4×2, 5×1)"
+      },
+      "CoreRules": {
+        "actionsStep": {
+          "Hint": "Cada N puntos de iniciativa por encima de N dan una acción extra: con paso 10, dos acciones a 20+, tres a 30+ (RyF 3.0, pág. 20).",
+          "Name": "Paso de acciones por iniciativa"
+        },
+        "attributeMax": {
+          "Hint": "Valor máximo de un atributo durante la creación (RyF 3.0, pág. 6: 10). Aviso no bloqueante.",
+          "Name": "Atributo máximo en creación"
+        },
+        "attributeMin": {
+          "Hint": "Valor mínimo de un atributo durante la creación (RyF 3.0, pág. 6: 4). Aviso no bloqueante.",
+          "Name": "Atributo mínimo en creación"
+        },
+        "attributePoints": {
+          "Hint": "Puntos a repartir entre atributos. Heroico: 30, Realista: 22 (RyF 3.0, pág. 6). Cualquier valor intermedio es válido.",
+          "Name": "Puntos de atributos"
+        },
+        "creationMaxSkill": {
+          "Hint": "Máximo de puntos por habilidad durante la creación (RyF 3.0, pág. 39: 6). Aviso no bloqueante.",
+          "Name": "Máximo por habilidad en creación"
+        },
+        "creationMaxSum": {
+          "Hint": "Suma máxima de atributo + habilidad al empezar a jugar (RyF 3.0, pág. 39: 16). Aviso no bloqueante.",
+          "Name": "Máximo atributo + habilidad en creación"
+        },
+        "deathMultiplier": {
+          "Hint": "La muerte llega al acumular Físico × N de daño, es decir, a PV negativos de -Físico × N (RyF 3.0, pág. 21: 6).",
+          "Name": "Multiplicador de muerte"
+        },
+        "defenseBase": {
+          "Hint": "Base fija de la Defensa: Destreza + habilidades de defensa + base (RyF 3.0, pág. 21: 5).",
+          "Name": "Base de Defensa"
+        },
+        "dualWieldBonus": {
+          "Hint": "Bono al ataque por luchar con dos armas ligeras de una mano (RyF 3.0, pág. 103: +3).",
+          "Name": "Bono por dos armas"
+        },
+        "healthMultiplier": {
+          "Hint": "PV máximos = Físico × N. Heroico: 4, Realista: 3, más letal: 2 (RyF 3.0, págs. 14, 21 y 93).",
+          "Name": "Multiplicador de vida"
+        },
+        "longRestFull": {
+          "Hint": "Si está activo, el descanso largo recupera toda la salud y el maná (regla de la casa). Si no, cura los PV por noche configurados abajo (RyF 3.0, pág. 94).",
+          "Name": "Descanso largo completo"
+        },
+        "longRestHealAmount": {
+          "Hint": "PV curados por noche cuando el descanso largo no es completo (RyF 3.0, pág. 94: 1 normal, 2 en condiciones cómodas).",
+          "Name": "PV por noche de descanso"
+        },
+        "rangeLong": {
+          "Hint": "Dificultad de los ataques a distancia larga (RyF 3.0, pág. 21: 25).",
+          "Name": "Dificultad a distancia larga"
+        },
+        "rangeMedium": {
+          "Hint": "Dificultad de los ataques a distancia media (RyF 3.0, pág. 21: 20).",
+          "Name": "Dificultad a distancia media"
+        },
+        "rangePointBlank": {
+          "Hint": "Dificultad de los ataques a bocajarro (RyF 3.0, pág. 21: 10).",
+          "Name": "Dificultad a bocajarro"
+        },
+        "rangeShort": {
+          "Hint": "Dificultad de los ataques a distancia corta (RyF 3.0, pág. 21: 15).",
+          "Name": "Dificultad a distancia corta"
+        },
+        "shortRestDivisor": {
+          "Hint": "El descanso corto cura Físico ÷ N PV (regla de la casa; el manual solo define la curación nocturna, pág. 94).",
+          "Name": "Divisor del descanso corto"
+        },
+        "unconsciousThreshold": {
+          "Hint": "PV a los que el personaje cae inconsciente (RyF 3.0, pág. 21: 0).",
+          "Name": "Umbral de inconsciencia"
+        },
+        "willpowerBase": {
+          "Hint": "Base fija de la Voluntad: Carisma + Inteligencia + base (RyF 3.0, pág. 94: 5).",
+          "Name": "Base de Voluntad"
+        },
+        "woundedMultiplier": {
+          "Hint": "Malherido cuando los PV bajan a Físico × N o menos (RyF 3.0, pág. 20: 1).",
+          "Name": "Multiplicador de malherido"
+        },
+        "xpCostMultiplier": {
+          "Hint": "Multiplicador del coste en PX para subir habilidades (RyF 3.0, pág. 38 sugiere ×1.5 o ×2 para campañas largas; cualquier valor es válido). Se redondea hacia arriba.",
+          "Name": "Multiplicador de coste de PX"
+        }
       },
       "CustomPyramidMenu": {
         "Description": "Define cuántas habilidades de cada nivel tendrán los personajes. Puedes usar los presets o crear tu propia distribución.",
@@ -405,6 +493,23 @@
         "ConfigHint": "Para cambiar este valor, ve a Configuración del Sistema → Nivel Máximo de Habilidades",
         "Hint": "Define el nivel máximo que pueden alcanzar las habilidades. Estándar: 10, Extendido: 15-20. Requiere recargar para aplicar cambios en la pirámide personalizada.",
         "Name": "Nivel Máximo de Habilidades"
+      },
+      "RulesConfig": {
+        "Description": "Todos los valores de regla que afectan a la ficha. Los presets solo rellenan campos: puedes editar cualquier valor libremente después (por ejemplo, un modo intermedio con 26 puntos de atributos).",
+        "GroupCombat": "Combate",
+        "GroupCreation": "Creación de personajes",
+        "GroupHealth": "Salud y estados",
+        "GroupProgression": "Progresión y descanso",
+        "Hint": "Configura las bases, umbrales y valores de regla del sistema. Los valores por defecto siguen el manual de RyF 3.0.",
+        "Label": "Configurar Reglas",
+        "Name": "Reglas del Sistema",
+        "PresetHeroic": "Heroico",
+        "PresetHeroicDescription": "30 puntos de atributos, PV = Físico × 4 (pág. 6 y 21)",
+        "PresetRealistic": "Realista",
+        "PresetRealisticDescription": "22 puntos de atributos, PV = Físico × 3 (pág. 6 y 14)",
+        "ResetDefaults": "Valores por defecto",
+        "ResetDefaultsDescription": "Restaura todos los campos a los valores del manual",
+        "Title": "Configuración de Reglas del Sistema"
       }
     },
     "SheetLabels": {
@@ -446,14 +551,18 @@
     },
     "Warnings": {
       "AttributeNotFound": "No se encontró el atributo {attribute}",
-      "AttributeOutOfRange": "Los atributos deben estar entre 4 y 10 durante la creación (RyF 3.0, pág. 13)",
+      "AttributeOutOfRange": "Los atributos deben estar entre {min} y {max} durante la creación (RyF 3.0, pág. 13)",
       "CannotActInCurrentState": "No puedes actuar en tu estado actual",
       "CannotEquip": "Este tipo de item no se puede equipar",
       "CarismaDisabled": "El Carisma no está habilitado en este mundo. Actívalo en la configuración del sistema.",
+      "CreationMaxSkill": "En la creación no se pueden superar los {max} puntos por habilidad (RyF 3.0, pág. 39)",
+      "CreationMaxSum": "En la creación, atributo + habilidad no puede superar {max} (RyF 3.0, pág. 39)",
+      "CreationSkillTooHigh": "{name} supera el máximo de {max} puntos por habilidad en la creación (RyF 3.0, pág. 39)",
+      "CreationSumTooHigh": "{name}: atributo + habilidad supera el máximo de {max} en la creación (RyF 3.0, pág. 39)",
       "EmptyPyramid": "La pirámide no puede estar vacía. Define al menos una habilidad.",
       "InvalidSpell": "Hechizo inválido",
       "MagicDisabled": "La magia no está habilitada en este mundo. Actívala en la configuración del sistema.",
-      "MaxSkillLevel": "La habilidad ya está al nivel máximo (10)",
+      "MaxSkillLevel": "La habilidad ya está al nivel máximo ({max})",
       "MinAttributeValue": "El atributo no puede ser menor que 1",
       "MinSkillLevel": "La habilidad ya está al nivel mínimo (0)",
       "NoActor": "Este item no está asociado a ningún actor",

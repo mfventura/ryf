@@ -59,7 +59,51 @@ export class RyfRoll {
     return rollData;
   }
   
+  // Núcleo compartido de una tirada 1o3d10 contra dificultad: degradación por
+  // malherido, pifia y fallo automático con 1 natural (RyF 3.0 PDF, págs. 18-20)
+  static async _resolveRoll(base, difficulty, mode, modifier, wounded) {
+    if (wounded) {
+      mode = degradeMode(mode);
+    }
+
+    const diceRoll = await roll1o3d10(mode);
+    const total = base + diceRoll.result + modifier;
+
+    const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
+    const margin = total - difficulty;
+    const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
+
+    return { mode, diceRoll, total, fumble, success, margin, criticalDice };
+  }
+
   static async rollAttack(actor, weapon, targetDefense, mode = 'normal', modifier = 0) {
+    // Reference: RyF 3.0 PDF, páginas 87-88 - los PNJ usan un bono plano de
+    // ataque en lugar de atributo + habilidad, pero comparten el resto de
+    // reglas de la tirada (malherido, pifia, 1 natural, crítico)
+    if (weapon.type === 'npc-attack') {
+      const wounded = actor.system.states?.wounded || actor.statuses?.has('wounded') || false;
+      const attackBonus = weapon.system.attackBonus || 0;
+      const resolved = await this._resolveRoll(attackBonus, targetDefense, mode, modifier, wounded);
+
+      const rollData = {
+        type: 'npc-attack',
+        actor: actor,
+        actorName: actor.name,
+        actorImg: actor.img,
+        attackName: weapon.name,
+        attackType: weapon.system.attackType,
+        attackBonus: attackBonus,
+        difficulty: targetDefense,
+        modifier: modifier,
+        ...resolved
+      };
+
+      await this.toMessage(rollData);
+
+      return rollData;
+    }
+
     const weaponCategory = this._getWeaponSkillCategory(weapon);
 
     if (!weaponCategory) {
@@ -244,9 +288,19 @@ export class RyfRoll {
       : await this._rollOpposedSide(targetActor, null, defenderBonus);
     if (!defenderSide) return null;
 
+    // Reference: RyF 3.0 PDF, página 18 - el 1 natural en el dado objetivo es
+    // fallo automático también en tiradas enfrentadas (y la pifia igualmente);
+    // si fallan ambos lados, el empate queda a discreción del máster
+    const attackerFails = attackerSide.fumble || attackerSide.naturalOne;
+    const defenderFails = defenderSide.fumble || defenderSide.naturalOne;
+
     let winner = null;
-    if (attackerSide.total > defenderSide.total) winner = 'attacker';
-    else if (defenderSide.total > attackerSide.total) winner = 'defender';
+    if (attackerFails && !defenderFails) winner = 'defender';
+    else if (defenderFails && !attackerFails) winner = 'attacker';
+    else if (!attackerFails && !defenderFails) {
+      if (attackerSide.total > defenderSide.total) winner = 'attacker';
+      else if (defenderSide.total > attackerSide.total) winner = 'defender';
+    }
 
     const rollData = {
       type: 'opposed',
@@ -304,6 +358,8 @@ export class RyfRoll {
       hindrance: hindrance,
       mode: mode,
       diceRoll: diceRoll,
+      fumble: checkFumble(diceRoll.dice, diceRoll.chosen),
+      naturalOne: diceRoll.chosen === 1,
       total: attributeValue + skillLevel + diceRoll.result - hindrance
     };
   }
@@ -346,7 +402,7 @@ export class RyfRoll {
     const total = attributeValue + spellLevel + diceRoll.result;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -478,12 +534,18 @@ export class RyfRoll {
       mode = degradeMode(mode);
     }
 
+    // Reference: RyF 3.0 PDF, página 21 - el estorbo se resta a todas las
+    // tiradas de Destreza, también las de atributo puro
+    const hindrance = (attributeName === 'destreza') ? (actor.system.combat?.hindrance || 0) : 0;
+
     const diceRoll = await roll1o3d10(mode);
 
-    const total = attributeValue + diceRoll.result;
+    const total = attributeValue + diceRoll.result - hindrance;
 
     const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
+    // Reference: RyF 3.0 PDF, página 18 - el 1 natural en el dado objetivo
+    // también es fallo automático en salvaciones y tiradas de atributo
+    const success = isSuccess(total, difficulty, fumble, diceRoll.chosen);
     const margin = total - difficulty;
     const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
 
@@ -494,6 +556,7 @@ export class RyfRoll {
       attributeValue: attributeValue,
       difficulty: difficulty,
       mode: mode,
+      hindrance: hindrance,
       diceRoll: diceRoll,
       total: total,
       success: success,
@@ -567,7 +630,8 @@ export class RyfRoll {
       'spell-damage': 'systems/ryf3/templates/chat/spell-damage.hbs',
       'healing': 'systems/ryf3/templates/chat/healing-roll.hbs',
       'dual-damage': 'systems/ryf3/templates/chat/dual-damage-roll.hbs',
-      'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs'
+      'opposed': 'systems/ryf3/templates/chat/opposed-roll.hbs',
+      'npc-attack': 'systems/ryf3/templates/chat/npc-attack-roll.hbs'
     };
 
     const template = templateMap[rollData.type];

@@ -138,6 +138,22 @@
   justify-content: flex-end;
 }
 
+/* Rules config menu (shares the pyramid-config base styles) */
+.rules-config .rules-group {
+  margin-bottom: 1.5rem;
+}
+
+.rules-config .rules-group h3 {
+  margin-bottom: 0.75rem;
+  color: var(--ryf-primary);
+  border-bottom: 2px solid var(--ryf-secondary);
+  padding-bottom: 0.5rem;
+}
+
+.rules-config .preset-buttons {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 .custom-pyramid-config .save-button {
   background: var(--ryf-success);
   color: white;

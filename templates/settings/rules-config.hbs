@@ -1,0 +1,47 @@
+<form class="rules-config custom-pyramid-config">
+  <div class="form-header">
+    <p class="notes">{{localize "RYF.Settings.RulesConfig.Description"}}</p>
+  </div>
+
+  <div class="presets-section">
+    <h3>{{localize "RYF.Settings.Presets"}}</h3>
+    <div class="preset-buttons">
+      <button type="button" class="preset-button" data-preset="heroic">
+        <strong>{{localize "RYF.Settings.RulesConfig.PresetHeroic"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.RulesConfig.PresetHeroicDescription"}}</span>
+      </button>
+      <button type="button" class="preset-button" data-preset="realistic">
+        <strong>{{localize "RYF.Settings.RulesConfig.PresetRealistic"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.RulesConfig.PresetRealisticDescription"}}</span>
+      </button>
+      <button type="button" class="preset-button reset-defaults-button">
+        <strong>{{localize "RYF.Settings.RulesConfig.ResetDefaults"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.RulesConfig.ResetDefaultsDescription"}}</span>
+      </button>
+    </div>
+  </div>
+
+  {{#each groups as |group|}}
+  <div class="rules-group">
+    <h3>{{group.label}}</h3>
+
+    {{#each group.fields as |field|}}
+    <div class="form-group">
+      <label for="{{field.key}}">{{field.label}}</label>
+      {{#if (eq field.type "checkbox")}}
+        <input type="checkbox" name="{{field.key}}" {{#if field.value}}checked{{/if}} />
+      {{else}}
+        <input type="number" name="{{field.key}}" value="{{field.value}}" step="{{field.step}}" />
+      {{/if}}
+      <p class="hint">{{field.hint}}</p>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+
+  <div class="form-footer">
+    <button type="submit" class="save-button">
+      <i class="fas fa-save"></i> {{localize "RYF.Settings.Save"}}
+    </button>
+  </div>
+</form>

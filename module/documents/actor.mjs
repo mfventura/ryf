@@ -1,3 +1,5 @@
+import { getRule } from '../helpers/rules.mjs';
+
 export class RyfActor extends Actor {
 
   prepareData() {
@@ -110,7 +112,8 @@ export class RyfActor extends Actor {
         return sum;
       }, 0);
 
-    system.defense.base = 5;
+    // Reference: RyF 3.0 PDF, página 21 - Defensa = Destreza + Esquivar + 5
+    system.defense.base = getRule('defenseBase');
     system.defense.value = system.attributes.destreza.value + defenseBonus + system.defense.base + shieldBonusMelee;
     system.defense.ranged = shieldBonusRanged;
 
@@ -120,9 +123,14 @@ export class RyfActor extends Actor {
     system.initiative.base = system.attributes.percepcion.value + initiativeBonus;
     system.initiative.value = system.initiative.base;
 
+    // Reference: RyF 3.0 PDF, página 94 - Voluntad = Carisma + Inteligencia + 5.
+    // Sin el módulo de Carisma se calcula igualmente (Inteligencia + base) para
+    // que las tiradas sociales enfrentadas no lean el valor estático de plantilla
+    system.willpower.base = getRule('willpowerBase');
     if (CONFIG.RYF.isCarismaEnabled() && system.attributes.carisma) {
-      system.willpower.base = 5;
       system.willpower.value = system.attributes.carisma.value + system.attributes.inteligencia.value + system.willpower.base;
+    } else {
+      system.willpower.value = system.attributes.inteligencia.value + system.willpower.base;
     }
 
     const equippedArmor = this.items.find(i => i.type === 'armor' && i.system.equipped);
@@ -146,9 +154,11 @@ export class RyfActor extends Actor {
     system.combat.baseAbsorption = armorAbsorption;
     system.combat.absorption = armorAbsorption;
 
-    system.states.wounded = system.health.value <= system.attributes.fisico.value;
-    system.states.unconscious = system.health.value <= 0;
-    system.states.dead = system.health.value <= -(system.attributes.fisico.value * 6);
+    // Reference: RyF 3.0 PDF, páginas 20-21 - malherido con PV <= Físico,
+    // inconsciente a 0 PV, muerte a Físico x6 de daño (PV negativos)
+    system.states.wounded = system.health.value <= system.attributes.fisico.value * getRule('woundedMultiplier');
+    system.states.unconscious = system.health.value <= getRule('unconsciousThreshold');
+    system.states.dead = system.health.value <= -(system.attributes.fisico.value * getRule('deathMultiplier'));
 
     const maxPoints = CONFIG.RYF.getAttributePoints();
     let usedPoints = 0;
@@ -293,6 +303,40 @@ export class RyfActor extends Actor {
       }
     }
 
+    // Reference: RyF 3.0 PDF, página 39 - límites de creación: máximo 6 puntos
+    // por habilidad y atributo + habilidad no superior a 16 al empezar
+    const creationMaxSkill = getRule('creationMaxSkill');
+    const creationMaxSum = getRule('creationMaxSum');
+    allSkillsAndSpells.forEach(item => {
+      const level = item.system.level || 0;
+
+      if (level > creationMaxSkill) {
+        errors.push({
+          level: level,
+          expected: creationMaxSkill,
+          actual: level,
+          message: game.i18n.format('RYF.Warnings.CreationSkillTooHigh', {
+            name: item.name,
+            max: creationMaxSkill
+          })
+        });
+      }
+
+      const attributeName = item.type === 'spell' ? 'inteligencia' : item.system.attribute;
+      const attributeValue = this.system.attributes?.[attributeName]?.value || 0;
+      if (attributeValue + level > creationMaxSum) {
+        errors.push({
+          level: level,
+          expected: creationMaxSum,
+          actual: attributeValue + level,
+          message: game.i18n.format('RYF.Warnings.CreationSumTooHigh', {
+            name: item.name,
+            max: creationMaxSum
+          })
+        });
+      }
+    });
+
     return {
       valid: errors.length === 0,
       errors: errors,
@@ -350,9 +394,10 @@ export class RyfActor extends Actor {
   async takeDamage(amount, type = 'physical') {
     const currentHP = this.system.health.value;
 
+    // Reference: RyF 3.0 PDF, página 21 - la muerte llega a Físico x6 de daño
     let minHP = 0;
     if (this.type === 'character' && this.system.attributes?.fisico) {
-      minHP = -(this.system.attributes.fisico.value * 6);
+      minHP = -(this.system.attributes.fisico.value * getRule('deathMultiplier'));
     }
 
     const newHP = Math.max(currentHP - amount, minHP);
@@ -366,7 +411,7 @@ export class RyfActor extends Actor {
     }
 
     if (this.type === 'character' && this.system.attributes?.fisico) {
-      if (newHP <= -(this.system.attributes.fisico.value * 6)) {
+      if (newHP <= -(this.system.attributes.fisico.value * getRule('deathMultiplier'))) {
         ui.notifications.error(game.i18n.format('RYF.Notifications.ActorDead', { name: this.name }));
       }
     } else if (this.type === 'npc' && newHP <= 0) {
@@ -491,9 +536,11 @@ export class RyfActor extends Actor {
 
   }
 
+  // Descanso corto: cura Físico / divisor (regla de la casa intencionada,
+  // configurable en el menú de reglas)
   async shortRest() {
     const fisico = this.system.attributes.fisico.value;
-    const healAmount = Math.floor(fisico / 2);
+    const healAmount = Math.floor(fisico / getRule('shortRestDivisor'));
 
     await this.heal(healAmount);
 
@@ -503,18 +550,32 @@ export class RyfActor extends Actor {
     }));
   }
 
+  // Descanso largo: recuperación total por defecto (regla de la casa
+  // intencionada). Alternativa configurable: curación natural nocturna de
+  // 1-2 PV según comodidad (RyF 3.0 PDF, página 94); el maná se recupera
+  // completo en ambos casos
   async longRest() {
-    const maxHP = this.system.health.max;
     const maxMana = this.system.mana.max;
 
-    await this.update({
-      'system.health.value': maxHP,
-      'system.mana.value': maxMana
-    });
+    if (getRule('longRestFull')) {
+      await this.update({
+        'system.health.value': this.system.health.max,
+        'system.mana.value': maxMana
+      });
 
-    ui.notifications.info(game.i18n.format('RYF.Notifications.LongRest', {
-      name: this.name
-    }));
+      ui.notifications.info(game.i18n.format('RYF.Notifications.LongRest', {
+        name: this.name
+      }));
+    } else {
+      const healAmount = getRule('longRestHealAmount');
+      await this.heal(healAmount);
+      await this.update({ 'system.mana.value': maxMana });
+
+      ui.notifications.info(game.i18n.format('RYF.Notifications.LongRestPartial', {
+        name: this.name,
+        amount: healAmount
+      }));
+    }
   }
 
   getRollMode() {
@@ -611,14 +672,15 @@ export class RyfActor extends Actor {
       return null;
     }
 
+    // Reference: RyF 3.0 PDF, páginas 21 y 93 - dificultad por banda de distancia
     const difficulties = {
-      'pointblank': 10,
-      'short': 15,
-      'medium': 20,
-      'long': 25
+      'pointblank': getRule('rangePointBlank'),
+      'short': getRule('rangeShort'),
+      'medium': getRule('rangeMedium'),
+      'long': getRule('rangeLong')
     };
 
-    let difficulty = difficulties[range] || 15;
+    let difficulty = difficulties[range] || getRule('rangeShort');
 
     if (targetDefenseRanged) {
       difficulty += targetDefenseRanged;
@@ -648,10 +710,12 @@ export class RyfActor extends Actor {
       return null;
     }
 
+    if (!this.getRollMode()) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.CannotActInCurrentState'));
+      return null;
+    }
+
     const attackType = attack.system.attackType;
-    const attackBonus = attack.system.attackBonus || 0;
-    const damageBase = attack.system.damage?.base || '1d6';
-    const damageBonus = attack.system.damage?.bonus || 0;
 
     const attackParams = await new Promise((resolve) => {
       new Dialog({
@@ -757,49 +821,24 @@ export class RyfActor extends Actor {
 
       if (!rangeInput) return null;
 
+      // Reference: RyF 3.0 PDF, páginas 21 y 93 - dificultad por banda de distancia
       const difficulties = {
-        'pointblank': 10,
-        'short': 15,
-        'medium': 20,
-        'long': 25
+        'pointblank': getRule('rangePointBlank'),
+        'short': getRule('rangeShort'),
+        'medium': getRule('rangeMedium'),
+        'long': getRule('rangeLong')
       };
 
-      difficulty = difficulties[rangeInput] || 15;
+      difficulty = difficulties[rangeInput] || getRule('rangeShort');
     }
 
-    const { roll1o3d10, isSuccess, checkFumble, calculateCriticalDice } = await import('../helpers/dice.mjs');
-    const diceRoll = await roll1o3d10(mode);
-    const total = attackBonus + diceRoll.result + modifier;
+    // El ataque y el daño se resuelven por el mismo camino que los personajes
+    // (RyfRoll), de modo que malherido, pifias y el 1 natural aplican también
+    // a los PNJ
+    const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
+    const attackRoll = await RyfRoll.rollAttack(this, attack, difficulty, mode, modifier);
 
-    const fumble = checkFumble(diceRoll.dice, diceRoll.chosen);
-    const success = isSuccess(total, difficulty, fumble);
-    const margin = total - difficulty;
-    const criticalDice = success ? calculateCriticalDice(total, difficulty) : 0;
-
-    const chatData = {
-      author: game.user.id,
-      speaker: ChatMessage.getSpeaker({ actor: this }),
-      content: await renderTemplate('systems/ryf3/templates/chat/npc-attack-roll.hbs', {
-        actorName: this.name,
-        actorImg: this.img,
-        attackName: attack.name,
-        attackType: attackType,
-        attackBonus: attackBonus,
-        mode: mode,
-        modifier: modifier,
-        diceRoll: diceRoll,
-        total: total,
-        difficulty: difficulty,
-        success: success,
-        fumble: fumble,
-        margin: margin,
-        criticalDice: criticalDice
-      })
-    };
-
-    await ChatMessage.create(chatData);
-
-    if (success) {
+    if (attackRoll && attackRoll.success) {
       const rollDamage = await Dialog.confirm({
         title: game.i18n.localize('RYF.Combat.AttackSuccess'),
         content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`,
@@ -807,37 +846,11 @@ export class RyfActor extends Actor {
       });
 
       if (rollDamage) {
-        const { rollEffect } = await import('../helpers/dice.mjs');
-
-        const baseRoll = await rollEffect(damageBase);
-        let total = baseRoll.total + damageBonus;
-
-        let criticalRoll = null;
-        if (criticalDice > 0) {
-          criticalRoll = await rollEffect(`${criticalDice}d6`);
-          total += criticalRoll.total;
-        }
-
-        const damageChatData = {
-          author: game.user.id,
-          speaker: ChatMessage.getSpeaker({ actor: this }),
-          content: await renderTemplate('systems/ryf3/templates/chat/npc-damage-roll.hbs', {
-            actorName: this.name,
-            attackName: attack.name,
-            damageBase: damageBase,
-            baseRoll: baseRoll,
-            damageBonus: damageBonus,
-            criticalDice: criticalDice,
-            criticalRoll: criticalRoll,
-            total: total
-          })
-        };
-
-        await ChatMessage.create(damageChatData);
+        await RyfRoll.rollDamage(attack, attackRoll.criticalDice, 0, this);
       }
     }
 
-    return { success, total, difficulty, fumble, criticalDice };
+    return attackRoll;
   }
 
   async applyDamage(damageAmount, damageType = 'physical', source = null) {
@@ -1503,10 +1516,10 @@ export class RyfActor extends Actor {
             <div class="form-group">
               <label>${game.i18n.localize('RYF.Combat.Range')}</label>
               <select name="range" autofocus>
-                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (10)</option>
-                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (15)</option>
-                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (20)</option>
-                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (25)</option>
+                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
               </select>
             </div>
           </form>

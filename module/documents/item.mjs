@@ -1,3 +1,5 @@
+import { getRule } from '../helpers/rules.mjs';
+
 export class RyfItem extends Item {
 
   prepareData() {
@@ -56,7 +58,8 @@ export class RyfItem extends Item {
     const system = itemData.system;
 
     if (system.level < 1) system.level = 1;
-    if (system.level > 10) system.level = 10;
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel') || 10;
+    if (system.level > maxLevel) system.level = maxLevel;
 
     if (system.manaCost < 0) system.manaCost = 0;
   }
@@ -258,8 +261,10 @@ export class RyfItem extends Item {
 
     const currentLevel = this.system.level;
 
-    if (currentLevel >= 10) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.MaxSkillLevel'));
+    const maxLevel = game.settings.get('ryf3', 'maxSkillLevel') || 10;
+    if (currentLevel >= maxLevel) {
+      ui.notifications.warn(game.i18n.format('RYF.Warnings.MaxSkillLevel', { max: maxLevel }));
+      return;
     }
 
     const newLevel = currentLevel + 1;
@@ -272,6 +277,21 @@ export class RyfItem extends Item {
         const success = await this.actor.spendExperience(xpCost, `${this.name} ${currentLevel} → ${newLevel}`);
 
         if (!success) return;
+      } else {
+        // Reference: RyF 3.0 PDF, página 39 - límites de creación: máximo 6
+        // puntos por habilidad y atributo + habilidad <= 16. Avisos no
+        // bloqueantes, coherentes con el resto de validaciones de creación
+        const creationMaxSkill = getRule('creationMaxSkill');
+        if (newLevel > creationMaxSkill) {
+          ui.notifications.warn(game.i18n.format('RYF.Warnings.CreationMaxSkill', { max: creationMaxSkill }));
+        }
+
+        const attributeName = this.type === 'spell' ? 'inteligencia' : this.system.attribute;
+        const attributeValue = this.actor.system.attributes?.[attributeName]?.value || 0;
+        const creationMaxSum = getRule('creationMaxSum');
+        if (attributeValue + newLevel > creationMaxSum) {
+          ui.notifications.warn(game.i18n.format('RYF.Warnings.CreationMaxSum', { max: creationMaxSum }));
+        }
       }
     }
 
@@ -308,15 +328,16 @@ export class RyfItem extends Item {
     }));
   }
 
+  // Reference: RyF 3.0 PDF, páginas 14 y 38 - subir una habilidad cuesta el
+  // nuevo nivel en PX; multiplicador opcional (x1.5 / x2) para campañas largas
   calculateSkillUpgradeCost(fromLevel, toLevel) {
-    const baseCost = 1;
     let totalCost = 0;
 
     for (let level = fromLevel + 1; level <= toLevel; level++) {
-      totalCost += baseCost * level;
+      totalCost += level;
     }
 
-    return totalCost;
+    return Math.ceil(totalCost * getRule('xpCostMultiplier'));
   }
 
   async castSpell() {

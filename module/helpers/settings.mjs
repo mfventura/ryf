@@ -1,4 +1,5 @@
 import { CustomPyramidConfig } from './custom-pyramid-config.mjs';
+import { RulesConfig } from './rules-config.mjs';
 
 export function registerSystemSettings() {
   
@@ -106,6 +107,33 @@ export function registerSystemSettings() {
     config: true,
     type: Number,
     default: 30
+  });
+
+  // Valores de regla configurables (bases, umbrales, bandas de distancia...).
+  // Se editan con el menú RulesConfig; el código los lee vía getRule(), que
+  // aplica los defaults de DEFAULT_RULES (module/helpers/rules.mjs) con sus
+  // citas de página del PDF
+  game.settings.registerMenu('ryf3', 'rulesConfigMenu', {
+    name: 'RYF.Settings.RulesConfig.Name',
+    label: 'RYF.Settings.RulesConfig.Label',
+    hint: 'RYF.Settings.RulesConfig.Hint',
+    icon: 'fas fa-sliders-h',
+    type: RulesConfig,
+    restricted: true
+  });
+
+  game.settings.register('ryf3', 'coreRules', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    onChange: () => {
+      game.actors.forEach(actor => {
+        if (actor.type === 'character' || actor.type === 'npc') {
+          actor.prepareData();
+        }
+      });
+    }
   });
 
   // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje;

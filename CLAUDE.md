@@ -29,7 +29,11 @@ Source of truth is **JSON documents in `packs/_source/<pack-name>/`** (tracked i
 - `npm run pack` — compile all sources to LevelDB (`npm run pack -- advantages-es` for one pack)
 - `npm run unpack` — extract pack databases back to JSON sources (after editing compendium content inside Foundry with the pack unlocked)
 - **Foundry must be closed** when packing/unpacking — LevelDB holds a lock while the server runs.
-- Release zips must include the compiled `packs/` directory (run `npm run pack` first).
+- Compiled binaries are gitignored; only `packs/_source` is tracked. After `git pull` on another machine, run `npm run pack` to rebuild local compendiums.
+
+## Releases
+
+Automated via GitHub Actions (`.github/workflows/release.yml`): pushing a `v*` tag compiles the packs, patches `system.json` (version from tag, per-version `download` URL, `manifest` stays on `releases/latest`), builds `ryf3.zip` (runtime files only — no `_source`, `utils/`, `node_modules`) and publishes the GitHub Release. Don't build release zips by hand. `ci.yml` validates JS syntax, all JSON files and a pack compile on every push/PR to `main`. Play installs should use the manifest URL, not a git clone.
 
 Orchestrated by `utils/packs.mjs`, which enumerates packs from `system.json`. New pack = declare it in `system.json` + create `packs/_source/<name>/`.
 
@@ -54,6 +58,7 @@ Entry point is `module/ryf.mjs`, declared in `system.json` (`esmodules`). It reg
 - `module/documents/ryf-active-effect.mjs` — `RyfActiveEffect.createFromSpell` turns spell effect data into timed Active Effects (combat-turn durations).
 - `module/config/spell-effects.mjs` — spells contain an `effects[]` array typed by `SPELL_EFFECT_TYPES` (immediate-damage, immediate-healing, buff, debuff, condition); each type declares which form fields it uses, rendered via `templates/item/partials/effect-*.hbs`.
 - `module/helpers/settings.mjs` — world settings that change rules behavior: optional Charisma, optional magic, health/mana multipliers, character type, max skill level, and a configurable skill pyramid (menu in `custom-pyramid-config.mjs`).
+- `module/helpers/rules.mjs` — every other sheet-affecting rule constant (defense/willpower bases, wounded/unconscious/death thresholds, range difficulty bands, actions-per-initiative step, dual-wield bonus, XP cost multiplier, rest recovery, creation caps) lives in `DEFAULT_RULES` with its PDF page citation, overridable per world via the `RulesConfig` menu (`rules-config.mjs`, hidden `coreRules` object setting). **Never hardcode a rule number — read it through `getRule(key)`.** Presets (Heroico/Realista) only pre-fill form values; every field stays freely editable.
 - Sheets use Foundry **Application v1** (`module/sheets/`); migration to AppV2 is planned but not started (see "Deprecation debt" above — AppV1 is removed in Foundry v16). Keep new sheet code in the v1 style until that migration happens.
 
 ### Compendium translation-key system
