@@ -209,7 +209,9 @@
   font-size: 0.85em;
 }
 
-/* Hit location and minion notes on attack chat cards (PDF pp. 87, 95) */
+/* Hit location and minion notes on attack chat cards (PDF pp. 87, 95).
+   The card background is dark, so light-background notes need their own
+   dark text color or they inherit the card's near-white text */
 .ryf-roll .hit-location,
 .ryf-roll .minion-note {
   margin: 4px 0;
@@ -218,6 +220,7 @@
   border-left: 3px solid var(--ryf-secondary, #95a5a6);
   border-radius: 3px;
   font-size: 0.9em;
+  color: var(--ryf-dark, #2c3e50);
 }
 
 /* Money section on the equipment tab (PDF p. 26) */
@@ -230,10 +233,12 @@
 
 .ryf .money-section .money-fields {
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .ryf .money-section .money-field {
   flex: 1;
+  min-width: 90px;
   text-align: center;
 }
 
@@ -241,6 +246,46 @@
   display: block;
   font-size: 0.85em;
   margin-bottom: 2px;
+}
+
+/* Economy config menu (currencies are world-configurable, PDF p. 26) */
+.economy-config .currency-list {
+  margin-bottom: 4px;
+}
+
+.economy-config .currency-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.economy-config .currency-row.currency-header {
+  font-weight: bold;
+  font-size: 0.85em;
+  color: var(--ryf-text-secondary, #7f8c8d);
+}
+
+.economy-config .currency-row .rate-last {
+  text-align: center;
+  color: var(--ryf-text-secondary, #7f8c8d);
+}
+
+.economy-config .row-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  min-width: 60px;
+}
+
+.economy-config .row-buttons a {
+  color: var(--ryf-secondary);
+}
+
+.economy-config .add-currency {
+  width: auto;
+  margin: 4px 0 8px;
 }
 
 .ryf .money-section .hint {
@@ -269,6 +314,7 @@
   border-radius: 3px;
   font-size: 0.85em;
   font-style: italic;
+  color: var(--ryf-dark, #2c3e50);
 }
 
 /* Ship crew section (PDF p. 103) */
@@ -381,6 +427,7 @@
   border-radius: 4px;
   padding: 2px 6px;
   font-size: 0.85rem;
+  color: var(--ryf-dark, #2c3e50);
 }
 
 .custom-pyramid-config .save-button {

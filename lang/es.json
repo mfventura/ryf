@@ -304,11 +304,7 @@
     "Miss": "Fallo",
     "Modifier": "Modificador",
     "Money": {
-      "ConversionHint": "1 mo = 10 mp = 100 mc (RyF 3.0, pág. 26)",
-      "Copper": "Monedas de cobre (mc)",
-      "Gold": "Monedas de oro (mo)",
-      "Label": "Dinero",
-      "Silver": "Monedas de plata (mp)"
+      "Label": "Dinero"
     },
     "NPC": {
       "SavingThrowBonus": "Tirada de Salvación - PNJ",
@@ -612,6 +608,34 @@
       "DefaultCharacterType": {
         "Hint": "Define la pirámide de habilidades que se aplicará a los nuevos personajes.",
         "Name": "Tipo de Personaje por Defecto"
+      },
+      "EconomyConfig": {
+        "AddCurrency": "Añadir moneda",
+        "ColumnAbbr": "Abreviatura",
+        "ColumnName": "Nombre",
+        "ColumnRate": "Equivale a (de la siguiente)",
+        "DefaultCopper": "Monedas de cobre",
+        "DefaultGold": "Monedas de oro",
+        "DefaultSilver": "Monedas de plata",
+        "Description": "Define las monedas de tu ambientación, ordenadas de mayor a menor valor. Los presets solo rellenan la lista: puedes renombrar, añadir, quitar o reordenar monedas libremente después.",
+        "Hint": "Configura cuántos tipos de moneda usa tu partida, sus nombres y su conversión. Por defecto: oro, plata y cobre (RyF 3.0, pág. 26); para otras ambientaciones puedes usar créditos, euros, dólares...",
+        "Label": "Configurar Economía",
+        "MoveDown": "Bajar",
+        "MoveUp": "Subir",
+        "Name": "Economía y Monedas",
+        "NeedOneCurrency": "Debe existir al menos una moneda con nombre.",
+        "PresetFantasy": "Fantasía",
+        "PresetFantasyDescription": "Oro, plata y cobre: 1 mo = 10 mp = 100 mc (pág. 26)",
+        "PresetFuturistic": "Futurista",
+        "PresetFuturisticCurrency": "Créditos",
+        "PresetFuturisticDescription": "Una sola divisa: créditos (cr)",
+        "PresetModern": "Moderna",
+        "PresetModernCurrency": "Euros",
+        "PresetModernDescription": "Una sola divisa (euros, dólares...)",
+        "RateHint": "«Equivale a» indica cuántas unidades de la siguiente moneda vale 1 unidad de esta (ej.: 1 mo = 10 mp). La última moneda no necesita conversión.",
+        "RemoveCurrency": "Eliminar moneda",
+        "Saved": "Economía guardada.",
+        "Title": "Configuración de Economía"
       },
       "EnableAmmo": {
         "Hint": "Activa el control de munición (RyF 3.0, págs. 96-98): cada disparo gasta una bala y sin balas hay que recargar. Solo afecta a armas con cargador configurado.",

@@ -1,5 +1,6 @@
 import { RyfRoll } from '../rolls/ryf-roll.mjs';
 import { getRule } from '../helpers/rules.mjs';
+import { getEconomy, getConversionHint } from '../helpers/economy.mjs';
 import { resolveMode, SKILL_DIFFICULTIES, ATTRIBUTE_DIFFICULTIES } from '../helpers/dice.mjs';
 
 export class RyfActorSheet extends ActorSheet {
@@ -74,6 +75,15 @@ export class RyfActorSheet extends ActorSheet {
 
     const attributePoints = context.system.attributePoints;
     context.attributePointsRemaining = attributePoints.max - attributePoints.used;
+
+    // Reference: RyF 3.0 PDF, página 26 - dinero; el juego de monedas es
+    // configurable por mundo (menú EconomyConfig)
+    const economy = getEconomy();
+    context.currencies = economy.currencies.map(currency => ({
+      ...currency,
+      value: context.system.money?.[currency.id] ?? 0
+    }));
+    context.moneyConversionHint = getConversionHint(economy.currencies);
 
     const states = context.system.states;
     if (states.dead) {

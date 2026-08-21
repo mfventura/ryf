@@ -1,5 +1,6 @@
 import { CustomPyramidConfig } from './custom-pyramid-config.mjs';
 import { RulesConfig } from './rules-config.mjs';
+import { EconomyConfig } from './economy-config.mjs';
 
 // Recalcula los datos derivados de todos los actores y refresca sus fichas
 // abiertas para que los cambios de regla se vean sin recargar
@@ -191,6 +192,26 @@ export function registerSystemSettings() {
   });
 
   game.settings.register('ryf3', 'coreRules', {
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {},
+    onChange: refreshActors
+  });
+
+  // Reference: RyF 3.0 PDF, página 26 - dinero (1 mo = 10 mp = 100 mc).
+  // Economía configurable: monedas, nombres y conversión se editan desde el
+  // menú EconomyConfig para ambientaciones no fantásticas (créditos, euros...)
+  game.settings.registerMenu('ryf3', 'economyConfigMenu', {
+    name: 'RYF.Settings.EconomyConfig.Name',
+    label: 'RYF.Settings.EconomyConfig.Label',
+    hint: 'RYF.Settings.EconomyConfig.Hint',
+    icon: 'fas fa-coins',
+    type: EconomyConfig,
+    restricted: true
+  });
+
+  game.settings.register('ryf3', 'economy', {
     scope: 'world',
     config: false,
     type: Object,

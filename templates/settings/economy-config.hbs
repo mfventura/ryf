@@ -1,0 +1,63 @@
+<form class="economy-config custom-pyramid-config">
+  <div class="form-header">
+    <p class="notes">{{localize "RYF.Settings.EconomyConfig.Description"}}</p>
+  </div>
+
+  <div class="presets-section">
+    <h3>{{localize "RYF.Settings.Presets"}}</h3>
+    <div class="preset-buttons">
+      <button type="button" class="preset-button" data-preset="fantasy">
+        <strong>{{localize "RYF.Settings.EconomyConfig.PresetFantasy"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.EconomyConfig.PresetFantasyDescription"}}</span>
+      </button>
+      <button type="button" class="preset-button" data-preset="modern">
+        <strong>{{localize "RYF.Settings.EconomyConfig.PresetModern"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.EconomyConfig.PresetModernDescription"}}</span>
+      </button>
+      <button type="button" class="preset-button" data-preset="futuristic">
+        <strong>{{localize "RYF.Settings.EconomyConfig.PresetFuturistic"}}</strong>
+        <span class="preset-description">{{localize "RYF.Settings.EconomyConfig.PresetFuturisticDescription"}}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="currency-list">
+    <div class="currency-row currency-header">
+      <span>{{localize "RYF.Settings.EconomyConfig.ColumnName"}}</span>
+      <span>{{localize "RYF.Settings.EconomyConfig.ColumnAbbr"}}</span>
+      <span>{{localize "RYF.Settings.EconomyConfig.ColumnRate"}}</span>
+      <span></span>
+    </div>
+
+    {{#each currencies as |currency|}}
+    <div class="currency-row" data-index="{{currency.index}}">
+      <input type="hidden" data-field="id" value="{{currency.id}}"/>
+      <input type="text" data-field="name" value="{{currency.name}}" placeholder="{{localize 'RYF.Settings.EconomyConfig.ColumnName'}}"/>
+      <input type="text" data-field="abbr" value="{{currency.abbr}}" placeholder="mo"/>
+      {{#if currency.isLast}}
+        <span class="rate-last" title="{{localize 'RYF.Settings.EconomyConfig.RateHint'}}">&mdash;</span>
+        <input type="hidden" data-field="rate" value="{{currency.rate}}"/>
+      {{else}}
+        <input type="number" data-field="rate" value="{{currency.rate}}" min="0" step="any"/>
+      {{/if}}
+      <div class="row-buttons">
+        <a class="move-currency" data-index="{{currency.index}}" data-direction="-1" title="{{localize 'RYF.Settings.EconomyConfig.MoveUp'}}"><i class="fas fa-arrow-up"></i></a>
+        <a class="move-currency" data-index="{{currency.index}}" data-direction="1" title="{{localize 'RYF.Settings.EconomyConfig.MoveDown'}}"><i class="fas fa-arrow-down"></i></a>
+        <a class="remove-currency" data-index="{{currency.index}}" title="{{localize 'RYF.Settings.EconomyConfig.RemoveCurrency'}}"><i class="fas fa-trash"></i></a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <p class="hint">{{localize "RYF.Settings.EconomyConfig.RateHint"}}</p>
+
+  <button type="button" class="add-currency">
+    <i class="fas fa-plus"></i> {{localize "RYF.Settings.EconomyConfig.AddCurrency"}}
+  </button>
+
+  <div class="form-footer">
+    <button type="submit" class="save-button">
+      <i class="fas fa-save"></i> {{localize "RYF.Settings.Save"}}
+    </button>
+  </div>
+</form>

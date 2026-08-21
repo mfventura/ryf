@@ -583,24 +583,21 @@
     </div>
 
     <div class="tab equipment" data-group="primary" data-tab="equipment">
-      {{!-- Reference: RyF 3.0 PDF, página 26 - dinero: 1 mo = 10 mp = 100 mc --}}
+      {{!-- Reference: RyF 3.0 PDF, página 26 - dinero. Las monedas (nombres y
+            conversión) son configurables por mundo desde el menú EconomyConfig --}}
       <div class="money-section">
         <h3>{{localize "RYF.Money.Label"}}</h3>
         <div class="money-fields flexrow">
+          {{#each currencies as |currency|}}
           <div class="money-field">
-            <label>{{localize "RYF.Money.Gold"}}</label>
-            <input type="number" name="system.money.gold" value="{{system.money.gold}}" data-dtype="Number" min="0"/>
+            <label>{{currency.name}}{{#if currency.abbr}} ({{currency.abbr}}){{/if}}</label>
+            <input type="number" name="system.money.{{currency.id}}" value="{{currency.value}}" data-dtype="Number" min="0"/>
           </div>
-          <div class="money-field">
-            <label>{{localize "RYF.Money.Silver"}}</label>
-            <input type="number" name="system.money.silver" value="{{system.money.silver}}" data-dtype="Number" min="0"/>
-          </div>
-          <div class="money-field">
-            <label>{{localize "RYF.Money.Copper"}}</label>
-            <input type="number" name="system.money.copper" value="{{system.money.copper}}" data-dtype="Number" min="0"/>
-          </div>
+          {{/each}}
         </div>
-        <p class="hint">{{localize "RYF.Money.ConversionHint"}}</p>
+        {{#if moneyConversionHint}}
+        <p class="hint">{{moneyConversionHint}}</p>
+        {{/if}}
       </div>
 
       <div class="equipment-header flexrow">
