@@ -86,24 +86,26 @@ export class RyfItem extends Item {
     return super.create(data, options);
   }
 
+  // Punto de entrada estándar (macros de hotbar, módulos): delega en los
+  // mismos flujos con diálogo que usan los botones de la ficha
   async roll() {
     const item = this;
 
+    if (!item.actor) {
+      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoActor'));
+      return;
+    }
+
     if (item.type === 'skill') {
-      if (!item.actor) {
-        ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoActor'));
-        return;
-      }
-      
-      await item.actor.rollSkill(item.name);
+      return item.actor.sheet.rollSkillItem(item);
     }
 
     if (item.type === 'weapon') {
-      ui.notifications.info('Sistema de combate pendiente de implementación (Fase 6)');
+      return item.actor.sheet.rollWeaponItem(item);
     }
 
     if (item.type === 'spell') {
-      ui.notifications.info('Sistema de magia pendiente de implementación (Fase 8)');
+      return item.castSpell();
     }
   }
 
@@ -452,16 +454,9 @@ export class RyfItem extends Item {
       return;
     }
 
-    const manaCost = this.system.manaCost;
-    const success = await this.actor.spendMana(manaCost);
-
-    if (!success) return;
-
-    ui.notifications.info(game.i18n.format('RYF.Notifications.SpellCast', {
-      name: this.name,
-      cost: manaCost
-    }));
-
+    // Mismo flujo que el botón de lanzar de la ficha: diálogo de lanzamiento
+    // (maná extra, modo, token), objetivos y pipeline completo de castSpell
+    return this.actor.sheet.castSpellItem(this);
   }
 }
 

@@ -299,20 +299,6 @@ export class RyfActor extends Actor {
     system.states.dead = system.health.value <= 0;
   }
 
-  async rollSkill(skillName, advantage = 'normal') {
-    const skill = this.items.find(i => i.type === 'skill' && i.name === skillName);
-
-    if (!skill) {
-      ui.notifications.warn(game.i18n.format('RYF.Warnings.SkillNotFound', { skill: skillName }));
-      return;
-    }
-
-    const attribute = this.system.attributes[skill.system.attribute];
-    const total = attribute.value + skill.system.level;
-
-    ui.notifications.info(`Sistema de tiradas 1o3d10 pendiente de implementación (Fase 5)`);
-  }
-
   validateSkillPyramid() {
     const skills = this.items.filter(i => i.type === 'skill' && i.system.level > 0);
     const spells = this.items.filter(i => i.type === 'spell' && i.system.level > 0);

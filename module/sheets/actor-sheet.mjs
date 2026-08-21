@@ -637,6 +637,10 @@ export class RyfActorSheet extends ActorSheet {
       return;
     }
 
+    await this.rollWeaponItem(weapon);
+  }
+
+  async rollWeaponItem(weapon) {
     let targetDefense = null;
     let targetDefenseRanged = null;
     let targetIsMinion = false;
@@ -845,28 +849,35 @@ export class RyfActorSheet extends ActorSheet {
     const item = this.actor.items.get(li.data("itemId"));
 
     if (item && item.type === 'skill') {
-      let defaultDifficulty = null;
-      let targetWillpower = null;
+      await this.rollSkillItem(item);
+    }
+  }
 
-      if (item.system.category === 'social') {
-        const targets = Array.from(game.user.targets);
-        if (targets.length === 1) {
-          const targetActor = targets[0].actor;
-          if (targetActor && targetActor.system.willpower) {
-            targetWillpower = targetActor.system.willpower.value;
-            defaultDifficulty = targetWillpower;
-          }
+  async rollSkillItem(item) {
+    let defaultDifficulty = null;
+    let targetWillpower = null;
+
+    if (item.system.category === 'social') {
+      const targets = Array.from(game.user.targets);
+      if (targets.length === 1) {
+        // Los personajes guardan la Voluntad como objeto {value} y los PNJ
+        // como número plano (template.json)
+        const willpower = targets[0].actor?.system.willpower;
+        const willpowerValue = typeof willpower === 'number' ? willpower : willpower?.value;
+        if (willpowerValue) {
+          targetWillpower = willpowerValue;
+          defaultDifficulty = willpowerValue;
         }
       }
-
-      const rollParams = await this._promptRollDialog(item, defaultDifficulty, targetWillpower);
-      if (!rollParams) return;
-
-      await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier, {
-        specialization: rollParams.specialization,
-        spendToken: rollParams.spendToken
-      });
     }
+
+    const rollParams = await this._promptRollDialog(item, defaultDifficulty, targetWillpower);
+    if (!rollParams) return;
+
+    await RyfRoll.rollSkill(this.actor, item.name, rollParams.difficulty, rollParams.mode, rollParams.modifier, {
+      specialization: rollParams.specialization,
+      spendToken: rollParams.spendToken
+    });
   }
 
   async _promptRollDialog(skill, defaultDifficulty = null, targetWillpower = null) {
@@ -965,6 +976,10 @@ export class RyfActorSheet extends ActorSheet {
 
     if (!spell) return;
 
+    await this.castSpellItem(spell);
+  }
+
+  async castSpellItem(spell) {
     const castParams = await this._promptSpellCastDialog(spell);
     if (!castParams) return;
 
