@@ -6,10 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A Foundry VTT v14 game system (`id: ryf3`) implementing the Spanish tabletop RPG **Rápido y Fácil 3.0**. Plain ES modules — no build step, no package.json, no bundler, no test suite, no linter.
 
-## Deprecation debt (works in v14 with console warnings)
+## UI architecture (ApplicationV2, since 0.5.0)
 
-- Removed in **v15**: the `renderChatMessage` hook (→ `renderChatMessageHTML`, native `HTMLElement` instead of jQuery) in `module/ryf.mjs`, and the bare globals `Actors.registerSheet`/`Items.registerSheet`, `renderTemplate`, `loadTemplates`, `TextEditor` (→ their `foundry.*` namespaced equivalents). This is the first debt that comes due.
-- Removed in **v16**: AppV1 sheets (`ActorSheet`/`ItemSheet`), the `FormApplication`-based pyramid settings menu, all 15 V1 `Dialog` call sites, and jQuery usage throughout sheets and hooks (~79 lines). Migrating means ApplicationV2 + `data-action` attributes in templates; note both sheet classes use a dynamic `get template()` per document type, which has no direct AppV2 equivalent (`static PARTS` is static).
+The whole UI was migrated to ApplicationV2 in v0.5.0 — no AppV1, `FormApplication`, V1 `Dialog` or jQuery remains:
+
+- Sheets extend `foundry.applications.sheets.ActorSheetV2`/`ItemSheetV2` through `RyfSheetMixin` (`module/sheets/sheet-mixin.mjs`), which provides manual tab handling (`data-action="changeTab"`, persists across re-renders), `editImage`, and routes every template `data-action` to `_handleSheetAction`. The old dynamic `get template()` per type became one subclass per document type: `RyfCharacterSheet`/`RyfNpcSheet`/`RyfShipSheet` and, for items, subclasses generated in `registerItemSheets()` — each with its own `static PARTS`.
+- Dialogs go through the `DialogV2` wrappers in `module/helpers/dialogs.mjs` (`formDialog`, `confirmDialog`, `choiceDialog`): cancel/close always resolves `null`; `read(fields)` receives the dialog form's named elements. Use these for any new dialog.
+- Settings menus (`custom-pyramid-config`, `rules-config`, `economy-config`) are `HandlebarsApplicationMixin(ApplicationV2)` with `tag: 'form'` and a static form handler.
+- Sheet templates root on a `<div class="{{cssClass}} flexcol sheet-content">` (AppV2 supplies the `<form>`), use `data-action` attributes, and `<prose-mirror>` elements instead of the `{{editor}}` helper (context provides `enrichedBiography`/`enrichedDescription`).
+- Chat interactivity uses the `renderChatMessageHTML` hook (native `HTMLElement`); all namespaced APIs (`foundry.applications.handlebars.renderTemplate`/`loadTemplates`, `foundry.applications.ux.TextEditor.implementation`, `foundry.documents.collections.Actors`/`Items`) — never the bare V1 globals.
 - Active Effects were migrated to the v14 V2 schema (`effect.system.changes`, string `type` instead of numeric `mode`). Any new code reading or creating effect changes must use that shape.
 
 ## Development workflow
@@ -61,7 +66,7 @@ Entry point is `module/ryf.mjs`, declared in `system.json` (`esmodules`). It reg
 - `module/config/spell-effects.mjs` — spells contain an `effects[]` array typed by `SPELL_EFFECT_TYPES` (immediate-damage, immediate-healing, buff, debuff, condition); each type declares which form fields it uses, rendered via `templates/item/partials/effect-*.hbs`.
 - `module/helpers/settings.mjs` — world settings. Only module toggles (`enableCarisma`, `enableMagia`, `enableTokens`), `defaultCharacterType` and the two menus are visible in the general config window; every numeric rule setting (health/mana multipliers, attribute points, max skill level, max advantages) is registered with `config: false` and edited exclusively through the `RulesConfig` menu — don't re-expose them or you create duplicate configuration points.
 - `module/helpers/rules.mjs` — every other sheet-affecting rule constant (defense/willpower bases, wounded/unconscious/death thresholds, range difficulty bands, actions-per-initiative step, dual-wield bonus, XP cost multiplier, rest recovery, creation caps) lives in `DEFAULT_RULES` with its PDF page citation, overridable per world via the `RulesConfig` menu (`rules-config.mjs`, hidden `coreRules` object setting). **Never hardcode a rule number — read it through `getRule(key)`.** Presets (Heroico/Realista) only pre-fill form values; every field stays freely editable.
-- Sheets use Foundry **Application v1** (`module/sheets/`); migration to AppV2 is planned but not started (see "Deprecation debt" above — AppV1 is removed in Foundry v16). Keep new sheet code in the v1 style until that migration happens.
+- Sheets are **ApplicationV2** (`module/sheets/`, see "UI architecture" above). New sheet interactions: add a `data-action` in the template and a case in `_handleSheetAction`; new dialogs use the helpers in `module/helpers/dialogs.mjs`. No jQuery.
 
 ### Compendium translation-key system
 

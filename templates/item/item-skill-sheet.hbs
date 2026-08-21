@@ -1,22 +1,22 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="{{cssClass}} flexcol sheet-content">
 
   <header class="sheet-header spell-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
+    <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage" title="{{item.name}}" height="48" width="48"/>
     <div class="header-fields">
       <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.SkillName'}}" class="spell-name-input"/>
     </div>
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
-    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-action="changeTab" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-action="changeTab" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
   <section class="sheet-body">
 
     <div class="tab description" data-group="primary" data-tab="description">
       <div class="editor-content">
-        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+        <prose-mirror name="system.description" value="{{system.description}}" toggled>{{{enrichedDescription}}}</prose-mirror>
       </div>
     </div>
 
@@ -65,9 +65,9 @@
       <div class="form-group">
         <label>{{localize "RYF.Level"}}</label>
         <div class="level-control flexrow">
-          <a class="skill-decrease" title="{{localize 'RYF.DecreaseLevel'}}"><i class="fas fa-minus"></i></a>
+          <a class="skill-decrease" data-action="decreaseSkill" title="{{localize 'RYF.DecreaseLevel'}}"><i class="fas fa-minus"></i></a>
           <input type="number" name="system.level" value="{{system.level}}" data-dtype="Number" min="0" max="10"/>
-          <a class="skill-increase" title="{{localize 'RYF.IncreaseLevel'}}"><i class="fas fa-plus"></i></a>
+          <a class="skill-increase" data-action="increaseSkill" title="{{localize 'RYF.IncreaseLevel'}}"><i class="fas fa-plus"></i></a>
         </div>
       </div>
 
@@ -85,5 +85,5 @@
     </div>
 
   </section>
-</form>
+</div>
 

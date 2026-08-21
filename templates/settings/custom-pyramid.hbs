@@ -1,4 +1,4 @@
-<form class="custom-pyramid-config">
+<div class="custom-pyramid-config">
   <div class="form-header">
     <p class="notes">{{localize "RYF.Settings.CustomPyramidMenu.Description"}}</p>
     <p class="notes"><strong>{{localize "RYF.Settings.MaxSkillLevel.Name"}}:</strong> {{maxLevel}}</p>
@@ -9,7 +9,7 @@
     <h3>{{localize "RYF.Settings.Presets"}}</h3>
     <div class="preset-buttons">
       {{#each presets as |preset key|}}
-        <button type="button" class="preset-button" data-preset="{{key}}">
+        <button type="button" class="preset-button" data-action="applyPreset" data-preset="{{key}}">
           <strong>{{preset.name}}</strong>
           <span class="preset-description">{{preset.description}}</span>
         </button>
@@ -37,5 +37,5 @@
       <i class="fas fa-save"></i> {{localize "RYF.Settings.Save"}}
     </button>
   </div>
-</form>
+</div>
 

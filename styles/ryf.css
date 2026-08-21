@@ -2417,3 +2417,37 @@
   font-weight: bold;
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   ApplicationV2: layout del contenido de ventana y visibilidad de tabs que
+   en las sheets V1 aportaban los estilos del core (.app)
+   ========================================================================== */
+.ryf.application .window-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ryf.application .window-content > .sheet-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ryf.application .sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ryf.application .sheet-body .tab {
+  display: none;
+}
+
+.ryf.application .sheet-body .tab.active {
+  display: block;
+}
+
+.ryf.application .sheet-tabs [data-tab] {
+  cursor: pointer;
+}

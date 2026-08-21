@@ -1,4 +1,5 @@
 import { getRule } from '../helpers/rules.mjs';
+import { formDialog, confirmDialog } from '../helpers/dialogs.mjs';
 
 export class RyfActor extends Actor {
 
@@ -680,7 +681,7 @@ export class RyfActor extends Actor {
 
     await this.update({ 'system.sanity.value': newValue });
 
-    const html = await renderTemplate('systems/ryf3/templates/chat/sanity-loss.hbs', {
+    const html = await foundry.applications.handlebars.renderTemplate('systems/ryf3/templates/chat/sanity-loss.hbs', {
       actor: this,
       formula: formula,
       roll: roll,
@@ -822,34 +823,28 @@ export class RyfActor extends Actor {
     }
 
     if (!targetDefense) {
-      const defenseInput = await Dialog.prompt({
+      const defenseInput = await formDialog({
         title: game.i18n.localize('RYF.Combat.EnterTargetDefense'),
         content: `
-          <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Defense')}</label>
-              <input type="number" name="defense" value="10" min="1" autofocus/>
-            </div>
-          </form>
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.Defense')}</label>
+            <input type="number" name="defense" value="10" min="1" autofocus/>
+          </div>
         `,
-        callback: (html) => {
-          return html.find('[name="defense"]').val();
-        },
-        rejectClose: false
+        read: (fields) => ({ defense: parseInt(fields.defense.value) })
       });
 
-      if (!defenseInput) return null;
-      targetDefense = parseInt(defenseInput);
+      if (!defenseInput || !defenseInput.defense) return null;
+      targetDefense = defenseInput.defense;
     }
 
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
     const attackRoll = await RyfRoll.rollAttack(this, weapon, targetDefense, mode, modifier, options);
 
     if (attackRoll && attackRoll.success) {
-      const rollDamage = await Dialog.confirm({
+      const rollDamage = await confirmDialog({
         title: game.i18n.localize('RYF.Combat.AttackSuccess'),
-        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`,
-        defaultYes: true
+        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`
       });
 
       if (rollDamage) {
@@ -919,10 +914,9 @@ export class RyfActor extends Actor {
     const attackRoll = await RyfRoll.rollAttack(this, weapon, difficulty, mode, modifier, attackOptions);
 
     if (attackRoll && attackRoll.success) {
-      const rollDamage = await Dialog.confirm({
+      const rollDamage = await confirmDialog({
         title: game.i18n.localize('RYF.Combat.AttackSuccess'),
-        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`,
-        defaultYes: true
+        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`
       });
 
       if (rollDamage) {
@@ -965,48 +959,29 @@ export class RyfActor extends Actor {
     const attackType = attack.system.attackType;
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
 
-    const attackParams = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Attack')}: ${attack.name}`,
-        content: `
-          <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.RollMode')}</label>
-              <select name="mode">
-                <option value="normal">${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0"/>
-            </div>
-            ${RyfRoll.calledShotField()}
-          </form>
-        `,
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d20"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => {
-              const form = html[0].querySelector('form');
-              resolve({
-                mode: form.mode.value,
-                modifier: parseInt(form.modifier.value) || 0,
-                calledShot: form.calledShot?.value || null
-              });
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const attackParams = await formDialog({
+      title: `${game.i18n.localize('RYF.Attack')}: ${attack.name}`,
+      okIcon: 'fas fa-dice-d20',
+      content: `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode">
+            <option value="normal">${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0"/>
+        </div>
+        ${RyfRoll.calledShotField()}
+      `,
+      read: (fields) => ({
+        mode: fields.mode.value,
+        modifier: parseInt(fields.modifier.value) || 0,
+        calledShot: fields.calledShot?.value || null
+      })
     });
 
     if (!attackParams) return null;
@@ -1030,51 +1005,43 @@ export class RyfActor extends Actor {
         // Reference: RyF 3.0 PDF, página 87 - esbirros: caen al golpe
         targetIsMinion = targetActor.type === 'npc' && !!targetActor.system.isMinion;
       } else {
-        const defenseInput = await Dialog.prompt({
+        const defenseInput = await formDialog({
           title: game.i18n.localize('RYF.Combat.EnterTargetDefense'),
           content: `
-            <form>
-              <div class="form-group">
-                <label>${game.i18n.localize('RYF.Defense')}</label>
-                <input type="number" name="defense" value="10" min="1" autofocus/>
-              </div>
-            </form>
+            <div class="form-group">
+              <label>${game.i18n.localize('RYF.Defense')}</label>
+              <input type="number" name="defense" value="10" min="1" autofocus/>
+            </div>
           `,
-          callback: (html) => {
-            return html.find('[name="defense"]').val();
-          },
-          rejectClose: false
+          read: (fields) => ({ defense: parseInt(fields.defense.value) })
         });
 
-        if (!defenseInput) return null;
-        difficulty = parseInt(defenseInput);
+        if (!defenseInput || !defenseInput.defense) return null;
+        difficulty = defenseInput.defense;
       }
     }
 
     let rangedModifiers = null;
 
     if (attackType !== 'melee') {
-      const rangeParams = await Dialog.prompt({
+      const rangeParams = await formDialog({
         title: game.i18n.localize('RYF.Combat.SelectRange'),
         content: `
-          <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Range')}</label>
-              <select name="range">
-                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
-                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
-                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
-                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
-              </select>
-            </div>
-            ${RyfRoll.rangedModifiersFields()}
-          </form>
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.Range')}</label>
+            <select name="range">
+              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
+            </select>
+          </div>
+          ${RyfRoll.rangedModifiersFields()}
         `,
-        callback: (html) => ({
-          range: html.find('[name="range"]').val(),
-          rangedModifiers: RyfRoll.readRangedModifiers(html)
-        }),
-        rejectClose: false
+        read: (fields) => ({
+          range: fields.range.value,
+          rangedModifiers: RyfRoll.readRangedModifiers(fields)
+        })
       });
 
       if (!rangeParams) return null;
@@ -1107,10 +1074,9 @@ export class RyfActor extends Actor {
     });
 
     if (attackRoll && attackRoll.success) {
-      const rollDamage = await Dialog.confirm({
+      const rollDamage = await confirmDialog({
         title: game.i18n.localize('RYF.Combat.AttackSuccess'),
-        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`,
-        defaultYes: true
+        content: `<p>${game.i18n.localize('RYF.Combat.RollDamageQuestion')}</p>`
       });
 
       if (rollDamage) {
@@ -1160,7 +1126,7 @@ export class RyfActor extends Actor {
     };
 
     const template = 'systems/ryf3/templates/chat/damage-applied.hbs';
-    const html = await renderTemplate(template, templateData);
+    const html = await foundry.applications.handlebars.renderTemplate(template, templateData);
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -1780,7 +1746,7 @@ export class RyfActor extends Actor {
     };
 
     const template = 'systems/ryf3/templates/chat/spell-generic.hbs';
-    const html = await renderTemplate(template, templateData);
+    const html = await foundry.applications.handlebars.renderTemplate(template, templateData);
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -1792,41 +1758,23 @@ export class RyfActor extends Actor {
   }
 
   async _promptRangeDialog() {
-    return new Promise((resolve) => {
-      new Dialog({
-        title: game.i18n.localize('RYF.Combat.SelectRange'),
-        content: `
-          <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Combat.Range')}</label>
-              <select name="range" autofocus>
-                <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
-                <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
-                <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
-                <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
-              </select>
-            </div>
-          </form>
-        `,
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => {
-              const range = html.find('[name="range"]').val();
-              resolve(range);
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const params = await formDialog({
+      title: game.i18n.localize('RYF.Combat.SelectRange'),
+      content: `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Combat.Range')}</label>
+          <select name="range" autofocus>
+            <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+            <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+            <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+            <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
+          </select>
+        </div>
+      `,
+      read: (fields) => ({ range: fields.range.value })
     });
+
+    return params ? params.range : null;
   }
 
   async _rollSpellAttack(spell, target, range = null) {

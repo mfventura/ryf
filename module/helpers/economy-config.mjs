@@ -1,5 +1,7 @@
 import { defaultEconomy, getEconomy } from './economy.mjs';
 
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
 // Simple slug for currency ids: they become keys inside system.money, so
 // they must be safe as object property path segments
 function slugId(text) {
@@ -23,27 +25,31 @@ const PRESETS = {
   ]
 };
 
-export class EconomyConfig extends FormApplication {
+export class EconomyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: 'economy-config',
-      title: game.i18n.localize('RYF.Settings.EconomyConfig.Title'),
-      template: 'systems/ryf3/templates/settings/economy-config.hbs',
-      width: 560,
-      height: 'auto',
-      closeOnSubmit: true,
-      submitOnClose: false,
-      submitOnChange: false
-    });
-  }
+  static DEFAULT_OPTIONS = {
+    id: 'economy-config',
+    tag: 'form',
+    classes: ['ryf'],
+    window: { title: 'RYF.Settings.EconomyConfig.Title' },
+    position: { width: 560, height: 'auto' },
+    form: {
+      handler: EconomyConfig.onSubmitForm,
+      submitOnChange: false,
+      closeOnSubmit: true
+    }
+  };
+
+  static PARTS = {
+    form: { template: 'systems/ryf3/templates/settings/economy-config.hbs' }
+  };
 
   _currencies() {
     if (!this._working) this._working = foundry.utils.deepClone(getEconomy().currencies);
     return this._working;
   }
 
-  getData() {
+  async _prepareContext(options) {
     const currencies = this._currencies();
     return {
       currencies: currencies.map((c, i) => ({
@@ -58,55 +64,47 @@ export class EconomyConfig extends FormApplication {
   // edits are not lost when adding/removing/moving rows
   _captureForm() {
     const captured = [];
-    this.element.find('.currency-row[data-index]').each((_, row) => {
-      const $row = $(row);
+    for (const row of this.element.querySelectorAll('.currency-row[data-index]')) {
       captured.push({
-        id: String($row.find('[data-field="id"]').val() ?? ''),
-        name: String($row.find('[data-field="name"]').val() ?? ''),
-        abbr: String($row.find('[data-field="abbr"]').val() ?? ''),
-        rate: Number($row.find('[data-field="rate"]').val())
+        id: String(row.querySelector('[data-field="id"]')?.value ?? ''),
+        name: String(row.querySelector('[data-field="name"]')?.value ?? ''),
+        abbr: String(row.querySelector('[data-field="abbr"]')?.value ?? ''),
+        rate: Number(row.querySelector('[data-field="rate"]')?.value)
       });
-    });
+    }
     this._working = captured;
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    html.find('.add-currency').click(event => {
-      event.preventDefault();
-      this._captureForm();
-      this._working.push({ id: '', name: '', abbr: '', rate: 10 });
-      this.render();
-    });
-
-    html.find('.remove-currency').click(event => {
-      event.preventDefault();
-      this._captureForm();
-      this._working.splice(Number(event.currentTarget.dataset.index), 1);
-      this.render();
-    });
-
-    html.find('.move-currency').click(event => {
-      event.preventDefault();
-      this._captureForm();
-      const index = Number(event.currentTarget.dataset.index);
-      const target = index + Number(event.currentTarget.dataset.direction);
-      if (target < 0 || target >= this._working.length) return;
-      [this._working[index], this._working[target]] = [this._working[target], this._working[index]];
-      this.render();
-    });
-
-    html.find('.preset-button[data-preset]').click(event => {
-      event.preventDefault();
-      const preset = PRESETS[event.currentTarget.dataset.preset];
-      if (!preset) return;
-      this._working = preset();
-      this.render();
-    });
+  _onClickAction(event, target) {
+    switch (target.dataset.action) {
+      case 'addCurrency': {
+        this._captureForm();
+        this._working.push({ id: '', name: '', abbr: '', rate: 10 });
+        return this.render();
+      }
+      case 'removeCurrency': {
+        this._captureForm();
+        this._working.splice(Number(target.dataset.index), 1);
+        return this.render();
+      }
+      case 'moveCurrency': {
+        this._captureForm();
+        const index = Number(target.dataset.index);
+        const destination = index + Number(target.dataset.direction);
+        if (destination < 0 || destination >= this._working.length) return;
+        [this._working[index], this._working[destination]] = [this._working[destination], this._working[index]];
+        return this.render();
+      }
+      case 'applyPreset': {
+        const preset = PRESETS[target.dataset.preset];
+        if (!preset) return;
+        this._working = preset();
+        return this.render();
+      }
+    }
   }
 
-  async _updateObject() {
+  static async onSubmitForm(event, form, formData) {
     this._captureForm();
 
     const cleaned = [];

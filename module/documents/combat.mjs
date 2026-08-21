@@ -32,7 +32,7 @@ export class RyfCombat extends Combat {
 
       updates.push({ _id: id, initiative: total, 'flags.ryf3.actions': actions });
 
-      const html = await renderTemplate('systems/ryf3/templates/chat/initiative-roll.hbs', {
+      const html = await foundry.applications.handlebars.renderTemplate('systems/ryf3/templates/chat/initiative-roll.hbs', {
         actor: actor,
         initiativeBase: initiativeBase,
         hindrance: hindrance,

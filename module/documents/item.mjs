@@ -1,4 +1,5 @@
 import { getRule } from '../helpers/rules.mjs';
+import { formDialog } from '../helpers/dialogs.mjs';
 
 export class RyfItem extends Item {
 
@@ -240,35 +241,20 @@ export class RyfItem extends Item {
     let chosen = granted;
 
     if (granted.length > 1) {
-      const selected = await new Promise((resolve) => {
-        new Dialog({
-          title: game.i18n.format('RYF.Race.ChooseAdvantageTitle', { race: this.name }),
-          content: `
-            <form>
-              <p class="hint">${game.i18n.localize('RYF.Race.ChooseAdvantageHint')}</p>
-              <div class="form-group">
-                <label>${game.i18n.localize('RYF.Advantage')}</label>
-                <select name="advantage" autofocus>
-                  ${granted.map((entry, index) => `<option value="${index}">${entry.name}</option>`).join('')}
-                </select>
-              </div>
-            </form>
-          `,
-          buttons: {
-            choose: {
-              icon: '<i class="fas fa-check"></i>',
-              label: game.i18n.localize('RYF.Race.ChooseAdvantage'),
-              callback: (html) => resolve(granted[parseInt(html.find('[name="advantage"]').val())] || null)
-            },
-            cancel: {
-              icon: '<i class="fas fa-times"></i>',
-              label: game.i18n.localize('RYF.Cancel'),
-              callback: () => resolve(null)
-            }
-          },
-          default: 'choose',
-          close: () => resolve(null)
-        }).render(true);
+      const selected = await formDialog({
+        title: game.i18n.format('RYF.Race.ChooseAdvantageTitle', { race: this.name }),
+        okLabel: game.i18n.localize('RYF.Race.ChooseAdvantage'),
+        okIcon: 'fas fa-check',
+        content: `
+          <p class="hint">${game.i18n.localize('RYF.Race.ChooseAdvantageHint')}</p>
+          <div class="form-group">
+            <label>${game.i18n.localize('RYF.Advantage')}</label>
+            <select name="advantage" autofocus>
+              ${granted.map((entry, index) => `<option value="${index}">${entry.name}</option>`).join('')}
+            </select>
+          </div>
+        `,
+        read: (fields) => granted[parseInt(fields.advantage.value)] || null
       });
 
       if (!selected) return;

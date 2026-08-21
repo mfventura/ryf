@@ -1,5 +1,6 @@
 import { roll1o3d10, rollEffect, calculateCriticalDice, checkFumble, isSuccess, resolveMode } from '../helpers/dice.mjs';
 import { getHitLocations, getHitLocation } from '../config/hit-locations.mjs';
+import { formDialog } from '../helpers/dialogs.mjs';
 
 export class RyfRoll {
 
@@ -120,12 +121,14 @@ export class RyfRoll {
       </div>`;
   }
 
-  static readRangedModifiers(html) {
-    const cover = parseInt(html.find('[name="cover"]').val()) || 0;
-    const movement = parseInt(html.find('[name="targetMovement"]').val()) || 0;
+  // `fields` son los elementos nombrados del formulario del diálogo
+  // (form.elements), como los entrega el helper formDialog
+  static readRangedModifiers(fields) {
+    const cover = parseInt(fields.cover?.value) || 0;
+    const movement = parseInt(fields.targetMovement?.value) || 0;
     // El flanqueo lo aprovecha el atacante: se resta de la dificultad
     // (+1 acumulativo por cada tirador adicional desde otra posición, pág. 93-94)
-    const flanking = parseInt(html.find('[name="flanking"]').val()) || 0;
+    const flanking = parseInt(fields.flanking?.value) || 0;
     const total = cover + movement - flanking;
 
     if (cover === 0 && movement === 0 && flanking === 0) return null;
@@ -763,49 +766,32 @@ export class RyfRoll {
   static async _promptNPCSavingThrowBonus(actor, attributeName, difficulty) {
     const attributeLabel = game.i18n.localize(`RYF.Attributes.${attributeName.charAt(0).toUpperCase() + attributeName.slice(1)}`);
 
-    return new Promise((resolve) => {
-      new Dialog({
-        title: game.i18n.localize('RYF.NPC.SavingThrowBonus'),
-        content: `
-          <form>
-            <div class="npc-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 12px;">
-              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                <img src="${actor.img}" alt="${actor.name}" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--ryf-border);"/>
-                <strong>${actor.name}</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span><i class="fas fa-shield-alt"></i> ${game.i18n.localize('RYF.SavingThrow')}: ${attributeLabel}</span>
-                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.DifficultyLabel')}: ${difficulty}</span>
-              </div>
-            </div>
-            <p style="margin-bottom: 12px; color: var(--ryf-text-secondary);">
-              ${game.i18n.localize('RYF.NPC.SavingThrowBonusDescription')}
-            </p>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.NPC.SavingThrowBonusLabel')}</label>
-              <input type="number" name="bonus" value="0" step="1" autofocus style="width: 100%;"/>
-            </div>
-          </form>
-        `,
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d20"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => {
-              const bonus = parseInt(html.find('[name="bonus"]').val()) || 0;
-              resolve(bonus);
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const params = await formDialog({
+      title: game.i18n.localize('RYF.NPC.SavingThrowBonus'),
+      okIcon: 'fas fa-dice-d20',
+      content: `
+        <div class="npc-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <img src="${actor.img}" alt="${actor.name}" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--ryf-border);"/>
+            <strong>${actor.name}</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span><i class="fas fa-shield-alt"></i> ${game.i18n.localize('RYF.SavingThrow')}: ${attributeLabel}</span>
+            <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.DifficultyLabel')}: ${difficulty}</span>
+          </div>
+        </div>
+        <p style="margin-bottom: 12px; color: var(--ryf-text-secondary);">
+          ${game.i18n.localize('RYF.NPC.SavingThrowBonusDescription')}
+        </p>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.NPC.SavingThrowBonusLabel')}</label>
+          <input type="number" name="bonus" value="0" step="1" autofocus style="width: 100%;"/>
+        </div>
+      `,
+      read: (fields) => ({ bonus: parseInt(fields.bonus.value) || 0 })
     });
+
+    return params ? params.bonus : null;
   }
 
   static async toMessage(rollData) {
@@ -831,7 +817,7 @@ export class RyfRoll {
       return;
     }
 
-    const html = await renderTemplate(template, rollData);
+    const html = await foundry.applications.handlebars.renderTemplate(template, rollData);
 
     const chatData = {
       author: game.user.id,

@@ -1,5 +1,7 @@
 import { DEFAULT_RULES, getRule } from './rules.mjs';
 
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
 // Grouped field layout for the form. Every field is a free input: the
 // Heroico/Realista presets only pre-fill values, they never restrict them.
 const FIELD_GROUPS = [
@@ -92,27 +94,31 @@ const PRESETS = {
   realistic: { attributePoints: 22, healthMultiplier: 3, healSkillDice: '1d6', breatherDice: '1d6' }
 };
 
-export class RulesConfig extends FormApplication {
+export class RulesConfig extends HandlebarsApplicationMixin(ApplicationV2) {
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: 'rules-config',
-      title: game.i18n.localize('RYF.Settings.RulesConfig.Title'),
-      template: 'systems/ryf3/templates/settings/rules-config.hbs',
-      width: 560,
-      height: 'auto',
-      closeOnSubmit: true,
-      submitOnClose: false,
-      submitOnChange: false
-    });
-  }
+  static DEFAULT_OPTIONS = {
+    id: 'rules-config',
+    tag: 'form',
+    classes: ['ryf'],
+    window: { title: 'RYF.Settings.RulesConfig.Title' },
+    position: { width: 560, height: 'auto' },
+    form: {
+      handler: RulesConfig.onSubmitForm,
+      submitOnChange: false,
+      closeOnSubmit: true
+    }
+  };
+
+  static PARTS = {
+    form: { template: 'systems/ryf3/templates/settings/rules-config.hbs' }
+  };
 
   _fieldValue(field) {
     if (field.setting) return game.settings.get('ryf3', field.setting);
     return getRule(field.key);
   }
 
-  getData() {
+  async _prepareContext(options) {
     const groups = FIELD_GROUPS.map(group => ({
       label: game.i18n.localize(`RYF.Settings.RulesConfig.${group.key}`),
       fields: group.fields.map(field => ({
@@ -128,33 +134,31 @@ export class RulesConfig extends FormApplication {
     return { groups };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    html.find('.preset-button').click(this._onPresetClick.bind(this));
-    html.find('.reset-defaults-button').click(this._onResetDefaults.bind(this));
-  }
-
-  _onPresetClick(event) {
-    event.preventDefault();
-    const preset = PRESETS[event.currentTarget.dataset.preset];
-    if (!preset) return;
-
-    for (const [key, value] of Object.entries(preset)) {
-      this.element.find(`input[name="${key}"]`).val(value);
+  _onClickAction(event, target) {
+    switch (target.dataset.action) {
+      case 'applyPreset': return this._onPresetClick(target);
+      case 'resetDefaults': return this._onResetDefaults();
     }
   }
 
-  _onResetDefaults(event) {
-    event.preventDefault();
+  _onPresetClick(target) {
+    const preset = PRESETS[target.dataset.preset];
+    if (!preset) return;
 
+    for (const [key, value] of Object.entries(preset)) {
+      const input = this.element.querySelector(`input[name="${key}"]`);
+      if (input) input.value = value;
+    }
+  }
+
+  _onResetDefaults() {
     for (const [key, value] of Object.entries(DEFAULT_RULES)) {
-      const input = this.element.find(`input[name="${key}"]`);
-      if (!input.length) continue;
-      if (input.attr('type') === 'checkbox') {
-        input.prop('checked', value === true);
+      const input = this.element.querySelector(`input[name="${key}"]`);
+      if (!input) continue;
+      if (input.type === 'checkbox') {
+        input.checked = value === true;
       } else {
-        input.val(value);
+        input.value = value;
       }
     }
 
@@ -162,17 +166,19 @@ export class RulesConfig extends FormApplication {
     for (const field of mirrored) {
       const defaultValue = game.settings.settings.get(`ryf3.${field.setting}`)?.default;
       if (defaultValue !== undefined) {
-        this.element.find(`input[name="${field.key}"]`).val(defaultValue);
+        const input = this.element.querySelector(`input[name="${field.key}"]`);
+        if (input) input.value = defaultValue;
       }
     }
   }
 
-  async _updateObject(event, formData) {
+  static async onSubmitForm(event, form, formData) {
+    const data = formData.object;
     const rules = {};
 
     for (const group of FIELD_GROUPS) {
       for (const field of group.fields) {
-        const raw = formData[field.key];
+        const raw = data[field.key];
 
         if (field.setting) {
           const value = Number(raw);

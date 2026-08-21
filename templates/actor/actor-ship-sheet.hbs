@@ -1,8 +1,8 @@
 {{!-- Reference: RyF 3.0 PDF, páginas 103-104 - naves espaciales (módulo opcional) --}}
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="{{cssClass}} flexcol sheet-content">
 
   <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" data-action="editImage" title="{{actor.name}}" height="100" width="100"/>
 
     <div class="header-fields">
       <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'RYF.Ship.Name'}}"/></h1>
@@ -42,16 +42,16 @@
       {{!-- Reference: RyF 3.0 PDF, páginas 103-104 - cada nave tira su lado
             de la enfrentada por separado --}}
       <div class="rest-buttons flexrow">
-        <button type="button" class="ship-attack"><i class="fas fa-crosshairs"></i> {{localize "RYF.Ship.Attack"}}</button>
-        <button type="button" class="ship-defense"><i class="fas fa-shield-alt"></i> {{localize "RYF.Ship.Defense"}}</button>
-        <button type="button" class="ship-chase"><i class="fas fa-gauge-high"></i> {{localize "RYF.Ship.Chase"}}</button>
+        <button type="button" class="ship-attack" data-action="shipAttack"><i class="fas fa-crosshairs"></i> {{localize "RYF.Ship.Attack"}}</button>
+        <button type="button" class="ship-defense" data-action="shipDefense"><i class="fas fa-shield-alt"></i> {{localize "RYF.Ship.Defense"}}</button>
+        <button type="button" class="ship-chase" data-action="shipChase"><i class="fas fa-gauge-high"></i> {{localize "RYF.Ship.Chase"}}</button>
       </div>
     </div>
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
-    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-action="changeTab" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-action="changeTab" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
   <section class="sheet-body">
@@ -69,7 +69,7 @@
           <label>{{localize "RYF.Ship.Pilot"}}</label>
           {{#if system.pilot.uuid}}
           <span class="crew-name"><i class="fas fa-user-astronaut"></i> {{system.pilot.name}}</span>
-          <a class="crew-clear" data-role="pilot" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
+          <a class="crew-clear" data-action="clearCrew" data-role="pilot" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
           {{else}}
           <span class="crew-empty">{{localize "RYF.Ship.NoCrew"}}</span>
           <div class="crew-base">
@@ -83,7 +83,7 @@
           <label>{{localize "RYF.Ship.Gunner"}}</label>
           {{#if system.gunner.uuid}}
           <span class="crew-name"><i class="fas fa-crosshairs"></i> {{system.gunner.name}}</span>
-          <a class="crew-clear" data-role="gunner" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
+          <a class="crew-clear" data-action="clearCrew" data-role="gunner" title="{{localize 'RYF.Delete'}}"><i class="fas fa-times"></i></a>
           {{else}}
           <span class="crew-empty">{{localize "RYF.Ship.NoCrew"}}</span>
           <div class="crew-base">
@@ -147,9 +147,9 @@
 
     <div class="tab description" data-group="primary" data-tab="description">
       <div class="editor-content">
-        {{editor system.biography target="system.biography" button=true owner=owner editable=editable}}
+        <prose-mirror name="system.biography" value="{{system.biography}}" toggled>{{{enrichedBiography}}}</prose-mirror>
       </div>
     </div>
 
   </section>
-</form>
+</div>

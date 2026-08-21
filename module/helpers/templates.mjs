@@ -25,6 +25,6 @@ export async function preloadHandlebarsTemplates() {
     'systems/ryf3/templates/settings/custom-pyramid.hbs'
   ];
 
-  return loadTemplates(templatePaths);
+  return foundry.applications.handlebars.loadTemplates(templatePaths);
 }
 

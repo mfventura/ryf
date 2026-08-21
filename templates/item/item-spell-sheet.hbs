@@ -1,23 +1,23 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="{{cssClass}} flexcol sheet-content">
 
   <header class="sheet-header spell-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="48" width="48"/>
+    <img class="profile-img" src="{{item.img}}" data-edit="img" data-action="editImage" title="{{item.name}}" height="48" width="48"/>
     <div class="header-fields">
       <input name="name" type="text" value="{{item.name}}" placeholder="{{localize 'RYF.SpellName'}}" class="spell-name-input"/>
     </div>
   </header>
 
   <nav class="sheet-tabs tabs" data-group="primary">
-    <a class="item" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
-    <a class="item" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
-    <a class="item" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
+    <a class="item" data-action="changeTab" data-tab="details">{{localize "RYF.Tabs.Details"}}</a>
+    <a class="item" data-action="changeTab" data-tab="effects">{{localize "RYF.Tabs.Effects"}}</a>
+    <a class="item" data-action="changeTab" data-tab="description">{{localize "RYF.Tabs.Description"}}</a>
   </nav>
 
   <section class="sheet-body">
 
     <div class="tab description" data-group="primary" data-tab="description">
       <div class="editor-content">
-        {{editor system.description target="system.description" button=true owner=owner editable=editable}}
+        <prose-mirror name="system.description" value="{{system.description}}" toggled>{{{enrichedDescription}}}</prose-mirror>
       </div>
     </div>
 
@@ -87,7 +87,7 @@
 
       {{#if actor}}
       <div class="form-group">
-        <button type="button" class="spell-cast">
+        <button type="button" class="spell-cast" data-action="castSpell">
           <i class="fas fa-magic"></i> {{localize "RYF.CastSpell"}}
         </button>
       </div>
@@ -102,7 +102,7 @@
         {{#each system.effects as |effect index|}}
         <div class="effect-item" data-effect-index="{{index}}">
           <div class="effect-header">
-            <button type="button" class="effect-collapse" data-effect-index="{{index}}">
+            <button type="button" class="effect-collapse" data-action="collapseEffect" data-effect-index="{{index}}">
               <i class="fas fa-chevron-down"></i>
             </button>
             <select name="system.effects.{{index}}.type" data-dtype="String" class="effect-type-select">
@@ -130,7 +130,7 @@
                 <span class="summary-details">{{localize (concat "RYF.Magic.Conditions." (capitalize effect.condition))}} - {{effect.duration.value}} {{localize (concat "RYF.Magic.DurationTypes." (capitalize effect.duration.type))}}{{#if effect.savingThrow.enabled}} - {{localize "RYF.SavingThrow"}}{{/if}}</span>
               {{/if}}
             </div>
-            <button type="button" class="effect-delete" data-effect-index="{{index}}">
+            <button type="button" class="effect-delete" data-action="deleteEffect" data-effect-index="{{index}}">
               <i class="fas fa-trash"></i>
             </button>
           </div>
@@ -151,14 +151,11 @@
         </div>
         {{/each}}
 
-        <button type="button" class="effect-add">
+        <button type="button" class="effect-add" data-action="addEffect">
           <i class="fas fa-plus"></i> {{localize "RYF.Magic.AddEffect"}}
         </button>
       </div>
     </div>
 
   </section>
-</form>
-
-  </section>
-</form>
+</div>

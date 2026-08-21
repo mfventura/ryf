@@ -2,7 +2,7 @@
   "id": "ryf3",
   "title": "Rápido y Fácil (RyF) 3.0",
   "description": "Sistema de rol Rápido y Fácil 3.0 con sistema de tiradas 1o3d10 para Foundry VTT v14",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14"

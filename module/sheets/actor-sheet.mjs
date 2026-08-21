@@ -2,33 +2,32 @@ import { RyfRoll } from '../rolls/ryf-roll.mjs';
 import { getRule } from '../helpers/rules.mjs';
 import { getEconomy, getConversionHint } from '../helpers/economy.mjs';
 import { resolveMode, SKILL_DIFFICULTIES, ATTRIBUTE_DIFFICULTIES } from '../helpers/dice.mjs';
+import { formDialog, confirmDialog, choiceDialog } from '../helpers/dialogs.mjs';
+import { RyfSheetMixin } from './sheet-mixin.mjs';
 
-export class RyfActorSheet extends ActorSheet {
+export class RyfActorSheet extends RyfSheetMixin(foundry.applications.sheets.ActorSheetV2) {
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["ryf", "sheet", "actor"],
-      width: 720,
-      height: 800,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }],
-      dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }],
-      submitOnChange: true,
-      closeOnSubmit: false,
-      scrollY: [".tab", ".scrollable", ".sheet-body", ".item-list"]
-    });
-  }
+  static DEFAULT_OPTIONS = {
+    classes: ['ryf', 'sheet', 'actor'],
+    position: { width: 720, height: 800 },
+    window: { resizable: true },
+    form: { submitOnChange: true, closeOnSubmit: false }
+  };
 
-  get template() {
-    return `systems/ryf3/templates/actor/actor-${this.actor.type}-sheet.hbs`;
-  }
+  #dropBound = false;
 
-  getData() {
-    const context = super.getData();
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
 
-    const actorData = this.actor.toObject(false);
+    const source = this.actor.toObject(false);
 
-    context.system = actorData.system;
-    context.flags = actorData.flags;
+    context.actor = this.actor;
+    context.system = source.system;
+    context.flags = source.flags;
+    context.items = source.items.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    context.editable = this.isEditable;
+    context.owner = this.document.isOwner;
+    context.cssClass = this.isEditable ? 'editable' : 'locked';
 
     context.config = CONFIG.RYF;
 
@@ -42,6 +41,11 @@ export class RyfActorSheet extends ActorSheet {
     context.enableSanity = game.settings.get('ryf3', 'enableSanity');
     context.enableRaces = game.settings.get('ryf3', 'enableRaces');
     context.isGM = game.user.isGM;
+
+    context.enrichedBiography = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+      source.system.biography || '',
+      { secrets: this.document.isOwner, relativeTo: this.actor }
+    );
 
     if (this.actor.type === 'character') {
       this._prepareCharacterData(context);
@@ -220,119 +224,167 @@ export class RyfActorSheet extends ActorSheet {
     }).filter(Boolean).join(', ');
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _onRender(context, options) {
+    super._onRender(context, options);
+    this.#bindDragDrop();
+    this.#applyItemTranslations();
+  }
 
+  // Nombres traducidos de los items de compendio con translationKey (antes en
+  // el hook renderActorSheet)
+  #applyItemTranslations() {
+    for (const nameEl of this.element.querySelectorAll('.item .item-name')) {
+      const itemId = nameEl.closest('.item')?.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      if (!item?.flags?.ryf?.translationKey) continue;
+
+      const nameKey = `RYF.ITEMS.${item.flags.ryf.translationKey}.name`;
+      const translatedName = game.i18n.localize(nameKey);
+
+      if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
+        const heading = nameEl.querySelector('h4');
+        if (heading) heading.textContent = translatedName;
+      }
+    }
+  }
+
+  #bindDragDrop() {
+    for (const li of this.element.querySelectorAll('.item-list .item')) {
+      if (!li.dataset.itemId) continue;
+      li.setAttribute('draggable', 'true');
+      li.addEventListener('dragstart', this._onDragStart.bind(this));
+    }
+
+    // El elemento raíz sobrevive a los re-renders: el listener de drop se
+    // engancha una sola vez
+    if (!this.#dropBound) {
+      this.element.addEventListener('dragover', event => event.preventDefault());
+      this.element.addEventListener('drop', this._onDrop.bind(this));
+      this.#dropBound = true;
+    }
+  }
+
+  #itemFromTarget(target) {
+    const li = target.closest('[data-item-id]');
+    return li ? this.actor.items.get(li.dataset.itemId) : null;
+  }
+
+  async _handleSheetAction(action, event, target) {
     if (!this.isEditable) return;
 
-    html.find('.item-create').click(this._onItemCreate.bind(this));
-    html.find('.item-edit').click(this._onItemEdit.bind(this));
-    html.find('.item-delete').click(this._onItemDelete.bind(this));
-    html.find('.item-toggle').click(this._onItemToggle.bind(this));
+    switch (action) {
+      case 'createItem': return this._onItemCreate(target);
+      case 'editItem': return this.#itemFromTarget(target)?.sheet.render(true);
+      case 'deleteItem': return this._onItemDelete(target);
+      case 'toggleItem': return this.#itemFromTarget(target)?.toggleEquipped();
+      case 'attackWeapon': {
+        const weapon = this.#itemFromTarget(target);
+        if (weapon) await this.rollWeaponItem(weapon);
+        return;
+      }
+      case 'reloadWeapon': {
+        const weapon = this.#itemFromTarget(target);
+        if (weapon) await this.actor.reloadWeapon(weapon);
+        return;
+      }
+      case 'opposedSkill': return this._onSkillOpposed(target);
+      case 'rollSkill': {
+        const skill = this.#itemFromTarget(target);
+        if (skill?.type === 'skill') await this.rollSkillItem(skill);
+        return;
+      }
+      case 'increaseSkill': return this.#itemFromTarget(target)?.increaseLevel();
+      case 'decreaseSkill': return this.#itemFromTarget(target)?.decreaseLevel();
+      case 'castSpell': {
+        const spell = this.#itemFromTarget(target);
+        if (spell) await this.castSpellItem(spell);
+        return;
+      }
+      case 'removeEffect': return this._onRemoveEffect(target);
+      case 'toggleEffect': return this._onToggleEffect(target);
+      case 'rollNpcAttack': {
+        const attack = this.#itemFromTarget(target);
+        if (attack) await this.actor.rollNpcAttack(attack);
+        return;
+      }
+      case 'shortRest': return this.actor.shortRest();
+      case 'longRest': return this.actor.longRest();
+      // Reference: RyF 3.0 PDF, página 94 - Coger aire tras un combate
+      case 'breather': return this.actor.breather();
+      case 'rollAttribute': return this._onAttributeRoll(target);
+      case 'healSkill': return this._onSkillHeal(target);
+      case 'addExperience': return this._onAddExperience();
+      // Reference: RyF 3.0 PDF, página 92 - el máster devuelve el token
+      case 'returnToken': return this.actor.returnDeathToken();
+      case 'sanityLoss': return this._onSanityLoss();
+      case 'shipAttack': return this._onShipAttack();
+      case 'shipDefense': return this._rollShipPilotSide('defense');
+      case 'shipChase': return this._rollShipPilotSide('chase');
+      case 'clearCrew': return this._onCrewClear(target);
+    }
+  }
 
-    html.find('.item-attack').click(this._onWeaponAttack.bind(this));
-    html.find('.weapon-reload').click(this._onWeaponReload.bind(this));
-
-    html.find('.skill-opposed').click(this._onSkillOpposed.bind(this));
-
-    html.find('.skill-roll').click(this._onSkillRoll.bind(this));
-    html.find('.skill-increase').click(this._onSkillIncrease.bind(this));
-    html.find('.skill-decrease').click(this._onSkillDecrease.bind(this));
-
-    html.find('.spell-cast').click(this._onSpellCast.bind(this));
-    html.find('.effect-remove').click(this._onRemoveEffect.bind(this));
-    html.find('.effect-toggle').click(this._onToggleEffect.bind(this));
-
-    html.find('.npc-attack-roll').click(this._onNpcAttackRoll.bind(this));
-
-    html.find('.short-rest').click(this._onShortRest.bind(this));
-    html.find('.long-rest').click(this._onLongRest.bind(this));
-    html.find('.breather').click(this._onBreather.bind(this));
-
-    html.find('.attribute-roll').click(this._onAttributeRoll.bind(this));
-    html.find('.skill-heal').click(this._onSkillHeal.bind(this));
-
-    html.find('.add-experience').click(this._onAddExperience.bind(this));
-
-    html.find('.attribute-input').change(this._onAttributeChange.bind(this));
-
-    html.find('.token-return').click(this._onTokenReturn.bind(this));
-
-    html.find('.sanity-loss').click(this._onSanityLoss.bind(this));
-
-    html.find('.ship-attack').click(this._onShipAttack.bind(this));
-    html.find('.ship-defense').click(this._onShipDefense.bind(this));
-    html.find('.ship-chase').click(this._onShipChase.bind(this));
-    html.find('.crew-clear').click(this._onCrewClear.bind(this));
+  // El input de atributo aplica su propia lógica de puntos de creación en vez
+  // del submit genérico del formulario
+  _onChangeForm(formConfig, event) {
+    if (event.target.classList.contains('attribute-input')) {
+      return this._onAttributeChange(event);
+    }
+    return super._onChangeForm(formConfig, event);
   }
 
   // Reference: RyF 3.0 PDF, páginas 103-104 - cada nave tira su lado de la
   // enfrentada por separado, cuando le toca; los totales se comparan en el
   // chat. El bono del tripulante se calcula de su ficha vinculada (Destreza +
   // habilidad) o de la base manual de la nave.
-  async _onShipAttack(event) {
-    event.preventDefault();
+  async _onShipAttack() {
     const ship = this.actor;
     const crew = await ship.getCrewBonus('gunner');
 
-    const params = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name}`,
-        content: `
-          <form>
-            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
-              <i class="fas fa-crosshairs"></i>
-              ${crew.source
-                ? `${game.i18n.localize('RYF.Ship.Gunner')}: <strong>${crew.source}</strong> (${crew.detail})`
-                : crew.detail}
-              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipGunnerSkill') })}</em>`}
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Bonus')}</label>
-              <input type="number" name="bonus" value="${crew.value}" step="1"/>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Ship.Weapon')}</label>
-              <select name="weapon">
-                <option value="1d6" selected>${game.i18n.localize('RYF.Ship.WeaponLaser')} (1d6)</option>
-                <option value="3d6">${game.i18n.localize('RYF.Ship.WeaponMissile')} (3d6)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Magic.DamageFormula')}</label>
-              <input type="text" name="damageFormula" value="1d6"/>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        render: (html) => {
-          html.find('[name="weapon"]').on('change', (ev) => {
-            html.find('[name="damageFormula"]').val(ev.currentTarget.value);
-          });
-        },
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-crosshairs"></i>',
-            label: game.i18n.localize('RYF.Ship.Attack'),
-            callback: (html) => resolve({
-              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
-              weapon: html.find('[name="weapon"]').val(),
-              damageFormula: html.find('[name="damageFormula"]').val() || '1d6',
-              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
-            })
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const params = await formDialog({
+      title: `${game.i18n.localize('RYF.Ship.AttackTitle')}: ${ship.name}`,
+      okLabel: game.i18n.localize('RYF.Ship.Attack'),
+      okIcon: 'fas fa-crosshairs',
+      content: `
+        <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          <i class="fas fa-crosshairs"></i>
+          ${crew.source
+            ? `${game.i18n.localize('RYF.Ship.Gunner')}: <strong>${crew.source}</strong> (${crew.detail})`
+            : crew.detail}
+          ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipGunnerSkill') })}</em>`}
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Bonus')}</label>
+          <input type="number" name="bonus" value="${crew.value}" step="1"/>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Ship.Weapon')}</label>
+          <select name="weapon">
+            <option value="1d6" selected>${game.i18n.localize('RYF.Ship.WeaponLaser')} (1d6)</option>
+            <option value="3d6">${game.i18n.localize('RYF.Ship.WeaponMissile')} (3d6)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Magic.DamageFormula')}</label>
+          <input type="text" name="damageFormula" value="1d6"/>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+      `,
+      onRender: (root) => {
+        root.querySelector('[name="weapon"]')?.addEventListener('change', event => {
+          const formula = root.querySelector('[name="damageFormula"]');
+          if (formula) formula.value = event.currentTarget.value;
+        });
+      },
+      read: (fields) => ({
+        bonus: parseInt(fields.bonus.value) || 0,
+        weapon: fields.weapon.value,
+        damageFormula: fields.damageFormula.value || '1d6',
+        modifier: parseInt(fields.modifier.value) || 0
+      })
     });
 
     if (!params) return;
@@ -359,16 +411,6 @@ export class RyfActorSheet extends ActorSheet {
     });
   }
 
-  async _onShipDefense(event) {
-    event.preventDefault();
-    await this._rollShipPilotSide('defense');
-  }
-
-  async _onShipChase(event) {
-    event.preventDefault();
-    await this._rollShipPilotSide('chase');
-  }
-
   // Defensa (Destreza + Pilotar + Maniobrabilidad) y persecución (Destreza +
   // Pilotar + Velocidad) comparten diálogo: solo cambia el atributo de la nave
   async _rollShipPilotSide(contest) {
@@ -376,46 +418,29 @@ export class RyfActorSheet extends ActorSheet {
     const crew = await ship.getCrewBonus('pilot');
     const titleKey = contest === 'defense' ? 'RYF.Ship.DefenseTitle' : 'RYF.Ship.ChaseTitle';
 
-    const params = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize(titleKey)}: ${ship.name}`,
-        content: `
-          <form>
-            <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
-              <i class="fas fa-user-astronaut"></i>
-              ${crew.source
-                ? `${game.i18n.localize('RYF.Ship.Pilot')}: <strong>${crew.source}</strong> (${crew.detail})`
-                : crew.detail}
-              ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipPilotSkill') })}</em>`}
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Bonus')}</label>
-              <input type="number" name="bonus" value="${crew.value}" step="1" autofocus/>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => resolve({
-              bonus: parseInt(html.find('[name="bonus"]').val()) || 0,
-              modifier: parseInt(html.find('[name="modifier"]').val()) || 0
-            })
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const params = await formDialog({
+      title: `${game.i18n.localize(titleKey)}: ${ship.name}`,
+      content: `
+        <div class="crew-bonus-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          <i class="fas fa-user-astronaut"></i>
+          ${crew.source
+            ? `${game.i18n.localize('RYF.Ship.Pilot')}: <strong>${crew.source}</strong> (${crew.detail})`
+            : crew.detail}
+          ${crew.skillFound ? '' : `<br><em>${game.i18n.format('RYF.Ship.SkillMissing', { skill: getRule('shipPilotSkill') })}</em>`}
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Bonus')}</label>
+          <input type="number" name="bonus" value="${crew.value}" step="1" autofocus/>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+      `,
+      read: (fields) => ({
+        bonus: parseInt(fields.bonus.value) || 0,
+        modifier: parseInt(fields.modifier.value) || 0
+      })
     });
 
     if (!params) return;
@@ -437,25 +462,13 @@ export class RyfActorSheet extends ActorSheet {
       return;
     }
 
-    const role = await new Promise((resolve) => {
-      new Dialog({
-        title: game.i18n.format('RYF.Ship.AssignCrewTitle', { name: dropped.name }),
-        content: `<p>${game.i18n.localize('RYF.Ship.AssignCrewHint')}</p>`,
-        buttons: {
-          pilot: {
-            icon: '<i class="fas fa-user-astronaut"></i>',
-            label: game.i18n.localize('RYF.Ship.Pilot'),
-            callback: () => resolve('pilot')
-          },
-          gunner: {
-            icon: '<i class="fas fa-crosshairs"></i>',
-            label: game.i18n.localize('RYF.Ship.Gunner'),
-            callback: () => resolve('gunner')
-          }
-        },
-        default: 'pilot',
-        close: () => resolve(null)
-      }).render(true);
+    const role = await choiceDialog({
+      title: game.i18n.format('RYF.Ship.AssignCrewTitle', { name: dropped.name }),
+      content: `<p>${game.i18n.localize('RYF.Ship.AssignCrewHint')}</p>`,
+      choices: [
+        { action: 'pilot', label: game.i18n.localize('RYF.Ship.Pilot'), icon: 'fas fa-user-astronaut', default: true },
+        { action: 'gunner', label: game.i18n.localize('RYF.Ship.Gunner'), icon: 'fas fa-crosshairs' }
+      ]
     });
 
     if (!role) return;
@@ -466,9 +479,8 @@ export class RyfActorSheet extends ActorSheet {
     });
   }
 
-  async _onCrewClear(event) {
-    event.preventDefault();
-    const role = event.currentTarget.dataset.role;
+  async _onCrewClear(target) {
+    const role = target.dataset.role;
     if (!['pilot', 'gunner'].includes(role)) return;
 
     await this.actor.update({
@@ -478,34 +490,23 @@ export class RyfActorSheet extends ActorSheet {
   }
 
   // Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en d6 según gravedad
-  async _onSanityLoss(event) {
-    event.preventDefault();
-
-    const formula = await Dialog.prompt({
+  async _onSanityLoss() {
+    const params = await formDialog({
       title: game.i18n.localize('RYF.Sanity.Loss'),
+      okLabel: game.i18n.localize('RYF.Roll'),
       content: `
-        <form>
-          <p class="hint">${game.i18n.localize('RYF.Sanity.LossHint')}</p>
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.Sanity.LossFormula')}</label>
-            <input type="text" name="formula" value="1d6" autofocus/>
-          </div>
-        </form>
+        <p class="hint">${game.i18n.localize('RYF.Sanity.LossHint')}</p>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Sanity.LossFormula')}</label>
+          <input type="text" name="formula" value="1d6" autofocus/>
+        </div>
       `,
-      callback: (html) => html.find('[name="formula"]').val() || '1d6',
-      rejectClose: false
+      read: (fields) => ({ formula: fields.formula.value || '1d6' })
     });
 
-    if (!formula) return;
+    if (!params) return;
 
-    await this.actor.loseSanity(formula);
-  }
-
-  // Reference: RyF 3.0 PDF, página 92 - el máster devuelve el token forzando
-  // bajar un rango el dado objetivo en la siguiente tirada
-  async _onTokenReturn(event) {
-    event.preventDefault();
-    await this.actor.returnDeathToken();
+    await this.actor.loseSanity(params.formula);
   }
 
   // Bloque compartido de los diálogos de tirada: factores automáticos que
@@ -562,7 +563,7 @@ export class RyfActorSheet extends ActorSheet {
 
   // Actualiza en vivo la previsualización del dado objetivo cuando cambian el
   // modo base o las mejoras opcionales del diálogo
-  _bindModePreview(html, downs) {
+  _bindModePreview(root, downs) {
     const labels = {
       advantage: 'RYF.RollFactors.DieHigh',
       normal: 'RYF.RollFactors.DieMiddle',
@@ -570,74 +571,45 @@ export class RyfActorSheet extends ActorSheet {
     };
 
     const update = () => {
-      const base = html.find('[name="mode"]').val() || 'normal';
+      const base = root.querySelector('[name="mode"]')?.value || 'normal';
       const ups = [];
-      if (html.find('[name="applySpecialization"]').is(':checked')) ups.push('specialization');
-      if (html.find('[name="spendToken"]').is(':checked')) ups.push('token');
+      if (root.querySelector('[name="applySpecialization"]')?.checked) ups.push('specialization');
+      if (root.querySelector('[name="spendToken"]')?.checked) ups.push('token');
       const mode = resolveMode(base, { ups: ups, downs: downs });
-      html.find('.mode-preview-value').text(game.i18n.localize(labels[mode]));
+      const preview = root.querySelector('.mode-preview-value');
+      if (preview) preview.textContent = game.i18n.localize(labels[mode]);
     };
 
-    html.find('[name="mode"], [name="applySpecialization"], [name="spendToken"]').on('change', update);
+    for (const el of root.querySelectorAll('[name="mode"], [name="applySpecialization"], [name="spendToken"]')) {
+      el.addEventListener('change', update);
+    }
     update();
   }
 
-  async _onItemCreate(event) {
-    event.preventDefault();
-    const header = event.currentTarget;
-    const type = header.dataset.type;
+  async _onItemCreate(target) {
+    const type = target.dataset.type;
     const data = {
       name: game.i18n.format('RYF.Items.New', { type: game.i18n.localize(`TYPES.Item.${type}`) }),
       type: type,
       system: {}
     };
-    
+
     const item = await Item.create(data, { parent: this.actor });
     item.sheet.render(true);
   }
 
-  _onItemEdit(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-    item.sheet.render(true);
-  }
+  async _onItemDelete(target) {
+    const item = this.#itemFromTarget(target);
+    if (!item) return;
 
-  async _onItemDelete(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-    
-    const confirmed = await Dialog.confirm({
+    const confirmed = await confirmDialog({
       title: game.i18n.localize('RYF.Dialogs.DeleteItem'),
       content: game.i18n.format('RYF.Dialogs.DeleteItemConfirm', { name: item.name })
     });
-    
+
     if (confirmed) {
       await item.delete();
-      li.slideUp(200, () => this.render(false));
     }
-  }
-
-  async _onItemToggle(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-    await item.toggleEquipped();
-  }
-
-  async _onWeaponAttack(event) {
-    event.preventDefault();
-    const button = event.currentTarget;
-    const itemId = button.dataset.itemId;
-    const weapon = this.actor.items.get(itemId);
-
-    if (!weapon) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.WeaponNotFound'));
-      return;
-    }
-
-    await this.rollWeaponItem(weapon);
   }
 
   async rollWeaponItem(weapon) {
@@ -705,87 +677,67 @@ export class RyfActorSheet extends ActorSheet {
     // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
     const factors = this._rollFactorsSection({ untrained: untrained, specialization: specialization });
 
-    return new Promise((resolve) => {
-      const content = `
-        <form>
-          ${factors.html}
-          ${isRanged ? `
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.Combat.Range')}</label>
-            <select name="range" autofocus>
-              <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
-              <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
-              <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
-              <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
-            </select>
-          </div>
-          ${RyfRoll.rangedModifiersFields()}
-          ` : !hasTarget ? `
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.Defense')}</label>
-            <input type="number" name="defense" value="10" min="1"/>
-          </div>
-          ` : ''}
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.RollMode')}</label>
-            <select name="mode">
-              <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
-              <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-              <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.Modifier')}</label>
-            <input type="number" name="modifier" value="0" step="1"/>
-          </div>
-          ${RyfRoll.calledShotField()}
-          ${dualWieldAvailable ? `
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.DualWield')} (+${getRule('dualWieldBonus')})</label>
-            <input type="checkbox" name="dualWield"/>
-          </div>
-          ` : ''}
-        </form>
-      `;
-
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Attack')}: ${weaponName}`,
-        content: content,
-        render: (html) => this._bindModePreview(html, factors.downs),
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d20"></i>',
-            label: game.i18n.localize('RYF.Attack'),
-            callback: (html) => {
-              const mode = html.find('[name="mode"]').val();
-              const defense = hasTarget || isRanged ? null : parseInt(html.find('[name="defense"]').val());
-              const range = isRanged ? html.find('[name="range"]').val() : null;
-              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              const dualWield = dualWieldAvailable ? html.find('[name="dualWield"]').is(':checked') : false;
-              const specialization = html.find('[name="applySpecialization"]').is(':checked');
-              const spendToken = html.find('[name="spendToken"]').is(':checked');
-              const rangedModifiers = isRanged ? RyfRoll.readRangedModifiers(html) : null;
-              const calledShot = html.find('[name="calledShot"]').val() || null;
-              resolve({ mode, defense, range, modifier, dualWield, specialization, spendToken, rangedModifiers, calledShot });
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    return formDialog({
+      title: `${game.i18n.localize('RYF.Attack')}: ${weaponName}`,
+      okLabel: game.i18n.localize('RYF.Attack'),
+      okIcon: 'fas fa-dice-d20',
+      content: `
+        ${factors.html}
+        ${isRanged ? `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Combat.Range')}</label>
+          <select name="range" autofocus>
+            <option value="pointblank">${game.i18n.localize('RYF.Combat.RangePointBlank')} (${getRule('rangePointBlank')})</option>
+            <option value="short" selected>${game.i18n.localize('RYF.Combat.RangeShort')} (${getRule('rangeShort')})</option>
+            <option value="medium">${game.i18n.localize('RYF.Combat.RangeMedium')} (${getRule('rangeMedium')})</option>
+            <option value="long">${game.i18n.localize('RYF.Combat.RangeLong')} (${getRule('rangeLong')})</option>
+          </select>
+        </div>
+        ${RyfRoll.rangedModifiersFields()}
+        ` : !hasTarget ? `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Defense')}</label>
+          <input type="number" name="defense" value="10" min="1"/>
+        </div>
+        ` : ''}
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode">
+            <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+        ${RyfRoll.calledShotField()}
+        ${dualWieldAvailable ? `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.DualWield')} (+${getRule('dualWieldBonus')})</label>
+          <input type="checkbox" name="dualWield"/>
+        </div>
+        ` : ''}
+      `,
+      onRender: (root) => this._bindModePreview(root, factors.downs),
+      read: (fields) => ({
+        mode: fields.mode.value,
+        defense: hasTarget || isRanged ? null : parseInt(fields.defense?.value),
+        range: isRanged ? fields.range.value : null,
+        modifier: parseInt(fields.modifier.value) || 0,
+        dualWield: dualWieldAvailable ? !!fields.dualWield?.checked : false,
+        specialization: !!fields.applySpecialization?.checked,
+        spendToken: !!fields.spendToken?.checked,
+        rangedModifiers: isRanged ? RyfRoll.readRangedModifiers(fields) : null,
+        calledShot: fields.calledShot?.value || null
+      })
     });
   }
 
   // Reference: RyF 3.0 PDF, página 18 - tiradas enfrentadas
-  async _onSkillOpposed(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const skill = this.actor.items.get(li.data("itemId"));
+  async _onSkillOpposed(target) {
+    const skill = this.#itemFromTarget(target);
     if (!skill || skill.type !== 'skill') return;
 
     const targets = Array.from(game.user.targets);
@@ -797,60 +749,31 @@ export class RyfActorSheet extends ActorSheet {
     const targetActor = targets[0].actor;
     const targetSkills = targetActor.items.filter(i => i.type === 'skill');
 
-    const params = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.OpposedRoll')}: ${skill.name} vs ${targetActor.name}`,
-        content: `
-          <form>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.OpposedDefenderSkill')}</label>
-              <select name="defenderSkill" autofocus>
-                ${targetSkills.map(s => `<option value="${s.name}">${s.name} (${s.system.level})</option>`).join('')}
-                <option value="">${game.i18n.localize('RYF.OpposedManualBonus')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="defenderBonus" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => {
-              resolve({
-                defenderSkillName: html.find('[name="defenderSkill"]').val() || null,
-                defenderBonus: parseInt(html.find('[name="defenderBonus"]').val()) || 0
-              });
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const params = await formDialog({
+      title: `${game.i18n.localize('RYF.OpposedRoll')}: ${skill.name} vs ${targetActor.name}`,
+      content: `
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.OpposedDefenderSkill')}</label>
+          <select name="defenderSkill" autofocus>
+            ${targetSkills.map(s => `<option value="${s.name}">${s.name} (${s.system.level})</option>`).join('')}
+            <option value="">${game.i18n.localize('RYF.OpposedManualBonus')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="defenderBonus" value="0" step="1"/>
+        </div>
+      `,
+      read: (fields) => ({
+        defenderSkillName: fields.defenderSkill.value || null,
+        defenderBonus: parseInt(fields.defenderBonus.value) || 0
+      })
     });
 
     if (!params) return;
 
     const { RyfRoll } = await import('../rolls/ryf-roll.mjs');
     await RyfRoll.rollOpposed(this.actor, skill.name, targetActor, params);
-  }
-
-  async _onSkillRoll(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-
-    if (item && item.type === 'skill') {
-      await this.rollSkillItem(item);
-    }
   }
 
   async rollSkillItem(item) {
@@ -890,93 +813,45 @@ export class RyfActorSheet extends ActorSheet {
       specialization: skill.system.specialization?.trim() || null
     });
 
-    return new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Roll')}: ${skillName}`,
-        content: `
-          <form>
-            ${factors.html}
-            ${targetWillpower ? `
-            <div class="target-willpower-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-brain"></i> <strong>${game.i18n.localize('RYF.TargetWillpower')}: ${targetWillpower}</strong>
-            </div>
-            ` : ''}
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
-              <!-- Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad -->
-              <select name="difficulty" autofocus>
-                ${SKILL_DIFFICULTIES.map(d => `<option value="${d.value}" ${difficulty === d.value ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`).join('')}
-                ${targetWillpower && !SKILL_DIFFICULTIES.some(d => d.value === targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.RollMode')}</label>
-              <select name="mode">
-                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        render: (html) => this._bindModePreview(html, factors.downs),
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => {
-              const difficulty = parseInt(html.find('[name="difficulty"]').val());
-              const mode = html.find('[name="mode"]').val();
-              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              const specialization = html.find('[name="applySpecialization"]').is(':checked');
-              const spendToken = html.find('[name="spendToken"]').is(':checked');
-              resolve({ difficulty, mode, modifier, specialization, spendToken });
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    return formDialog({
+      title: `${game.i18n.localize('RYF.Roll')}: ${skillName}`,
+      content: `
+        ${factors.html}
+        ${targetWillpower ? `
+        <div class="target-willpower-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
+          <i class="fas fa-brain"></i> <strong>${game.i18n.localize('RYF.TargetWillpower')}: ${targetWillpower}</strong>
+        </div>
+        ` : ''}
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+          <!-- Reference: RyF 3.0 PDF, página 18 - tabla de dificultades de habilidad -->
+          <select name="difficulty" autofocus>
+            ${SKILL_DIFFICULTIES.map(d => `<option value="${d.value}" ${difficulty === d.value ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`).join('')}
+            ${targetWillpower && !SKILL_DIFFICULTIES.some(d => d.value === targetWillpower) ? `<option value="${targetWillpower}" selected>${game.i18n.localize('RYF.Willpower')} (${targetWillpower})</option>` : ''}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode">
+            <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+      `,
+      onRender: (root) => this._bindModePreview(root, factors.downs),
+      read: (fields) => ({
+        difficulty: parseInt(fields.difficulty.value),
+        mode: fields.mode.value,
+        modifier: parseInt(fields.modifier.value) || 0,
+        specialization: !!fields.applySpecialization?.checked,
+        spendToken: !!fields.spendToken?.checked
+      })
     });
-  }
-
-  async _onSkillIncrease(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-
-    if (item) {
-      await item.increaseLevel();
-    }
-  }
-
-  async _onSkillDecrease(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const item = this.actor.items.get(li.data("itemId"));
-
-    if (item) {
-      await item.decreaseLevel();
-    }
-  }
-
-  async _onSpellCast(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const spell = this.actor.items.get(li.data("itemId"));
-
-    if (!spell) return;
-
-    await this.castSpellItem(spell);
   }
 
   async castSpellItem(spell) {
@@ -1001,66 +876,50 @@ export class RyfActorSheet extends ActorSheet {
     // Reference: RyF 3.0 PDF, páginas 17-18 - factores de rango del dado objetivo
     const factors = this._rollFactorsSection();
 
-    return new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.CastSpell')}: ${spell.name}`,
-        content: `
-          <form>
-            ${factors.html}
-            <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
-                ${!isNPC ? `<span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>` : ''}
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Magic.CastingDifficulty')}: ${castingDifficulty}</span>
-                ${!isNPC ? `<span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>` : ''}
-              </div>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.RollMode')}</label>
-              <select name="mode" autofocus>
-                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-            ${!isNPC ? `
-            <!-- Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 por cada 2 puntos extra -->
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Magic.BurnMana')}</label>
-              <input type="number" name="extraMana" value="0" min="0" step="1"/>
-            </div>
-            <p class="hint" style="margin: 0 0 8px 0;">${game.i18n.localize('RYF.Magic.BurnManaHint')}</p>
-            ` : ''}
-          </form>
-        `,
-        render: (html) => this._bindModePreview(html, factors.downs),
-        buttons: {
-          cast: {
-            icon: '<i class="fas fa-magic"></i>',
-            label: game.i18n.localize('RYF.Cast'),
-            callback: (html) => {
-              const mode = html.find('[name="mode"]').val();
-              const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-              const spendToken = html.find('[name="spendToken"]').is(':checked');
-              const extraMana = parseInt(html.find('[name="extraMana"]').val()) || 0;
-              resolve({ mode, modifier, spendToken, extraMana });
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'cast',
-        close: () => resolve(null)
-      }).render(true);
+    return formDialog({
+      title: `${game.i18n.localize('RYF.CastSpell')}: ${spell.name}`,
+      okLabel: game.i18n.localize('RYF.Cast'),
+      okIcon: 'fas fa-magic',
+      content: `
+        ${factors.html}
+        <div class="spell-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span><i class="fas fa-magic"></i> ${game.i18n.localize('RYF.Level')}: ${spell.system.level}</span>
+            ${!isNPC ? `<span><i class="fas fa-droplet"></i> ${game.i18n.localize('RYF.ManaCost')}: ${manaCost}</span>` : ''}
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span><i class="fas fa-bullseye"></i> ${game.i18n.localize('RYF.Magic.CastingDifficulty')}: ${castingDifficulty}</span>
+            ${!isNPC ? `<span><i class="fas fa-flask"></i> ${game.i18n.localize('RYF.CurrentMana')}: ${currentMana}</span>` : ''}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode" autofocus>
+            <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+        ${!isNPC ? `
+        <!-- Reference: RyF 3.0 PDF, página 101 - Quemar maná: +1 por cada 2 puntos extra -->
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Magic.BurnMana')}</label>
+          <input type="number" name="extraMana" value="0" min="0" step="1"/>
+        </div>
+        <p class="hint" style="margin: 0 0 8px 0;">${game.i18n.localize('RYF.Magic.BurnManaHint')}</p>
+        ` : ''}
+      `,
+      onRender: (root) => this._bindModePreview(root, factors.downs),
+      read: (fields) => ({
+        mode: fields.mode.value,
+        modifier: parseInt(fields.modifier.value) || 0,
+        spendToken: !!fields.spendToken?.checked,
+        extraMana: parseInt(fields.extraMana?.value) || 0
+      })
     });
   }
 
@@ -1084,13 +943,12 @@ export class RyfActorSheet extends ActorSheet {
     return selectedTargets.map(t => t.actor).filter(a => a);
   }
 
-  async _onRemoveEffect(event) {
-    event.preventDefault();
-    const effectId = event.currentTarget.dataset.effectId;
+  async _onRemoveEffect(target) {
+    const effectId = target.dataset.effectId;
     const effect = this.actor.effects.get(effectId);
 
     if (effect) {
-      const confirmed = await Dialog.confirm({
+      const confirmed = await confirmDialog({
         title: game.i18n.localize('RYF.Dialogs.RemoveEffect'),
         content: game.i18n.format('RYF.Dialogs.RemoveEffectConfirm', { name: effect.name })
       });
@@ -1102,9 +960,8 @@ export class RyfActorSheet extends ActorSheet {
     }
   }
 
-  async _onToggleEffect(event) {
-    event.preventDefault();
-    const effectId = event.currentTarget.dataset.effectId;
+  async _onToggleEffect(target) {
+    const effectId = target.dataset.effectId;
     const effect = this.actor.effects.get(effectId);
 
     if (effect) {
@@ -1112,47 +969,10 @@ export class RyfActorSheet extends ActorSheet {
     }
   }
 
-  async _onNpcAttackRoll(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const attack = this.actor.items.get(li.data("itemId"));
-
-    if (!attack) return;
-
-    await this.actor.rollNpcAttack(attack);
-  }
-
-  async _onShortRest(event) {
-    event.preventDefault();
-    await this.actor.shortRest();
-  }
-
-  async _onLongRest(event) {
-    event.preventDefault();
-    await this.actor.longRest();
-  }
-
-  // Reference: RyF 3.0 PDF, página 94 - Coger aire tras un combate
-  async _onBreather(event) {
-    event.preventDefault();
-    await this.actor.breather();
-  }
-
-  // Reference: RyF 3.0 PDF, páginas 96-98 - recargar el arma
-  async _onWeaponReload(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const weapon = this.actor.items.get(li.data("itemId"));
-    if (!weapon) return;
-
-    await this.actor.reloadWeapon(weapon);
-  }
-
   // Reference: RyF 3.0 PDF, página 18 - tirada de atributo puro con su propia
   // tabla de dificultades (9/12/15/18/21)
-  async _onAttributeRoll(event) {
-    event.preventDefault();
-    const attribute = event.currentTarget.dataset.attribute;
+  async _onAttributeRoll(target) {
+    const attribute = target.dataset.attribute;
     if (!attribute) return;
 
     const factors = this._rollFactorsSection();
@@ -1162,51 +982,34 @@ export class RyfActorSheet extends ActorSheet {
       `<option value="${d.value}" ${d.value === 12 ? 'selected' : ''}>${game.i18n.localize(d.label)} (${d.value})</option>`
     ).join('');
 
-    const rollParams = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Roll')}: ${attributeLabel}`,
-        content: `
-          <form>
-            ${factors.html}
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
-              <select name="difficulty" autofocus>${difficultyOptions}</select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.RollMode')}</label>
-              <select name="mode">
-                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        render: (html) => this._bindModePreview(html, factors.downs),
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-dice-d10"></i>',
-            label: game.i18n.localize('RYF.Roll'),
-            callback: (html) => resolve({
-              difficulty: parseInt(html.find('[name="difficulty"]').val()),
-              mode: html.find('[name="mode"]').val(),
-              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
-              spendToken: html.find('[name="spendToken"]').is(':checked')
-            })
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const rollParams = await formDialog({
+      title: `${game.i18n.localize('RYF.Roll')}: ${attributeLabel}`,
+      content: `
+        ${factors.html}
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+          <select name="difficulty" autofocus>${difficultyOptions}</select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode">
+            <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+      `,
+      onRender: (root) => this._bindModePreview(root, factors.downs),
+      read: (fields) => ({
+        difficulty: parseInt(fields.difficulty.value),
+        mode: fields.mode.value,
+        modifier: parseInt(fields.modifier.value) || 0,
+        spendToken: !!fields.spendToken?.checked
+      })
     });
 
     if (!rollParams) return;
@@ -1219,10 +1022,8 @@ export class RyfActorSheet extends ActorSheet {
 
   // Reference: RyF 3.0 PDF, páginas 11-12 y 45 - curación por habilidad sobre
   // el objetivo seleccionado (o uno mismo si no hay objetivo)
-  async _onSkillHeal(event) {
-    event.preventDefault();
-    const li = $(event.currentTarget).parents(".item");
-    const skill = this.actor.items.get(li.data("itemId"));
+  async _onSkillHeal(target) {
+    const skill = this.#itemFromTarget(target);
     if (!skill || skill.type !== 'skill') return;
 
     const targets = Array.from(game.user.targets);
@@ -1235,60 +1036,45 @@ export class RyfActorSheet extends ActorSheet {
 
     const alreadyHealed = patient.getFlag('ryf3', 'healedToday');
 
-    const rollParams = await new Promise((resolve) => {
-      new Dialog({
-        title: `${game.i18n.localize('RYF.Healing')}: ${skill.name}`,
-        content: `
-          <form>
-            <div class="heal-target-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
-              <i class="fas fa-user-injured"></i> ${game.i18n.localize('RYF.HealTarget')}: <strong>${patient.name}</strong>
-            </div>
-            ${alreadyHealed ? `
-            <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
-              <i class="fas fa-exclamation-triangle"></i> ${game.i18n.format('RYF.Warnings.AlreadyHealedToday', { name: patient.name })}
-            </div>
-            ` : ''}
-            ${factors.html}
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
-              <input type="number" name="difficulty" value="${getRule('healSkillDifficulty')}" step="1"/>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.RollMode')}</label>
-              <select name="mode">
-                <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
-                <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
-                <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>${game.i18n.localize('RYF.Modifier')}</label>
-              <input type="number" name="modifier" value="0" step="1"/>
-            </div>
-          </form>
-        `,
-        render: (html) => this._bindModePreview(html, factors.downs),
-        buttons: {
-          roll: {
-            icon: '<i class="fas fa-briefcase-medical"></i>',
-            label: game.i18n.localize('RYF.Healing'),
-            callback: (html) => resolve({
-              difficulty: parseInt(html.find('[name="difficulty"]').val()) || getRule('healSkillDifficulty'),
-              mode: html.find('[name="mode"]').val(),
-              modifier: parseInt(html.find('[name="modifier"]').val()) || 0,
-              specialization: html.find('[name="applySpecialization"]').is(':checked'),
-              spendToken: html.find('[name="spendToken"]').is(':checked')
-            })
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize('RYF.Cancel'),
-            callback: () => resolve(null)
-          }
-        },
-        default: 'roll',
-        close: () => resolve(null)
-      }).render(true);
+    const rollParams = await formDialog({
+      title: `${game.i18n.localize('RYF.Healing')}: ${skill.name}`,
+      okLabel: game.i18n.localize('RYF.Healing'),
+      okIcon: 'fas fa-briefcase-medical',
+      content: `
+        <div class="heal-target-info" style="background: var(--ryf-secondary); padding: 8px; border-radius: 4px; margin-bottom: 8px; text-align: center;">
+          <i class="fas fa-user-injured"></i> ${game.i18n.localize('RYF.HealTarget')}: <strong>${patient.name}</strong>
+        </div>
+        ${alreadyHealed ? `
+        <div class="roll-factors" style="background: var(--ryf-warning); padding: 8px; border-radius: 4px; margin-bottom: 8px;">
+          <i class="fas fa-exclamation-triangle"></i> ${game.i18n.format('RYF.Warnings.AlreadyHealedToday', { name: patient.name })}
+        </div>
+        ` : ''}
+        ${factors.html}
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.DifficultyLabel')}</label>
+          <input type="number" name="difficulty" value="${getRule('healSkillDifficulty')}" step="1"/>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.RollMode')}</label>
+          <select name="mode">
+            <option value="normal" selected>${game.i18n.localize('RYF.Normal')}</option>
+            <option value="advantage">${game.i18n.localize('RYF.Advantage')}</option>
+            <option value="disadvantage">${game.i18n.localize('RYF.Disadvantage')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Modifier')}</label>
+          <input type="number" name="modifier" value="0" step="1"/>
+        </div>
+      `,
+      onRender: (root) => this._bindModePreview(root, factors.downs),
+      read: (fields) => ({
+        difficulty: parseInt(fields.difficulty.value) || getRule('healSkillDifficulty'),
+        mode: fields.mode.value,
+        modifier: parseInt(fields.modifier.value) || 0,
+        specialization: !!fields.applySpecialization?.checked,
+        spendToken: !!fields.spendToken?.checked
+      })
     });
 
     if (!rollParams) return;
@@ -1296,41 +1082,34 @@ export class RyfActorSheet extends ActorSheet {
     await this.actor.rollHealingSkill(skill, patient, rollParams);
   }
 
-  async _onAddExperience(event) {
-    event.preventDefault();
-
-    const amount = await Dialog.prompt({
+  async _onAddExperience() {
+    const params = await formDialog({
       title: game.i18n.localize('RYF.AddExperience'),
+      okLabel: game.i18n.localize('RYF.AddExperience'),
+      okIcon: 'fas fa-plus',
       content: `
-        <form>
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.ExperienceAmount')}</label>
-            <input type="number" name="amount" value="10" min="1" autofocus/>
-          </div>
-          <div class="form-group">
-            <label>${game.i18n.localize('RYF.Reason')}</label>
-            <input type="text" name="reason" value="" placeholder="${game.i18n.localize('RYF.ReasonPlaceholder')}"/>
-          </div>
-        </form>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.ExperienceAmount')}</label>
+          <input type="number" name="amount" value="10" min="1" autofocus/>
+        </div>
+        <div class="form-group">
+          <label>${game.i18n.localize('RYF.Reason')}</label>
+          <input type="text" name="reason" value="" placeholder="${game.i18n.localize('RYF.ReasonPlaceholder')}"/>
+        </div>
       `,
-      callback: (html) => {
-        const form = html[0].querySelector('form');
-        return {
-          amount: parseInt(form.amount.value),
-          reason: form.reason.value
-        };
-      },
-      rejectClose: false
+      read: (fields) => ({
+        amount: parseInt(fields.amount.value),
+        reason: fields.reason.value
+      })
     });
 
-    if (amount && amount.amount > 0) {
-      await this.actor.addExperience(amount.amount, amount.reason);
+    if (params && params.amount > 0) {
+      await this.actor.addExperience(params.amount, params.reason);
     }
   }
 
   async _onAttributeChange(event) {
-    event.preventDefault();
-    const input = event.currentTarget;
+    const input = event.target;
     const attribute = input.dataset.attribute;
     const value = parseInt(input.value);
 
@@ -1384,16 +1163,18 @@ export class RyfActorSheet extends ActorSheet {
 
   _onDragStart(event) {
     const li = event.currentTarget;
-    if (event.target.classList.contains("content-link")) return;
+    if (event.target.classList.contains('content-link')) return;
 
     const item = this.actor.items.get(li.dataset.itemId);
+    if (!item) return;
     const dragData = item.toDragData();
 
-    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
   }
 
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    event.preventDefault();
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
     const actor = this.actor;
 
     // Reference: RyF 3.0 PDF, página 103 - asignar piloto/artillero soltando
@@ -1402,11 +1183,9 @@ export class RyfActorSheet extends ActorSheet {
       return this._onDropCrewMember(data);
     }
 
-    if (data.type === "Item") {
+    if (data.type === 'Item') {
       return this._onDropItem(event, data);
     }
-
-    return super._onDrop(event);
   }
 
   async _onDropItem(event, data) {
@@ -1422,7 +1201,50 @@ export class RyfActorSheet extends ActorSheet {
 
   async _onDropItemCreate(itemData) {
     itemData = itemData instanceof Array ? itemData : [itemData];
-    return this.actor.createEmbeddedDocuments("Item", itemData);
+    return this.actor.createEmbeddedDocuments('Item', itemData);
+  }
+
+  _onSortItem(event, itemData) {
+    const items = this.actor.items;
+    const source = items.get(itemData._id);
+    const dropTarget = event.target.closest('[data-item-id]');
+    if (!dropTarget || !source) return;
+
+    const target = items.get(dropTarget.dataset.itemId);
+    if (!target || source.id === target.id) return;
+
+    const siblings = [];
+    for (const el of dropTarget.parentElement.children) {
+      const siblingId = el.dataset?.itemId;
+      if (siblingId && siblingId !== source.id) siblings.push(items.get(siblingId));
+    }
+
+    const performSort = foundry.utils.performIntegerSort ?? foundry.utils.SortingHelpers?.performIntegerSort;
+    if (!performSort) return;
+
+    const sortUpdates = performSort(source, { target: target, siblings: siblings });
+    const updateData = sortUpdates.map(u => ({ _id: u.target.id, ...u.update }));
+    return this.actor.updateEmbeddedDocuments('Item', updateData);
   }
 }
 
+export class RyfCharacterSheet extends RyfActorSheet {
+  static PARTS = {
+    body: { template: 'systems/ryf3/templates/actor/actor-character-sheet.hbs', scrollable: ['.sheet-body .tab'] }
+  };
+  static INITIAL_TAB = 'attributes';
+}
+
+export class RyfNpcSheet extends RyfActorSheet {
+  static PARTS = {
+    body: { template: 'systems/ryf3/templates/actor/actor-npc-sheet.hbs', scrollable: ['.sheet-body .tab'] }
+  };
+  static INITIAL_TAB = 'attacks';
+}
+
+export class RyfShipSheet extends RyfActorSheet {
+  static PARTS = {
+    body: { template: 'systems/ryf3/templates/actor/actor-ship-sheet.hbs', scrollable: ['.sheet-body .tab'] }
+  };
+  static INITIAL_TAB = 'details';
+}

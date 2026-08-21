@@ -5,8 +5,8 @@ import { RyfActor } from './documents/actor.mjs';
 import { RyfItem } from './documents/item.mjs';
 import { RyfActiveEffect } from './documents/ryf-active-effect.mjs';
 import { RyfCombat } from './documents/combat.mjs';
-import { RyfActorSheet } from './sheets/actor-sheet.mjs';
-import { RyfItemSheet } from './sheets/item-sheet.mjs';
+import { RyfCharacterSheet, RyfNpcSheet, RyfShipSheet } from './sheets/actor-sheet.mjs';
+import { registerItemSheets } from './sheets/item-sheet.mjs';
 
 Hooks.once('init', async function() {
 
@@ -38,19 +38,28 @@ Hooks.once('init', async function() {
     img: 'icons/svg/blood.svg'
   });
 
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ryf", RyfActorSheet, {
-    types: ["character", "npc", "ship"],
+  const ActorsCollection = foundry.documents.collections.Actors;
+  const ItemsCollection = foundry.documents.collections.Items;
+
+  ActorsCollection.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
+  ActorsCollection.registerSheet("ryf", RyfCharacterSheet, {
+    types: ["character"],
+    makeDefault: true,
+    label: "RYF.SheetLabels.Actor"
+  });
+  ActorsCollection.registerSheet("ryf", RyfNpcSheet, {
+    types: ["npc"],
+    makeDefault: true,
+    label: "RYF.SheetLabels.Actor"
+  });
+  ActorsCollection.registerSheet("ryf", RyfShipSheet, {
+    types: ["ship"],
     makeDefault: true,
     label: "RYF.SheetLabels.Actor"
   });
 
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ryf", RyfItemSheet, {
-    types: ["skill", "weapon", "armor", "shield", "equipment", "spell", "npc-attack", "advantage", "race"],
-    makeDefault: true,
-    label: "RYF.SheetLabels.Item"
-  });
+  ItemsCollection.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
+  registerItemSheets(ItemsCollection);
 
   registerSystemSettings();
 
@@ -172,67 +181,70 @@ Hooks.once('ready', async function() {
   
 });
 
-Hooks.on('renderChatMessage', (message, html) => {
-  html.find('.roll-damage').click(async (event) => {
-    event.preventDefault();
-    const button = $(event.currentTarget);
-    const weaponId = button.data('weapon-id');
-    const criticalDice = button.data('critical-dice') || 0;
-    const range = button.data('range') || null;
+Hooks.on('renderChatMessageHTML', (message, html) => {
+  for (const button of html.querySelectorAll('.roll-damage')) {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const weaponId = button.dataset.weaponId;
+      const criticalDice = parseInt(button.dataset.criticalDice) || 0;
+      const range = button.dataset.range || null;
 
-    const speaker = message.speaker;
-    const actor = ChatMessage.getSpeakerActor(speaker);
+      const speaker = message.speaker;
+      const actor = ChatMessage.getSpeakerActor(speaker);
 
-    if (!actor) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoActor'));
-      return;
-    }
+      if (!actor) {
+        ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoActor'));
+        return;
+      }
 
-    const weapon = actor.items.get(weaponId);
+      const weapon = actor.items.get(weaponId);
 
-    if (!weapon) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.WeaponNotFound'));
-      return;
-    }
+      if (!weapon) {
+        ui.notifications.warn(game.i18n.localize('RYF.Warnings.WeaponNotFound'));
+        return;
+      }
 
-    const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(weapon, criticalDice, 0, actor, range);
-  });
+      const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
+      await RyfRoll.rollDamage(weapon, criticalDice, 0, actor, range);
+    });
+  }
 
   // Reference: RyF 3.0 PDF, página 103 - daño de las armas de la nave (cañón
   // láser 1d6, misil 3d6); el GM lo tira si el ataque superó la defensa
-  html.find('.ship-roll-damage').click(async (event) => {
-    event.preventDefault();
-    const button = $(event.currentTarget);
-    const formula = String(button.data('damage-formula') || '1d6');
-    const weaponLabel = button.data('weapon-label') || game.i18n.localize('RYF.Damage');
+  for (const button of html.querySelectorAll('.ship-roll-damage')) {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const formula = String(button.dataset.damageFormula || '1d6');
+      const weaponLabel = button.dataset.weaponLabel || game.i18n.localize('RYF.Damage');
 
-    const pseudoWeapon = { name: weaponLabel, type: 'weapon', system: { damage: { base: formula } } };
-    const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
-    await RyfRoll.rollDamage(pseudoWeapon, 0, 0, null);
-  });
+      const pseudoWeapon = { name: weaponLabel, type: 'weapon', system: { damage: { base: formula } } };
+      const { RyfRoll } = await import('./rolls/ryf-roll.mjs');
+      await RyfRoll.rollDamage(pseudoWeapon, 0, 0, null);
+    });
+  }
 
-  html.find('.apply-damage-button').click(async (event) => {
-    event.preventDefault();
-    const button = $(event.currentTarget);
-    const damage = parseInt(button.data('damage'));
-    const damageType = button.data('damage-type') || 'physical';
-    // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción
-    const ignoreAbsorption = button.data('ignores-armor') === true;
+  for (const button of html.querySelectorAll('.apply-damage-button')) {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const damage = parseInt(button.dataset.damage);
+      const damageType = button.dataset.damageType || 'physical';
+      // Reference: RyF 3.0 PDF, página 22 - armas que ignoran la absorción
+      const ignoreAbsorption = button.dataset.ignoresArmor === 'true';
 
-    const targets = Array.from(game.user.targets);
+      const targets = Array.from(game.user.targets);
 
-    if (targets.length === 0) {
-      ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoTargetSelected'));
-      return;
-    }
-
-    for (const token of targets) {
-      if (token.actor) {
-        await token.actor.applyDamage(damage, damageType, null, { ignoreAbsorption: ignoreAbsorption });
+      if (targets.length === 0) {
+        ui.notifications.warn(game.i18n.localize('RYF.Warnings.NoTargetSelected'));
+        return;
       }
-    }
-  });
+
+      for (const token of targets) {
+        if (token.actor) {
+          await token.actor.applyDamage(damage, damageType, null, { ignoreAbsorption: ignoreAbsorption });
+        }
+      }
+    });
+  }
 });
 
 // Reference: RyF 3.0 PDF, página 20 - mostrar las acciones múltiples por
@@ -305,64 +317,27 @@ Hooks.on('updateCombat', async (combat, updateData, updateOptions) => {
   }
 });
 
-Hooks.on('renderItemSheet', (app, html, data) => {
-  const item = app.object;
-
-  if (!item.flags?.ryf?.translationKey) return;
-
-  const translationKey = item.flags.ryf.translationKey;
-  const nameKey = `RYF.ITEMS.${translationKey}.name`;
-  const descKey = `RYF.ITEMS.${translationKey}.description`;
-
-  const translatedName = game.i18n.localize(nameKey);
-  const translatedDesc = game.i18n.localize(descKey);
-
-  if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
-    html.find('input[name="name"]').val(translatedName);
-  }
-
-  if (translatedDesc !== descKey && item.system.description?.startsWith('RYF.ITEMS.')) {
-    const descEditor = html.find('.editor-content .editor');
-    if (descEditor.length > 0) {
-      descEditor.html(`<p>${translatedDesc}</p>`);
-    }
-  }
-});
-
-Hooks.on('renderActorSheet', (app, html, data) => {
-  const actor = app.object;
-
-  html.find('.item .item-name').each(function() {
-    const itemId = $(this).closest('.item').data('item-id');
-    const item = actor.items.get(itemId);
-
-    if (!item || !item.flags?.ryf?.translationKey) return;
-
-    const translationKey = item.flags.ryf.translationKey;
-    const nameKey = `RYF.ITEMS.${translationKey}.name`;
-    const translatedName = game.i18n.localize(nameKey);
-
-    if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
-      $(this).find('h4').text(translatedName);
-    }
-  });
-});
+// Los nombres/descripciones traducidos en las fichas (antes en los hooks
+// renderItemSheet/renderActorSheet) viven ahora dentro de las sheets V2
 
 Hooks.on('renderCompendium', (app, html, data) => {
-  html.find('.directory-item').each(function() {
-    const itemId = $(this).data('document-id');
-    const item = app.collection.get(itemId);
+  const root = html instanceof HTMLElement ? html : html[0];
+  if (!root) return;
 
-    if (!item || !item.flags?.ryf?.translationKey) return;
+  for (const entry of root.querySelectorAll('.directory-item')) {
+    const item = app.collection.get(entry.dataset.documentId ?? entry.dataset.entryId);
+
+    if (!item || !item.flags?.ryf?.translationKey) continue;
 
     const translationKey = item.flags.ryf.translationKey;
     const nameKey = `RYF.ITEMS.${translationKey}.name`;
     const translatedName = game.i18n.localize(nameKey);
 
     if (translatedName !== nameKey && item.name.startsWith('RYF.ITEMS.')) {
-      $(this).find('.document-name').text(translatedName);
+      const nameEl = entry.querySelector('.document-name') ?? entry.querySelector('.entry-name');
+      if (nameEl) nameEl.textContent = translatedName;
     }
-  });
+  }
 });
 
 // Reference: RyF 3.0 PDF, página 98 - una sola ventaja por personaje (límite

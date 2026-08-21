@@ -1,19 +1,25 @@
-export class CustomPyramidConfig extends FormApplication {
-  
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      id: 'custom-pyramid-config',
-      title: game.i18n.localize('RYF.Settings.CustomPyramidMenu.Title'),
-      template: 'systems/ryf3/templates/settings/custom-pyramid.hbs',
-      width: 500,
-      height: 'auto',
-      closeOnSubmit: true,
-      submitOnClose: false,
-      submitOnChange: false
-    });
-  }
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-  getData() {
+export class CustomPyramidConfig extends HandlebarsApplicationMixin(ApplicationV2) {
+
+  static DEFAULT_OPTIONS = {
+    id: 'custom-pyramid-config',
+    tag: 'form',
+    classes: ['ryf'],
+    window: { title: 'RYF.Settings.CustomPyramidMenu.Title' },
+    position: { width: 500, height: 'auto' },
+    form: {
+      handler: CustomPyramidConfig.onSubmitForm,
+      submitOnChange: false,
+      closeOnSubmit: true
+    }
+  };
+
+  static PARTS = {
+    form: { template: 'systems/ryf3/templates/settings/custom-pyramid.hbs' }
+  };
+
+  async _prepareContext(options) {
     const current = game.settings.get('ryf3', 'customPyramid');
     const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
 
@@ -52,17 +58,19 @@ export class CustomPyramidConfig extends FormApplication {
     };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
-    
-    html.find('.preset-button').click(this._onPresetClick.bind(this));
-    
-    html.find('input[type="number"]').change(this._onInputChange.bind(this));
+  _onRender(context, options) {
+    super._onRender(context, options);
+    for (const input of this.element.querySelectorAll('input[type="number"]')) {
+      input.addEventListener('change', () => this._updateTotal());
+    }
   }
 
-  _onPresetClick(event) {
-    event.preventDefault();
-    const preset = event.currentTarget.dataset.preset;
+  _onClickAction(event, target) {
+    if (target.dataset.action === 'applyPreset') return this._onPresetClick(target);
+  }
+
+  _onPresetClick(target) {
+    const preset = target.dataset.preset;
     const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
 
     const presets = {
@@ -75,16 +83,12 @@ export class CustomPyramidConfig extends FormApplication {
     const values = presets[preset];
     if (values) {
       for (let i = 1; i <= maxLevel; i++) {
-        const value = values[`level${i}`] || 0;
-        this.element.find(`input[name="level${i}"]`).val(value);
+        const input = this.element.querySelector(`input[name="level${i}"]`);
+        if (input) input.value = values[`level${i}`] || 0;
       }
 
       this._updateTotal();
     }
-  }
-
-  _onInputChange(event) {
-    this._updateTotal();
   }
 
   _updateTotal() {
@@ -92,20 +96,22 @@ export class CustomPyramidConfig extends FormApplication {
     let total = 0;
 
     for (let i = 1; i <= maxLevel; i++) {
-      const value = parseInt(this.element.find(`input[name="level${i}"]`).val()) || 0;
-      total += value;
+      const input = this.element.querySelector(`input[name="level${i}"]`);
+      total += parseInt(input?.value) || 0;
     }
 
-    this.element.find('.total-skills').text(total);
+    const totalEl = this.element.querySelector('.total-skills');
+    if (totalEl) totalEl.textContent = total;
   }
 
-  async _updateObject(event, formData) {
+  static async onSubmitForm(event, form, formData) {
+    const data = formData.object;
     const maxLevel = game.settings.get('ryf3', 'maxSkillLevel');
     const pyramid = {};
     let total = 0;
 
     for (let i = 1; i <= maxLevel; i++) {
-      const value = formData[`level${i}`] || 0;
+      const value = Number(data[`level${i}`]) || 0;
       pyramid[`level${i}`] = value;
       total += value;
     }
@@ -120,4 +126,3 @@ export class CustomPyramidConfig extends FormApplication {
     ui.notifications.info(game.i18n.localize('RYF.Notifications.PyramidSaved'));
   }
 }
-
