@@ -694,16 +694,20 @@ export class RyfActor extends Actor {
 
     await this.update({ 'system.sanity.value': newValue });
 
+    const html = await renderTemplate('systems/ryf3/templates/chat/sanity-loss.hbs', {
+      actor: this,
+      formula: formula,
+      roll: roll,
+      total: roll.total,
+      current: newValue,
+      max: this.system.sanity?.max || 0
+    });
+
     await ChatMessage.create({
+      author: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      content: game.i18n.format('RYF.Notifications.SanityLost', {
-        name: this.name,
-        amount: roll.total,
-        formula: formula,
-        current: newValue,
-        max: this.system.sanity?.max || 0
-      }),
-      style: CONST.CHAT_MESSAGE_STYLES.OTHER
+      content: html,
+      sound: CONFIG.sounds.dice
     });
 
     return roll.total;

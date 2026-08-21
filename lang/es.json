@@ -336,7 +336,6 @@
       "RaceXpNote": "Raza {race}: {modifier} PX por sesión (RyF 3.0, pág. 98)",
       "ReloadRequired": "Recarga el mundo (F5) para que los cambios surtan efecto",
       "RulesSaved": "Reglas del sistema guardadas correctamente",
-      "SanityLost": "{name} pierde {amount} de Cordura ({formula}). Cordura actual: {current} / {max}",
       "ShipDestroyed": "¡{name} ha sido destruida!",
       "ShortRest": "{name} ha descansado brevemente y recuperado {amount} PV",
       "SkillDecreased": "{name} reducido a nivel {level}",
@@ -405,10 +404,12 @@
     },
     "RollMode": "Modo de Tirada",
     "Sanity": {
+      "CurrentLabel": "Cordura actual",
       "Label": "Cordura",
       "Loss": "Pérdida de Cordura",
       "LossFormula": "Dados de pérdida",
-      "LossHint": "Según la gravedad: presenciar un asesinato 1d6, un genocidio 3d6 (RyF 3.0, pág. 43). Los dados explotan."
+      "LossHint": "Según la gravedad: presenciar un asesinato 1d6, un genocidio 3d6 (RyF 3.0, pág. 43). Los dados explotan.",
+      "LostLabel": "Cordura perdida"
     },
     "SavingThrow": "Tirada de Salvación",
     "Settings": {

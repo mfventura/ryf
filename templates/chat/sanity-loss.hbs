@@ -1,0 +1,45 @@
+{{!-- Reference: RyF 3.0 PDF, página 43 - pérdida de Cordura en dados d6 --}}
+<div class="ryf-roll sanity-loss">
+  <div class="roll-header">
+    <img src="{{actor.img}}" alt="{{actor.name}}" class="actor-image"/>
+    <div class="roll-title">
+      <h3>{{localize "RYF.Sanity.Loss"}}</h3>
+      <div class="roll-subtitle">{{actor.name}}</div>
+    </div>
+  </div>
+
+  <div class="damage-breakdown">
+    <div class="damage-section sanity-dice">
+      <div class="section-label">{{localize "RYF.Sanity.LossFormula"}}</div>
+      <div class="damage-formula">{{formula}}</div>
+
+      <div class="dice-results">
+        {{#each roll.rolls as |die|}}
+          <div class="die d6">
+            <i class="fas fa-dice-d6"></i>
+            <span class="die-value">{{die}}</span>
+          </div>
+        {{/each}}
+
+        {{#if roll.explosions.length}}
+        <div class="explosions">
+          <i class="fas fa-burst"></i>
+          {{#each roll.explosions as |explosion|}}
+            <span class="explosion-value">+{{explosion}}</span>
+          {{/each}}
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="damage-total sanity-total">
+    <div class="total-label">{{localize "RYF.Sanity.LostLabel"}}</div>
+    <div class="total-value">-{{total}}</div>
+  </div>
+
+  <div class="sanity-current">
+    <i class="fas fa-brain"></i>
+    {{localize "RYF.Sanity.CurrentLabel"}}: <strong>{{current}} / {{max}}</strong>
+  </div>
+</div>

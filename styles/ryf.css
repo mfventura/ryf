@@ -1575,6 +1575,37 @@
   background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
 }
 
+/* Sanity loss chat card (PDF p. 43): green variant of the damage card */
+.ryf-roll.sanity-loss {
+  background: linear-gradient(135deg, #145a32 0%, #1e8449 100%);
+  border-color: #27ae60;
+}
+
+.ryf-roll.sanity-loss .roll-title h3 {
+  color: #82e0aa;
+}
+
+.ryf-roll.sanity-loss .actor-image {
+  border-color: #27ae60;
+}
+
+.ryf-roll.sanity-loss .total-value {
+  color: #82e0aa;
+}
+
+.ryf-roll.sanity-loss .sanity-current {
+  text-align: center;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.ryf-roll.sanity-loss .sanity-current i {
+  color: #82e0aa;
+  margin-right: 0.35rem;
+}
+
 .damage-calculation {
   background: rgba(0, 0, 0, 0.3);
   padding: 1rem;
