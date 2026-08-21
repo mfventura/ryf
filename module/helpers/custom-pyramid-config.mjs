@@ -5,7 +5,7 @@ export class CustomPyramidConfig extends HandlebarsApplicationMixin(ApplicationV
   static DEFAULT_OPTIONS = {
     id: 'custom-pyramid-config',
     tag: 'form',
-    classes: ['ryf'],
+    classes: ['ryf', 'themed', 'theme-light'],
     window: { title: 'RYF.Settings.CustomPyramidMenu.Title' },
     position: { width: 500, height: 'auto' },
     form: {

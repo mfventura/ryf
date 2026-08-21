@@ -2425,6 +2425,10 @@
 .ryf.application .window-content {
   display: flex;
   flex-direction: column;
+  /* Texto oscuro sobre el fondo claro de la ficha, como daba el core V1;
+     las ventanas van ancladas a theme-light pero esto cubre cualquier
+     variable de color que el tema del UI dejara en pastel */
+  color: #191813;
 }
 
 .ryf.application .window-content > .sheet-content {

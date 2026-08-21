@@ -30,7 +30,7 @@ export class EconomyConfig extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: 'economy-config',
     tag: 'form',
-    classes: ['ryf'],
+    classes: ['ryf', 'themed', 'theme-light'],
     window: { title: 'RYF.Settings.EconomyConfig.Title' },
     position: { width: 560, height: 'auto' },
     form: {

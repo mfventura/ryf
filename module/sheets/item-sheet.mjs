@@ -5,7 +5,9 @@ const ITEM_SHEET_TYPES = ['skill', 'weapon', 'armor', 'shield', 'equipment', 'sp
 export class RyfItemSheet extends RyfSheetMixin(foundry.applications.sheets.ItemSheetV2) {
 
   static DEFAULT_OPTIONS = {
-    classes: ['ryf', 'sheet', 'item'],
+    // themed/theme-light: mismo motivo que en la ficha de actor — fondo claro
+    // propio sobre el que la paleta del tema oscuro del core no se lee
+    classes: ['ryf', 'sheet', 'item', 'themed', 'theme-light'],
     position: { width: 520, height: 480 },
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false }

@@ -8,7 +8,9 @@ import { RyfSheetMixin } from './sheet-mixin.mjs';
 export class RyfActorSheet extends RyfSheetMixin(foundry.applications.sheets.ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
-    classes: ['ryf', 'sheet', 'actor'],
+    // themed/theme-light: las fichas tienen fondo claro propio, así que se
+    // fija la paleta clara del core en vez de heredar el tema (oscuro) del UI
+    classes: ['ryf', 'sheet', 'actor', 'themed', 'theme-light'],
     position: { width: 720, height: 800 },
     window: { resizable: true },
     form: { submitOnChange: true, closeOnSubmit: false }

@@ -99,7 +99,7 @@ export class RulesConfig extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: 'rules-config',
     tag: 'form',
-    classes: ['ryf'],
+    classes: ['ryf', 'themed', 'theme-light'],
     window: { title: 'RYF.Settings.RulesConfig.Title' },
     position: { width: 560, height: 'auto' },
     form: {
